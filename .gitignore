@@ -1,5 +1,6 @@
 .DS_Store
 Library
+Libraries
 Temp
 *.csproj
 *.pidb
