@@ -2,6 +2,7 @@
 Library
 Libraries
 Temp
+*.apk
 *.csproj
 *.pidb
 *.unityproj
