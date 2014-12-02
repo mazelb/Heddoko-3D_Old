@@ -8,3 +8,8 @@ Temp
 *.unityproj
 *.sln
 *.userprefs
+*.pdb
+*.suo
+*.ipch
+*.log
+*.tlog

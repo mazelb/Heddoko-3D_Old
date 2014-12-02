@@ -104,7 +104,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	//init sensors lib 
 	sensorsLib = new SensorDLL();
 	sensorsLib->initSensorsConnection();
-	if (sensorsLib->getNumberConnectedDevices() > 0)
+	if (sensorsLib->getNumberConnectedDevices() >= 1)
 	{
 		sensorsLib->connect6DSensor(0);
 	}
@@ -591,14 +591,21 @@ void Render()
     //g_World = XMMatrixRotationY( t );
 
 	Pose6DEvent* vpEvent = sensorsLib->getSensorLatestEvent(0);
-	if (vpEvent != NULL)
-	{
-		FLOAT vPitch = vpEvent->pitch;
-		FLOAT vYaw = vpEvent->yaw;
-		FLOAT vRoll = vpEvent->roll;
 
-		g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll);
-	}
+	FLOAT vPitch = 0;
+	FLOAT vYaw = 0;
+	FLOAT vRoll = 0;
+	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
+	g_World = XMMatrixRotationRollPitchYaw(vYaw, 0, 0);
+
+// 	if (vpEvent != NULL)
+// 	{
+// 		FLOAT vPitch = vpEvent->pitch;
+// 		FLOAT vYaw = vpEvent->yaw;
+// 		FLOAT vRoll = vpEvent->roll;
+// 
+// 		g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll);
+// 	}
 
     // Modify the color
     g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;

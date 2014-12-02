@@ -19,6 +19,7 @@
 #include <string>
 #include <iostream>
 #include <winsvc.h>
+#include <mutex>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -184,6 +185,8 @@ private:
 
 	DWORD dataThreadID;
 	DWORD nameThreadID;
+
+	std::mutex mMtx;
 };
 
 

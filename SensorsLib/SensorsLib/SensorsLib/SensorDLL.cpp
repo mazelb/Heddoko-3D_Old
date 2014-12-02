@@ -46,10 +46,13 @@ void SensorDLL::connect6DSensor(unsigned int vIdx)
 {
 	if (indexExist(vIdx))
 	{
+		Pose6DEvent* vTempEvent = new Pose6DEvent();
+		mMtx.lock();
+			mpDelegate->pose6DEventsMap.insert(std::pair<int, Pose6DEvent*>(vIdx, vTempEvent));
+		mMtx.unlock();
+
 		mpController->subscribeToPose6D(mpController->names.at(vIdx));
 		mpController->setMode(mpController->names.at(vIdx), MODE_3D);
-		Pose6DEvent* vTempEvent = new Pose6DEvent();
-		mpDelegate->pose6DEventsMap.insert(std::pair<int, Pose6DEvent*>(vIdx, vTempEvent));
 	}
 }
 
@@ -62,6 +65,18 @@ Pose6DEvent* SensorDLL::getSensorLatestEvent(unsigned int vIdx)
 
 	return NULL;
 }
+
+
+void SensorDLL::getSensorLatestOrientation(unsigned int vIdx, float &vPitch, float &vRoll, float &vYaw)
+{
+	if (mpDelegate->pose6DEventsMap[vIdx] != NULL)
+	{
+		vPitch = mpDelegate->pose6DEventsMap[vIdx]->pitch;
+		vRoll = mpDelegate->pose6DEventsMap[vIdx]->roll;
+		vYaw = mpDelegate->pose6DEventsMap[vIdx]->yaw;
+	}
+}
+
 
 BOOL SensorDLL::indexExist(unsigned int vIdx)
 {
@@ -86,6 +101,66 @@ int SensorDLL::getNumberConnectedDevices()
 	}
 
 	return 0;
+}
+
+extern "C"
+{
+	SensorDLL* sensorsLib = NULL;
+
+	void initSensorsConnection()
+	{
+		//init sensors lib 
+		sensorsLib = new SensorDLL();	
+		sensorsLib->initSensorsConnection();
+	}
+	
+	void connect6DSensor(int vIdx)
+	{
+		if (sensorsLib->getNumberConnectedDevices() >= (vIdx + 1))
+		{
+			sensorsLib->connect6DSensor(vIdx);
+		}
+	}
+
+	int  getNumberConnectedDevices()
+	{
+		return sensorsLib->getNumberConnectedDevices();
+	}
+
+	void shutDown6DSensor(int vIdx)
+	{
+		if (sensorsLib->getNumberConnectedDevices() >= (vIdx + 1))
+		{
+			sensorsLib->shutDown6DSensor(vIdx);
+		}
+	}	
+	
+
+	float getSensorLatestPitch(int vIdx)
+	{
+		if (sensorsLib->getNumberConnectedDevices() >= (vIdx + 1))
+		{
+			return sensorsLib->getSensorLatestEvent(vIdx)->pitch;
+		}
+	}
+
+	float getSensorLatestRoll(int vIdx)
+	{
+		if (sensorsLib->getNumberConnectedDevices() >= (vIdx + 1))
+		{
+			return sensorsLib->getSensorLatestEvent(vIdx)->roll;
+		}
+
+	}
+
+	float getSensorLatestYaw(int vIdx)
+	{
+		if (sensorsLib->getNumberConnectedDevices() >= (vIdx + 1))
+		{
+			return sensorsLib->getSensorLatestEvent(vIdx)->yaw;
+		}
+
+	}
 }
 
 

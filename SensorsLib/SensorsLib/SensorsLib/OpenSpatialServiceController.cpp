@@ -8,6 +8,8 @@ SOCKET dataSocket;
 DWORD portCount = 0;
 
 std::vector<std::string> nameOutput;
+BOOL namesReturned = FALSE;
+BOOL requestAccepted = FALSE;
 
 BOOL subscribedToPointer = false;
 BOOL subscribedToButton = false;
@@ -94,7 +96,7 @@ int OpenSpatialServiceController::setupService()
 		else
 		{
 			if (!buildingForUnity)
-				printf("Found Service\n");
+				OutputDebugStringA("Found Service\n");
 		}
 	}
 	else
@@ -106,14 +108,6 @@ int OpenSpatialServiceController::setupService()
 
 	waitForServiceStatus(SERVICE_RUNNING, OSService);
 
-	//Connect To Socket
-	dataThreadHandle = CreateThread(
-		NULL,
-		0,
-		openDataSocket,
-		NULL,
-		0,
-		&dataThreadID);
 	openNameSocket();
 	nameThreadHandle = CreateThread(
 		NULL,
@@ -134,30 +128,93 @@ int OpenSpatialServiceController::setupService()
 	{
 		while (waitForNames)
 		{
-			if (nameOutput.size() > 0)
+			//OutputDebugStringA("\nwaiting for names \n");
+			if (nameOutput.size() > 0 && namesReturned)
 			{
-				if (nameOutput.at(nameOutput.size() - 1).find("END") >= 0)
+				OutputDebugStringA("\nReceived all names \n");
+				//mMtx.lock();
+				for (std::vector<std::string>::iterator it = nameOutput.begin(); it != nameOutput.end(); it++)
 				{
-					waitForNames = false;
+					std::wostringstream os;
+					os << it->c_str();
+
+					//if (it-> != NULL)
+					OutputDebugStringA(it->c_str());
+					OutputDebugStringA("\n");
+					int vIdx = it->find("END");
+					if (vIdx >= 0 && vIdx < it->size())
+					{
+						waitForNames = false;						
+						break;
+					}
 				}
+				//mMtx.unlock();
+
 			}
+// 			if (nameOutput.size() > 0)
+// 			{
+// 				//if (nameOutput.at(nameOutput.size() - 1).find("END") >= 0)
+// 				
+// 				if (nameOutput.back() == "END")
+// 				{
+// 					waitForNames = false;
+// 
+// 					//Connect To Socket
+// 					dataThreadHandle = CreateThread(
+// 						NULL,
+// 						0,
+// 						openDataSocket,
+// 						NULL,
+// 						0,
+// 						&dataThreadID);
+// 				}
+// 			}
 		}
-		for (int i = 0; i < (int)nameOutput.size(); i++)
+
+		for (std::vector<std::string>::iterator it = nameOutput.begin(); it != nameOutput.end(); it++)
 		{
-			std::wostringstream os;
-			os << nameOutput.at(i).c_str();
-			int in = nameOutput.at(i).find("END");
-			if (in < 0)
+			OutputDebugStringA(it->c_str());
+			OutputDebugStringA("==Names==\n");
+			int vIdx = it->find("END");
+			if (vIdx >= 0 && vIdx < it->size())
 			{
-				names.push_back(nameOutput.at(i));
-				printf("%s, ", names.at(i).c_str());
+				//nameOutput.clear();
+				break;
 			}
 			else
 			{
-				nameOutput.clear();
-				break;
+				names.push_back(it->c_str());
 			}
 		}
+
+		OutputDebugStringA("Connecting Data thread\n");
+		dataThreadHandle = CreateThread(
+			NULL,
+			0,
+			openDataSocket,
+			NULL,
+			0,
+			&dataThreadID);
+
+// 		for (int i = 0; i < (int)nameOutput.size(); i++)
+// 		{
+// 			std::wostringstream os;
+// 			os << nameOutput.at(i).c_str();
+// 
+// 			int in = nameOutput.at(i).find("END");
+// 			if (in < 0)
+// 			{
+// 				names.push_back(nameOutput.at(i));
+// 				OutputDebugStringA("Main waiting for names ! \n");
+// 				OutputDebugStringA(names.at(i).c_str());
+// 				OutputDebugStringA("\n");
+// 			}
+// 			else
+// 			{
+// 				nameOutput.clear();
+// 				break;
+// 			}
+// 		}
 	}
 	else
 	{
@@ -199,6 +256,8 @@ void OpenSpatialServiceController::waitForServiceStatus(DWORD statusTo, SC_HANDL
 
 DWORD WINAPI openDataSocket(LPVOID lpParam)
 {
+	OutputDebugStringA("OpenDataSocket \n");
+
 	WSADATA wsaData;
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
@@ -263,20 +322,27 @@ DWORD WINAPI openDataSocket(LPVOID lpParam)
 		return 1;
 	}
 	if (!buildingForUnity)
-		printf("data connected\n");
+		OutputDebugStringA("data connected\n");
 
 	while (true)
 	{
 		if (subscribedToPointer || subscribedToGesture || subscribedToButton || subscribedToPose6D)
 		{
+			OutputDebugStringA("OpenDataSocket loop subscribed\n");
 			iResult = recv(dataSocket, (char*)recvbuf, recvbuflen, 0);
 			if (iResult > 0)
 			{
+				OutputDebugStringA("OpenDataSocekt Data received\n");
 				decodeAndSendEvents(recvbuf, iResult);
 			}
-			else if (iResult == 0) {
-				if (!buildingForUnity)
-					printf("Connection closed\n");
+			else if (iResult == 0) 
+			{
+				OutputDebugStringA("Connection closed\n");
+			}
+			else
+			{
+				WSAGetLastError();
+				OutputDebugStringA("recv failed\n");
 			}
 		}
 	}
@@ -573,38 +639,72 @@ DWORD OpenSpatialServiceController::openNameSocket()
 	return 0;
 }
 
+std::mutex mMtx;
+
 DWORD WINAPI listenNameSocket(LPVOID lpParam)
 {
+	char nameb[BUFFER_SIZE];
+	int recvbuflen = BUFFER_SIZE;
+
 	while (true)
 	{
-		char nameb[BUFFER_SIZE];
-		int recvbuflen = BUFFER_SIZE;
-		recv(nameSocket, nameb, recvbuflen, 0);
-		std::string name = nameb;
-		int index = name.find("Ì");
-		name = name.substr(0, index);
-		nameOutput.push_back(name);
 		ZeroMemory(nameb, BUFFER_SIZE);
+
+		int vResult = recv(nameSocket, nameb, recvbuflen, 0);
+		
+		if (vResult > 0)
+		{
+			std::string name = nameb;
+
+			if (name.size() > 0)
+			{
+				int index = name.find("Ì");
+				name = name.substr(0, index);
+				OutputDebugStringA(name.c_str());
+				OutputDebugStringA("===\n");
+
+				//mMtx.lock();
+				nameOutput.push_back(name);
+				//mMtx.unlock();
+
+				index = name.find("END");
+				if (index >= 0 && index != std::string::npos)
+				{
+					mMtx.lock();
+					OutputDebugStringA("FOUND END ===\n");
+					namesReturned = TRUE;
+					mMtx.unlock();
+				}
+
+				index = name.find("acce");
+				if (index >= 0 && index != std::string::npos)
+				{
+					mMtx.lock();
+					OutputDebugStringA("FOUND ACCEPTED ===\n");
+					requestAccepted = TRUE;
+					mMtx.unlock();
+				}
+			}
+		}
+		else if (vResult == 0)
+		{
+			OutputDebugStringA("Connection closed\n");
+		}
+		else
+		{
+			WSAGetLastError();
+			OutputDebugStringA("recv failed\n");
+		}
 	}
 	return 0;
 }
 
 void OpenSpatialServiceController::sendName(std::string name)
 {
-	nameOutput.clear();
+	//nameOutput.clear();
 	send(nameSocket, name.c_str(), strlen(name.c_str()), 0);
-	BOOL accepted = false;
-	/*while (!accepted)
-	{
-		if (nameOutput.size() > 0)
-		{
-			if (nameOutput.at(nameOutput.size() - 1).find("acce") >= 0)
-			{
-				accepted = true;
-				nameOutput.clear();
-			}
-		}
-	}*/
+	//BOOL accepted = false;
+	while (!requestAccepted) {}
 }
 
 void OpenSpatialServiceController::subscribeToPointer(std::string name)
@@ -654,7 +754,9 @@ void OpenSpatialServiceController::subscribeToGesture(std::string name)
 
 BOOL OpenSpatialServiceController::subscribeToPose6D(std::string name)
 {
+	OutputDebugStringA("SUBSCRIBING TO SERVICE \n");
 	sendName(name);
+	OutputDebugStringA("NAME SENT AND ACCEPTED \n");
 	subscribedToPose6D = true;
 	SERVICE_STATUS status;
 
@@ -664,6 +766,12 @@ BOOL OpenSpatialServiceController::subscribeToPose6D(std::string name)
 		if (!buildingForUnity)
 			printf("ERROR SUBSCRIBE POSE 6D %d", GetLastError());
 		//Handle errors
+	}
+	else
+	{
+		OutputDebugStringA("SUBSCRIBED TO POSE 6D ! ");
+		OutputDebugStringA(name.c_str());
+		OutputDebugStringA("\n");
 	}
 
 	return bResult;

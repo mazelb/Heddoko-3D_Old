@@ -21,16 +21,33 @@ public:
 	void initSensorsConnection();
 	void shutDown6DSensor(unsigned int vIdx);
 	void connect6DSensor(unsigned int vIdx);
+	void getSensorLatestOrientation(unsigned int vIdx, float& vPitch, float& vRoll, float& vYaw);
 
 	Pose6DEvent* getSensorLatestEvent(unsigned int vIdx);
 
 private:
 	OpenSpatialServiceController* mpController;
 	SensorDelegate* mpDelegate;
+	std::mutex mMtx;
 
 private: 
 	BOOL indexExist(unsigned int vIdx);
 };
+
+extern "C"
+{
+	SENSORSSDLL_API void initSensorsConnection();
+	SENSORSSDLL_API void connect6DSensor(int vIdx);
+	SENSORSSDLL_API void shutDown6DSensor(int vIdx);
+	SENSORSSDLL_API int  getNumberConnectedDevices();
+	//SENSORSSDLL_API void getSensorLatestOrientation(unsigned int vIdx, float& vPitch, float& vRoll, float& vYaw);
+	
+	SENSORSSDLL_API float getSensorLatestPitch(int vIdx);
+	SENSORSSDLL_API float getSensorLatestRoll(int vIdx);
+	SENSORSSDLL_API float getSensorLatestYaw(int vIdx);
+
+
+}
 
 //Recommended skeleton connections: 
 // Idx		Description

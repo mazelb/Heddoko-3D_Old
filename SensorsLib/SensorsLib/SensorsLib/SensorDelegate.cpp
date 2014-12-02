@@ -37,5 +37,4 @@ void SensorDelegate::pose6DEventFired(Pose6DEvent event)
 			pose6DEventsMap[event.sender]->roll = event.roll;
 		}
 	mMtx.unlock();
-
 }

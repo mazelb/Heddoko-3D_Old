@@ -19,6 +19,5 @@ public:
 
 private:
 	std::mutex mMtx;
-
 };
 
