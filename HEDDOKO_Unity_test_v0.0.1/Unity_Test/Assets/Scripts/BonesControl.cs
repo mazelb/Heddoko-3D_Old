@@ -13,6 +13,9 @@ public class BonesControl : MonoBehaviour
 	public static extern void initSensorsConnection();
 
 	[DllImport("SensorsLib")]
+	public static extern bool indexExist(int vIdx);
+
+	[DllImport("SensorsLib")]
 	public static extern void connect6DSensor(int vIdx);
 
 	[DllImport("SensorsLib")]
@@ -37,12 +40,12 @@ public class BonesControl : MonoBehaviour
 	public Transform leftForeArmTransform = null;
 
 	//Torso transforms
-	//public Transform rightShoulderTransform = null;
 	public Transform upperSpineTransform = null;
 	public Transform lowerSpineTransform = null;
+	//public Transform rightShoulderTransform = null;
 	//public Transform leftShoulderTransform = null;
-	//public Transform leftHipTransform = null;
 	//public Transform rightHipTransform = null;
+	//public Transform leftHipTransform = null;
 
 	//Legs transforms
 	public Transform rightThighTransform = null;
@@ -55,75 +58,186 @@ public class BonesControl : MonoBehaviour
 	public float rightForeArmFac = 0.5f;
 	public float leftUpperArmFac = 0.5f;
 	public float leftForeArmFac = 0.5f;
-	//public float rightShoulderFac = 0.5f;
 	public float upperSpineFac = 0.5f;
 	public float lowerSpineFac = 0.5f;
-	//public float leftShoulderFac = 0.5f;
-	//public float leftHipFac = 0.5f;
-	//public float rightHipFac = 0.5f;
 	public float rightThighFac = 0.5f;
 	public float rightCalfFac = 0.5f;
 	public float leftCalfFac = 0.5f;
 	public float leftThighFac = 0.5f;
+	//public float rightShoulderFac = 0.5f;
+	//public float leftShoulderFac = 0.5f;
+	//public float leftHipFac = 0.5f;
+	//public float rightHipFac = 0.5f;
 
 	//Quaternion targets
 	private Quaternion rightUpperArmTarget;
 	private Quaternion rightForeArmTarget;
 	private Quaternion leftUpperArmTarget;
 	private Quaternion leftForeArmTarget;
-	private Quaternion rightShoulderTarget;
-	private Quaternion spineTarget;
 	private Quaternion upperSpineTarget;
 	private Quaternion lowerSpineTarget;
-	private Quaternion leftShoulderTarget;
-	private Quaternion leftHipTarget;
-	private Quaternion rightHipTarget;
 	private Quaternion rightThighTarget;
 	private Quaternion rightCalfTarget;
 	private Quaternion leftCalfTarget;
 	private Quaternion leftThighTarget;
+	//private Quaternion leftShoulderTarget;
+	//private Quaternion rightShoulderTarget;
+	//private Quaternion spineTarget;
+	//private Quaternion leftHipTarget;
+	//private Quaternion rightHipTarget;
 
-	//test 
-	private Vector3 currentDirection = Vector3.forward;
+	//Vector Initial targets
+	private Vector3 rightUpperArmInitEulers;
+	private Vector3 rightForeArmInitEulers;
+	private Vector3 leftUpperArmInitEulers;
+	private Vector3 leftForeArmInitEulers;
+	private Vector3 upperSpineInitEulers;
+	private Vector3 lowerSpineInitEulers;
+	private Vector3 rightThighInitEulers;
+	private Vector3 rightCalfInitEulers;
+	private Vector3 leftThighInitEulers;
+	private Vector3 leftCalfInitEulers;
+	//private Quaternion spineInitEulers;
+	//private Quaternion rightShoulderInitEulers;
+	//private Quaternion leftShoulderInitEulers;
+	//private Quaternion rightHipInitEulers;
+	//private Quaternion leftHipInitEulers;
 
-	//protected Animator animator;
-	
-	//public bool ikActive = false;
+	//Vector Current targets
+	private Vector3 rightUpperArmCurrentEulers;
+	private Vector3 rightForeArmCurrentEulers;
+	private Vector3 leftUpperArmCurrentEulers;
+	private Vector3 leftForeArmCurrentEulers;
+	private Vector3 upperSpineCurrentEulers;
+	private Vector3 lowerSpineCurrentEulers;
+	private Vector3 rightThighCurrentEulers;
+	private Vector3 rightCalfCurrentEulers;
+	private Vector3 leftThighCurrentEulers;
+	private Vector3 leftCalfCurrentEulers;
+	//private Quaternion spineCurrentEulers;
+	//private Quaternion rightShoulderCurrentEulers;
+	//private Quaternion leftShoulderCurrentEulers;
+	//private Quaternion rightHipCurrentEulers;
+	//private Quaternion leftHipCurrentEulers;
+
+
+	private Boolean isInitialized = false;
+
+	private void ConnectSensor(int vIdx) 
+	{
+		if (indexExist (vIdx)) 
+		{
+			connect6DSensor(vIdx);
+		}
+	}
 
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log("Initializing connection to service");
-
-		//animator = GetComponent<Animator>();
-
 		initSensorsConnection();
 
-		Debug.Log("connecting to sensors");
-
-		connect6DSensor(0);
-		connect6DSensor(1);
+		for (int i = 0; i < 10; i++) 
+		{
+			connect6DSensor(i);		
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		if (getNumberConnectedDevices () >= 2 && !isInitialized) 
+		{
+			isInitialized = true;
+
+			upperSpineCurrentEulers 	= Vector3.zero;
+			lowerSpineCurrentEulers 	= Vector3.zero;
+			rightUpperArmCurrentEulers 	= Vector3.zero;
+			rightForeArmCurrentEulers 	= Vector3.zero;
+			leftUpperArmCurrentEulers 	= Vector3.zero;
+			leftForeArmCurrentEulers 	= Vector3.zero;
+			rightThighCurrentEulers 	= Vector3.zero;
+			rightCalfCurrentEulers 		= Vector3.zero;
+			leftThighCurrentEulers 		= Vector3.zero;
+			leftCalfCurrentEulers 		= Vector3.zero;
+
+			upperSpineTarget 	= Quaternion.Euler(upperSpineCurrentEulers);
+			lowerSpineTarget 	= Quaternion.Euler(lowerSpineCurrentEulers);
+			rightUpperArmTarget = Quaternion.Euler(rightUpperArmCurrentEulers);
+			rightForeArmTarget 	= Quaternion.Euler(rightForeArmCurrentEulers);
+			leftUpperArmTarget 	= Quaternion.Euler(leftUpperArmCurrentEulers);
+			leftForeArmTarget 	= Quaternion.Euler(leftForeArmCurrentEulers);
+			rightThighTarget 	= Quaternion.Euler(rightThighCurrentEulers);
+			rightCalfTarget 	= Quaternion.Euler(rightCalfCurrentEulers);
+			leftThighTarget 	= Quaternion.Euler(leftThighCurrentEulers);
+			leftCalfTarget 		= Quaternion.Euler(leftCalfCurrentEulers);
+
+			upperSpineTransform.localRotation 	 = upperSpineTarget;
+			lowerSpineTransform.localRotation 	 = lowerSpineTarget;			
+			rightUpperArmTransform.localRotation = rightUpperArmTarget;
+			rightForeArmTransform.localRotation  = rightForeArmTarget;			
+			leftUpperArmTransform.localRotation  = leftUpperArmTarget;
+			leftForeArmTransform.localRotation   = leftForeArmTarget;			
+			rightThighTransform.localRotation 	 = rightThighTarget;
+			rightCalfTransform.localRotation 	 = rightCalfTarget;			
+			leftThighTransform.localRotation 	 = leftThighTarget;
+			leftCalfTransform.localRotation 	 = leftCalfTarget;
+
+			upperSpineInitEulers.x = getSensorLatestPitch (0) * 360 / Mathf.PI; 
+			upperSpineInitEulers.y = getSensorLatestYaw (0) * 360 / Mathf.PI;
+			upperSpineInitEulers.z = getSensorLatestRoll (0) * 360 / Mathf.PI;
+
+			lowerSpineInitEulers.x = getSensorLatestPitch (1) * 360 / Mathf.PI; 
+			lowerSpineInitEulers.y = getSensorLatestYaw (1) * 360 / Mathf.PI;
+			lowerSpineInitEulers.z = getSensorLatestRoll (1) * 360 / Mathf.PI;
+
+			/*rightUpperArmInitEulers.x = getSensorLatestPitch (2) * 360 / Mathf.PI; 
+			rightUpperArmInitEulers.y = getSensorLatestYaw (2) * 360 / Mathf.PI;
+			rightUpperArmInitEulers.z = getSensorLatestRoll (2) * 360 / Mathf.PI;
+
+			rightForeArmInitEulers.x = getSensorLatestPitch (3) * 360 / Mathf.PI; 
+			rightForeArmInitEulers.y = getSensorLatestYaw (3) * 360 / Mathf.PI;
+			rightForeArmInitEulers.z = getSensorLatestRoll (3) * 360 / Mathf.PI;
+
+			leftUpperArmInitEulers.x = getSensorLatestPitch (4) * 360 / Mathf.PI; 
+			leftUpperArmInitEulers.y = getSensorLatestYaw (4) * 360 / Mathf.PI;
+			leftUpperArmInitEulers.z = getSensorLatestRoll (4) * 360 / Mathf.PI;
+
+			leftForeArmInitEulers.x = getSensorLatestPitch (5) * 360 / Mathf.PI; 
+			leftForeArmInitEulers.y = getSensorLatestYaw (5) * 360 / Mathf.PI;
+			leftForeArmInitEulers.z = getSensorLatestRoll (5) * 360 / Mathf.PI;
+
+			rightThighInitEulers.x = getSensorLatestPitch (6) * 360 / Mathf.PI; 
+			rightThighInitEulers.y = getSensorLatestYaw (6) * 360 / Mathf.PI;
+			rightThighInitEulers.z = getSensorLatestRoll (6) * 360 / Mathf.PI;
+
+			rightCalfInitEulers.x = getSensorLatestPitch (7) * 360 / Mathf.PI; 
+			rightCalfInitEulers.y = getSensorLatestYaw (7) * 360 / Mathf.PI;
+			rightCalfInitEulers.z = getSensorLatestRoll (7) * 360 / Mathf.PI;
+
+			leftThighInitEulers.x = getSensorLatestPitch (8) * 360 / Mathf.PI; 
+			leftThighInitEulers.y = getSensorLatestYaw (8) * 360 / Mathf.PI;
+			leftThighInitEulers.z = getSensorLatestRoll (8) * 360 / Mathf.PI;
+
+			leftCalfInitEulers.x = getSensorLatestPitch (9) * 360 / Mathf.PI; 
+			leftCalfInitEulers.y = getSensorLatestYaw (9) * 360 / Mathf.PI;
+			leftCalfInitEulers.z = getSensorLatestRoll (9) * 360 / Mathf.PI;
+			//*/
+		}
 	}
 
 	void OnApplicationQuit() 
 	{
 		if (getNumberConnectedDevices () >= 1) 
 		{
-			//shutDown6DSensor (0);
+			shutDown6DSensor (0);
 		}
 	}
 
 	void OnDestroy() 
 	{
-		//if (getNumberConnectedDevices () >= 1) 
+		if (getNumberConnectedDevices () >= 1) 
 		{
-			//shutDown6DSensor (0);
+			shutDown6DSensor (0);
 		}
 	}
 
@@ -137,38 +251,79 @@ public class BonesControl : MonoBehaviour
 			//currentDirection.y = Mathf.Clamp(currentDirection.y + Input.GetAxis("Mouse Y"), -1, 1);
 			//rightUpperArmTarget = Quaternion.LookRotation(currentDirection);
 
-			upperSpineTarget 	= Quaternion.Euler (getSensorLatestPitch (0) * 360 / Mathf.PI, getSensorLatestYaw (0) * 360 / Mathf.PI, getSensorLatestRoll (0) * 360 / Mathf.PI);
-			lowerSpineTarget 	= Quaternion.Euler (getSensorLatestPitch (1) * 360 / Mathf.PI, getSensorLatestYaw (1) * 360 / Mathf.PI, getSensorLatestRoll (1) * 360 / Mathf.PI);
 
-			/*rightUpperArmTarget = Quaternion.Euler (getSensorLatestPitch (2) * 360 / Mathf.PI, getSensorLatestYaw (2) * 360 / Mathf.PI, getSensorLatestRoll (2) * 360 / Mathf.PI);
-			rightForeArmTarget 	= Quaternion.Euler (getSensorLatestPitch (3) * 360 / Mathf.PI, getSensorLatestYaw (3) * 360 / Mathf.PI, getSensorLatestRoll (3) * 360 / Mathf.PI);
+			upperSpineCurrentEulers.x = getSensorLatestPitch (0) * 360 / Mathf.PI; 
+			upperSpineCurrentEulers.y = getSensorLatestYaw (0) * 360 / Mathf.PI;
+			upperSpineCurrentEulers.z = getSensorLatestRoll (0) * 360 / Mathf.PI;
+			upperSpineCurrentEulers += upperSpineCurrentEulers - upperSpineInitEulers;
 
-			leftUpperArmTarget 	= Quaternion.Euler (getSensorLatestPitch (4) * 360 / Mathf.PI, getSensorLatestYaw (4) * 360 / Mathf.PI, getSensorLatestRoll (4) * 360 / Mathf.PI);
-			leftForeArmTarget 	= Quaternion.Euler (getSensorLatestPitch (5) * 360 / Mathf.PI, getSensorLatestYaw (5) * 360 / Mathf.PI, getSensorLatestRoll (5) * 360 / Mathf.PI);
+			lowerSpineCurrentEulers.x = getSensorLatestPitch (1) * 360 / Mathf.PI; 
+			lowerSpineCurrentEulers.y = getSensorLatestYaw (1) * 360 / Mathf.PI;
+			lowerSpineCurrentEulers.z = getSensorLatestRoll (1) * 360 / Mathf.PI;
+			lowerSpineCurrentEulers += lowerSpineCurrentEulers - lowerSpineInitEulers;
 
-			rightThighTarget 	= Quaternion.Euler (getSensorLatestPitch (6) * 360 / Mathf.PI, getSensorLatestYaw (6) * 360 / Mathf.PI, getSensorLatestRoll (6) * 360 / Mathf.PI);
-			rightCalfTarget 	= Quaternion.Euler (getSensorLatestPitch (7) * 360 / Mathf.PI, getSensorLatestYaw (7) * 360 / Mathf.PI, getSensorLatestRoll (7) * 360 / Mathf.PI);
+			/*rightUpperArmCurrentEulers.x = getSensorLatestPitch (2) * 360 / Mathf.PI; 
+			rightUpperArmCurrentEulers.y = getSensorLatestYaw (2) * 360 / Mathf.PI;
+			rightUpperArmCurrentEulers.z = getSensorLatestRoll (2) * 360 / Mathf.PI;
+			rightUpperArmCurrentEulers += rightUpperArmCurrentEulers - rightUpperArmInitEulers;
+			
+			rightForeArmCurrentEulers.x = getSensorLatestPitch (3) * 360 / Mathf.PI; 
+			rightForeArmCurrentEulers.y = getSensorLatestYaw (3) * 360 / Mathf.PI;
+			rightForeArmCurrentEulers.z = getSensorLatestRoll (3) * 360 / Mathf.PI;
+			rightForeArmCurrentEulers += rightForeArmCurrentEulers - rightForeArmInitEulers;
 
-			leftThighTarget 	= Quaternion.Euler (getSensorLatestPitch (8) * 360 / Mathf.PI, getSensorLatestYaw (8) * 360 / Mathf.PI, getSensorLatestRoll (8) * 360 / Mathf.PI);
-			leftCalfTarget 		= Quaternion.Euler (getSensorLatestPitch (9) * 360 / Mathf.PI, getSensorLatestYaw (9) * 360 / Mathf.PI, getSensorLatestRoll (9) * 360 / Mathf.PI);
+			leftUpperArmCurrentEulers.x = getSensorLatestPitch (4) * 360 / Mathf.PI; 
+			leftUpperArmCurrentEulers.y = getSensorLatestYaw (4) * 360 / Mathf.PI;
+			leftUpperArmCurrentEulers.z = getSensorLatestRoll (4) * 360 / Mathf.PI;
+			leftUpperArmCurrentEulers += leftUpperArmCurrentEulers - leftUpperArmInittEulers;
+
+			leftForeArmCurrentEulers.x = getSensorLatestPitch (5) * 360 / Mathf.PI; 
+			leftForeArmCurrentEulers.y = getSensorLatestYaw (5) * 360 / Mathf.PI;
+			leftForeArmCurrentEulers.z = getSensorLatestRoll (5) * 360 / Mathf.PI;
+			leftForeArmCurrentEulers += leftForeArmCurrentEulers - leftForeArmInitEulers;
+
+			rightThighCurrentEulers.x = getSensorLatestPitch (6) * 360 / Mathf.PI; 
+			rightThighCurrentEulers.y = getSensorLatestYaw (6) * 360 / Mathf.PI;
+			rightThighCurrentEulers.z = getSensorLatestRoll (6) * 360 / Mathf.PI;
+			rightThighCurrentEulers += rightThighCurrentEulers - rightThighInitEulers;
+
+			rightCalfCurrentEulers.x = getSensorLatestPitch (7) * 360 / Mathf.PI; 
+			rightCalfCurrentEulers.y = getSensorLatestYaw (7) * 360 / Mathf.PI;
+			rightCalfCurrentEulers.z = getSensorLatestRoll (7) * 360 / Mathf.PI;
+			rightCalfCurrentEulers += rightCalfCurrentEulers - rightCalfInittEulers;
+
+			leftThighCurrentEulers.x = getSensorLatestPitch (8) * 360 / Mathf.PI; 
+			leftThighCurrentEulers.y = getSensorLatestYaw (8) * 360 / Mathf.PI;
+			leftThighCurrentEulers.z = getSensorLatestRoll (8) * 360 / Mathf.PI;
+			leftThighCurrentEulers += leftThighCurrentEulers - leftThighInitEulers;
+
+			leftCalfCurrentEulers.x = getSensorLatestPitch (9) * 360 / Mathf.PI; 
+			leftCalfCurrentEulers.y = getSensorLatestYaw (9) * 360 / Mathf.PI;
+			leftCalfCurrentEulers.z = getSensorLatestRoll (9) * 360 / Mathf.PI;
+			leftCalfCurrentEulers += leftCalfCurrentEulers - leftCalfInitEulers;
 			//*/
-			Debug.Log("sensors rotation");
+
+			upperSpineTarget 	= Quaternion.Euler(upperSpineCurrentEulers);
+			lowerSpineTarget 	= Quaternion.Euler(lowerSpineCurrentEulers);
+			rightUpperArmTarget = Quaternion.Euler(rightUpperArmCurrentEulers);
+			rightForeArmTarget 	= Quaternion.Euler(rightForeArmCurrentEulers);
+			leftUpperArmTarget 	= Quaternion.Euler(leftUpperArmCurrentEulers);
+			leftForeArmTarget 	= Quaternion.Euler(leftForeArmCurrentEulers);
+			rightThighTarget 	= Quaternion.Euler(rightThighCurrentEulers);
+			rightCalfTarget 	= Quaternion.Euler(rightCalfCurrentEulers);
+			leftThighTarget 	= Quaternion.Euler(leftThighCurrentEulers);
+			leftCalfTarget 		= Quaternion.Euler(leftCalfCurrentEulers);
 
 			upperSpineTransform.localRotation 	 = upperSpineTarget;
 			lowerSpineTransform.localRotation 	 = lowerSpineTarget;
-
 			rightUpperArmTransform.localRotation = rightUpperArmTarget;
 			rightForeArmTransform.localRotation  = rightForeArmTarget;
-
 			leftUpperArmTransform.localRotation  = leftUpperArmTarget;
 			leftForeArmTransform.localRotation   = leftForeArmTarget;
-
 			rightThighTransform.localRotation 	 = rightThighTarget;
 			rightCalfTransform.localRotation 	 = rightCalfTarget;
-
 			leftThighTransform.localRotation 	 = leftThighTarget;
 			leftCalfTransform.localRotation 	 = leftCalfTarget;
-
 
 			//Quaternion.Slerp(rightUpperArmTransform.localRotation, rightUpperArmTarget, rightUpperArmFac);
 			//elbow.localRotation = Quaternion.Slerp(elbow.localRotation, rotation, elbowControl);

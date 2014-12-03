@@ -113,6 +113,11 @@ extern "C"
 		sensorsLib = new SensorDLL();	
 		sensorsLib->initSensorsConnection();
 	}
+
+	BOOL indexExist(int vIdx)
+	{
+		return sensorsLib->indexExist(vIdx);
+	}
 	
 	void connect6DSensor(int vIdx)
 	{
