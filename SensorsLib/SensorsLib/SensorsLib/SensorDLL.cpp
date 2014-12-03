@@ -51,8 +51,8 @@ void SensorDLL::connect6DSensor(unsigned int vIdx)
 			mpDelegate->pose6DEventsMap.insert(std::pair<int, Pose6DEvent*>(vIdx, vTempEvent));
 		mMtx.unlock();
 
-		mpController->subscribeToPose6D(mpController->names.at(vIdx));
 		mpController->setMode(mpController->names.at(vIdx), MODE_3D);
+		mpController->subscribeToPose6D(mpController->names.at(vIdx));
 	}
 }
 

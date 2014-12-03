@@ -176,6 +176,7 @@ private:
 	void ClearGlobalVariables();
 
 	DWORD openNameSocket();
+	void startDataListening();
 	SC_HANDLE OSService;
 	int setupService();
 	void sendName(std::string name);

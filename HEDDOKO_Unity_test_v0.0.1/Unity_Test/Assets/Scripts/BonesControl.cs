@@ -37,12 +37,12 @@ public class BonesControl : MonoBehaviour
 	public Transform leftForeArmTransform = null;
 
 	//Torso transforms
-	public Transform rightShoulderTransform = null;
+	//public Transform rightShoulderTransform = null;
 	public Transform upperSpineTransform = null;
 	public Transform lowerSpineTransform = null;
-	public Transform leftShoulderTransform = null;
-	public Transform leftHipTransform = null;
-	public Transform rightHipTransform = null;
+	//public Transform leftShoulderTransform = null;
+	//public Transform leftHipTransform = null;
+	//public Transform rightHipTransform = null;
 
 	//Legs transforms
 	public Transform rightThighTransform = null;
@@ -55,12 +55,12 @@ public class BonesControl : MonoBehaviour
 	public float rightForeArmFac = 0.5f;
 	public float leftUpperArmFac = 0.5f;
 	public float leftForeArmFac = 0.5f;
-	public float rightShoulderFac = 0.5f;
+	//public float rightShoulderFac = 0.5f;
 	public float upperSpineFac = 0.5f;
 	public float lowerSpineFac = 0.5f;
-	public float leftShoulderFac = 0.5f;
-	public float leftHipFac = 0.5f;
-	public float rightHipFac = 0.5f;
+	//public float leftShoulderFac = 0.5f;
+	//public float leftHipFac = 0.5f;
+	//public float rightHipFac = 0.5f;
 	public float rightThighFac = 0.5f;
 	public float rightCalfFac = 0.5f;
 	public float leftCalfFac = 0.5f;
@@ -102,7 +102,7 @@ public class BonesControl : MonoBehaviour
 		Debug.Log("connecting to sensors");
 
 		connect6DSensor(0);
-
+		connect6DSensor(1);
 	}
 	
 	// Update is called once per frame
@@ -115,70 +115,64 @@ public class BonesControl : MonoBehaviour
 	{
 		if (getNumberConnectedDevices () >= 1) 
 		{
-			shutDown6DSensor (0);
+			//shutDown6DSensor (0);
 		}
 	}
 
 	void OnDestroy() 
 	{
-		if (getNumberConnectedDevices () >= 1) 
+		//if (getNumberConnectedDevices () >= 1) 
 		{
-			shutDown6DSensor (0);
+			//shutDown6DSensor (0);
 		}
 	}
 
 
 	void LateUpdate()
 	{
-		if (getNumberConnectedDevices () >= 1) 
+		if (getNumberConnectedDevices () >= 2) 
 		{
 			Debug.Log(">1 sensors connected");
 			//currentDirection.x = Mathf.Clamp(currentDirection.x + Input.GetAxis("Mouse X"), -1, 1);
 			//currentDirection.y = Mathf.Clamp(currentDirection.y + Input.GetAxis("Mouse Y"), -1, 1);
-	
 			//rightUpperArmTarget = Quaternion.LookRotation(currentDirection);
-			//rightUpperArmTarget = Quaternion.Euler (getSensorLatestPitch (0) * 360 / Mathf.PI, getSensorLatestYaw (0) * 360 / Mathf.PI, getSensorLatestRoll (0) * 360 / Mathf.PI);
-			//rightUpperArmTarget = Quaternion.Euler (getSensorLatestYaw (0) * 360 / Mathf.PI, getSensorLatestPitch (0) * 360 / Mathf.PI, 0);
 
-			upperSpineTarget = Quaternion.Euler (getSensorLatestPitch (0) * 360 / Mathf.PI, getSensorLatestYaw (0) * 360 / Mathf.PI, getSensorLatestRoll (0) * 360 / Mathf.PI);
+			upperSpineTarget 	= Quaternion.Euler (getSensorLatestPitch (0) * 360 / Mathf.PI, getSensorLatestYaw (0) * 360 / Mathf.PI, getSensorLatestRoll (0) * 360 / Mathf.PI);
+			lowerSpineTarget 	= Quaternion.Euler (getSensorLatestPitch (1) * 360 / Mathf.PI, getSensorLatestYaw (1) * 360 / Mathf.PI, getSensorLatestRoll (1) * 360 / Mathf.PI);
 
+			/*rightUpperArmTarget = Quaternion.Euler (getSensorLatestPitch (2) * 360 / Mathf.PI, getSensorLatestYaw (2) * 360 / Mathf.PI, getSensorLatestRoll (2) * 360 / Mathf.PI);
+			rightForeArmTarget 	= Quaternion.Euler (getSensorLatestPitch (3) * 360 / Mathf.PI, getSensorLatestYaw (3) * 360 / Mathf.PI, getSensorLatestRoll (3) * 360 / Mathf.PI);
+
+			leftUpperArmTarget 	= Quaternion.Euler (getSensorLatestPitch (4) * 360 / Mathf.PI, getSensorLatestYaw (4) * 360 / Mathf.PI, getSensorLatestRoll (4) * 360 / Mathf.PI);
+			leftForeArmTarget 	= Quaternion.Euler (getSensorLatestPitch (5) * 360 / Mathf.PI, getSensorLatestYaw (5) * 360 / Mathf.PI, getSensorLatestRoll (5) * 360 / Mathf.PI);
+
+			rightThighTarget 	= Quaternion.Euler (getSensorLatestPitch (6) * 360 / Mathf.PI, getSensorLatestYaw (6) * 360 / Mathf.PI, getSensorLatestRoll (6) * 360 / Mathf.PI);
+			rightCalfTarget 	= Quaternion.Euler (getSensorLatestPitch (7) * 360 / Mathf.PI, getSensorLatestYaw (7) * 360 / Mathf.PI, getSensorLatestRoll (7) * 360 / Mathf.PI);
+
+			leftThighTarget 	= Quaternion.Euler (getSensorLatestPitch (8) * 360 / Mathf.PI, getSensorLatestYaw (8) * 360 / Mathf.PI, getSensorLatestRoll (8) * 360 / Mathf.PI);
+			leftCalfTarget 		= Quaternion.Euler (getSensorLatestPitch (9) * 360 / Mathf.PI, getSensorLatestYaw (9) * 360 / Mathf.PI, getSensorLatestRoll (9) * 360 / Mathf.PI);
+			//*/
 			Debug.Log("sensors rotation");
 
-			upperSpineTransform.localRotation = spineTarget;//Quaternion.Slerp(rightUpperArmTransform.localRotation, rightUpperArmTarget, rightUpperArmFac);
+			upperSpineTransform.localRotation 	 = upperSpineTarget;
+			lowerSpineTransform.localRotation 	 = lowerSpineTarget;
+
+			rightUpperArmTransform.localRotation = rightUpperArmTarget;
+			rightForeArmTransform.localRotation  = rightForeArmTarget;
+
+			leftUpperArmTransform.localRotation  = leftUpperArmTarget;
+			leftForeArmTransform.localRotation   = leftForeArmTarget;
+
+			rightThighTransform.localRotation 	 = rightThighTarget;
+			rightCalfTransform.localRotation 	 = rightCalfTarget;
+
+			leftThighTransform.localRotation 	 = leftThighTarget;
+			leftCalfTransform.localRotation 	 = leftCalfTarget;
+
+
+			//Quaternion.Slerp(rightUpperArmTransform.localRotation, rightUpperArmTarget, rightUpperArmFac);
 			//elbow.localRotation = Quaternion.Slerp(elbow.localRotation, rotation, elbowControl);
 			//hand.localRotation = Quaternion.Slerp(hand.localRotation, rotation, handControl);
 		}
 	}
-
-	//a callback for calculating IK
-	/*void OnAnimatorIK()
-	{
-		if(animator) 
-		{
-			
-			//if the IK is active, set the position and rotation directly to the goal. 
-			if(ikActive) 
-			{
-				
-				//weight = 1.0 for the right hand means position and rotation will be at the IK goal (the place the character wants to grab)
-				animator.SetIKPositionWeight(AvatarIKGoal.RightHand,1.0f);
-				animator.SetIKRotationWeight(AvatarIKGoal.RightHand,1.0f);
-				
-				//set the position and the rotation of the right hand where the external object is
-				if(rightHandObj != null) 
-				{
-					animator.SetIKPosition(AvatarIKGoal.RightHand,rightHandObj.position);
-					animator.SetIKRotation(AvatarIKGoal.RightHand,rightHandObj.rotation);
-				}                   
-				
-			}
-			
-			//if the IK is not active, set the position and rotation of the hand back to the original position
-			else 
-			{          
-				animator.SetIKPositionWeight(AvatarIKGoal.RightHand,0);
-				animator.SetIKRotationWeight(AvatarIKGoal.RightHand,0);             
-			}
-		}
-	}*/   
 }

@@ -187,15 +187,6 @@ int OpenSpatialServiceController::setupService()
 			}
 		}
 
-		OutputDebugStringA("Connecting Data thread\n");
-		dataThreadHandle = CreateThread(
-			NULL,
-			0,
-			openDataSocket,
-			NULL,
-			0,
-			&dataThreadID);
-
 // 		for (int i = 0; i < (int)nameOutput.size(); i++)
 // 		{
 // 			std::wostringstream os;
@@ -253,6 +244,20 @@ void OpenSpatialServiceController::waitForServiceStatus(DWORD statusTo, SC_HANDL
 		}
 	}
 }
+
+
+void OpenSpatialServiceController::startDataListening()
+{
+	OutputDebugStringA("Connecting Data thread\n");
+	dataThreadHandle = CreateThread(
+		NULL,
+		0,
+		openDataSocket,
+		NULL,
+		0,
+		&dataThreadID);
+}
+
 
 DWORD WINAPI openDataSocket(LPVOID lpParam)
 {
@@ -705,6 +710,7 @@ void OpenSpatialServiceController::sendName(std::string name)
 	send(nameSocket, name.c_str(), strlen(name.c_str()), 0);
 	//BOOL accepted = false;
 	while (!requestAccepted) {}
+	requestAccepted = FALSE;
 }
 
 void OpenSpatialServiceController::subscribeToPointer(std::string name)
@@ -764,14 +770,14 @@ BOOL OpenSpatialServiceController::subscribeToPose6D(std::string name)
 	if (!bResult)
 	{
 		if (!buildingForUnity)
-			printf("ERROR SUBSCRIBE POSE 6D %d", GetLastError());
-		//Handle errors
+			printf("ERROR SUBSCRIBE POSE 6D %d", GetLastError());	
 	}
 	else
 	{
 		OutputDebugStringA("SUBSCRIBED TO POSE 6D ! ");
 		OutputDebugStringA(name.c_str());
 		OutputDebugStringA("\n");
+		startDataListening();
 	}
 
 	return bResult;

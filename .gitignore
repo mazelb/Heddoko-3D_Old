@@ -13,3 +13,12 @@ Temp
 *.ipch
 *.log
 *.tlog
+*.obj
+*.res
+*.idb
+*.sdf
+*.opensdf
+*.ilk
+*.exp
+*.sdf
+*.pch

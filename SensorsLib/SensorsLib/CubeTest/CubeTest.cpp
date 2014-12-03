@@ -596,7 +596,7 @@ void Render()
 	FLOAT vYaw = 0;
 	FLOAT vRoll = 0;
 	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
-	g_World = XMMatrixRotationRollPitchYaw(vYaw, 0, 0);
+	g_World = XMMatrixRotationRollPitchYaw(0, 0, vRoll);
 
 // 	if (vpEvent != NULL)
 // 	{
