@@ -78,19 +78,17 @@ void SensorDLL::getSensorLatestOrientation(unsigned int vIdx, float &vPitch, flo
 }
 
 
-BOOL SensorDLL::indexExist(unsigned int vIdx)
-{
-	BOOL vResult = FALSE;
-	
+bool SensorDLL::indexExist(unsigned int vIdx)
+{	
 	if (mpController != NULL)
 	{
 		if (vIdx >= 0 && vIdx < mpController->names.size())
 		{
-			vResult = TRUE;
+			return true;
 		}
 	}
 
-	return vResult;
+	return false;
 }
 
 int SensorDLL::getNumberConnectedDevices()
@@ -114,7 +112,7 @@ extern "C"
 		sensorsLib->initSensorsConnection();
 	}
 
-	BOOL indexExist(int vIdx)
+	bool indexExist(int vIdx)
 	{
 		return sensorsLib->indexExist(vIdx);
 	}

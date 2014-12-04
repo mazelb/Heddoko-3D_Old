@@ -123,32 +123,50 @@ public class BonesControl : MonoBehaviour
 
 	private Boolean isInitialized = false;
 
+	private float mapRange(float a1,float a2,float b1,float b2,float s)
+	{
+		return b1 + (s-a1)*(b2-b1)/(a2-a1);
+	}
+
 	private void ConnectSensor(int vIdx) 
 	{
-		if (indexExist (vIdx)) 
+		Boolean vExists = indexExist (vIdx);
+		if (vExists) 
 		{
 			connect6DSensor(vIdx);
 		}
 	}
 
-	// Use this for initialization
-	void Start () 
+	private void ShutdownSensor(int vIdx) 
 	{
-		initSensorsConnection();
-
-		for (int i = 0; i < 10; i++) 
+		Boolean vExists = indexExist (vIdx);
+		if (vExists) 
 		{
-			connect6DSensor(i);		
+			shutDown6DSensor(vIdx);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		if (getNumberConnectedDevices () >= 2 && !isInitialized) 
-		{
-			isInitialized = true;
 
+	private Vector3 getEulerOrientation(int vIdx)
+	{
+		Vector3 vEulerVector = Vector3.zero;
+
+		if (indexExist (vIdx)) 
+		{
+			vEulerVector.x = getSensorLatestPitch (vIdx) * 360 / Mathf.PI; 
+			//vEulerVector.x = mapRange(-180, 180, 0, 360, vEulerVector.x);
+			vEulerVector.y = getSensorLatestYaw (vIdx) * 360 / Mathf.PI;
+			//vEulerVector.y = mapRange(-180, 180, 0, 360, vEulerVector.y);
+			vEulerVector.z = getSensorLatestRoll (vIdx) * 360 / Mathf.PI;
+			//vEulerVector.z = mapRange(-360, 360, 0, 360, vEulerVector.z);
+		}
+
+		return vEulerVector;
+	}
+
+	void ResetOrientations()
+	{
+		if (getNumberConnectedDevices () >= 1) 
+		{
 			upperSpineCurrentEulers 	= Vector3.zero;
 			lowerSpineCurrentEulers 	= Vector3.zero;
 			rightUpperArmCurrentEulers 	= Vector3.zero;
@@ -159,7 +177,7 @@ public class BonesControl : MonoBehaviour
 			rightCalfCurrentEulers 		= Vector3.zero;
 			leftThighCurrentEulers 		= Vector3.zero;
 			leftCalfCurrentEulers 		= Vector3.zero;
-
+			
 			upperSpineTarget 	= Quaternion.Euler(upperSpineCurrentEulers);
 			lowerSpineTarget 	= Quaternion.Euler(lowerSpineCurrentEulers);
 			rightUpperArmTarget = Quaternion.Euler(rightUpperArmCurrentEulers);
@@ -170,7 +188,7 @@ public class BonesControl : MonoBehaviour
 			rightCalfTarget 	= Quaternion.Euler(rightCalfCurrentEulers);
 			leftThighTarget 	= Quaternion.Euler(leftThighCurrentEulers);
 			leftCalfTarget 		= Quaternion.Euler(leftCalfCurrentEulers);
-
+			
 			upperSpineTransform.localRotation 	 = upperSpineTarget;
 			lowerSpineTransform.localRotation 	 = lowerSpineTarget;			
 			rightUpperArmTransform.localRotation = rightUpperArmTarget;
@@ -181,125 +199,92 @@ public class BonesControl : MonoBehaviour
 			rightCalfTransform.localRotation 	 = rightCalfTarget;			
 			leftThighTransform.localRotation 	 = leftThighTarget;
 			leftCalfTransform.localRotation 	 = leftCalfTarget;
-
-			upperSpineInitEulers.x = getSensorLatestPitch (0) * 360 / Mathf.PI; 
-			upperSpineInitEulers.y = getSensorLatestYaw (0) * 360 / Mathf.PI;
-			upperSpineInitEulers.z = getSensorLatestRoll (0) * 360 / Mathf.PI;
-
-			lowerSpineInitEulers.x = getSensorLatestPitch (1) * 360 / Mathf.PI; 
-			lowerSpineInitEulers.y = getSensorLatestYaw (1) * 360 / Mathf.PI;
-			lowerSpineInitEulers.z = getSensorLatestRoll (1) * 360 / Mathf.PI;
-
-			/*rightUpperArmInitEulers.x = getSensorLatestPitch (2) * 360 / Mathf.PI; 
-			rightUpperArmInitEulers.y = getSensorLatestYaw (2) * 360 / Mathf.PI;
-			rightUpperArmInitEulers.z = getSensorLatestRoll (2) * 360 / Mathf.PI;
-
-			rightForeArmInitEulers.x = getSensorLatestPitch (3) * 360 / Mathf.PI; 
-			rightForeArmInitEulers.y = getSensorLatestYaw (3) * 360 / Mathf.PI;
-			rightForeArmInitEulers.z = getSensorLatestRoll (3) * 360 / Mathf.PI;
-
-			leftUpperArmInitEulers.x = getSensorLatestPitch (4) * 360 / Mathf.PI; 
-			leftUpperArmInitEulers.y = getSensorLatestYaw (4) * 360 / Mathf.PI;
-			leftUpperArmInitEulers.z = getSensorLatestRoll (4) * 360 / Mathf.PI;
-
-			leftForeArmInitEulers.x = getSensorLatestPitch (5) * 360 / Mathf.PI; 
-			leftForeArmInitEulers.y = getSensorLatestYaw (5) * 360 / Mathf.PI;
-			leftForeArmInitEulers.z = getSensorLatestRoll (5) * 360 / Mathf.PI;
-
-			rightThighInitEulers.x = getSensorLatestPitch (6) * 360 / Mathf.PI; 
-			rightThighInitEulers.y = getSensorLatestYaw (6) * 360 / Mathf.PI;
-			rightThighInitEulers.z = getSensorLatestRoll (6) * 360 / Mathf.PI;
-
-			rightCalfInitEulers.x = getSensorLatestPitch (7) * 360 / Mathf.PI; 
-			rightCalfInitEulers.y = getSensorLatestYaw (7) * 360 / Mathf.PI;
-			rightCalfInitEulers.z = getSensorLatestRoll (7) * 360 / Mathf.PI;
-
-			leftThighInitEulers.x = getSensorLatestPitch (8) * 360 / Mathf.PI; 
-			leftThighInitEulers.y = getSensorLatestYaw (8) * 360 / Mathf.PI;
-			leftThighInitEulers.z = getSensorLatestRoll (8) * 360 / Mathf.PI;
-
-			leftCalfInitEulers.x = getSensorLatestPitch (9) * 360 / Mathf.PI; 
-			leftCalfInitEulers.y = getSensorLatestYaw (9) * 360 / Mathf.PI;
-			leftCalfInitEulers.z = getSensorLatestRoll (9) * 360 / Mathf.PI;
+			
+			
+			upperSpineInitEulers = getEulerOrientation(0);
+			/*lowerSpineInitEulers = getEulerOrientation(1);
+			rightUpperArmInitEulers = getEulerOrientation(2);
+			rightForeArmInitEulers = getEulerOrientation(3);
+			leftUpperArmInitEulers = getEulerOrientation(4);
+			leftForeArmInitEulers = getEulerOrientation(5);
+			rightThighInitEulers = getEulerOrientation(6);
+			rightCalfInitEulers = getEulerOrientation(7);
+			leftThighInitEulers = getEulerOrientation(8);
+			leftCalfInitEulers = getEulerOrientation(9);
 			//*/
+		}
+	}
+
+
+	// Use this for initialization
+	void Start () 
+	{
+		initSensorsConnection();
+
+		for (int i = 0; i < 10; i++) 
+		{
+			ConnectSensor(i);		
+		}
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+		if (!isInitialized) 
+		{
+			isInitialized = true;
+			ResetOrientations ();
 		}
 	}
 
 	void OnApplicationQuit() 
 	{
-		if (getNumberConnectedDevices () >= 1) 
+		for (int i = 0; i < 10; i++) 
 		{
-			shutDown6DSensor (0);
+			ShutdownSensor(i);		
 		}
 	}
 
 	void OnDestroy() 
 	{
-		if (getNumberConnectedDevices () >= 1) 
+		for (int i = 0; i < 10; i++) 
 		{
-			shutDown6DSensor (0);
+			ShutdownSensor(i);		
 		}
 	}
 
 
 	void LateUpdate()
 	{
-		if (getNumberConnectedDevices () >= 2) 
+		if (getNumberConnectedDevices () >= 1 && isInitialized) 
 		{
-			Debug.Log(">1 sensors connected");
-			//currentDirection.x = Mathf.Clamp(currentDirection.x + Input.GetAxis("Mouse X"), -1, 1);
-			//currentDirection.y = Mathf.Clamp(currentDirection.y + Input.GetAxis("Mouse Y"), -1, 1);
-			//rightUpperArmTarget = Quaternion.LookRotation(currentDirection);
+			upperSpineCurrentEulers = getEulerOrientation(0);
+			//upperSpineCurrentEulers.x = 0;//mapRange(-180, 180, 0, 360, upperSpineCurrentEulers.x);
+			//upperSpineCurrentEulers.y = 0;//mapRange(-180, 180, 0, 360, upperSpineCurrentEulers.y);
+			//upperSpineCurrentEulers.z = upperSpineCurrentEulers.z + 180;
+			upperSpineCurrentEulers = upperSpineCurrentEulers - upperSpineInitEulers;
+			//mapRange(-360, 360, -90, 90, upperSpineCurrentEulers.z);
 
+			/*lowerSpineCurrentEulers = getEulerOrientation(1);
+			rightUpperArmCurrentEulers = getEulerOrientation(2);
+			rightForeArmCurrentEulers = getEulerOrientation(3);
+			leftUpperArmCurrentEulers = getEulerOrientation(4);
+			leftForeArmCurrentEulers = getEulerOrientation(5);
+			rightThighCurrentEulers = getEulerOrientation(6);
+			rightCalfCurrentEulers = getEulerOrientation(7);
+			leftThighCurrentEulers = getEulerOrientation(8);
+			leftCalfCurrentEulers = getEulerOrientation(9);
+			//*/
 
-			upperSpineCurrentEulers.x = getSensorLatestPitch (0) * 360 / Mathf.PI; 
-			upperSpineCurrentEulers.y = getSensorLatestYaw (0) * 360 / Mathf.PI;
-			upperSpineCurrentEulers.z = getSensorLatestRoll (0) * 360 / Mathf.PI;
-			upperSpineCurrentEulers += upperSpineCurrentEulers - upperSpineInitEulers;
-
-			lowerSpineCurrentEulers.x = getSensorLatestPitch (1) * 360 / Mathf.PI; 
-			lowerSpineCurrentEulers.y = getSensorLatestYaw (1) * 360 / Mathf.PI;
-			lowerSpineCurrentEulers.z = getSensorLatestRoll (1) * 360 / Mathf.PI;
+			/*upperSpineCurrentEulers += upperSpineCurrentEulers - upperSpineInitEulers;
 			lowerSpineCurrentEulers += lowerSpineCurrentEulers - lowerSpineInitEulers;
-
-			/*rightUpperArmCurrentEulers.x = getSensorLatestPitch (2) * 360 / Mathf.PI; 
-			rightUpperArmCurrentEulers.y = getSensorLatestYaw (2) * 360 / Mathf.PI;
-			rightUpperArmCurrentEulers.z = getSensorLatestRoll (2) * 360 / Mathf.PI;
 			rightUpperArmCurrentEulers += rightUpperArmCurrentEulers - rightUpperArmInitEulers;
-			
-			rightForeArmCurrentEulers.x = getSensorLatestPitch (3) * 360 / Mathf.PI; 
-			rightForeArmCurrentEulers.y = getSensorLatestYaw (3) * 360 / Mathf.PI;
-			rightForeArmCurrentEulers.z = getSensorLatestRoll (3) * 360 / Mathf.PI;
 			rightForeArmCurrentEulers += rightForeArmCurrentEulers - rightForeArmInitEulers;
-
-			leftUpperArmCurrentEulers.x = getSensorLatestPitch (4) * 360 / Mathf.PI; 
-			leftUpperArmCurrentEulers.y = getSensorLatestYaw (4) * 360 / Mathf.PI;
-			leftUpperArmCurrentEulers.z = getSensorLatestRoll (4) * 360 / Mathf.PI;
-			leftUpperArmCurrentEulers += leftUpperArmCurrentEulers - leftUpperArmInittEulers;
-
-			leftForeArmCurrentEulers.x = getSensorLatestPitch (5) * 360 / Mathf.PI; 
-			leftForeArmCurrentEulers.y = getSensorLatestYaw (5) * 360 / Mathf.PI;
-			leftForeArmCurrentEulers.z = getSensorLatestRoll (5) * 360 / Mathf.PI;
+			leftUpperArmCurrentEulers += leftUpperArmCurrentEulers - leftUpperArmInitEulers;
 			leftForeArmCurrentEulers += leftForeArmCurrentEulers - leftForeArmInitEulers;
-
-			rightThighCurrentEulers.x = getSensorLatestPitch (6) * 360 / Mathf.PI; 
-			rightThighCurrentEulers.y = getSensorLatestYaw (6) * 360 / Mathf.PI;
-			rightThighCurrentEulers.z = getSensorLatestRoll (6) * 360 / Mathf.PI;
 			rightThighCurrentEulers += rightThighCurrentEulers - rightThighInitEulers;
-
-			rightCalfCurrentEulers.x = getSensorLatestPitch (7) * 360 / Mathf.PI; 
-			rightCalfCurrentEulers.y = getSensorLatestYaw (7) * 360 / Mathf.PI;
-			rightCalfCurrentEulers.z = getSensorLatestRoll (7) * 360 / Mathf.PI;
-			rightCalfCurrentEulers += rightCalfCurrentEulers - rightCalfInittEulers;
-
-			leftThighCurrentEulers.x = getSensorLatestPitch (8) * 360 / Mathf.PI; 
-			leftThighCurrentEulers.y = getSensorLatestYaw (8) * 360 / Mathf.PI;
-			leftThighCurrentEulers.z = getSensorLatestRoll (8) * 360 / Mathf.PI;
+			rightCalfCurrentEulers += rightCalfCurrentEulers - rightCalfInitEulers;
 			leftThighCurrentEulers += leftThighCurrentEulers - leftThighInitEulers;
-
-			leftCalfCurrentEulers.x = getSensorLatestPitch (9) * 360 / Mathf.PI; 
-			leftCalfCurrentEulers.y = getSensorLatestYaw (9) * 360 / Mathf.PI;
-			leftCalfCurrentEulers.z = getSensorLatestRoll (9) * 360 / Mathf.PI;
 			leftCalfCurrentEulers += leftCalfCurrentEulers - leftCalfInitEulers;
 			//*/
 
@@ -324,10 +309,14 @@ public class BonesControl : MonoBehaviour
 			rightCalfTransform.localRotation 	 = rightCalfTarget;
 			leftThighTransform.localRotation 	 = leftThighTarget;
 			leftCalfTransform.localRotation 	 = leftCalfTarget;
+		}
+	}
 
-			//Quaternion.Slerp(rightUpperArmTransform.localRotation, rightUpperArmTarget, rightUpperArmFac);
-			//elbow.localRotation = Quaternion.Slerp(elbow.localRotation, rotation, elbowControl);
-			//hand.localRotation = Quaternion.Slerp(hand.localRotation, rotation, handControl);
+	void OnGUI()
+	{
+		if (GUI.Button (new Rect (20, 20, 100, 50), "RESET")) 
+		{
+			ResetOrientations();
 		}
 	}
 }

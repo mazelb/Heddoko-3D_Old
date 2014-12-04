@@ -566,7 +566,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     return 0;
 }
 
-
+#define PI	3.14159265358979323846
 //--------------------------------------------------------------------------------------
 // Render a frame
 //--------------------------------------------------------------------------------------
@@ -596,7 +596,15 @@ void Render()
 	FLOAT vYaw = 0;
 	FLOAT vRoll = 0;
 	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
-	g_World = XMMatrixRotationRollPitchYaw(0, 0, vRoll);
+	char temp[512];
+
+	g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll/2);
+
+	vPitch = vPitch *360 / PI;
+	vYaw = vYaw * 360 / PI;
+	vRoll = vRoll * 360 / PI;
+	sprintf_s(temp, "vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
+	OutputDebugStringA(temp);
 
 // 	if (vpEvent != NULL)
 // 	{

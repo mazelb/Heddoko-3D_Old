@@ -22,7 +22,7 @@ public:
 	void shutDown6DSensor(unsigned int vIdx);
 	void connect6DSensor(unsigned int vIdx);
 	void getSensorLatestOrientation(unsigned int vIdx, float& vPitch, float& vRoll, float& vYaw);
-	BOOL indexExist(unsigned int vIdx);
+	bool indexExist(unsigned int vIdx);
 
 	Pose6DEvent* getSensorLatestEvent(unsigned int vIdx);
 
@@ -35,7 +35,7 @@ private:
 extern "C"
 {
 	SENSORSSDLL_API void initSensorsConnection();
-	SENSORSSDLL_API BOOL indexExist(int vIdx);
+	SENSORSSDLL_API bool indexExist(int vIdx);
 	SENSORSSDLL_API void connect6DSensor(int vIdx);
 	SENSORSSDLL_API void shutDown6DSensor(int vIdx);
 	SENSORSSDLL_API int  getNumberConnectedDevices();
