@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -42,32 +42,12 @@ public class BonesControl : MonoBehaviour
 	//Torso transforms
 	public Transform upperSpineTransform = null;
 	public Transform lowerSpineTransform = null;
-	//public Transform rightShoulderTransform = null;
-	//public Transform leftShoulderTransform = null;
-	//public Transform rightHipTransform = null;
-	//public Transform leftHipTransform = null;
 
 	//Legs transforms
 	public Transform rightThighTransform = null;
 	public Transform rightCalfTransform = null;
 	public Transform leftCalfTransform = null;
 	public Transform leftThighTransform = null;
-
-	//factors
-	public float rightUpperArmFac = 0.5f;
-	public float rightForeArmFac = 0.5f;
-	public float leftUpperArmFac = 0.5f;
-	public float leftForeArmFac = 0.5f;
-	public float upperSpineFac = 0.5f;
-	public float lowerSpineFac = 0.5f;
-	public float rightThighFac = 0.5f;
-	public float rightCalfFac = 0.5f;
-	public float leftCalfFac = 0.5f;
-	public float leftThighFac = 0.5f;
-	//public float rightShoulderFac = 0.5f;
-	//public float leftShoulderFac = 0.5f;
-	//public float leftHipFac = 0.5f;
-	//public float rightHipFac = 0.5f;
 
 	//Quaternion targets
 	private Quaternion rightUpperArmTarget;
@@ -80,11 +60,6 @@ public class BonesControl : MonoBehaviour
 	private Quaternion rightCalfTarget;
 	private Quaternion leftCalfTarget;
 	private Quaternion leftThighTarget;
-	//private Quaternion leftShoulderTarget;
-	//private Quaternion rightShoulderTarget;
-	//private Quaternion spineTarget;
-	//private Quaternion leftHipTarget;
-	//private Quaternion rightHipTarget;
 
 	//Vector Initial targets
 	private Vector3 rightUpperArmInitEulers;
@@ -97,11 +72,6 @@ public class BonesControl : MonoBehaviour
 	private Vector3 rightCalfInitEulers;
 	private Vector3 leftThighInitEulers;
 	private Vector3 leftCalfInitEulers;
-	//private Quaternion spineInitEulers;
-	//private Quaternion rightShoulderInitEulers;
-	//private Quaternion leftShoulderInitEulers;
-	//private Quaternion rightHipInitEulers;
-	//private Quaternion leftHipInitEulers;
 
 	//Vector Current targets
 	private Vector3 rightUpperArmCurrentEulers;
@@ -114,12 +84,6 @@ public class BonesControl : MonoBehaviour
 	private Vector3 rightCalfCurrentEulers;
 	private Vector3 leftThighCurrentEulers;
 	private Vector3 leftCalfCurrentEulers;
-	//private Quaternion spineCurrentEulers;
-	//private Quaternion rightShoulderCurrentEulers;
-	//private Quaternion leftShoulderCurrentEulers;
-	//private Quaternion rightHipCurrentEulers;
-	//private Quaternion leftHipCurrentEulers;
-
 
 	private Boolean isInitialized = false;
 
@@ -257,7 +221,6 @@ public class BonesControl : MonoBehaviour
 	{
 		if (getNumberConnectedDevices () >= 1 && isInitialized) 
 		{
-
 			/*upperSpineCurrentEulers = getEulerOrientation(0);
 			upperSpineCurrentEulers = upperSpineCurrentEulers - upperSpineInitEulers;
 
@@ -277,13 +240,17 @@ public class BonesControl : MonoBehaviour
 			rightForeArmCurrentEulers = rightForeArmCurrentEulers - rightForeArmInitEulers;
 			//*/
 
-			/*leftUpperArmCurrentEulers = getEulerOrientation(0);
-			leftUpperArmCurrentEulers = leftUpperArmCurrentEulers - leftUpperArmInitEulers;
-			leftUpperArmCurrentEulers.x = leftUpperArmCurrentEulers.x + 90;
-			leftUpperArmCurrentEulers.y = leftUpperArmCurrentEulers.y;
-			leftUpperArmCurrentEulers.z = leftUpperArmCurrentEulers.z + 90;
+			//vPitch: -176.545425 vRoll: -32.676498 vYaw: 178.251984 
+			leftUpperArmCurrentEulers = getEulerOrientation(0);
+			Vector3 tempVector = leftUpperArmCurrentEulers - leftUpperArmInitEulers;
+			/*tempVector.x = mapRange(-360, 360, 0, 360, tempVector.x);
+			tempVector.y = mapRange(-360, 360, 0, 360, tempVector.y);
+			tempVector.z = mapRange(-360, 360, 0, 360, tempVector.z);*/
+			leftUpperArmCurrentEulers = new Vector3(tempVector.x, tempVector.y, tempVector.z);
+			//leftUpperArmCurrentEulers = new Vector3(tempVector.y, 0, 0);
+			//leftUpperArmCurrentEulers = new Vector3(-176.5F, -32.6F, 178.25F);
 
-			leftForeArmCurrentEulers = getEulerOrientation(1);
+			/*leftForeArmCurrentEulers = getEulerOrientation(1);
 			leftForeArmCurrentEulers = leftForeArmCurrentEulers - leftForeArmInitEulers;
 			//*/
 

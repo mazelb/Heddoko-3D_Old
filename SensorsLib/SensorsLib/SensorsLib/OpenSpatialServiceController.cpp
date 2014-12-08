@@ -722,7 +722,7 @@ void OpenSpatialServiceController::subscribeToPointer(std::string name)
 	BOOL bResult = ControlService(OSService, SUBSCRIBE_TO_POINTER, &status);
 	if (!bResult)
 	{
-		if (!buildingForUnity)
+		if (!buildingForUnity)	
 			printf("ERROR SUBSCRIBE 2D %d", GetLastError());
 		//Handle errors
 	}

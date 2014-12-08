@@ -83,6 +83,12 @@ void Render();
 //--------------------------------------------------------------------------------------
 SensorDLL* sensorsLib = NULL;
 
+#define PI	3.14159265358979323846
+bool isInit = false;
+FLOAT vInitPitch = 0;
+FLOAT vInitYaw = 0;
+FLOAT vInitRoll = 0;
+
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
@@ -559,6 +565,18 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
             PostQuitMessage( 0 );
             break;
 
+		case WM_CHAR:
+			switch (wParam)
+			{
+			case 0x08:
+				// Process a backspace. 
+				isInit = false;
+				break;
+			default:
+				// Process displayable characters. 
+				break;
+			}
+
         default:
             return DefWindowProc( hWnd, message, wParam, lParam );
     }
@@ -566,7 +584,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     return 0;
 }
 
-#define PI	3.14159265358979323846
+
 //--------------------------------------------------------------------------------------
 // Render a frame
 //--------------------------------------------------------------------------------------
@@ -595,14 +613,27 @@ void Render()
 	FLOAT vPitch = 0;
 	FLOAT vYaw = 0;
 	FLOAT vRoll = 0;
-	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
-	char temp[512];
 
-	g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll/2);
+	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
+
+	if (!isInit)
+	{
+		isInit = true;
+		vInitPitch = vPitch;
+		vInitYaw = vRoll;
+		vInitRoll = vYaw;
+	}
+
+	vPitch = vPitch - vInitPitch;
+	vYaw = vYaw - vInitYaw;
+	vRoll = vRoll - vInitRoll;
+	g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll);
 
 	vPitch = vPitch *360 / PI;
 	vYaw = vYaw * 360 / PI;
 	vRoll = vRoll * 360 / PI;
+
+	char temp[512];
 	sprintf_s(temp, "vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
 	OutputDebugStringA(temp);
 
