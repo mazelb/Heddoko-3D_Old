@@ -172,9 +172,8 @@ public class BonesControl : MonoBehaviour
 			leftForeArmInitEulers = getEulerOrientation(5);//*/
 			rightThighInitEulers = getEulerOrientation(6);
 			rightCalfInitEulers = getEulerOrientation(7);//*/
-			leftThighInitEulers = getEulerOrientation(8);
-			leftCalfInitEulers = getEulerOrientation(9);//*/
-			//*/
+			leftThighInitEulers = getEulerOrientation(0);
+			leftCalfInitEulers = getEulerOrientation(1);//*/
 		}
 	}
 
@@ -223,38 +222,56 @@ public class BonesControl : MonoBehaviour
 		{
 			upperSpineCurrentEulers = getEulerOrientation(0);
 			upperSpineCurrentEulers = upperSpineCurrentEulers - upperSpineInitEulers;
+			upperSpineCurrentEulers = new Vector3(-upperSpineCurrentEulers.x, -upperSpineCurrentEulers.y, upperSpineCurrentEulers.z);
+			//*/
 
 			lowerSpineCurrentEulers = getEulerOrientation(1);
 			lowerSpineCurrentEulers = lowerSpineCurrentEulers - lowerSpineInitEulers;
+			lowerSpineCurrentEulers = new Vector3(-lowerSpineCurrentEulers.x, -lowerSpineCurrentEulers.y, lowerSpineCurrentEulers.z);
 			//*/
 
 			rightUpperArmCurrentEulers = getEulerOrientation(2);
 			rightUpperArmCurrentEulers = rightUpperArmCurrentEulers - rightUpperArmInitEulers;
+			rightUpperArmCurrentEulers = new Vector3(rightUpperArmCurrentEulers.x, -rightUpperArmCurrentEulers.y, -rightUpperArmCurrentEulers.z);
+			//*/
 
 			rightForeArmCurrentEulers = getEulerOrientation(3);
 			rightForeArmCurrentEulers = rightForeArmCurrentEulers - rightForeArmInitEulers;
+			//rightForeArmCurrentEulers = new Vector3(rightForeArmCurrentEulers.x, -rightForeArmCurrentEulers.y, -rightForeArmCurrentEulers.z);
+			rightForeArmCurrentEulers = new Vector3(rightForeArmCurrentEulers.x, -rightForeArmCurrentEulers.y, 0);
 			//*/
 
-			//vPitch: -176.545425 vRoll: -32.676498 vYaw: 178.251984 
 			leftUpperArmCurrentEulers = getEulerOrientation(4);
 			leftUpperArmCurrentEulers = leftUpperArmCurrentEulers - leftUpperArmInitEulers;
+			leftUpperArmCurrentEulers = new Vector3(leftUpperArmCurrentEulers.x, -leftUpperArmCurrentEulers.y, -leftUpperArmCurrentEulers.z);
+			//*/
 
 			leftForeArmCurrentEulers = getEulerOrientation(5);
 			leftForeArmCurrentEulers = leftForeArmCurrentEulers - leftForeArmInitEulers;
+			//leftForeArmCurrentEulers = new Vector3(leftForeArmCurrentEulers.x, -leftForeArmCurrentEulers.y, -leftForeArmCurrentEulers.z);
+			leftForeArmCurrentEulers = new Vector3(leftForeArmCurrentEulers.x, -leftForeArmCurrentEulers.y, 0);
 			//*/
 
 			rightThighCurrentEulers = getEulerOrientation(6);
 			rightThighCurrentEulers = rightThighCurrentEulers - rightThighInitEulers;
+			rightThighCurrentEulers = new Vector3(-rightThighCurrentEulers.x, -rightThighCurrentEulers.y, rightThighCurrentEulers.z);
+			//*/
 
 			rightCalfCurrentEulers = getEulerOrientation(7);
 			rightCalfCurrentEulers = rightCalfCurrentEulers - rightCalfInitEulers;
+			//rightCalfCurrentEulers = new Vector3(-rightCalfCurrentEulers.x, -rightCalfCurrentEulers.y, rightCalfCurrentEulers.z);
+			rightCalfCurrentEulers = new Vector3(-rightCalfCurrentEulers.x, 0, 0);
 			//*/
 
-			leftThighCurrentEulers = getEulerOrientation(8);
+			leftThighCurrentEulers = getEulerOrientation(0);
 			leftThighCurrentEulers = leftThighCurrentEulers - leftThighInitEulers;
+			leftThighCurrentEulers = new Vector3(-leftThighCurrentEulers.x, -leftThighCurrentEulers.y, leftThighCurrentEulers.z);
+			//*/
 
-			leftCalfCurrentEulers = getEulerOrientation(9);
+			leftCalfCurrentEulers = getEulerOrientation(1);
 			leftCalfCurrentEulers = leftCalfCurrentEulers - leftCalfInitEulers;
+			//leftCalfCurrentEulers = new Vector3(-leftCalfCurrentEulers.x, -leftCalfCurrentEulers.y, leftCalfCurrentEulers.z);
+			leftCalfCurrentEulers = new Vector3(-leftCalfCurrentEulers.x, 0, 0);
 			//*/
 
 			upperSpineTarget 	= Quaternion.Euler(upperSpineCurrentEulers);
