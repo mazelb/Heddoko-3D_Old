@@ -620,8 +620,8 @@ void Render()
 	{
 		isInit = true;
 		vInitPitch = vPitch;
-		vInitYaw = vRoll;
-		vInitRoll = vYaw;
+		vInitYaw = vYaw;
+		vInitRoll = vRoll;
 	}
 
 	vPitch = vPitch - vInitPitch;
@@ -636,15 +636,6 @@ void Render()
 	char temp[512];
 	sprintf_s(temp, "vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
 	OutputDebugStringA(temp);
-
-// 	if (vpEvent != NULL)
-// 	{
-// 		FLOAT vPitch = vpEvent->pitch;
-// 		FLOAT vYaw = vpEvent->yaw;
-// 		FLOAT vRoll = vpEvent->roll;
-// 
-// 		g_World = XMMatrixRotationRollPitchYaw(vPitch, vYaw, vRoll);
-// 	}
 
     // Modify the color
     g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;

@@ -164,15 +164,15 @@ public class BonesControl : MonoBehaviour
 			leftThighTransform.localRotation 	 = leftThighTarget;
 			leftCalfTransform.localRotation 	 = leftCalfTarget;
 			
-			/*upperSpineInitEulers = getEulerOrientation(0);
+			upperSpineInitEulers = getEulerOrientation(0);
 			lowerSpineInitEulers = getEulerOrientation(1);//*/
-			/*rightUpperArmInitEulers = getEulerOrientation(2);
+			rightUpperArmInitEulers = getEulerOrientation(2);
 			rightForeArmInitEulers = getEulerOrientation(3);//*/
-			leftUpperArmInitEulers = getEulerOrientation(0);
-			/*leftForeArmInitEulers = getEulerOrientation(1);//*/
-			/*rightThighInitEulers = getEulerOrientation(6);
+			leftUpperArmInitEulers = getEulerOrientation(4);
+			leftForeArmInitEulers = getEulerOrientation(5);//*/
+			rightThighInitEulers = getEulerOrientation(6);
 			rightCalfInitEulers = getEulerOrientation(7);//*/
-			/*leftThighInitEulers = getEulerOrientation(8);
+			leftThighInitEulers = getEulerOrientation(8);
 			leftCalfInitEulers = getEulerOrientation(9);//*/
 			//*/
 		}
@@ -208,60 +208,49 @@ public class BonesControl : MonoBehaviour
 		}
 	}
 
-	void OnDestroy() 
+	/*void OnDestroy() 
 	{
 		for (int i = 0; i < 10; i++) 
 		{
 			ShutdownSensor(i);		
 		}
-	}
+	}*/
 
 
 	void LateUpdate()
 	{
 		if (getNumberConnectedDevices () >= 1 && isInitialized) 
 		{
-			/*upperSpineCurrentEulers = getEulerOrientation(0);
+			upperSpineCurrentEulers = getEulerOrientation(0);
 			upperSpineCurrentEulers = upperSpineCurrentEulers - upperSpineInitEulers;
 
 			lowerSpineCurrentEulers = getEulerOrientation(1);
 			lowerSpineCurrentEulers = lowerSpineCurrentEulers - lowerSpineInitEulers;
 			//*/
 
-			/*rightUpperArmCurrentEulers = getEulerOrientation(0);
+			rightUpperArmCurrentEulers = getEulerOrientation(2);
 			rightUpperArmCurrentEulers = rightUpperArmCurrentEulers - rightUpperArmInitEulers;
-			rightUpperArmCurrentEulers.x = rightUpperArmCurrentEulers.z;
-			rightUpperArmCurrentEulers.z = rightUpperArmCurrentEulers.x;//*/
-			/*rightUpperArmCurrentEulers.x = -tempVector.y;
-			rightUpperArmCurrentEulers.y = tempVector.z;
-			rightUpperArmCurrentEulers.z = -tempVector.x;//*/
 
-			/*rightForeArmCurrentEulers = getEulerOrientation(1);
+			rightForeArmCurrentEulers = getEulerOrientation(3);
 			rightForeArmCurrentEulers = rightForeArmCurrentEulers - rightForeArmInitEulers;
 			//*/
 
 			//vPitch: -176.545425 vRoll: -32.676498 vYaw: 178.251984 
-			leftUpperArmCurrentEulers = getEulerOrientation(0);
-			Vector3 tempVector = leftUpperArmCurrentEulers - leftUpperArmInitEulers;
-			/*tempVector.x = mapRange(-360, 360, 0, 360, tempVector.x);
-			tempVector.y = mapRange(-360, 360, 0, 360, tempVector.y);
-			tempVector.z = mapRange(-360, 360, 0, 360, tempVector.z);*/
-			leftUpperArmCurrentEulers = new Vector3(tempVector.x, tempVector.y, tempVector.z);
-			//leftUpperArmCurrentEulers = new Vector3(tempVector.y, 0, 0);
-			//leftUpperArmCurrentEulers = new Vector3(-176.5F, -32.6F, 178.25F);
+			leftUpperArmCurrentEulers = getEulerOrientation(4);
+			leftUpperArmCurrentEulers = leftUpperArmCurrentEulers - leftUpperArmInitEulers;
 
-			/*leftForeArmCurrentEulers = getEulerOrientation(1);
+			leftForeArmCurrentEulers = getEulerOrientation(5);
 			leftForeArmCurrentEulers = leftForeArmCurrentEulers - leftForeArmInitEulers;
 			//*/
 
-			/*rightThighCurrentEulers = getEulerOrientation(6);
+			rightThighCurrentEulers = getEulerOrientation(6);
 			rightThighCurrentEulers = rightThighCurrentEulers - rightThighInitEulers;
 
 			rightCalfCurrentEulers = getEulerOrientation(7);
 			rightCalfCurrentEulers = rightCalfCurrentEulers - rightCalfInitEulers;
 			//*/
 
-			/*leftThighCurrentEulers = getEulerOrientation(8);
+			leftThighCurrentEulers = getEulerOrientation(8);
 			leftThighCurrentEulers = leftThighCurrentEulers - leftThighInitEulers;
 
 			leftCalfCurrentEulers = getEulerOrientation(9);

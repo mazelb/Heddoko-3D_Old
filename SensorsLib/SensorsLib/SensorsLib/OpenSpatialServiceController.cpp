@@ -713,7 +713,7 @@ void OpenSpatialServiceController::sendName(std::string name)
 	requestAccepted = FALSE;
 }
 
-void OpenSpatialServiceController::subscribeToPointer(std::string name)
+void OpenSpatialServiceController::subscribeToPointer(std::string name)	
 {
 	sendName(name);
 	subscribedToPointer = true;
