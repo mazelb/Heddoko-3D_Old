@@ -329,15 +329,19 @@ DWORD WINAPI openDataSocket(LPVOID lpParam)
 	if (!buildingForUnity)
 		OutputDebugStringA("data connected\n");
 
+	char temp[512];
+
 	while (true)
 	{
 		if (subscribedToPointer || subscribedToGesture || subscribedToButton || subscribedToPose6D)
 		{
-			OutputDebugStringA("OpenDataSocket loop subscribed\n");
+			//OutputDebugStringA("OpenDataSocket loop subscribed\n");
 			iResult = recv(dataSocket, (char*)recvbuf, recvbuflen, 0);
 			if (iResult > 0)
 			{
-				OutputDebugStringA("OpenDataSocekt Data received\n");
+				//sprintf_s(temp, "vID: %d = vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
+				//OutputDebugStringA(temp);
+				//OutputDebugStringA("OpenDataSocekt Data received\n");
 				decodeAndSendEvents(recvbuf, iResult);
 			}
 			else if (iResult == 0) 

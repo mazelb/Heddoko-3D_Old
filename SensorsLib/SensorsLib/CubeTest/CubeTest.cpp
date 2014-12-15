@@ -85,6 +85,7 @@ SensorDLL* sensorsLib = NULL;
 
 #define PI	3.14159265358979323846
 bool isInit = false;
+int vCurIndex = 0;
 FLOAT vInitPitch = 0;
 FLOAT vInitYaw = 0;
 FLOAT vInitRoll = 0;
@@ -112,7 +113,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	sensorsLib->initSensorsConnection();
 	if (sensorsLib->getNumberConnectedDevices() >= 1)
 	{
-		sensorsLib->connect6DSensor(0);
+		for (int i = 0; i < 10; i++)
+		{
+			sensorsLib->connect6DSensor(i);
+		}
+		
 	}
 
 
@@ -130,6 +135,15 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
             Render();
         }
     }
+
+	if (sensorsLib->getNumberConnectedDevices() >= 1)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			sensorsLib->shutDown6DSensor(i);
+		}
+
+	}
 
     CleanupDevice();
 
@@ -564,6 +578,35 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
         case WM_DESTROY:
             PostQuitMessage( 0 );
             break;
+		
+		case WM_KEYDOWN:
+			switch (wParam)
+			{
+			case VK_LEFT:
+				vCurIndex++;
+				if (vCurIndex > 9)
+				{
+					vCurIndex = 0;
+				}
+				break;
+
+			case VK_RIGHT:
+				vCurIndex--;
+				if (vCurIndex < 0)
+				{
+					vCurIndex = 9;
+				}
+				break;
+
+			case VK_UP:
+
+				// Process the UP ARROW key. 
+
+				break;
+
+			default:
+				break;
+			}
 
 		case WM_CHAR:
 			switch (wParam)
@@ -608,13 +651,13 @@ void Render()
     // Rotate cube around the origin
     //g_World = XMMatrixRotationY( t );
 
-	Pose6DEvent* vpEvent = sensorsLib->getSensorLatestEvent(0);
+	Pose6DEvent* vpEvent = sensorsLib->getSensorLatestEvent(vCurIndex);
 
 	FLOAT vPitch = 0;
 	FLOAT vYaw = 0;
 	FLOAT vRoll = 0;
 
-	sensorsLib->getSensorLatestOrientation(0, vPitch, vRoll, vYaw);
+	sensorsLib->getSensorLatestOrientation(vCurIndex, vPitch, vRoll, vYaw);
 
 	if (!isInit)
 	{
@@ -633,9 +676,9 @@ void Render()
 	vYaw = vYaw * 360 / PI;
 	vRoll = vRoll * 360 / PI;
 
-	char temp[512];
-	sprintf_s(temp, "vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
-	OutputDebugStringA(temp);
+	//char temp[512];
+	//sprintf_s(temp, "vPitch: %f vRoll: %f vYaw: %f \n", vPitch, vRoll, vYaw);
+	//OutputDebugStringA(temp);
 
     // Modify the color
     g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;

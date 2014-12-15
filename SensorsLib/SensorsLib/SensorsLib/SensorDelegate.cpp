@@ -29,6 +29,10 @@ void SensorDelegate::gestureEventFired(GestureEvent event)
 void SensorDelegate::pose6DEventFired(Pose6DEvent event)
 {
 	mMtx.lock();
+// 		char temp[512];
+// 		sprintf_s(temp, "vID: %d \n", event.sender);
+// 		OutputDebugStringA(temp);
+
 		//printf("\nPose6D Event Fired. Yaw: %f, Pitch: %f, Roll %f from id: %d", event.yaw, event.pitch, event.roll, event.sender);
 		if (pose6DEventsMap[event.sender] != NULL)
 		{
