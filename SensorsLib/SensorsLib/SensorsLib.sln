@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SensorsLib", "SensorsLib\Se
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CubeTest", "CubeTest\Tutorial07_2010.vcxproj", "{D29C6982-A589-4081-89B1-91E78D7C41E2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleAppNoDLL", "..\..\..\..\..\99_Ressources\openspatial-windows\OpenSpatialExampleApp\ExampleAppNoDLL\ExampleAppNoDLL.vcxproj", "{7D89F508-20AE-46A8-BEF0-65BDC9A5809E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleAppNoDLL", "..\..\..\..\RESOURCES\openspatial-windows\OpenSpatialExampleApp\ExampleAppNoDLL.vcxproj", "{7D89F508-20AE-46A8-BEF0-65BDC9A5809E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
