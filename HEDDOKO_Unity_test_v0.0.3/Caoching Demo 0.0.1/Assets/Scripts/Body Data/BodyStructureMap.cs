@@ -5,19 +5,19 @@ using System.Collections.Generic;
 public class BodyStructureMap : MonoBehaviour
 {
     #region Singleton definition
-    private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr();
+    private static readonly BodyStructureMap instance = new BodyStructureMap();
 
     // Explicit static constructor to tell C# compiler
     // not to mark type as beforefieldinit
-    static BodyRecordingsMgr()
+    static BodyStructureMap()
     {
     }
 
-    private BodyRecordingsMgr()
+    private BodyStructureMap()
     {
     }
 
-    public static BodyRecordingsMgr Instance
+    public static BodyStructureMap Instance
     {
         get
         {
@@ -109,62 +109,337 @@ public class BodyStructureMap : MonoBehaviour
 
     public void CreateBodyToSegmentMap()
     {
-        //TODO:
+        //BodyToSegmentMap = new Dictionary<BodyTypes, List<SegmentTypes>>();
+
         var vBodyTypes = EnumUtil.GetValues<BodyTypes>();
         foreach (BodyTypes vBodyType in vBodyTypes)
         {
             switch(vBodyType)
             {
                 case BodyTypes.BodyType_FullBody:
+                    {
+                        List<SegmentTypes> vFullBodySegments = new List<SegmentTypes>();
+                        var vSegmentTypes = EnumUtil.GetValues<SegmentTypes>();
 
-                    //BodyToSegmentMap.
+                        foreach (SegmentTypes vSegmentType in vSegmentTypes)
+                        {
+                            if (vSegmentType != SegmentTypes.SegmentType_Count)
+                            {
+                                vFullBodySegments.Add(vSegmentType);
+                            }
+                        }
+
+                        BodyToSegmentMap.Add(BodyTypes.BodyType_FullBody, vFullBodySegments);
+                    }
                     break;
                 case BodyTypes.BodyType_UpperBody:
+                    {
+                        List<SegmentTypes> vUpperBodySegments = new List<SegmentTypes>();
+                        vUpperBodySegments.Add(SegmentTypes.SegmentType_Torso);
+                        vUpperBodySegments.Add(SegmentTypes.SegmentType_RightArm);
+                        vUpperBodySegments.Add(SegmentTypes.SegmentType_LeftArm);
+                        BodyToSegmentMap.Add(BodyTypes.BodyType_UpperBody, vUpperBodySegments);
+                    }
                     break;
                 case BodyTypes.BodyType_LowerBody:
+                    {
+                        List<SegmentTypes> vLowerBodySegments = new List<SegmentTypes>();
+                        vLowerBodySegments.Add(SegmentTypes.SegmentType_RightLeg);
+                        vLowerBodySegments.Add(SegmentTypes.SegmentType_LeftLeg);
+                        BodyToSegmentMap.Add(BodyTypes.BodyType_LowerBody, vLowerBodySegments);
+                    }
                     break;
                 case BodyTypes.BodyType_Limbs:
+                    {
+                        List<SegmentTypes> vLimbsBodySegments = new List<SegmentTypes>();
+                        vLimbsBodySegments.Add(SegmentTypes.SegmentType_RightArm);
+                        vLimbsBodySegments.Add(SegmentTypes.SegmentType_LeftArm);
+                        vLimbsBodySegments.Add(SegmentTypes.SegmentType_RightLeg);
+                        vLimbsBodySegments.Add(SegmentTypes.SegmentType_LeftLeg);
+                        BodyToSegmentMap.Add(BodyTypes.BodyType_LowerBody, vLimbsBodySegments);
+                    }
                     break;
                 default:
                     break;
             }
-            BodySegment vSegment = new BodySegment();
-            vSegment.SegmentType = vSegmentType;
-            vSegment.IsTracked = true;
-            vSegmentType.InitSegment();
         }
-
-
-   
-
-        SegmentTypes.SegmentType_Torso = 0,
-        SegmentTypes.SegmentType_RightArm = 1,
-        SegmentTypes.SegmentType_LeftArm = 2,
-        SegmentTypes.SegmentType_RightLeg = 3,
-        SegmentTypes.SegmentType_LeftLeg = 4,
     }
 
     public void CreateSegmentToSubSegmentMap()
     {
-        //TODO:
-
+        var vSegmentTypes = EnumUtil.GetValues<SegmentTypes>();
+        foreach (SegmentTypes vSegmentType in vSegmentTypes)
+        {
+            switch (vSegmentType)
+            {
+                case SegmentTypes.SegmentType_Torso:
+                    {
+                        List<SubSegmentTypes> vTorsoSubSegments = new List<SubSegmentTypes>();
+                        vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_LowerSpine);
+                        vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_UpperSpine);
+                        SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_Torso, vTorsoSubSegments);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_RightArm:
+                    {
+                        List<SubSegmentTypes> vRightArmSubSegments = new List<SubSegmentTypes>();
+                        vRightArmSubSegments.Add(SubSegmentTypes.SubsegmentType_RightUpperArm);
+                        vRightArmSubSegments.Add(SubSegmentTypes.SubsegmentType_RightForeArm);
+                        SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_RightArm, vRightArmSubSegments);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_LeftArm:
+                    {
+                        List<SubSegmentTypes> vLeftArmSubSegments = new List<SubSegmentTypes>();
+                        vLeftArmSubSegments.Add(SubSegmentTypes.SubsegmentType_LeftUpperArm);
+                        vLeftArmSubSegments.Add(SubSegmentTypes.SubsegmentType_LeftForeArm);
+                        SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_LeftArm, vLeftArmSubSegments);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_RightLeg:
+                    {
+                        List<SubSegmentTypes> vRightLegSubSegments = new List<SubSegmentTypes>();
+                        vRightLegSubSegments.Add(SubSegmentTypes.SubsegmentType_RightThigh);
+                        vRightLegSubSegments.Add(SubSegmentTypes.SubsegmentType_RightCalf);
+                        SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_RightLeg, vRightLegSubSegments);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_LeftLeg:
+                    {
+                        List<SubSegmentTypes> vLeftLegSubSegments = new List<SubSegmentTypes>();
+                        vLeftLegSubSegments.Add(SubSegmentTypes.SubsegmentType_LeftThigh);
+                        vLeftLegSubSegments.Add(SubSegmentTypes.SubsegmentType_LeftCalf);
+                        SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_LeftLeg, vLeftLegSubSegments);
+                    }
+                    break;
+            default:
+                    break;
+            }
+        }
     }
 
     public void CreateSegmentToSensorPosMap()
     {
-        //TODO:
-
+        var vSegmentTypes = EnumUtil.GetValues<SegmentTypes>();
+        foreach (SegmentTypes vSegmentType in vSegmentTypes)
+        {
+            switch (vSegmentType)
+            {
+                case SegmentTypes.SegmentType_Torso:
+                    {
+                        List<SensorPositions> vTorsoSensorPos = new List<SensorPositions>();
+                        vTorsoSensorPos.Add(SensorPositions.SP_UpperSpine);
+                        vTorsoSensorPos.Add(SensorPositions.SP_LowerSpine);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_Torso, vTorsoSensorPos);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_RightArm:
+                    {
+                        List<SensorPositions> vRightArmSensorPos = new List<SensorPositions>();
+                        vRightArmSensorPos.Add(SensorPositions.SP_RightUpperArm);
+                        vRightArmSensorPos.Add(SensorPositions.SP_RightForeArm);
+                        vRightArmSensorPos.Add(SensorPositions.SP_RightElbow);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightArm, vRightArmSensorPos);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_LeftArm:
+                    {
+                        List<SensorPositions> vLeftArmSensorPos = new List<SensorPositions>();
+                        vLeftArmSensorPos.Add(SensorPositions.SP_LeftUpperArm);
+                        vLeftArmSensorPos.Add(SensorPositions.SP_LeftForeArm);
+                        vLeftArmSensorPos.Add(SensorPositions.SP_LeftElbow);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightArm, vLeftArmSensorPos);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_RightLeg:
+                    {
+                        List<SensorPositions> vRightLegSensorPos = new List<SensorPositions>();
+                        vRightLegSensorPos.Add(SensorPositions.SP_RightThigh);
+                        vRightLegSensorPos.Add(SensorPositions.SP_RightCalf);
+                        vRightLegSensorPos.Add(SensorPositions.SP_RightKnee);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightLeg, vRightLegSensorPos);
+                    }
+                    break;
+                case SegmentTypes.SegmentType_LeftLeg:
+                    {
+                        List<SensorPositions> vLeftLegSensorPos = new List<SensorPositions>();
+                        vLeftLegSensorPos.Add(SensorPositions.SP_LeftThigh);
+                        vLeftLegSensorPos.Add(SensorPositions.SP_LeftCalf);
+                        vLeftLegSensorPos.Add(SensorPositions.SP_LeftKnee);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightLeg, vLeftLegSensorPos);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public void CreateSensorPosToSensorTypeMap()
     {
-        //TODO:
+        var vSensorPositions = EnumUtil.GetValues<SensorPositions>();
+        foreach (SensorPositions vSensorPos in vSensorPositions)
+        {
+            switch (vSensorPos)
+            {
+                case SensorPositions.SP_UpperSpine:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_UpperSpine, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_LowerSpine:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LowerSpine, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_RightUpperArm:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightUpperArm, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_RightForeArm:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightForeArm, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_RightElbow:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightElbow, SensorTypes.ST_Flexcore);
+                    }
+                    break;
+                case SensorPositions.SP_LeftUpperArm:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftUpperArm, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_LeftForeArm:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftForeArm, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_LeftElbow:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftElbow, SensorTypes.ST_Flexcore);
+                    }
+                    break;
+                case SensorPositions.SP_RightThigh:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightThigh, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_RightCalf:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightCalf, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_RightKnee:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_RightKnee, SensorTypes.ST_Flexcore);
+                    }
+                    break;
+                case SensorPositions.SP_LeftThigh:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftThigh, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_LeftCalf:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftCalf, SensorTypes.ST_Biomech);
+                    }
+                    break;
+                case SensorPositions.SP_LeftKnee:
+                    {
+                        SensorPosToSensorTypeMap.Add(SensorPositions.SP_LeftKnee, SensorTypes.ST_Flexcore);
+                    }
+                    break;
 
+                default:
+                    break;
+            }
+        }
     }
 
     public void CreateSensorPosToSensorIDMap()
     {
-        //TODO:
+        var vSensorPositions = EnumUtil.GetValues<SensorPositions>();
+        foreach (SensorPositions vSensorPos in vSensorPositions)
+        {
+            switch (vSensorPos)
+            {
+                case SensorPositions.SP_UpperSpine:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_UpperSpine, 0);
+                    }
+                    break;
+                case SensorPositions.SP_LowerSpine:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LowerSpine, 9);
+                    }
+                    break;
+                case SensorPositions.SP_RightUpperArm:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightUpperArm, 1);
+                    }
+                    break;
+                case SensorPositions.SP_RightForeArm:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightForeArm, 2);
+                    }
+                    break;
+                case SensorPositions.SP_RightElbow:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightElbow, 0);
+                    }
+                    break;
+                case SensorPositions.SP_LeftUpperArm:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftUpperArm, 3);
+                    }
+                    break;
+                case SensorPositions.SP_LeftForeArm:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftForeArm, 4);
+                    }
+                    break;
+                case SensorPositions.SP_LeftElbow:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftElbow, 1);
+                    }
+                    break;
+                case SensorPositions.SP_RightThigh:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightThigh, 5);
+                    }
+                    break;
+                case SensorPositions.SP_RightCalf:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightCalf, 6);
+                    }
+                    break;
+                case SensorPositions.SP_RightKnee:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_RightKnee, 2);
+                    }
+                    break;
+                case SensorPositions.SP_LeftThigh:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftThigh, 7);
+                    }
+                    break;
+                case SensorPositions.SP_LeftCalf:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftCalf, 8);
+                    }
+                    break;
+                case SensorPositions.SP_LeftKnee:
+                    {
+                        SensorPosToSensorIDMap.Add(SensorPositions.SP_LeftKnee, 3);
+                    }
+                    break;
 
+                default:
+                    break;
+            }
+        }
     }
 }
