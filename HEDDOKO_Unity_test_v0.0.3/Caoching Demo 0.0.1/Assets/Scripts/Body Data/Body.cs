@@ -15,15 +15,6 @@ using System.Collections.Generic;
 */
 public class Body : MonoBehaviour
 {
-    public enum BodyTypes
-    {
-        BodyType_FullBody = 0,
-        BodyType_UpperBody = 1,
-        BodyType_LowerBody = 2,
-        BodyType_Limbs = 3,
-        BodyType_Count
-    };
-
     //Body Unique GUID for ease of cloud access
     public string BodyGuid;
     //Currently connected suit GUID 
@@ -33,8 +24,9 @@ public class Body : MonoBehaviour
     
     //Body ID
     public Int32 BodyId;
+    
     //Body Type (Default is full body)
-    public BodyTypes BodyType = BodyTypes.BodyType_FullBody;
+    public BodyStructureMap.BodyTypes BodyType;
 
     //Body Thread handle 
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
@@ -64,7 +56,7 @@ public class Body : MonoBehaviour
     * @param vBodyUUID the new body UUID (could be empty)
     * @brief Initializes a new body 
     */
-    public void InitBody(string vBodyUUID, BodyTypes vBodyType = BodyTypes.BodyType_FullBody)
+    public void InitBody(string vBodyUUID/*, BodyTypes vBodyType = BodyTypes.BodyType_FullBody*/)
     {
         //Init the body UUID (given or created)
         if (string.IsNullOrEmpty(vBodyUUID))
@@ -77,7 +69,7 @@ public class Body : MonoBehaviour
         }
 
         //Init all structures
-        CreateBodyStructure(vBodyType);
+        CreateBodyStructure(/*vBodyType*/);
 
         //TODO: Current body Frame 
         //TODO: Initial body Frame
@@ -86,36 +78,49 @@ public class Body : MonoBehaviour
         //TODO: Body state machine
     }
 
-    public void CreateBodyStructure(BodyTypes vBodyType = BodyTypes.BodyType_FullBody)
+    public void CreateBodyStructure(/*BodyTypes vBodyType = BodyTypes.BodyType_FullBody*/)
     {
-        BodyType = vBodyType;
+        //TODO: make the body creating more systematic (right now its almost hardcoded)
+        //BodyType = vBodyType;
 
-        switch(BodyType)
-        {
-            case BodyTypes.BodyType_FullBody:
-                {
+        //switch(BodyType)
+        //{
+        //    case BodyTypes.BodyType_FullBody:
+        //        {
+        //            var vSegmentTypes = EnumUtil.GetValues<BodySegment.SegmentTypes>();
+        //            foreach(BodySegment.SegmentTypes vSegmentType in vSegmentTypes)
+        //            {
+        //                BodySegment vSegment = new BodySegment();
+        //                vSegment.SegmentType = vSegmentType;
+        //                vSegment.IsTracked = true;
+        //                vSegmentType.InitSegment();
+        //            }
+        //        }
+        //        break;
+        //    case BodyTypes.BodyType_UpperBody:
+        //        {
 
-                }
-                break;
-            case BodyTypes.BodyType_UpperBody:
-                {
+        //        }
+        //        break;
+        //    case BodyTypes.BodyType_LowerBody:
+        //        {
 
-                }
-                break;
-            case BodyTypes.BodyType_LowerBody:
-                {
+        //        }
+        //        break;
+        //    case BodyTypes.BodyType_Limbs:
+        //        {
 
-                }
-                break;
-            case BodyTypes.BodyType_Limbs:
-                {
+        //        }
+        //        break;
+        //    default:
+        //        //TODO: Invalid Body Type
+        //        break;
+        //}
+    }
 
-                }
-                break;
-            default:
-                //TODO: Invalid Body Type
-                break;
-        }
+    public void UpdateBody(BodyFrame vFrame)
+    {
+
     }
 
     public void PlayRecording(string vRecUUID)

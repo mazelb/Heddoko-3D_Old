@@ -5,19 +5,8 @@ using System.Collections.Generic;
 
 public class BodySegment : MonoBehaviour
 {
-    //Segment Types
-    public enum SegmentTypes
-    {
-        SegmentType_Torso = 0,
-        SegmentType_RightArm = 1,
-        SegmentType_LeftArm = 2,
-        SegmentType_RightLeg = 3,
-        SegmentType_LeftLeg = 4,
-        SegmentType_Count
-    };
-
     //Segment Type 
-    public SegmentTypes SegmentType = SegmentTypes.SegmentType_Count; 
+    public BodyStructureMap.SegmentTypes SegmentType; 
 
     //Body SubSegments 
     public List<BodySubSegment> BodySubSegments = new List<BodySubSegment>();
@@ -28,42 +17,46 @@ public class BodySegment : MonoBehaviour
     //TODO: List of sensors to get data access
     private List<SensorTuple> Sensors = new List<SensorTuple>();
 
-
-    public void InitSegment(SegmentTypes vSegType)
+    public void UpdateSensorsData()
     {
-        SegmentType = vSegType;
 
-        switch (SegmentType)
-        {
-            case SegmentTypes.SegmentType_Torso:
-                {
+    }
 
-                }
-                break;
-            case SegmentTypes.SegmentType_RightArm:
-                {
+    public void InitSegment(/*SegmentTypes vSegType, bool vIsTracked = true*/)
+    {
+        //SegmentType = vSegType;
 
-                }
-                break;
-            case SegmentTypes.SegmentType_LeftArm:
-                {
+        //switch (SegmentType)
+        //{
+        //    case SegmentTypes.SegmentType_Torso:
+        //        {
 
-                }
-                break;
-            case SegmentTypes.SegmentType_RightLeg:
-                {
+        //        }
+        //        break;
+        //    case SegmentTypes.SegmentType_RightArm:
+        //        {
 
-                }
-                break;
-            case SegmentTypes.SegmentType_LeftLeg:
-                {
+        //        }
+        //        break;
+        //    case SegmentTypes.SegmentType_LeftArm:
+        //        {
 
-                }
-                break;
-            default:
-                //TODO: Invalid Body Type
-                break;
-        }
+        //        }
+        //        break;
+        //    case SegmentTypes.SegmentType_RightLeg:
+        //        {
+
+        //        }
+        //        break;
+        //    case SegmentTypes.SegmentType_LeftLeg:
+        //        {
+
+        //        }
+        //        break;
+        //    default:
+        //        //TODO: Invalid Body Type
+        //        break;
+        //}
     }
 
 }
