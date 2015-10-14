@@ -156,7 +156,7 @@ public class BodyStructureMap : MonoBehaviour
                         vLimbsBodySegments.Add(SegmentTypes.SegmentType_LeftArm);
                         vLimbsBodySegments.Add(SegmentTypes.SegmentType_RightLeg);
                         vLimbsBodySegments.Add(SegmentTypes.SegmentType_LeftLeg);
-                        BodyToSegmentMap.Add(BodyTypes.BodyType_LowerBody, vLimbsBodySegments);
+                        BodyToSegmentMap.Add(BodyTypes.BodyType_Limbs, vLimbsBodySegments);
                     }
                     break;
                 default:
@@ -248,7 +248,7 @@ public class BodyStructureMap : MonoBehaviour
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftUpperArm);
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftForeArm);
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftElbow);
-                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightArm, vLeftArmSensorPos);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_LeftArm, vLeftArmSensorPos);
                     }
                     break;
                 case SegmentTypes.SegmentType_RightLeg:
