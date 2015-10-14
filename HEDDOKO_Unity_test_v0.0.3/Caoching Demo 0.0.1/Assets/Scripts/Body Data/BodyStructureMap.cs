@@ -266,7 +266,7 @@ public class BodyStructureMap : MonoBehaviour
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftThigh);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftCalf);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftKnee);
-                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_RightLeg, vLeftLegSensorPos);
+                        SegmentToSensorPosMap.Add(SegmentTypes.SegmentType_LeftLeg, vLeftLegSensorPos);
                     }
                     break;
                 default:
