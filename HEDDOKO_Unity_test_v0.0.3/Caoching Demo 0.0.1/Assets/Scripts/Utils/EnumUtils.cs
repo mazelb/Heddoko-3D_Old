@@ -9,4 +9,9 @@ public static class EnumUtil
     {
         return Enum.GetValues(typeof(T)).Cast<T>();
     }
+
+    public static string GetName(this Enum e)
+    {
+        return Enum.GetName(e.GetType(), e);
+    }
 }
