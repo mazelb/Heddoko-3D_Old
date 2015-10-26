@@ -9,6 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Interfaces;
 
 /**
 * BodyFramesRecording class 
@@ -19,7 +20,7 @@ using System.Collections.Generic;
 * SUIT GUID
 * BOIMECH_sensorID_1, Yaw;Pitch;Roll, ... BOIMECH_sensorID_9, Yaw;Pitch;Roll, FLEXCORE_sensorID_1, SensorValue, ... ,FLEXCORE_sensorID_4, SensorValue
 */
-public class BodyFramesRecording : MonoBehaviour
+public class BodyFramesRecording : IFrameStream
 {
     //Number of UUIDs (lines) before the beginning of the frames recorded in CSV
     public static uint sNumberOfUUIDs = 3;
@@ -32,7 +33,8 @@ public class BodyFramesRecording : MonoBehaviour
     public string SuitGuid;
     //Recording content
     public List<BodyRawFrame> RecordingRawFrames = new List<BodyRawFrame>();
-    //private BodyRawFrame[] mRecordingRawFrames;
+    //current raw frame index
+    private int currentRawFrameIndex;
 
     /**
     * CreateNewRecordingUUID()
@@ -59,6 +61,22 @@ public class BodyFramesRecording : MonoBehaviour
     }
 
     /**
+    * GetNextFrame()
+    * @param 
+    * @brief Adds a frame to the recording
+    * @return Returns the next frame from the Raw Frame Recordings
+    */
+    public BodyRawFrame GetNextFrame()
+    {
+        BodyRawFrame returnedFrame = RecordingRawFrames[currentRawFrameIndex];
+        currentRawFrameIndex++;
+        if (currentRawFrameIndex >= RecordingRawFrames.Count)
+        {
+            currentRawFrameIndex = RecordingRawFrames.Count - 1;
+        }
+        return returnedFrame;
+    }
+    /**
      * PopulateRecordingUUIDs()
      * @param vRecordingLines: The recording content
      * @brief Gets the UUID of the recording and Body from the content
@@ -81,10 +99,11 @@ public class BodyFramesRecording : MonoBehaviour
     */
     public void ExtractRawFramesData(string[] vRecordingLines)
     {
-        if(vRecordingLines.Length > sNumberOfUUIDs) //The minimum amount of lines in the recording
+        if (vRecordingLines.Length > sNumberOfUUIDs) //The minimum amount of lines in the recording
         {
             //Get the data line by line and add them as frames
-            for (uint i = (sNumberOfUUIDs-1); i < vRecordingLines.Length; i++)
+            //for (uint i = (sNumberOfUUIDs-1); i < vRecordingLines.Length; i++)
+            for (uint i = (sNumberOfUUIDs); i < vRecordingLines.Length; i++)
             {
                 BodyRawFrame vTempRaw = new BodyRawFrame();
                 vTempRaw.BodyRecordingGuid = BodyRecordingGuid;
@@ -95,6 +114,8 @@ public class BodyFramesRecording : MonoBehaviour
             }
         }
     }
+
+
 
     //    //Send each line to a BodyFrameStream
     //    //Each line start by sending Frame start "S"
@@ -113,4 +134,6 @@ public class BodyFramesRecording : MonoBehaviour
     //    //Send the frame data 
     //    //Send Frame End: "E"
     //}
+    ///
+
 }

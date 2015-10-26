@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿ 
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Assets.Scripts.Utils;
 using System.IO;
 [JsonObject(MemberSerialization.OptIn)]
-public class BodyStructureMap : MonoBehaviour
+public class BodyStructureMap 
 {
     #region Singleton definition
     private static readonly BodyStructureMap instance = new BodyStructureMap();
-
+    private bool isInitialized; //has the bodystructuremap been initiated?
     // Explicit static constructor to tell C# compiler
     // not to mark type as beforefieldinit
     static BodyStructureMap()
@@ -24,6 +23,15 @@ public class BodyStructureMap : MonoBehaviour
     {
         get
         {
+            if (!instance.isInitialized)
+            {
+                instance.CreateBodyToSegmentMap();
+                instance.CreateSegmentToSensorPosMap();
+                instance.CreateSegmentToSubSegmentMap();
+                instance.CreateSensorPosToSensorIDMap();
+                instance.CreateSensorPosToSensorTypeMap();
+                instance.isInitialized = true;
+            }
             return instance;
         }
     }
@@ -64,8 +72,8 @@ public class BodyStructureMap : MonoBehaviour
         SubsegmentType_LeftThigh = 8,
         SubsegmentType_LeftCalf = 9,
         SubsegmentType_Count
-    };
-
+    }; 
+ 
     //Sensors positions
     public enum SensorPositions
     {
@@ -212,7 +220,7 @@ public class BodyStructureMap : MonoBehaviour
                 case SegmentTypes.SegmentType_Torso:
                     {
                         List<SubSegmentTypes> vTorsoSubSegments = new List<SubSegmentTypes>();
-                        vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_LowerSpine);
+                       vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_LowerSpine);
                         vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_UpperSpine);
                         SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_Torso, vTorsoSubSegments);
                     }

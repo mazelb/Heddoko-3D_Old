@@ -9,6 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
+using Assets.Scripts.Interfaces;
 
 /**
 * RecordingsManager class 
@@ -54,7 +55,7 @@ public class BodyRecordingsMgr : MonoBehaviour
     * @return int: the number of files found
     * @brief Scans a specific folder for recordings
     */
-    public int ScanRecordings(string vDirectoryPath)
+    public int  ScanRecordings(string vDirectoryPath)
     {
         mDirectoryPath = vDirectoryPath;
         mFilePaths = Directory.GetFiles(mDirectoryPath);
@@ -216,4 +217,6 @@ public class BodyRecordingsMgr : MonoBehaviour
         return null;
     }
 
+
+ 
 }
