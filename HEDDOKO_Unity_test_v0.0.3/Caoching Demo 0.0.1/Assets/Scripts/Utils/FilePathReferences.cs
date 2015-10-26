@@ -19,5 +19,8 @@ namespace Assets.Scripts.Utils
         {
             return Application.persistentDataPath + "/" + postPendPath;
         }
+
+        public static string CSVDirectory = Application.dataPath + "/Resources/Recordings";
+
     }
 }
