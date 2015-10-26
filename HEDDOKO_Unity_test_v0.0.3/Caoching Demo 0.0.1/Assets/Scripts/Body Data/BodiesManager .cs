@@ -4,8 +4,7 @@
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
 */
-using UnityEngine;
-using System.Collections;
+using UnityEngine; 
 using System.Collections.Generic;
 
 /**
@@ -104,7 +103,8 @@ public sealed class BodiesManager : MonoBehaviour
         if(vTempRecording != null)
         {
             //Find the related body
-            return GetBodyFromUUID(vTempRecording.BodyRecordingGuid);
+           // return GetBodyFromUUID(vTempRecording.BodyRecordingGuid);
+            return GetBodyFromUUID(vTempRecording.BodyGuid);
         }
           
         return null;

@@ -5,10 +5,7 @@
  * @author Francis Amankrah (frank@heddoko.com)
  * @date June 2015
  */
-using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine; 
 
 public class SSJointElbow : SSJoint
 {

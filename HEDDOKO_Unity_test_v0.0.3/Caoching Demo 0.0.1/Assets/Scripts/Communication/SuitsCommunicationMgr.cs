@@ -6,6 +6,7 @@
 */
 using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Interfaces;
 
 /**
 * SuitsCommunicationMgr class 
@@ -34,4 +35,6 @@ public class SuitsCommunicationMgr : MonoBehaviour
         }
     }
     #endregion
+
+ 
 }

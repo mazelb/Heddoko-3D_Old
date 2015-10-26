@@ -351,7 +351,7 @@ public class StretchSensor : MonoBehaviour
    */
     private bool IsBufferLongEnough(int vLength)
     {
-        // Buffer should only have positive integers.
+        // Input should only have positive integers.
         for (int i = 0; i < vLength; i++)
         {
             if (maBuffer[i] < 0)

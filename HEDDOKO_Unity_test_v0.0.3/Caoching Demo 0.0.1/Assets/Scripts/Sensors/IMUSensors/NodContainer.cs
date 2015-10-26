@@ -39,7 +39,7 @@ public class NodContainer : MonoBehaviour
 	{
 		for (int ndx = 0; ndx < mNodJoints.Length; ndx++) 
 		{
-			if(!mNodJoints[ndx].independantUpdate)
+			if(!mNodJoints[ndx].IndependantUpdate)
 			{
 				mNodJoints[ndx].StartJoint();
 			}
@@ -53,7 +53,7 @@ public class NodContainer : MonoBehaviour
 	{
 		for (int ndx = 0; ndx < mNodJoints.Length; ndx++) 
 		{
-			if(!mNodJoints[ndx].independantUpdate)
+			if(!mNodJoints[ndx].IndependantUpdate)
 			{
 				mNodJoints[ndx].UpdateJoint();
 			}
@@ -67,7 +67,7 @@ public class NodContainer : MonoBehaviour
 	{
 		for (int ndx = 0; ndx < mNodJoints.Length; ndx++) 
 		{
-			if(!mNodJoints[ndx].independantUpdate)
+			if(!mNodJoints[ndx].IndependantUpdate)
 			{
 				mNodJoints[ndx].ResetJoint();
 			}

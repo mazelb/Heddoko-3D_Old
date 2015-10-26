@@ -104,6 +104,6 @@ public class ThreadedJob
     private void Run()
     {
         ThreadFunction();
-        IsDone = true;
+        IsDone = true;// once thread function is done, set it to is done
     }
 }
