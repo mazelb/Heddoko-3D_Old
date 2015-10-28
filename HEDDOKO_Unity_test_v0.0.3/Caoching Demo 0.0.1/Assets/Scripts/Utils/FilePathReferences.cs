@@ -1,30 +1,26 @@
-﻿/** 
-* @file FilePathReferences.cs
-* @brief Contains the FilePathReferences class
-* @author Mohammed Haider (Mohammed@heddoko.com)
-* @date October 2015
-*/
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 namespace Assets.Scripts.Utils
 {
-    /**
-    * FilePathReferences class 
-    * @brief Static class that returns paths to various directories vital to the functionality to the app
-    */
-   
+    /// <summary>
+    /// This class acts like a repository of locally saved data pathss
+    /// </summary>
     public static class FilePathReferences
     {
-        /**
-        * LocalSavedDataPath(string postPendPath)
-        * @param string vSuffix: a suffix that will be added to Application.persistentDataPath
-        * @brief returns a string that reflects where a file would be saved with respect to  Application.persistentDataPath
-        * @note:
-        * @return string of the file save path
-        */
-        public static string LocalSavedDataPath(string vSuffix)
+         /// <summary>
+         /// Returns a string whose path reflects the directory of local saved data. 
+         /// </summary>
+         /// <param name="postPendPath"></param>
+         /// <returns></returns>
+        public static string LocalSavedDataPath(string postPendPath)
         {
-            return Application.persistentDataPath + "/" + vSuffix;
+            return Application.persistentDataPath + "/" + postPendPath;
         }
-        public static string sCSVDirectory = Application.dataPath + "/Resources/Recordings"; 
+
+        public static string CSVDirectory = Application.dataPath + "/Resources/Recordings";
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿/** 
-* @file bodySubsegmentView.cs
+* @file BodySubsegmentView.cs
 * @brief The view for a body's subsegment. Application of transforms happen in here. 
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date October 2015
@@ -14,57 +14,64 @@ namespace Assets.Scripts.Body_Data.view
     public class BodySubsegmentView : MonoBehaviour
     {
         #region fields
-        //member transform needed to update orientation
-        public Transform JointTransform;   
+        //the transforms required to transform
+  
+        public  Transform jointTransform;
+        private NodJoint joint;
+        public Quaternion initialRot;
+
+
+        void Awake()
+        {
+            initialRot = JointTransform.rotation;
+        }
 
         #endregion
         #region properties
-		/**
-		* mJointTransform
-		* @param Transform
-		* @brief class property 
-		* @return 
-		*/ 
-        public Transform Transform
+        public Transform JointTransform
         {
             get
             {
-                if (JointTransform == null)
-
+                if (jointTransform == null)
                 {
-                    LookForAssociatedTransform();
+                    AssignTransform();
                 }
-                return JointTransform;
+                return jointTransform;
             }
-            set { JointTransform = value; }
+            set { jointTransform = value; }
         }
   
         #endregion
 
-		/**
-		*  LookForAssociatedTransform()
-		* @param 
-		* @brief Finds the associated transform in the scene by searching for tags that are equal to the this current's view gameObject.name  
-		* @return 
-		*/ 
-        public void LookForAssociatedTransform()
+    /**
+    * View
+    * @param 
+    * @brief View associated with this body
+    * @note: a new gameobject is created and this Body is added into it as a compnent
+    * @return returns the view associated with this body
+    */
+
+        public void AssignTransform()
         {
             //find the object in the scene with the tag
             GameObject go = GameObject.FindWithTag(gameObject.name);
-            Transform = go.transform;
+            jointTransform = go.transform;
         }
 
-		/**
-		* UpdateOrientation(Quaternion vRotation))
-		* @param Quaternion vRotation: Orientation in the form of a quaternion
-		* @brief Sets the orientation of the mTransforms rotation the passed in parameter
-		* @return  
-		*/
-        internal void UpdateOrientation(Quaternion vRotation)
-        {  
-			Transform.rotation= vRotation;
-        } 
- 
+        //updates the orientation of the joint transform
+        internal void UpdateOrientation(Quaternion newRot)
+        { 
+           /* eulerRotation *= Mathf.Rad2Deg;
+            Quaternion q = Quaternion.Euler(eulerRotation);
+            JointTransform.rotation = q*initialRot;*/
+            jointTransform.rotation = newRot;
+        }
 
+       
+
+        internal void ResetOrientation(Vector3 eulerRotation)
+        {
+            initialRot = Quaternion.Euler(eulerRotation*Mathf.Rad2Deg);
+        }
     }
 }

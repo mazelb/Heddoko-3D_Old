@@ -20,7 +20,7 @@ public class Body
     public string BodyGuid;
     //Currently connected suit GUID 
     public string SuitGuid;
-
+    //Currently playing recording``` GUIDCurrentBodyFrame
     //Body Composition
     public List<BodySegment> BodySegments = new List<BodySegment>();
 
@@ -32,28 +32,26 @@ public class Body
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
 
     //view associated with this model
-    private BodyView mView;
-
     #region properties
-
+    private BodyView view;
     /**
-    * mBodyView
+    * View
     * @param 
     * @brief View associated with this body
     * @note: a new gameobject is created and this Body is added into it as a compnent
     * @return returns the view associated with this body
     */
-    public BodyView BodyView
+    public BodyView View
     {
         get
         {
-            if (mView == null)
-
+            if (view == null)
             {
                 GameObject viewGO = new GameObject("body view " + BodyGuid);
-                mView = viewGO.AddComponent<BodyView>();
+                view = viewGO.AddComponent<BodyView>();
+
             }
-            return mView;
+            return view;
         }
 
     }
@@ -113,6 +111,7 @@ public class Body
             BodyGuid = vBodyUUID;
         }
 
+
         //Init all structures
         CreateBodyStructure(vBodyType);
 
@@ -124,23 +123,23 @@ public class Body
     }
 
     /**
-    * CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType )
-    * @param  vBodyType: the desired BodyType
-    * @brief Initializes a new body structure's internal properties with the desired body type
-    */
+* CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType )
+* @param  vBodyType: the desired BodyType
+* @brief Initializes a new body structure's internal properties with the desired body type
+*/
     public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
         List<BodyStructureMap.SegmentTypes> segmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap
         List<Sensor> sensors = new List<Sensor>(); //create a list of sensors that will be shared by all the segments
         foreach (BodyStructureMap.SegmentTypes type in segmentList)
         {
-            BodySegment vSegment = new BodySegment();
-            vSegment.mSegmentType = type;
-            vSegment.SensorList = sensors;
-            vSegment.InitializeBodySegment(type);
-            BodySegments.Add(vSegment);
+            BodySegment segment = new BodySegment();
+            segment.SegmentType = type;
+            segment.sensorList = sensors;
+            segment.InitializeBodySegment(type);
+            BodySegments.Add(segment);
             #region using unity functions
-            vSegment.AssociatedView.transform.parent = BodyView.transform;
+            segment.AssociatedView.transform.parent = View.transform;
             #endregion
         }
     }
@@ -151,26 +150,25 @@ public class Body
     */
     public void UpdateBody(BodyFrame vFrame)
     {
-        CurrentBodyFrame = vFrame;
-        Tracking();
+        CurrentBodyFrame = vFrame; 
         for (int i = 0; i < BodySegments.Count; i++)
         {
-            BodySegments[i].UpdateSensorsData(CurrentBodyFrame);
+            BodySegments[i].UpdateSensorsData(vFrame);
         }
     }
 
 
     /**
-    * SetInitialFrame(BodyFrame vInitialFrame)
-    * @param vInitialFrame, sets the initial frame, subsequently the initial orientations point of the body's subsegment
+    * SetInitialFrame(BodyFrame initialFrame)
+    * @param initialFrame, sets the initial frame, subsequently the initial orientations point of the body's subsegment
     * @brief  Set the current body frame from the passed in parameter
     */
-    public void SetInitialFrame(BodyFrame vInitialFrame)
+    public void SetInitialFrame(BodyFrame initialFrame)
     {
-        InitialBodyFrame = vInitialFrame;
+        InitialBodyFrame = initialFrame; 
         for (int i = 0; i < BodySegments.Count; i++)
         {
-            BodySegments[i].UpdateInitialSensorsData(vInitialFrame);
+            BodySegments[i].UpdateInitialSensorsData(initialFrame); 
         }
     }
 
@@ -183,22 +181,29 @@ public class Body
     private void Tracking()
     {
         //get the list of keys from the current body frame
-        List<BodyStructureMap.SensorPositions> keys = new List<BodyStructureMap.SensorPositions>(CurrentBodyFrame.MapSensorPosToValue.Keys);
+        List<BodyStructureMap.SensorPositions> keys = new List<BodyStructureMap.SensorPositions>(CurrentBodyFrame.FrameData.Keys);
         for (int i = 0; i < keys.Count; i++)
         {
-            Vector3 vCurrentValue = CurrentBodyFrame.MapSensorPosToValue[keys[i]];
-            Vector3 vInitialValue = InitialBodyFrame.MapSensorPosToValue[keys[i]];  
-            
+            /* Vector3 currValue = CurrentBodyFrame.FrameData[keys[i]];
+             //convert it to a quaternion
+             Quaternion qCurrent = Quaternion.Euler(currValue * Mathf.Rad2Deg);
+             Quaternion qInitial = Quaternion.Euler(currValue * Mathf.Rad2Deg);
+             Quaternion qNew = qCurrent * qInitial;
+             //update the current body frames values
+             Vector3 toEuler = qNew.eulerAngles * Mathf.Deg2Rad;
+             CurrentBodyFrame.FrameData[keys[i]] = toEuler;*/
+            //get the current value
+            Vector3 initialValue = InitialBodyFrame.FrameData[keys[i]] * Mathf.Rad2Deg;
+            float[,] initialRot = MatrixTools.RotationGlobal(initialValue.z, initialValue.x, initialValue.y);
+            Vector3 currentValue = CurrentBodyFrame.FrameData[keys[i]];
+            float[,] currentLocalRot = MatrixTools.RotationLocal(currentValue.z, currentValue.x, currentValue.y);
+            float[,] orientation = MatrixTools.multi(initialRot, currentLocalRot);
+            Quaternion qOrientation = MatrixTools.MatToQuat(orientation);
+            Vector3 newVal = qOrientation.eulerAngles * Mathf.Deg2Rad;
+            CurrentBodyFrame.FrameData[keys[i]] = newVal;
 
-            float[,] vInitialRotation = MatrixTools.RotationGlobal(vInitialValue.z, vInitialValue.x, vInitialValue.y);
-            float[,] vCurrentRotMat = MatrixTools.RotationLocal(vCurrentValue.z, vCurrentValue.x, vCurrentValue.y);
-            float[,] vOrientationMatrix = MatrixTools.multi(vInitialRotation, vCurrentRotMat);
-            NodQuaternionOrientation vNodQuaternion = MatrixTools.MatToQuat(vOrientationMatrix);
-            Quaternion vQuatOrientation = new Quaternion(vNodQuaternion.x, vNodQuaternion.y, vNodQuaternion.z, vNodQuaternion.w);
-            Vector3 vnewVal = vQuatOrientation.eulerAngles * Mathf.Deg2Rad; //make sure to transform it back to a radian to keep the data consistent with calculations 
+        }
 
-            CurrentBodyFrame.MapSensorPosToValue[keys[i]] = vnewVal;
-        } 
     }
     /**
     * PlayRecording(string vRecUUID)
@@ -209,17 +214,18 @@ public class Body
     {
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
-        BodyFramesRecording vBodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
+        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
 
-        if (vBodyFramesRec != null && vBodyFramesRec.RecordingRawFrames.Count > 0)
+        if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-            mBodyFrameThread = new BodyFrameThread(vBodyFramesRec.RecordingRawFrames);
+            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames);
             //get the first frame and set it as the initial frame
-            BodyFrame vFrame = BodyFrame.ConvertRawFrame(vBodyFramesRec.RecordingRawFrames[0]);
-            SetInitialFrame(vFrame);
-            BodyView.Init(this, mBodyFrameThread.BodyFrameBuffer);
+            BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+            SetInitialFrame(frame); 
+            View.Init(this, mBodyFrameThread.BodyFrameBuffer);
             mBodyFrameThread.Start();
-            BodyView.mStartUpdating = true;
+            View.StartUpdating = true; 
+
         }
     }
 
@@ -251,6 +257,12 @@ public class Body
 
         mBodyFrameThread.StopThread();
     }
+
+    #region Unity functions
+
+
+    #endregion
+
 
 
 

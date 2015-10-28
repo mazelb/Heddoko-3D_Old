@@ -12,59 +12,53 @@ namespace Assets.Scripts.Utils
 {
 
     /**
-    * JsonUtilities class 
+    * SuitsCommunicationMgr class 
     * @brief Class that provides json utilities to the interested clients
     */
-
+ 
     public class JsonUtilities
     {
-        /**
-        * ConvertObjectToJson(string vPath, object vObj)
-        * @brief  Converts an object to Json Format and saves it to disk 
-        * @param  string vPath: path to save to, object vObj: the object that needs to be seralized to a Json format
-        * @note a NullValuePassedException will be thrown if vObj is null
-        */
-        public static void ConvertObjectToJson(string vPath, object vObj)
+        /// <summary>
+        /// Converts an object to a json string and saves it locally with the given path parameter. Will throw an exception if an object passed is null
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="o"></param>
+        public static void ConvertObjectToJson(string path, object obj)
         {
-            if (vObj == null)
+            if (obj == null)
             {
                 throw new NullValuePassedException();
             }
-            JsonSerializer vSerializer = new JsonSerializer();
-            StreamWriter vStreamWriter = new StreamWriter(vPath);
-            vSerializer.NullValueHandling = NullValueHandling.Ignore;
-            vSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-            vSerializer.Formatting = Formatting.Indented;
-            using (JsonWriter vWriter = new JsonTextWriter(vStreamWriter))
+            JsonSerializer serializer = new JsonSerializer();
+            StreamWriter sw = new StreamWriter(path);
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            serializer.Formatting = Formatting.Indented;
+            using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                vSerializer.Serialize(vWriter, vObj);
+                serializer.Serialize(writer, obj);
             }
-        } 
-        /**
-        * JsonFileToObject<T>(string vPath)
-        * @brief  From the given file path, return an object of type T from a JSOn file 
-        * @param  string vPath: path to Json file from 
-        * @return The deserialize json file to a type T
-        */
-        public static T JsonFileToObject<T>(string vPath)
+        }
+        /// <summary>
+        /// From the given file path, return an object of type T from a JSOn file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T JsonFileToObject<T>(string path)
         {
-            JsonSerializer vDeserializer = new JsonSerializer();
-            JsonTextReader vTxtReader = new JsonTextReader(File.OpenText(vPath));
-            vDeserializer.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
-            T vDeserializedObj = (T)vDeserializer.Deserialize(vTxtReader, typeof(T));
-            return vDeserializedObj;
+            JsonSerializer deserializer = new JsonSerializer();
+            JsonTextReader txtReader = new JsonTextReader(File.OpenText(path));
+            deserializer.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
+            T deserializedObj = (T)deserializer.Deserialize(txtReader, typeof(T));
+            return deserializedObj;
         }
 
     }
     /// <summary>
     /// Exception should be thrown if a null value type was passed in
     /// </summary>
-    /// 
-    /**
-    * NullValuePassedException class 
-    * @brief exception that should be thrown when an innaproriate null value was passed to an method
-    */
     public class NullValuePassedException : Exception
-    {
-    }
+    { }
 }
