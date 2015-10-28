@@ -8,7 +8,7 @@ public class BodyStructureMap
 {
     #region Singleton definition
     private static readonly BodyStructureMap instance = new BodyStructureMap();
-    private bool isInitialized; //has the bodystructuremap been initiated?
+    private bool mIsInitialized; //has the bodystructuremap been initiated?
     // Explicit static constructor to tell C# compiler
     // not to mark type as beforefieldinit
     static BodyStructureMap()
@@ -23,14 +23,14 @@ public class BodyStructureMap
     {
         get
         {
-            if (!instance.isInitialized)
+            if (!instance.mIsInitialized)
             {
                 instance.CreateBodyToSegmentMap();
                 instance.CreateSegmentToSensorPosMap();
                 instance.CreateSegmentToSubSegmentMap();
                 instance.CreateSensorPosToSensorIDMap();
                 instance.CreateSensorPosToSensorTypeMap();
-                instance.isInitialized = true;
+                instance.mIsInitialized = true;
             }
             return instance;
         }

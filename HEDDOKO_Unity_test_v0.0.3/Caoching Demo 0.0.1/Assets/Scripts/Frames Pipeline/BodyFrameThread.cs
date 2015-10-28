@@ -15,10 +15,10 @@ using System.Collections.Generic;
 public class BodyFrameThread : ThreadedJob
 {
     #region class fields
-    private BodyFrameBuffer buffer;  //buffer  
-    private SourceDataType dataType;
-    private List<BodyRawFrame> rawFrames;
-    private bool continueWorking;
+    private BodyFrameBuffer vBuffer;  //buffer  
+    private SourceDataType vDataType;
+    private List<BodyRawFrame> vListRawFrames;
+    private bool vContinueWorking;
    
     #endregion
     #region properties
@@ -26,11 +26,11 @@ public class BodyFrameThread : ThreadedJob
     {
         get
         {
-            if (buffer == null)
+            if (vBuffer == null)
             {
-                buffer = new BodyFrameBuffer(); 
+                vBuffer = new BodyFrameBuffer(); 
             }
-            return buffer;
+            return vBuffer;
         }
     }
     #endregion
@@ -49,8 +49,8 @@ public class BodyFrameThread : ThreadedJob
     */
     public BodyFrameThread( List<BodyRawFrame> rawFrames )
     {
-        this.rawFrames = rawFrames;
-        dataType = SourceDataType.Recording;
+        this.vListRawFrames = rawFrames;
+        vDataType = SourceDataType.Recording;
     }
     /**
      * @brief Default constructor
@@ -66,7 +66,7 @@ public class BodyFrameThread : ThreadedJob
     public override void Start()
     {
         base.Start();
-        continueWorking = true;
+        vContinueWorking = true;
     }
 
     #endregion
@@ -76,22 +76,22 @@ public class BodyFrameThread : ThreadedJob
     */
     protected override void ThreadFunction()
     {
-        switch (dataType)
+        switch (vDataType)
         {
             case SourceDataType.BrainFrame:
-                BodyFrameBuffer.AllowOverflow = true;
+                BodyFrameBuffer.AllowOverFlow = true;
                 BrainFrameTask();
                 //todo
                 break;
             case SourceDataType.DataStream:
-                BodyFrameBuffer.AllowOverflow = true;
+                BodyFrameBuffer.AllowOverFlow = true;
                 DataStreamTask();
 
                 //todo
                 break;
           
             case SourceDataType.Recording:
-                BodyFrameBuffer.AllowOverflow = false;
+                BodyFrameBuffer.AllowOverFlow = false;
                 RecordingTask();
                 break;
             case SourceDataType.Suit:
@@ -111,15 +111,15 @@ public class BodyFrameThread : ThreadedJob
     private void RecordingTask()
     {
         int bodyFrameRecordingIndex = 0;
-        while (continueWorking)
+        while (vContinueWorking)
         {
             while (!BodyFrameBuffer.IsFull())
             {
-                BodyFrame bframe = BodyFrame.ConvertRawFrame(rawFrames[bodyFrameRecordingIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                BodyFrame bframe = BodyFrame.ConvertRawFrame(vListRawFrames[bodyFrameRecordingIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
                 BodyFrameBuffer.Enqueue(bframe);
                 bodyFrameRecordingIndex++;
                 //todo: can set a flag for restarting this task over again
-                if (bodyFrameRecordingIndex >= rawFrames.Count) //reset back to 0
+                if (bodyFrameRecordingIndex >= vListRawFrames.Count) //reset back to 0
                 {
                     bodyFrameRecordingIndex = 0;
                 } 
@@ -157,7 +157,7 @@ public class BodyFrameThread : ThreadedJob
 
     public void StopThread()
     {
-        continueWorking = false;
+        vContinueWorking = false;
     }
     /**
 * OnFinished()

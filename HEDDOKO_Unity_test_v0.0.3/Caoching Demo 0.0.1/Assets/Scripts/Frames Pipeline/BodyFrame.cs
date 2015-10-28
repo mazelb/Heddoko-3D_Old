@@ -15,103 +15,104 @@ using System;
 public class BodyFrame 
 {
     //The frame of data populated to sensors 
-    private Dictionary<BodyStructureMap.SensorPositions, Vector3> frameData; 
+    private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData; 
 
-    private List<Sensor> sensorData;
-    internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
+    private List<Sensor> mListOfSensors;
+    public Dictionary<BodyStructureMap.SensorPositions, Vector3> MapSensorPosToValue
     {
           get
         {
-            if (frameData == null)
+            if (mFrameData == null)
             {
-                frameData = new Dictionary<BodyStructureMap.SensorPositions, Vector3>(18);
+                mFrameData = new Dictionary<BodyStructureMap.SensorPositions, Vector3>(18);
             }
-            return frameData;
+            return mFrameData;
         }
           set
         {
-            frameData = value;
+            mFrameData = value;
         }
     }
-     
- 
- 
+
+
+
     #region static helper functions
     /**
-    * ConvertRawFrame(BodyRawFrame rawData)
+    * ConvertRawFrame(BodyRawFrame vRawData)
     * @brief Pass in a BodyRawFrame and convert it to a body frame
-    * @param BodyRawFrame rawData
-    * @return void
-    * 
+    * @param BodyRawFrame vRawData:  Raw data that will be converted to a body frame
+    * @return a converted BodyFrame
     */
-    public static BodyFrame ConvertRawFrame(BodyRawFrame rawData)
+    public static BodyFrame ConvertRawFrame(BodyRawFrame vRawData)
     {
         //from startIndex to endIndex, we check the subframes and extrapolate the IMU data. 
-        int startIndex = 1;
-        int endIndex = 20;
+        int vStartIndex = 1;
+        int vEndIndex = 20;
         //The check index is made such that when we iterate through the list, it is possible that the 19th index isn't of an IMU type, then it must be that it is a stretch sensor
-        int checkIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
-        bool finishLoop = false;
-        BodyFrame bodyFrame = new BodyFrame();
-        Vector3 placeholderV3 = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
+        int vCheckIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        bool vFinishLoop = false;
+        BodyFrame vBodyFrame = new BodyFrame();
+        Vector3 vPlaceholderCoords = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
 
         int key = 0;
-        BodyStructureMap.SensorPositions sensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
-        for (int i = startIndex; i < endIndex; i++)
+        BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
+        for (int i = vStartIndex; i < vEndIndex; i++)
         {
             //first check if the current index falls on a position that can be interpreted as an int
             if (i%2 == 1)
             {
-                if (i == checkIndex)
+                if (i == vCheckIndex)
                 {
                     try
                     {
-                        int.TryParse(rawData.RawFrameData[i], out key);
+                        int.TryParse(vRawData.RawFrameData[i], out key);
                     }
                     finally
                     {
                         if (key != 10)
                         {
-                            finishLoop = true;
+                            vFinishLoop = true;
                         } 
                     }
-                    if (finishLoop)
+                    if (vFinishLoop)
                     {
                         //set the start index for the next iteration
-                        startIndex = i;
+                        vStartIndex = i;
                         break;
                     } 
                 }
-                int.TryParse(rawData.RawFrameData[i], out key);
+                int.TryParse(vRawData.RawFrameData[i], out key);
                 key--;
-                sensorPosAsKey = ImuSensorFromPos(key);
-                bodyFrame.FrameData.Add(sensorPosAsKey, placeholderV3);  
+                vSensorPosAsKey = ImuSensorFromPos(key);
+                vBodyFrame.MapSensorPosToValue.Add(vSensorPosAsKey, vPlaceholderCoords);  
             }
             else
             {
                 //split the string into three floats
-                string[] v3data = rawData.RawFrameData[i].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] v3data = vRawData.RawFrameData[i].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                 float[] value = new float[3];
                 for (int j = 0; j < 3; j++)
                 {
                     float.TryParse(v3data[j], out value[j]);
+                
                 }
-                bodyFrame.FrameData[sensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
+                vBodyFrame.MapSensorPosToValue[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
             } 
 
         }
 
         //todo stretch sense data extrapolation starting from the updated startingIndex
  
-        return bodyFrame;
+        return vBodyFrame;
 
     }
-
-    /// <summary>
-    /// Returns a sensor position fromt eh given position
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
+    /**
+    * ImuSensorFromPos(int pos)
+    * @brief Retrieve the imu's position from the given parameter
+    * @param int pos: the position in int of an IMU
+    * @return BodyStructureMap.SensorPositions the imu's position with respect to the pased in parameter
+    * 
+    */
     internal static BodyStructureMap.SensorPositions ImuSensorFromPos(int pos)
     {
         if (pos == 0)
@@ -155,11 +156,13 @@ public class BodyFrame
             return BodyStructureMap.SensorPositions.SP_LowerSpine;
         }
     }
-    /// <summary>
-    /// Returns a sensor position of a stretch sensor from the given int pos
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
+    /**
+    * StretchSensorFromPos(int pos)
+    * @brief Retrieve the stretch sensor's position from the given parameter
+    * @param int pos: the position in int of a stretch sensor
+    * @return BodyStructureMap.SensorPositions the stretch sensor's position with respect to the pased in parameter
+    * 
+    */
     internal BodyStructureMap.SensorPositions StretchSensorFromPos(int pos)
     {
         if (pos == 0)

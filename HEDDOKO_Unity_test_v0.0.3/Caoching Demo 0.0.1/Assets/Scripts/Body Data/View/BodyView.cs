@@ -1,54 +1,94 @@
 ﻿ 
 using UnityEngine;
 using UnityEngine.UI;
-
+/**
+* @file bodyView.cs:
+* @brief This file contains all of the functionality required
+* to execute the containment of the Body's view in unity
+* @author: Mohammed Haider(Mohammed@heddoko.com)
+* @date October 2015
+*/
 namespace Assets.Scripts.Body_Data.view
 {
-    public class BodyView : MonoBehaviour
+	/**
+	* BodyView  class 
+	* @brief BodyView class (represents one Body view)
+	*/    
+	public class BodyView : MonoBehaviour
     {
-        public Button ResetButton;
-        private BodyFrameBuffer buffer;
-        private Body associatedBody;
-        public  bool StartUpdating { get; set; }
+        #region member fields 
+        private BodyFrameBuffer mBuffer;
+        private Body mAssociatedBody;
+        public  bool mStartUpdating;
+        public BodyFrame CurrentFrame;
+        #endregion
 
-        public void Init(Body associatedBody, BodyFrameBuffer buffer)
+        /**
+        * Init(Body mAssociatedBody, BodyFrameBuffer vBuffer)
+        * @param Body vAssociatedBody, the  Body object associated with this view. BodyFrameBuffer vBuffer: the buffer needed to pull bodyframe data from
+        * @brief Initializes the class object with passed in parameters.
+        * @note 
+        * @return 
+        */
+        public void Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
         { 
-            this.buffer = buffer;
-            this.associatedBody = associatedBody; 
-            
+            this.mBuffer = vBuffer;
+            this.mAssociatedBody = vAssociatedBody; 
         }
-
-        void OnDisable()
+        /**
+        * ResetJoint()
+        * @param 
+        * @brief Sets the initial frame of the associated body with the current frame. 
+        * @note 
+        * @return 
+        */
+        public void ResetJoint()
         {
-            if (associatedBody != null)
+            if (mAssociatedBody.CurrentBodyFrame != null)
             {
-                associatedBody.StopThread();
+                mAssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
             }
-            
         }
-        public void UpdateBuffer(BodyFrameBuffer buffer)
+
+        #region Unity function calls
+        /**
+        * OnDisable()
+        * @param  
+        * @brief OnDisable is automatically initiated in the event that the current script is disabled. 
+        * @note 
+        * @return 
+        */
+        void OnApplicationQuit()
         {
-            
+            if (mAssociatedBody != null)
+
+            {
+                mAssociatedBody.StopThread(); //stop threads
+            }
         }
 
 
+        /**
+        * Update()
+        * @param  
+        * @brief Update is called on every frame. In this case, dequeue body frame data from the buffer and update the associated body 
+        * @note 
+        * @return 
+        */
         private void Update()
         {
-            if (StartUpdating)
+			if (mStartUpdating)
             {
-                if (buffer != null)
+                if (mBuffer != null)
+
                 {
-                    BodyFrame bframe = buffer.Dequeue();
-                    associatedBody.UpdateBody(bframe); 
+                   CurrentFrame = mBuffer.Dequeue();
+                    mAssociatedBody.UpdateBody(CurrentFrame); 
                 }
             }
           
         }
-
-        public void ResetJoint()
-        {
-            associatedBody.ResetJoints(associatedBody.CurrentBodyFrame);
-        }
-
+        #endregion
+  
     }
 }

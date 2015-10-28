@@ -4,13 +4,13 @@ using System.Collections.Generic;
 public class Sensor //: MonoBehaviour
 {
     //Sensor type
-    public BodyStructureMap.SensorTypes SensorType;
+    public BodyStructureMap.SensorTypes mSensorType;
     //Sensor position
-    public BodyStructureMap.SensorPositions SensorPosition;
+    public BodyStructureMap.SensorPositions mSensorPosition;
     //Sensor Unique GUID for ease of cloud access
     public string SensorGuid;
     //Sensor ID on the body
-    public int SensorBodyId;
+    public int mSensorBodyID;
     private SensorsData sensorData = new SensorsData();
     //Data contained in the sensor
     public SensorsData SensorData
@@ -29,15 +29,17 @@ public class Sensor //: MonoBehaviour
         
     }
 
-    /// <summary>
-    /// Deep copy constructor
-    /// </summary>
+    /**
+    * Sensor(Sensor sensor)
+    * @param Sensor sensor: a sensor who's fields need to be copied 
+    * @brief Perform a deep copy of the passed in sensor parameter
+    */
     public Sensor(Sensor sensor)
     {
-        this.SensorType = sensor.SensorType;
-        this.SensorPosition = sensor.SensorPosition;
+        this.mSensorType = sensor.mSensorType;
+        this.mSensorPosition = sensor.mSensorPosition;
         this.SensorGuid = string.Copy(sensor.SensorGuid);
-        this.SensorBodyId = sensor.SensorBodyId;
+        this.mSensorBodyID = sensor.mSensorBodyID;
        //deep copy
         this.SensorData.Data = new List<short>(sensor.SensorData.Data);
         this.SensorData.PositionalData = sensor.SensorData.PositionalData; 

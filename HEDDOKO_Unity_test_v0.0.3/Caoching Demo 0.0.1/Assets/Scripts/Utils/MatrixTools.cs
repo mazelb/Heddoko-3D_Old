@@ -8,10 +8,16 @@ namespace Assets.Scripts.Utils
     public static class MatrixTools
     {
 
-
-        public static Quaternion MatToQuat(float[,] m)
+    /**
+    /* MatToQuat
+    /* @It converts a 3*3 orientation Matrix to a Quaternion
+    /* @param float m[][3] is the original 3*3 matrix
+    /* @return NodQuaternionOrientation, the orientation in quaternion
+    /* reference: @http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche52.html
+    */
+        public static NodQuaternionOrientation MatToQuat(float[,] m)
         {
-            Quaternion q;
+            NodQuaternionOrientation q;
             q.w = (m[0, 0] + m[1, 1] + m[2, 2] + 1.0f) / 4.0f;
             q.x = (m[0, 0] - m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
             q.y = (-m[0, 0] + m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
@@ -128,6 +134,39 @@ namespace Assets.Scripts.Utils
             }
             return c;
         }
+
+        /// <summary>
+        /// Eulers to quaternion.
+        /// </summary>
+        /// <returns>The to quaternion.</returns>
+        /// <param name="pitch">Pitch.</param>
+        /// <param name="roll">Roll.</param>
+        /// <param name="yaw">Yaw.</param>
+
+        public static NodQuaternionOrientation eulerToQuaternion(float pitch, float roll, float yaw)
+        {
+            float sinHalfYaw = Mathf.Sin(yaw / 2.0f);
+            float cosHalfYaw = Mathf.Cos(yaw / 2.0f);
+            float sinHalfPitch = Mathf.Sin(pitch / 2.0f);
+            float cosHalfPitch = Mathf.Cos(pitch / 2.0f);
+            float sinHalfRoll = Mathf.Sin(roll / 2.0f);
+            float cosHalfRoll = Mathf.Cos(roll / 2.0f);
+
+            NodQuaternionOrientation result;
+            result.x = -cosHalfRoll * sinHalfPitch * sinHalfYaw
+                + cosHalfPitch * cosHalfYaw * sinHalfRoll;
+            result.y = cosHalfRoll * cosHalfYaw * sinHalfPitch
+                + sinHalfRoll * cosHalfPitch * sinHalfYaw;
+            result.z = cosHalfRoll * cosHalfPitch * sinHalfYaw
+                - sinHalfRoll * cosHalfYaw * sinHalfPitch;
+            result.w = cosHalfRoll * cosHalfPitch * cosHalfYaw
+                + sinHalfRoll * sinHalfPitch * sinHalfYaw;
+
+            return result;
+        }
+
+
+
 
     }
 }
