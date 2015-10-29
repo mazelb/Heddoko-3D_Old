@@ -16,62 +16,55 @@ namespace Assets.Scripts.Body_Data.view
         #region fields
         //the transforms required to transform
   
-        public  Transform jointTransform;
-        private NodJoint joint;
-        public Quaternion initialRot;
+        public  Transform vJointTransform;
 
 
-        void Awake()
-        {
-            initialRot = JointTransform.rotation;
-        }
 
         #endregion
         #region properties
+        /**
+        * JointTransform
+        * @param 
+        * @brief The joint transform associated with this subsegment view, if not assigned, calls on the AssignTransform helper function
+        * @return returns the Transform associated with this body
+        */
         public Transform JointTransform
         {
             get
             {
-                if (jointTransform == null)
+                if (vJointTransform == null)
                 {
                     AssignTransform();
                 }
-                return jointTransform;
+                return vJointTransform;
             }
-            set { jointTransform = value; }
+            set { vJointTransform = value; }
         }
   
         #endregion
 
-    /**
-    * View
-    * @param 
-    * @brief View associated with this body
-    * @note: a new gameobject is created and this Body is added into it as a compnent
-    * @return returns the view associated with this body
-    */
-
+        /**
+        * View
+        * @param 
+        * @brief View associated with this body
+        * @note: a new gameobject is created and this Body is added into it as a component
+        * @return returns the view associated with this body
+        */
         public void AssignTransform()
         {
             //find the object in the scene with the tag
             GameObject go = GameObject.FindWithTag(gameObject.name);
-            jointTransform = go.transform;
+            vJointTransform = go.transform;
         }
 
-        //updates the orientation of the joint transform
-        internal void UpdateOrientation(Quaternion newRot)
-        { 
-           /* eulerRotation *= Mathf.Rad2Deg;
-            Quaternion q = Quaternion.Euler(eulerRotation);
-            JointTransform.rotation = q*initialRot;*/
-            jointTransform.rotation = newRot;
-        }
-
-       
-
-        internal void ResetOrientation(Vector3 eulerRotation)
-        {
-            initialRot = Quaternion.Euler(eulerRotation*Mathf.Rad2Deg);
+        /**
+       * UpdateOrientation(Quaternion vNewOrientation)
+       * @param Quaternion vNewOrientation: the new orientation of the subsegment
+       * @brief Updates the current orientation with the passed in parameter
+       */
+        internal void UpdateOrientation(Quaternion vNewOrientation)
+        {  
+            vJointTransform.rotation = vNewOrientation;
         }
     }
 }
