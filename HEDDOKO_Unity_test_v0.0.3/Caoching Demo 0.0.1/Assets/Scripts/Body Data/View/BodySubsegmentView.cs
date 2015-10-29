@@ -16,9 +16,7 @@ namespace Assets.Scripts.Body_Data.view
         #region fields
         //the transforms required to transform
   
-        public  Transform vJointTransform;
-
-
+        public  Transform vJointTransform; 
 
         #endregion
         #region properties
