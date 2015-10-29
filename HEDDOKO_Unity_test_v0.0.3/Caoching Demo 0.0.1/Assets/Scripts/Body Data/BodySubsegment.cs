@@ -25,35 +25,40 @@ public class BodySubSegment
         NonFused = 1,
         MappedTransformation
     }
-    /// <summary>
-    /// Updates the Subsegment's orientation from the given input
-    /// </summary>
-    /// <param name="input"></param>
-    public void UpdateSubsegmentOrientation(Vector3 input)
+    /**
+   *  UpdateSubsegmentOrientation(Vector3 vRawEuler)
+   * @param   vRawEuler: the raw euler in Rads that will update the subsegment's orientation
+   * @brief  Updates the subsegments orientation
+   */
+    public void UpdateSubsegmentOrientation(Vector3 vRawEuler)
     {
-        SubsegmentOrientation = Quaternion.Euler(input* Mathf.Rad2Deg);
+        SubsegmentOrientation = Quaternion.Euler(vRawEuler* Mathf.Rad2Deg);
         AssociatedView.UpdateOrientation(SubsegmentOrientation);
     }
-
-    public void UpdateSubsegmentOrientation(Quaternion q)
+    /**
+    *  UpdateSubsegmentOrientation(Quaternion vOrientation)
+    * @param  vOrientation: the orientation that will update the subsegment's orientation
+    * @brief  Updates the subsegments orientation
+    */
+    public void UpdateSubsegmentOrientation(Quaternion vOrientation)
     {
-        SubsegmentOrientation =q;
+        SubsegmentOrientation =vOrientation;
         AssociatedView.UpdateOrientation(SubsegmentOrientation);
     }
+   
     /**
    *  InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes sstype)
    * @param  sstype: the desired SubSegment Type
    * @brief Initializes a new  subsegment structure's internal properties with the desired subsegment Type 
    */
-
-    internal void InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes sstype)
+    internal void InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes vSubsegmentType)
     {
         #region using unity functions
-        GameObject go = new GameObject(EnumUtil.GetName(sstype));
+        GameObject go = new GameObject(EnumUtil.GetName(vSubsegmentType));
         AssociatedView = go.AddComponent<BodySubsegmentView>();
         #endregion
 
-        SubSegmentType = sstype;
+        SubSegmentType = vSubsegmentType;
 
     }
 
