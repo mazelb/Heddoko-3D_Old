@@ -9,29 +9,25 @@ public class BodySegment
     public BodyStructureMap.SegmentTypes SegmentType;
 
     //Body SubSegments 
-    //  public List<BodySubSegment> BodySubSegments = new List<BodySubSegment>();
-
     public Dictionary<int, BodySubSegment> BodySubSegmentsDictionary = new Dictionary<int, BodySubSegment>();
 
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
+    public List<Sensor> sensorList;
 
-   
-    public List<Sensor> sensorList; 
- 
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
     public BodySegmentView AssociatedView;
-     
 
     public void UpdateSensorsData()
     {
-       
+
 
     }
-    /// <summary>
-    /// Update sensors information with reference to the given frame of data
-    /// </summary>
-    /// <param name="vFrame">Body frame of data </param>
+    /**
+    * UpdateSensorsData(BodyFrame vFrame)
+    * @param BodyFrame vFrame: the body frame whose subframes will trickled down to its respective subsegments. 
+    * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
+    */
     public void UpdateSensorsData(BodyFrame vFrame)
     {
         //get the sensor 
@@ -40,7 +36,7 @@ public class BodySegment
         foreach (BodyStructureMap.SensorPositions sensorsPos in sensorPos)
         {
             //find a suitable sensor to update
-            SensorTuple sensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == sensorsPos); 
+            SensorTuple sensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == sensorsPos);
             //get the relevant data from vFrame 
             if (vFrame.FrameData.ContainsKey(sensorsPos))
             {
@@ -52,10 +48,11 @@ public class BodySegment
     }
 
 
-    /// <summary>
-    /// Update the initial sensors information 
-    /// </summary>
-    /// <param name="vFrame">a BodyFrame to set initial sensors</param>
+    /**
+    * UpdateInitialSensorsData(BodyFrame vFrame)
+    * @param BodyFrame vFrame: the body frame whose subframes will updates to initial sensors
+    * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information
+    */
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
         //get the sensor 
@@ -71,28 +68,27 @@ public class BodySegment
             if (vFrame.FrameData.ContainsKey(sensorsPos))
             {
                 Vector3 data = vFrame.FrameData[sensorsPos];
-
                 sensTuple.InitSensor.SensorData.PositionalData = data;
-            } 
+            }
         }
     }
-    /// <summary>
-    /// updates torso orientation
-    /// </summary>
+    /**
+    * UpdateTorsoSubsegment()
+    * @brief  Updates the current torso's subsegments
+    */
     internal void UpdateTorsoSubsegment()
     {
         Quaternion quaternionFactor = Quaternion.Euler(new Vector3(0, 90, 0));
- 
- 
+
         SensorTuple upperSpineTuple = SensorsTuple.First(x => x.InitSensor.SensorPosition == BodyStructureMap.SensorPositions.SP_UpperSpine);
         SensorTuple lowerSpineTuple = SensorsTuple.First(x => x.InitSensor.SensorPosition == BodyStructureMap.SensorPositions.SP_LowerSpine);
- 
+
         Vector3 upperSpOrientation = upperSpineTuple.CurrentSensor.SensorData.PositionalData * Mathf.Rad2Deg;
         Vector3 lowerSpOrientation = lowerSpineTuple.CurrentSensor.SensorData.PositionalData * Mathf.Rad2Deg;
-    
+
         BodySubSegment upperSpineSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
         BodySubSegment lowerSpineSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
-      
+
         //get the sensor tuple for upperspine and lowerspine    
 
         Quaternion initUpperSpineQuaternion = Quaternion.Euler(upperSpineTuple.InitSensor.SensorData.PositionalData * Mathf.Rad2Deg);
@@ -104,42 +100,42 @@ public class BodySegment
         Quaternion vNodQuat = Quaternion.Euler(upperSpOrientation);
         Quaternion vNodQuat2 = Quaternion.Euler(lowerSpOrientation);
 
-        Quaternion finalUpperSpOrientation = initInverseUpperSpineRotation*vNodQuat*Quaternion.Inverse(quaternionFactor);
-        Quaternion finalLowerSpOrientation = initialInverseLowerSpineRotation*vNodQuat2*
+        Quaternion finalUpperSpOrientation = initInverseUpperSpineRotation * vNodQuat * Quaternion.Inverse(quaternionFactor);
+        Quaternion finalLowerSpOrientation = initialInverseLowerSpineRotation * vNodQuat2 *
                                              Quaternion.Inverse(quaternionFactor);
         upperSpineSubsegment.UpdateSubsegmentOrientation(finalUpperSpOrientation);
         lowerSpineSubsegment.UpdateSubsegmentOrientation(finalLowerSpOrientation);
-  
+
 
         //todo update legs
-/*
-        float vUpperLegLength = 1f;
-        float vLowerLegLength = 1f;
-        float vFootHeight = 0.1f;
+        /*
+                float vUpperLegLength = 1f;
+                float vLowerLegLength = 1f;
+                float vFootHeight = 0.1f;
 
-        float vRightLegHeight = NodJointLegRight.RightLegMovement(vUpperLegLength, vLowerLegLength);
-        float vLeftLegHeight = NodJointLegLeft.LeftLegMovement(vUpperLegLength, vLowerLegLength);
-        float vLegMovement;
+                float vRightLegHeight = NodJointLegRight.RightLegMovement(vUpperLegLength, vLowerLegLength);
+                float vLeftLegHeight = NodJointLegLeft.LeftLegMovement(vUpperLegLength, vLowerLegLength);
+                float vLegMovement;
 
-        if (vRightLegHeight > vLeftLegHeight)
-        {
-            vLegMovement = vRightLegHeight;
-        }
-        else
-        {
-            vLegMovement = vLeftLegHeight;
-        }
-        Vector3 v3 = lowerSpineSubsegment.AssociatedView.transform.localPosition;
-        //*****To move the body down when sitting uncomment next line****#1#/
-        //v3.y = vLegMovement+vFootHeight;
-        lowerSpineSubsegment.AssociatedView.transform.localPosition = v3;*/
- 
+                if (vRightLegHeight > vLeftLegHeight)
+                {
+                    vLegMovement = vRightLegHeight;
+                }
+                else
+                {
+                    vLegMovement = vLeftLegHeight;
+                }
+                Vector3 v3 = lowerSpineSubsegment.AssociatedView.transform.localPosition;
+                //*****To move the body down when sitting uncomment next line****#1#/
+                //v3.y = vLegMovement+vFootHeight;
+                lowerSpineSubsegment.AssociatedView.transform.localPosition = v3;*/
+
 
     }
-    /// <summary>
-    /// Updates the right arm subsegment from the available sensor data
-    /// </summary>
-
+    /**
+    * UpdateRightArmSubsegment()
+    * @brief  Updates the current right arm's subsegments
+    */
     internal void UpdateRightArmSubsegment()
     {
         Quaternion quaternionFactor = Quaternion.Euler(new Vector3(0, 90, 0));
@@ -172,10 +168,11 @@ public class BodySegment
         //update current body segments
 
     }
-    /// <summary>
-    /// Updates the left arm subsegment from the available sensor data
-    /// </summary>
 
+    /**
+    * UpdateRightArmSubsegment()
+    * @brief  Updates the left arm subsegment from the available sensor data
+    */
     internal void UpdateLeftArmSubsegment()
     {
         Quaternion quaternionFactor = Quaternion.Euler(new Vector3(0, 90, 0));
@@ -208,7 +205,7 @@ public class BodySegment
         //update current body segments
 
     }
- 
+
 
     /**
     *  InitializeBodySegment(BodyStructureMap.SegmentTypes vSegmentType)
@@ -240,7 +237,7 @@ public class BodySegment
             SensorTuple tuple = new SensorTuple();
             tuple.CurrentSensor = new Sensor(newSensor);
             tuple.InitSensor = new Sensor(newSensor);
-          
+
             SensorsTuple.Add(tuple);
             sensorList.Add(tuple.CurrentSensor);
         }
@@ -248,13 +245,13 @@ public class BodySegment
         foreach (BodyStructureMap.SubSegmentTypes sstype in subsegmentTypes)
         {
             BodySubSegment subSegment = new BodySubSegment();
-            subSegment.SubSegmentType = sstype;
+            subSegment.subsegmentType = sstype;
             subSegment.InitializeBodySubsegment(sstype);
             //BodySubSegments.Add(subSegment);
             BodySubSegmentsDictionary.Add((int)sstype, subSegment);
             #region use of unity functions
 
-            subSegment.AssociatedView.transform.parent = AssociatedView.transform;
+            subSegment.associatedView.transform.parent = AssociatedView.transform;
 
             #endregion
 
@@ -301,32 +298,24 @@ public class BodySegment
         //}
     }
     #region helperfunctions
-    /// <summary>
-    /// Updates the subsegments
-    /// </summary>
+    /**
+    * private void UpdateSubsegments()
+    * @brief Updates the subsegments of the current subsgment from the available sensor data
+    */
     private void UpdateSubsegments()
     {
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {
-        //    UpdateTorsoSubsegment();
+            //    UpdateTorsoSubsegment();
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
-            UpdateRightArmSubsegment();
+            //UpdateRightArmSubsegment();
         }
-        //from the list of current subsegments we have, find the subsegments that correspond to the current sensor from the sensor tuples list
-        //get the integer value of the keyvalue pair in the subsegment dictionary
-        /*foreach (KeyValuePair<int, BodySubSegment> segmentPair in BodySubSegmentsDictionary)
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
         {
-            //find the corresponding sensor to this subsegment by looking up the integer value of its segment type
-            int potentialKey = (int)segmentPair.Value.SubSegmentType;
-            //get the potential value from the list of sensortuples
-            SensorTuple sensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == (BodyStructureMap.SensorPositions)potentialKey);
-            //update the orientation of this subsegment
-            BodySubSegmentsDictionary[segmentPair.Key].UpdateSubsegmentOrientation(sensTuple.CurrentSensor.SensorData.PositionalData);
-        }*/
-
-
+            UpdateLeftArmSubsegment();
+        }
     }
     #endregion
 

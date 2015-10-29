@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class BodySubSegment
 {
-    public BodyStructureMap.SubSegmentTypes SubSegmentType;
+    public BodyStructureMap.SubSegmentTypes subsegmentType;
     //TODO: Sub Segment Orientation 
     //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
-    private Quaternion subsegmentOrientation;
-    private SubSegmentOrientationType subSegmentOrientationType;
-    public BodySubsegmentView AssociatedView;
+    private Quaternion mSubsegmentOrientation;
+    private SubSegmentOrientationType mSubsegmentOrientationType;
+    public BodySubsegmentView associatedView;
 
 
     public Quaternion SubsegmentOrientation
     {
-        get { return subsegmentOrientation; }
-        set { subsegmentOrientation = value; }
+        get { return mSubsegmentOrientation; }
+        set { mSubsegmentOrientation = value; }
     }
 
     public enum SubSegmentOrientationType
@@ -25,35 +25,40 @@ public class BodySubSegment
         NonFused = 1,
         MappedTransformation
     }
-    /// <summary>
-    /// Updates the Subsegment's orientation from the given input
-    /// </summary>
-    /// <param name="input"></param>
-    public void UpdateSubsegmentOrientation(Vector3 input)
+    /**
+   *  UpdateSubsegmentOrientation(Vector3 vRawEuler)
+   * @param   vRawEuler: the raw euler in Rads that will update the subsegment's orientation
+   * @brief  Updates the subsegments orientation
+   */
+    public void UpdateSubsegmentOrientation(Vector3 vRawEuler)
     {
-        SubsegmentOrientation = Quaternion.Euler(input* Mathf.Rad2Deg);
-        AssociatedView.UpdateOrientation(SubsegmentOrientation);
+        SubsegmentOrientation = Quaternion.Euler(vRawEuler* Mathf.Rad2Deg);
+        associatedView.UpdateOrientation(SubsegmentOrientation);
     }
-
-    public void UpdateSubsegmentOrientation(Quaternion q)
+    /**
+    *  UpdateSubsegmentOrientation(Quaternion vOrientation)
+    * @param  vOrientation: the orientation that will update the subsegment's orientation
+    * @brief  Updates the subsegments orientation
+    */
+    public void UpdateSubsegmentOrientation(Quaternion vOrientation)
     {
-        SubsegmentOrientation =q;
-        AssociatedView.UpdateOrientation(SubsegmentOrientation);
+        SubsegmentOrientation =vOrientation;
+        associatedView.UpdateOrientation(SubsegmentOrientation);
     }
+   
     /**
    *  InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes sstype)
    * @param  sstype: the desired SubSegment Type
    * @brief Initializes a new  subsegment structure's internal properties with the desired subsegment Type 
    */
-
-    internal void InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes sstype)
+    internal void InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes vSubsegmentType)
     {
         #region using unity functions
-        GameObject go = new GameObject(EnumUtil.GetName(sstype));
-        AssociatedView = go.AddComponent<BodySubsegmentView>();
+        GameObject go = new GameObject(EnumUtil.GetName(vSubsegmentType));
+        associatedView = go.AddComponent<BodySubsegmentView>();
         #endregion
 
-        SubSegmentType = sstype;
+        subsegmentType = vSubsegmentType;
 
     }
 

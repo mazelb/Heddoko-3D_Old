@@ -33,25 +33,25 @@ public class Body
 
     //view associated with this model
     #region properties
-    private BodyView view;
+    private BodyView mView;
     /**
     * View
     * @param 
     * @brief View associated with this body
-    * @note: a new gameobject is created and this Body is added into it as a compnent
+    * @note: a new gameobject is created and this Body is added into it as a component
     * @return returns the view associated with this body
     */
     public BodyView View
     {
         get
         {
-            if (view == null)
+            if (mView == null)
             {
                 GameObject viewGO = new GameObject("body view " + BodyGuid);
-                view = viewGO.AddComponent<BodyView>();
+                mView = viewGO.AddComponent<BodyView>();
 
             }
-            return view;
+            return mView;
         }
 
     }
