@@ -38,7 +38,7 @@ public class Body
     * View
     * @param 
     * @brief View associated with this body
-    * @note: a new gameobject is created and this Body is added into it as a compnent
+    * @note: a new gameobject is created and this Body is added into it as a component
     * @return returns the view associated with this body
     */
     public BodyView View

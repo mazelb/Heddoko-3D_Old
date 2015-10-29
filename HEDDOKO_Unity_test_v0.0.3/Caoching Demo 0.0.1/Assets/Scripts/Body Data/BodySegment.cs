@@ -310,7 +310,11 @@ public class BodySegment
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
-            UpdateRightArmSubsegment();
+            //UpdateRightArmSubsegment();
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
+        {
+            UpdateLeftArmSubsegment();
         }
     }
     #endregion
