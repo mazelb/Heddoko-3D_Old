@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class BodySubSegment
 {
-    public BodyStructureMap.SubSegmentTypes SubSegmentType;
+    public BodyStructureMap.SubSegmentTypes subsegmentType;
     //TODO: Sub Segment Orientation 
     //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
-    private Quaternion subsegmentOrientation;
-    private SubSegmentOrientationType subSegmentOrientationType;
-    public BodySubsegmentView AssociatedView;
+    private Quaternion mSubsegmentOrientation;
+    private SubSegmentOrientationType mSubsegmentOrientationType;
+    public BodySubsegmentView associatedView;
 
 
     public Quaternion SubsegmentOrientation
     {
-        get { return subsegmentOrientation; }
-        set { subsegmentOrientation = value; }
+        get { return mSubsegmentOrientation; }
+        set { mSubsegmentOrientation = value; }
     }
 
     public enum SubSegmentOrientationType
@@ -33,7 +33,7 @@ public class BodySubSegment
     public void UpdateSubsegmentOrientation(Vector3 vRawEuler)
     {
         SubsegmentOrientation = Quaternion.Euler(vRawEuler* Mathf.Rad2Deg);
-        AssociatedView.UpdateOrientation(SubsegmentOrientation);
+        associatedView.UpdateOrientation(SubsegmentOrientation);
     }
     /**
     *  UpdateSubsegmentOrientation(Quaternion vOrientation)
@@ -43,7 +43,7 @@ public class BodySubSegment
     public void UpdateSubsegmentOrientation(Quaternion vOrientation)
     {
         SubsegmentOrientation =vOrientation;
-        AssociatedView.UpdateOrientation(SubsegmentOrientation);
+        associatedView.UpdateOrientation(SubsegmentOrientation);
     }
    
     /**
@@ -55,10 +55,10 @@ public class BodySubSegment
     {
         #region using unity functions
         GameObject go = new GameObject(EnumUtil.GetName(vSubsegmentType));
-        AssociatedView = go.AddComponent<BodySubsegmentView>();
+        associatedView = go.AddComponent<BodySubsegmentView>();
         #endregion
 
-        SubSegmentType = vSubsegmentType;
+        subsegmentType = vSubsegmentType;
 
     }
 

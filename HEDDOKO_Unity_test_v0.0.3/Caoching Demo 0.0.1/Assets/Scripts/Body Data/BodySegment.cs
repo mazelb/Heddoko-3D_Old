@@ -248,13 +248,13 @@ public class BodySegment
         foreach (BodyStructureMap.SubSegmentTypes sstype in subsegmentTypes)
         {
             BodySubSegment subSegment = new BodySubSegment();
-            subSegment.SubSegmentType = sstype;
+            subSegment.subsegmentType = sstype;
             subSegment.InitializeBodySubsegment(sstype);
             //BodySubSegments.Add(subSegment);
             BodySubSegmentsDictionary.Add((int)sstype, subSegment);
             #region use of unity functions
 
-            subSegment.AssociatedView.transform.parent = AssociatedView.transform;
+            subSegment.associatedView.transform.parent = AssociatedView.transform;
 
             #endregion
 
