@@ -47,7 +47,7 @@ namespace Assets.Scripts.Body_Data.view
 
         public void ResetJoint()
         {
-            associatedBody.ResetJoints(associatedBody.CurrentBodyFrame);
+            //associatedBody.ResetJoints(associatedBody.CurrentBodyFrame);
         }
 
     }
