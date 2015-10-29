@@ -33,7 +33,7 @@ public class Body
 
     //view associated with this model
     #region properties
-    private BodyView view;
+    private BodyView mView;
     /**
     * View
     * @param 
@@ -45,13 +45,13 @@ public class Body
     {
         get
         {
-            if (view == null)
+            if (mView == null)
             {
                 GameObject viewGO = new GameObject("body view " + BodyGuid);
-                view = viewGO.AddComponent<BodyView>();
+                mView = viewGO.AddComponent<BodyView>();
 
             }
-            return view;
+            return mView;
         }
 
     }

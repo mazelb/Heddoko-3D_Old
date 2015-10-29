@@ -15,7 +15,7 @@ namespace Assets.Scripts.Body_Data.view
     */
     public class BodyView : MonoBehaviour
     {
-        public Button ResetButton;
+       
         private BodyFrameBuffer mBuffer;
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
