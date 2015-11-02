@@ -83,6 +83,12 @@ public class BodyRecordingsMgr : MonoBehaviour
     public void ReadRecordingFile(string vFilePath)
     {
         //Read recording file
+        //if the file doesn't end with CSV then return
+        if(vFilePath.EndsWith("meta"))
+        {
+            return;
+        }
+
         BodyRecordingReader vTempReader = new BodyRecordingReader();
 
         if (vTempReader.ReadFile(vFilePath) > 0)
