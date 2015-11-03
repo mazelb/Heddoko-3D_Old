@@ -578,23 +578,23 @@ public class BodySegment
 
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {
-            MapTorsoSegment(vFilteredDictionary);
+          //  MapTorsoSegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
-           // MapRightArmSubsegment(vFilteredDictionary);
+            MapRightArmSubsegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
         {
-            //MapLeftArmSubsegment(vFilteredDictionary);
+            MapLeftArmSubsegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
         {
-        //    MapRightLegSegment(vFilteredDictionary);
+            MapRightLegSegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
         {
-          //  MapLeftLegSegment(vFilteredDictionary);
+            MapLeftLegSegment(vFilteredDictionary);
         }
     }
     #endregion
