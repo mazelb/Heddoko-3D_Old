@@ -54,12 +54,9 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     * @brief will set the Initial Frame
     */
     public void ResetInitialFrame()
-    {
-<<<<<<< HEAD
-        mBody.View.SetInitialFrameToCurrent();
-=======
-        mBody.View.ResetInitialFrame();
->>>>>>> origin/master
+    { 
+        mBody.View.SetInitialFrameToCurrent(); 
+        mBody.View.ResetInitialFrame(); 
     }
     /**
     * Pause 
