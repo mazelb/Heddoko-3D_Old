@@ -20,11 +20,11 @@ public class NodSensor : MonoBehaviour
 	private bool mIsStartConnection = false;
 
 	//Nod data
-	public Quaternion initRotation = Quaternion.identity;
+	public Quaternion initRotation { get; set; }
 	public Quaternion curRotation = Quaternion.identity;
-	public Vector3 initRotationEuler = Vector3.zero;
-	public Vector3 curRotationEuler = Vector3.zero;
-	public Vector3 curRotationRawEuler = Vector3.zero;
+	public Vector3 initRotationEuler { get;set;}
+	public Vector3 curRotationEuler { get; set; }
+	public Vector3 curRotationRawEuler { get;set; }
 
 	/// <summary>
 	/// Reset the sensors data to init status.

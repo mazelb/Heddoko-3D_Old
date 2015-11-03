@@ -3,11 +3,12 @@
 * @brief Contains the bodyframethread class
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
 
 using System;
-using System.Collections.Generic; 
-
+using System.Collections.Generic;
+using Assets.Scripts.Utils;
 /**
 * BodyFrameThread class 
 * @brief child class for communication threads
@@ -15,22 +16,22 @@ using System.Collections.Generic;
 public class BodyFrameThread : ThreadedJob
 {
     #region class fields
-    private BodyFrameBuffer buffer;  //buffer  
-    private SourceDataType dataType;
-    private List<BodyRawFrame> rawFrames;
-    private bool continueWorking;
-   
+    private BodyFrameBuffer mBuffer;  //buffer  
+    private SourceDataType mDataSourceType;
+    private List<BodyRawFrame> mRawFrames;
+    private bool mContinueWorking;
+
     #endregion
     #region properties
     internal BodyFrameBuffer BodyFrameBuffer
     {
         get
         {
-            if (buffer == null)
+            if (mBuffer == null)
             {
-                buffer = new BodyFrameBuffer(); 
+                mBuffer = new BodyFrameBuffer();
             }
-            return buffer;
+            return mBuffer;
         }
     }
     #endregion
@@ -47,17 +48,18 @@ public class BodyFrameThread : ThreadedJob
     * @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
     * @param recording 
     */
-    public BodyFrameThread( List<BodyRawFrame> rawFrames )
+    public BodyFrameThread(List<BodyRawFrame> mRawFrames, BodyFrameBuffer vBuffer)
     {
-        this.rawFrames = rawFrames;
-        dataType = SourceDataType.Recording;
+        this.mRawFrames = mRawFrames;
+        this.mBuffer = vBuffer;
+        mDataSourceType = SourceDataType.Recording;
     }
     /**
      * @brief Default constructor
      */
     public BodyFrameThread()
     {
-        
+
     }
 
     #endregion
@@ -66,7 +68,7 @@ public class BodyFrameThread : ThreadedJob
     public override void Start()
     {
         base.Start();
-        continueWorking = true;
+        mContinueWorking = true;
     }
 
     #endregion
@@ -76,7 +78,7 @@ public class BodyFrameThread : ThreadedJob
     */
     protected override void ThreadFunction()
     {
-        switch (dataType)
+        switch (mDataSourceType)
         {
             case SourceDataType.BrainFrame:
                 BodyFrameBuffer.AllowOverflow = true;
@@ -89,7 +91,7 @@ public class BodyFrameThread : ThreadedJob
 
                 //todo
                 break;
-          
+
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
                 RecordingTask();
@@ -110,20 +112,34 @@ public class BodyFrameThread : ThreadedJob
    */
     private void RecordingTask()
     {
-        int bodyFrameRecordingIndex = 0;
-        while (continueWorking)
+        int vBodyFrameIndex = 0;
+        while (mContinueWorking)
         {
             while (!BodyFrameBuffer.IsFull())
             {
-                BodyFrame bframe = BodyFrame.ConvertRawFrame(rawFrames[bodyFrameRecordingIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                BodyFrameBuffer.Enqueue(bframe);
-                bodyFrameRecordingIndex++;
-                //todo: can set a flag for restarting this task over again
-                if (bodyFrameRecordingIndex >= rawFrames.Count) //reset back to 0
+                if (!mContinueWorking)
                 {
-                    bodyFrameRecordingIndex = 0;
-                } 
-            } 
+                    break;
+                }
+                try
+                {
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                    BodyFrameBuffer.Enqueue(vBodyFrame);
+                    vBodyFrameIndex++;
+                    //todo: can set a flag for restarting this task over again
+                    if (vBodyFrameIndex >= mRawFrames.Count) //reset back to 0
+                    {
+                        vBodyFrameIndex = 0;
+                    }
+                }
+                catch (Exception e)
+                {
+                    mContinueWorking = false;
+                    UnityEngine.Debug.Log(e.StackTrace);
+                    break;
+                }
+
+            }
         }
     }
     /**
@@ -141,9 +157,9 @@ public class BodyFrameThread : ThreadedJob
     * comes from a the brainframe
     */
 
-   private void DataStreamTask()
+    private void DataStreamTask()
     {
-        
+
     }
     #endregion
 
@@ -151,18 +167,18 @@ public class BodyFrameThread : ThreadedJob
 
 
     /**
-  * CleanUp
-  * @brief Helping function cleans ups  
-  */
+    * CleanUp
+    * @brief Helping function cleans ups  
+    */
 
     public void StopThread()
     {
-        continueWorking = false;
+        mContinueWorking = false;
     }
     /**
-* OnFinished()
-* @brief Callback when the thread is done executing
-*/
+    * OnFinished()
+    * @brief Callback when the thread is done executing
+    */
     protected override void OnFinished()
     {
         //This is executed by the Unity main thread when the job is finished 
@@ -183,10 +199,5 @@ public class BodyFrameThread : ThreadedJob
         Other
     }
 
-    public struct CallbackActionStruct
-    {
-        public object[] objects;
-        public Action callbackAction;
-    }
 
 }

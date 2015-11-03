@@ -1,17 +1,32 @@
-﻿
+﻿/** 
+* @file MatrixTools.cs
+* @brief Contains the MatrixTools  class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date October 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
 
 using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Utils
 {
+    /**
+    * MatrixTools class 
+    * @brief MatrixTools, provides functions and methods to convert, calculate and execute on float[,] data types and NodQuaternion orientations)
+    */
     public static class MatrixTools
     {
-
-
-        public static Quaternion MatToQuat(float[,] m)
+        /**
+        //* MatToQuat
+        //* @It converts a 3*3 orientation Matrix to a Quaternion
+        //* @param float m[][3] is the original 3*3 matrix
+        //* @return NodQuaternionOrientation, the orientation in quaternion
+        //* reference: @http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche52.html
+        */
+        public static NodQuaternionOrientation MatToQuat(float[,] m)
         {
-            Quaternion q;
+            NodQuaternionOrientation q;
             q.w = (m[0, 0] + m[1, 1] + m[2, 2] + 1.0f) / 4.0f;
             q.x = (m[0, 0] - m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
             q.y = (-m[0, 0] + m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
@@ -60,7 +75,7 @@ namespace Assets.Scripts.Utils
             q.z /= r;
             return q;
         }
-        //////////////////////////// These are the reference functions for matrix calculation and transformation ///////////////////////////////
+  
 
         /**
         //	* RotationGlobal()
@@ -85,7 +100,48 @@ namespace Assets.Scripts.Utils
         }
 
 
+        /// <summary>
+        /// Eulers to quaternion.
+        /// </summary>
+        /// <returns>The to quaternion.</returns>
+        /// <param name="pitch">Pitch.</param>
+        /// <param name="roll">Roll.</param>
+        /// <param name="yaw">Yaw.</param>
 
+        public static NodQuaternionOrientation eulerToQuaternion(float pitch, float roll, float yaw)
+        {
+            float sinHalfYaw = Mathf.Sin(yaw / 2.0f);
+            float cosHalfYaw = Mathf.Cos(yaw / 2.0f);
+            float sinHalfPitch = Mathf.Sin(pitch / 2.0f);
+            float cosHalfPitch = Mathf.Cos(pitch / 2.0f);
+            float sinHalfRoll = Mathf.Sin(roll / 2.0f);
+            float cosHalfRoll = Mathf.Cos(roll / 2.0f);
+
+            NodQuaternionOrientation result;
+            result.x = -cosHalfRoll * sinHalfPitch * sinHalfYaw
+                + cosHalfPitch * cosHalfYaw * sinHalfRoll;
+            result.y = cosHalfRoll * cosHalfYaw * sinHalfPitch
+                + sinHalfRoll * cosHalfPitch * sinHalfYaw;
+            result.z = cosHalfRoll * cosHalfPitch * sinHalfYaw
+                - sinHalfRoll * cosHalfYaw * sinHalfPitch;
+            result.w = cosHalfRoll * cosHalfPitch * cosHalfYaw
+                + sinHalfRoll * sinHalfPitch * sinHalfYaw;
+
+            return result;
+        }
+        /**
+       //	* Identity3X3Matrix()  
+       //	* @return 3*3  identity matrix
+       //	*/
+        // 
+        public static float[,] Identity3X3Matrix()
+        {
+            float[,] vIdentMatrix = new float[3, 3];
+            vIdentMatrix[0, 0] = 0;
+            vIdentMatrix[1, 1] = 0;
+            vIdentMatrix[2, 2] = 0;
+            return vIdentMatrix;
+        }
         /**
         //	* RotationLocal()
         //	* @ This Performs transformation From Nods Local Coordinate System To global coordinates
@@ -109,11 +165,11 @@ namespace Assets.Scripts.Utils
         }
 
         /**
-//	* multi()
-//	*	@This Function do multiplication between two 3*3 matrices
-//	*	@param matrix a and b
-//	*	@return c = a * b,
-//	*/
+        //	* multi()
+        //	*	@This Function do multiplication between two 3*3 matrices
+        //	*	@param matrix a and b
+        //	*	@return c = a * b,
+        //	*/
         public static float[,] multi(float[,] a, float[,] b)
         {
             float[,] c = new float[3, 3];
@@ -129,5 +185,51 @@ namespace Assets.Scripts.Utils
             return c;
         }
 
+
+
+        /**
+        //* RotationVector()
+        //* @It produces a rotation matrix around an arbitrary vector with desired angles
+        //* @param vec u, arbitrary unit vector
+        //* @param float t, desired angle of rotation
+        //* @return float a[][3], The output rotation matrix
+        //*/
+        public static float[,] RVector(Vector3 u, float t)
+        {
+            float[,] a = new float[3, 3];
+            a[0, 0] = Mathf.Cos(t) + u.x * u.x * (1 - Mathf.Cos(t));
+            a[1, 0] = u.x * u.y * (1 - Mathf.Cos(t)) + u.z * Mathf.Sin(t);
+            a[2, 0] = u.x * u.z * (1 - Mathf.Cos(t)) - u.y * Mathf.Sin(t);
+            a[0, 1] = u.x * u.y * (1 - Mathf.Cos(t)) - u.z * Mathf.Sin(t);
+            a[1, 1] = Mathf.Cos(t) + u.y * u.y * (1 - Mathf.Cos(t)); ;
+            a[2, 1] = u.z * u.y * (1 - Mathf.Cos(t)) + u.x * Mathf.Sin(t);
+            a[0, 2] = u.x * u.z * (1 - Mathf.Cos(t)) + u.y * Mathf.Sin(t);
+            a[1, 2] = u.z * u.y * (1 - Mathf.Cos(t)) - u.x * Mathf.Sin(t);
+            a[2, 2] = Mathf.Cos(t) + u.z * u.z * (1 - Mathf.Cos(t));
+            return a;
+        }
+
+        
+
     }
+
+    /**
+   * NodQuaternionOrientation struct 
+   * @brief A quaternion structure that is needed to render orientation data 
+   */
+    public struct NodQuaternionOrientation
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+
+        public NodQuaternionOrientation(float _x, float _y, float _z, float _w)
+        {
+            x = _x;
+            y = _y;
+            z = _z;
+            w = _w;
+        }
+    };
 }

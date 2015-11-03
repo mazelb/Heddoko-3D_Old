@@ -3,6 +3,7 @@
 * @brief The view for a body's subsegment. Application of transforms happen in here. 
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date October 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
 using UnityEngine; 
 namespace Assets.Scripts.Body_Data.view
@@ -16,8 +17,8 @@ namespace Assets.Scripts.Body_Data.view
         #region fields
         //the transforms required to transform
   
-        public  Transform vJointTransform; 
-
+        public  Transform vSubSegmentTransform;
+        public BodySubSegment AssociatedSubSegment;
         #endregion
         #region properties
         /**
@@ -26,17 +27,17 @@ namespace Assets.Scripts.Body_Data.view
         * @brief The joint transform associated with this subsegment view, if not assigned, calls on the AssignTransform helper function
         * @return returns the Transform associated with this body
         */
-        public Transform JointTransform
+        public Transform SubSegmentTransform
         {
             get
             {
-                if (vJointTransform == null)
+                if (vSubSegmentTransform == null)
                 {
                     AssignTransform();
                 }
-                return vJointTransform;
+                return vSubSegmentTransform;
             }
-            set { vJointTransform = value; }
+            set { vSubSegmentTransform = value; }
         }
   
         #endregion
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             //find the object in the scene with the tag
             GameObject go = GameObject.FindWithTag(gameObject.name);
-            vJointTransform = go.transform;
+            vSubSegmentTransform = go.transform;
         }
 
         /**
@@ -61,8 +62,8 @@ namespace Assets.Scripts.Body_Data.view
        * @brief Updates the current orientation with the passed in parameter
        */
         internal void UpdateOrientation(Quaternion vNewOrientation)
-        {  
-            vJointTransform.rotation = vNewOrientation;
+        {
+            SubSegmentTransform.rotation = vNewOrientation; 
         }
     }
 }

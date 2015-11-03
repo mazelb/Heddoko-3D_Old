@@ -3,6 +3,7 @@
 * @brief Contains the BodiesManager class
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
 using UnityEngine; 
 using System.Collections.Generic;

@@ -2,6 +2,7 @@
 * @brief Contains the CircularQueue<T> class class
 * @author Mohammed Haider(mohammed@heddoko.com)
 * @date October 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
 using System;
 using System.Collections;
@@ -19,14 +20,12 @@ namespace Assets.Scripts.Utils
     */
     public class CircularQueue<T> : IEnumerable<T>, ICollection<T>
     {
-        private int capacity; //how large is the queue?
-        private int count;
-        private int headIndex;
-        private int tailIndex;
-        private T[] queue;
-        private const int defaultCapacity = 255; //default size to use in the parameterles constructor
-
-        private object syncronizedRoot;
+        private int mCapacity; //how large is the queue?
+        private int mCount;
+        private int mHeadIndex;
+        private int mTailIndex;
+        private T[] mQueue;
+        private const int mDefaultCapacity = 64; //default size to use in the parameterles constructor 
         #region properties
         public bool AllowOverflow { get; set; }
 
@@ -34,23 +33,23 @@ namespace Assets.Scripts.Utils
         {
             get
             {
-                return capacity;
+                return mCapacity;
             }
             set
             {
-                if (value == capacity)
+                if (value == mCapacity)
                     return;
-                if (value < count)
+                if (value < mCount)
                 {
-                    throw new ArgumentOutOfRangeException("Trying to resize the queue to a size smaller than the current count of " + count);
+                    throw new ArgumentOutOfRangeException("Trying to resize the queue to a size smaller than the current count of " + mCount);
                 }
                 var temp = new T[value];
-                if (count > 0)
+                if (mCount > 0)
                 {
                     CopyTo(temp);
                 }
-                queue = temp;
-                capacity = value;
+                mQueue = temp;
+                mCapacity = value;
             }
         }
 
@@ -58,92 +57,95 @@ namespace Assets.Scripts.Utils
         {
             get
             {
-                return count;
+                return mCount;
             }
         }
 
         public T[] CirclQueue
         {
-            get { return queue; }
+            get
+            {
+                return mQueue;
+            }
         }
 
         #endregion
         #region constructors
         /**
         * CircularQueue()
-        * @brief Default constructor, sets the capacity to 255 and doesn't allow overflow
+        * @brief Default constructor, sets the capacity to 64 and doesn't allow overflow
         * @param  
         * @return a new CircularQueueObject
         */
         public CircularQueue()
-            : this(defaultCapacity, false)
+            : this(mDefaultCapacity, false)
         {
 
         }
         /**
-        * CircularQueue(bool allowOverflow)
-        * @brief Constructor, sets the capacity to 255, and allow overflow is set according to the parameter passed in 
+        * CircularQueue(bool vAllowOverflow)
+        * @brief Constructor, sets the capacity to 64, and allow overflow is set according to the parameter passed in 
         * @param  allowOverflow
         * @return a new CircularQueueObject
         */
-        public CircularQueue(bool allowOverflow)
-            : this(defaultCapacity, allowOverflow)
+        public CircularQueue(bool vAllowOverflow)
+            : this(mDefaultCapacity, vAllowOverflow)
         {
 
         }
         /**
-        * CircularQueue(bool capacity)
+        * CircularQueue(bool vCapacity)
         * @brief Constructor, sets the capacity according to the paramater passed in and doesn't allow overflow 
         * @param  capacity
         * @return a new CircularQueueObject
         */
-        public CircularQueue(int capacity)
-            : this(capacity, false)
+        public CircularQueue(int vCapacity)
+            : this(vCapacity, false)
         {
 
         }
 
-       /**
-       * CircularQueue(int capacity, bool allowOverflow)
-       * @brief Constructor, sets the capacity according to the paramater passed in and sets overflow according to the allowOverflow parameter passed in
-       * @param  capacity, allowOverflow
-       * @return a new CircularQueueObject
-       */
-        public CircularQueue(int capacity, bool allowOverflow)
+        /**
+        * CircularQueue(int vCapacity, bool vAllowOverflow)
+        * @brief Constructor, sets the capacity according to the paramater passed in and sets overflow according to the allowOverflow parameter passed in
+        * @param  capacity, allowOverflow
+        * @return a new CircularQueueObject
+        */
+        public CircularQueue(int vCapacity, bool vAllowOverflow)
         {
-            if (capacity < 0)
+            if (vCapacity < 0)
             {
                 throw new EmptyCircularQueueException();
             }
-            this.capacity = capacity;
-            count = 0;
-            headIndex = 0;
-            tailIndex = 0;
-            queue = new T[capacity];
-            AllowOverflow = allowOverflow;
+            this.mCapacity = vCapacity;
+            mCount = 0;
+            mHeadIndex = 0;
+            mTailIndex = 0;
+            mQueue = new T[vCapacity];
+            AllowOverflow = vAllowOverflow;
         }
         #endregion
-       /**
-       * Contains(T obj)
-       * @brief Does the circular queue contain the object?
-       * @param  obj
-       * @return false if  object isn't found
-       */
-        public bool Contains(T obj)
+        /**
+        * Contains(T vObj)
+        * @brief Does the circular queue contain the object?
+        * @param  obj
+        * @return false if  object isn't found
+        */
+        public bool Contains(T vObj)
         {
-            int queueIndex = headIndex;
-            var comparer = EqualityComparer<T>.Default;
-            for (int i = 0; i < count; i++, queueIndex++)
+            int vQueueIndex = mHeadIndex;
+            var vComparer = EqualityComparer<T>.Default;
+            for (int i = 0; i < mCount; i++, vQueueIndex++)
             {
-                if (queueIndex == capacity)
+                if (vQueueIndex == mCapacity)
                 {
-                    queueIndex = 0;
+                    vQueueIndex = 0;
                 }
-                if (obj == null && queue[queueIndex] == null)
+                if (vObj == null && mQueue[vQueueIndex] == null)
                 {
                     return true;
                 }
-                else if ((queue[queueIndex] != null) && comparer.Equals(queue[queueIndex], obj))
+                else if ((mQueue[vQueueIndex] != null) && vComparer.Equals(mQueue[vQueueIndex], vObj))
                 {
                     return true;
                 }
@@ -158,19 +160,19 @@ namespace Assets.Scripts.Utils
        */
         public void Clear()
         {
-            count = 0;
-            headIndex = 0;
-            tailIndex = 0;
+            mCount = 0;
+            mHeadIndex = 0;
+            mTailIndex = 0;
         }
-       /**
-       * Enqueue(T[] tA)
-       * @brief  Enqueues an array of the same type as contained in the circular queue
-       * @param  T[] tA
-       * @return  number of items that were placed in the circular queue 
-       */
-        public int Enqueue(T[] tA)
+        /**
+        * Enqueue(T[] vA)
+        * @brief  Enqueues an array of the same type as contained in the circular queue
+        * @param  T[] vA
+        * @return  number of items that were placed in the circular queue 
+        */
+        public int Enqueue(T[] vA)
         {
-            return Enqueue(tA, 0, tA.Length);
+            return Enqueue(vA, 0, vA.Length);
         }
         /**
         * Enqueue(T[] tA, int offset, int length)
@@ -180,45 +182,45 @@ namespace Assets.Scripts.Utils
         * @param    tA,  offset, length
         * @return  number of items that were placed in the circular queue 
         */
-        public int Enqueue(T[] tA, int offset, int length)
+        public int Enqueue(T[] vA, int vOffset, int vLength)
         {
-            if (!AllowOverflow && length > Capacity - Count)
+            if (!AllowOverflow && vLength > Capacity - Count)
             {
                 throw new CircularQueueOverflowException();
             }
 
-            int startIndex = offset;
-            for (int i = 0; i < length; i++, tailIndex++, startIndex++)
+            int startIndex = vOffset;
+            for (int i = 0; i < vLength; i++, mTailIndex++, startIndex++)
             {
-                if (tailIndex == capacity)
+                if (mTailIndex == mCapacity)
                 {
-                    tailIndex = 0;
+                    mTailIndex = 0;
                 }
-                queue[tailIndex] = tA[startIndex];
+                mQueue[mTailIndex] = vA[startIndex];
             }
 
-            count = Math.Min(Count + length, capacity);
-            return count;
+            mCount = Math.Min(Count + vLength, mCapacity);
+            return mCount;
         }
         /**
-        * Enqueue(T item)
+        * Enqueue(T vItem)
         * @brief  Enqueues an item in the circular queue
         * @note If the AllowOverflow flag is set to false and the circular queue is full, then a CircularQueueOverflowException is thrown
         * @param item
         * @return 
         */
-        public void Enqueue(T item)
+        public void Enqueue(T vItem)
         {
             if (!AllowOverflow && IsFull())
             {
                 throw new CircularQueueOverflowException();
             }
-            queue[tailIndex] = item;
-            if (++tailIndex == capacity)
+            mQueue[mTailIndex] = vItem;
+            if (++mTailIndex == mCapacity)
             {
-                tailIndex = 0;
+                mTailIndex = 0;
             }
-            count++;
+            mCount++;
         }
         /**
         * IsFull( )
@@ -228,7 +230,7 @@ namespace Assets.Scripts.Utils
         */
         public bool IsFull()
         {
-            return count == capacity;
+            return mCount == mCapacity;
         }
 
        /**
@@ -240,10 +242,10 @@ namespace Assets.Scripts.Utils
        */
         public void Skip(int nAmount)
         {
-            headIndex += nAmount;
-            if (headIndex >= Count)
+            mHeadIndex += nAmount;
+            if (mHeadIndex >= Count)
             {
-                headIndex -= Count -1; //wrap
+                mHeadIndex -= Count -1; //wrap
             }
         }
 
@@ -266,17 +268,17 @@ namespace Assets.Scripts.Utils
         */
         public int Dequeue(ref T[] tA, int offset, int length)
         {
-            int actualCount = Math.Min(length, count);
+            int actualCount = Math.Min(length, mCount);
             int startIndex = offset;
-            for (int i = 0; i < actualCount; i++, headIndex++, startIndex++)
+            for (int i = 0; i < actualCount; i++, mHeadIndex++, startIndex++)
             {
-                if (headIndex == capacity)
+                if (mHeadIndex == mCapacity)
                 {
-                    headIndex = 0;
+                    mHeadIndex = 0;
                 }
-                tA[startIndex] = queue[headIndex];
+                tA[startIndex] = mQueue[mHeadIndex];
             }
-            count -= actualCount;
+            mCount -= actualCount;
             return actualCount;
         }
 
@@ -293,19 +295,18 @@ namespace Assets.Scripts.Utils
             {
                 throw new EmptyCircularQueueException();
             }
-            var item = queue[headIndex];
-            if (++headIndex == capacity)
+            var item = mQueue[mHeadIndex];
+            if (++mHeadIndex == mCapacity)
             {
-                headIndex = 0;
+                mHeadIndex = 0;
             }
-            count--;
+            mCount--;
             return item;
         } 
         /**
         * Peek()
         * @brief Peek at the head of the circular queue, without moving the head
         * @note Throws an EmptyCircularQueueException when empty.
-        * @param  
         * @return the element that was peeked
         */
         public T Peek()
@@ -314,76 +315,102 @@ namespace Assets.Scripts.Utils
             {
                 throw new EmptyCircularQueueException();
             }
-            var item = queue[headIndex];
+            var item = mQueue[mHeadIndex];
             return item;
         }
 
         #region copy buffered queue to array 
         /**
-        * CopyTo(  T[] tA)
+        * CopyTo(  T[] vA)
         * @brief  Copy the circular queue into the requested array tA without modifying the circular queue
-        * @param  T[] tA
-        * @return  
+        * @param  T[] vA: the array to copy the CircularQueue into
         */
-        public void CopyTo(  T[] tA)
+        public void CopyTo(  T[] vA)
         {
-            CopyTo(tA, 0);
+            CopyTo(vA, 0);
         }
-
-        public void CopyTo(  T[] tA, int index)
+        /**
+        * CopyTo(  T[] vA, int vIndex)
+        * @brief  Copy the circular queue into the requested array tA without modifying the circular queue
+        * @param  T[] vA: : the array to copy the CircularQueue into ,int vIndex: the index where to start copying into
+        */
+        public void CopyTo(  T[] vA, int vIndex)
         {
-            CopyTo(0,   tA, index, count);
+            CopyTo(vA, vIndex, mCount);
         }
-
-        public void CopyTo(int index,   T[] tA, int arrayIndex, int length)
+        /**
+        * CopyTo(  T[] vA, int vArrayIndex, int vLength)
+        * @brief  Copy the circular queue into the requested array tA without modifying the circular queue
+        * @param  T[] vA: : the array to copy the CircularQueue into ,int vIndex: the index where to start copying into, 
+        * vLength the length of the circular queue to copy
+        * @note: Will throw an argument out of range exception if requested length is larger than the number of elements in the queue
+        */
+        public void CopyTo(  T[] vA, int vArrayIndex, int vLength)
         {
-            if (length > Count)
+            if (vLength > Count)
             {
                 throw new ArgumentOutOfRangeException("Length requested is too large");
             }
 
-            int queueindex = headIndex;
-            for (int i = 0; i < count; i++, queueindex++, arrayIndex++)
+            int queueindex = mHeadIndex;
+            for (int i = 0; i < mCount; i++, queueindex++, vArrayIndex++)
             {
-                if (queueindex == capacity)
+                if (queueindex == mCapacity)
                 {
                     queueindex = 0;
                 }
-                tA[arrayIndex] = queue[queueindex];
+                vA[vArrayIndex] = mQueue[queueindex];
             }
         }
 
         #endregion
-        
+        /**
+        * GetEnumerator()
+        * @brief  An IEnumerator object that can be used to iterate through the CircularQueue.
+        * @return An IEnumerator object
+        */
         public IEnumerator<T> GetEnumerator()
         {
-            int queueIndex = headIndex;
-            for (int i = 0; i < Count; i++, queueIndex++)
+            int vQueueIndex = mHeadIndex;
+            for (int i = 0; i < Count; i++, vQueueIndex++)
             {
-                if (queueIndex == capacity)
+                if (vQueueIndex == mCapacity)
                 {
-                    queueIndex = 0;
+                    vQueueIndex = 0;
                 }
-                yield return queue[queueIndex];
+                yield return mQueue[vQueueIndex];
             }
         }
-       
+        /**
+        * ToArray()
+        * @brief  returns the CircularQueue as an array.
+        * @return An array representation of the circular queue , starting at the head index and terminating at the 
+        * tail index
+        */
         public T[] ToArray()
         {
-            var tA = new T[Count];
-            CopyTo(tA);
-            return tA;
+            var vT = new T[Count];
+            CopyTo(vT);
+            return vT;
         }
 
-
+        /**
+        * Count
+        * @brief Returns the count of the circular queue
+        * @return the total count of element in the circular queue
+        */
         int ICollection<T>.Count
         {
             get
             {
-                return count;
+                return mCount;
             }
         }
-
+        /**
+        * IsReadOnly
+        * @brief Returns if the collection is readonly
+        * @return false
+        */
         bool ICollection<T>.IsReadOnly
         {
             get
@@ -391,12 +418,21 @@ namespace Assets.Scripts.Utils
                 return false;
             }
         }
-
-        void ICollection<T>.Add(T item)
+        /**
+        * Add(T vItem)
+        * @brief Adds an item to the collection
+        * @param T vItem: The item to be added
+        */
+        void ICollection<T>.Add(T vItem)
         {
-            Enqueue(item);
+            Enqueue(vItem);
         }
-
+        /**
+        * Remove(T item)
+        * @brief removes  an item from the collection
+        * @param T vItem: The item to be removed
+        * @return returns if the item was successfully removed
+        */
         bool ICollection<T>.Remove(T item)
         {
             if (Count == 0)

@@ -18,8 +18,8 @@ public class BodyFrameBuffer : CircularQueue<BodyFrame>
     * @brief Constructor for a BodyFrameBuffer with a set capacity
     * @return a new BodyFrameBuffer with a set capacity
     */
-    public BodyFrameBuffer(int capacity)
-        : base(capacity, true)
+    public BodyFrameBuffer(int mCapacity)
+        : base(mCapacity, true)
     {
         
     }

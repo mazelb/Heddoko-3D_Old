@@ -3,12 +3,15 @@
 * @brief Contains the Body class
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
 using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
+using System.Linq;
+using Assets.Scripts.Body_Pipeline.Tracking;
 
 /**
 * Body class 
@@ -24,12 +27,14 @@ public class Body
     //Body Composition
     public List<BodySegment> BodySegments = new List<BodySegment>();
 
+
     //Current body Frame 
     public BodyFrame CurrentBodyFrame;
 
     //Initial body Frame
     public BodyFrame InitialBodyFrame;
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
+    private TrackingThread mTrackingThread;
 
     //view associated with this model
     #region properties
@@ -49,7 +54,7 @@ public class Body
             {
                 GameObject viewGO = new GameObject("body view " + BodyGuid);
                 mView = viewGO.AddComponent<BodyView>();
-
+                mView.AssociatedBody = this;
             }
             return mView;
         }
@@ -123,23 +128,22 @@ public class Body
     }
 
     /**
-* CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType )
-* @param  vBodyType: the desired BodyType
-* @brief Initializes a new body structure's internal properties with the desired body type
-*/
+    * CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType )
+    * @param  vBodyType: the desired BodyType
+    * @brief Initializes a new body structure's internal properties with the desired body type
+    */
     public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
-        List<BodyStructureMap.SegmentTypes> segmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap
-        List<Sensor> sensors = new List<Sensor>(); //create a list of sensors that will be shared by all the segments
-        foreach (BodyStructureMap.SegmentTypes type in segmentList)
+        List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
+        foreach (BodyStructureMap.SegmentTypes type in vSegmentList)
         {
-            BodySegment segment = new BodySegment();
-            segment.SegmentType = type;
-            segment.sensorList = sensors;
-            segment.InitializeBodySegment(type);
-            BodySegments.Add(segment);
+            BodySegment vSegment = new BodySegment();
+            vSegment.SegmentType = type;
+            vSegment.InitializeBodySegment(type);
+            vSegment.ParentBody = this;
+            BodySegments.Add(vSegment);
             #region using unity functions
-            segment.AssociatedView.transform.parent = View.transform;
+            vSegment.AssociatedView.transform.parent = View.transform;
             #endregion
         }
     }
@@ -150,25 +154,24 @@ public class Body
     */
     public void UpdateBody(BodyFrame vFrame)
     {
-        CurrentBodyFrame = vFrame; 
+        CurrentBodyFrame = vFrame;
+        //Tracking();
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateSensorsData(vFrame);
         }
     }
-
-
     /**
-    * SetInitialFrame(BodyFrame initialFrame)
-    * @param initialFrame, sets the initial frame, subsequently the initial orientations point of the body's subsegment
+    * SetInitialFrame(BodyFrame vInitialFrame)
+    * @param BodyFrame vInitialFrame, sets the initial frame, subsequently the initial orientations point of the body's subsegment
     * @brief  Set the current body frame from the passed in parameter
     */
-    public void SetInitialFrame(BodyFrame initialFrame)
+    public void SetInitialFrame(BodyFrame vInitialFrame)
     {
-        InitialBodyFrame = initialFrame; 
+        InitialBodyFrame = vInitialFrame;
         for (int i = 0; i < BodySegments.Count; i++)
         {
-            BodySegments[i].UpdateInitialSensorsData(initialFrame); 
+            BodySegments[i].UpdateInitialSensorsData(vInitialFrame);
         }
     }
 
@@ -181,27 +184,18 @@ public class Body
     private void Tracking()
     {
         //get the list of keys from the current body frame
-        List<BodyStructureMap.SensorPositions> keys = new List<BodyStructureMap.SensorPositions>(CurrentBodyFrame.FrameData.Keys);
-        for (int i = 0; i < keys.Count; i++)
+        List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(CurrentBodyFrame.FrameData.Keys);
+        for (int i = 0; i < vKeyList.Count; i++)
         {
-            /* Vector3 currValue = CurrentBodyFrame.FrameData[keys[i]];
-             //convert it to a quaternion
-             Quaternion qCurrent = Quaternion.Euler(currValue * Mathf.Rad2Deg);
-             Quaternion qInitial = Quaternion.Euler(currValue * Mathf.Rad2Deg);
-             Quaternion qNew = qCurrent * qInitial;
-             //update the current body frames values
-             Vector3 toEuler = qNew.eulerAngles * Mathf.Deg2Rad;
-             CurrentBodyFrame.FrameData[keys[i]] = toEuler;*/
             //get the current value
-            Vector3 initialValue = InitialBodyFrame.FrameData[keys[i]] * Mathf.Rad2Deg;
-            float[,] initialRot = MatrixTools.RotationGlobal(initialValue.z, initialValue.x, initialValue.y);
-            Vector3 currentValue = CurrentBodyFrame.FrameData[keys[i]];
-            float[,] currentLocalRot = MatrixTools.RotationLocal(currentValue.z, currentValue.x, currentValue.y);
-            float[,] orientation = MatrixTools.multi(initialRot, currentLocalRot);
-            Quaternion qOrientation = MatrixTools.MatToQuat(orientation);
-            Vector3 newVal = qOrientation.eulerAngles * Mathf.Deg2Rad;
-            CurrentBodyFrame.FrameData[keys[i]] = newVal;
+            BodyStructureMap.SensorPositions vKey = vKeyList[i];
+            Vector3 vInitialRawEuler = InitialBodyFrame.FrameData[vKey];
+            Vector3 vCurrentRawEuler = CurrentBodyFrame.FrameData[vKey];
+            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitialRawEuler.z, vInitialRawEuler.x, vInitialRawEuler.y);
+            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrentRawEuler.z, vCurrentRawEuler.x, vCurrentRawEuler.y);
+            float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
 
+            CurrentBodyFrame.MappedRotationMatrixData[vKey] = vOrientationMatrix;
         }
 
     }
@@ -218,17 +212,86 @@ public class Body
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames);
+            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
+            TrackingBuffer vBuffer2 = new TrackingBuffer();
+
+            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+            mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
             //get the first frame and set it as the initial frame
             BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
-            SetInitialFrame(frame); 
-            View.Init(this, mBodyFrameThread.BodyFrameBuffer);
+            SetInitialFrame(frame);
+            View.Init(this, vBuffer2);
             mBodyFrameThread.Start();
-            View.StartUpdating = true; 
-
+            mTrackingThread.Start();
+            View.StartUpdating = true;
         }
     }
+    /**
+    * ApplyTracking(Body vBody)
+    * @param Body vBody: The body to apply tracking to. 
+    * @brief  Applies tracking on the requested body. 
+    */
+    public static void ApplyTracking(Body vBody)
+    {
+        //get a collection of transformation matrices
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = GetTracking(vBody);
+        //get the list of segments of the speicied vBody
+        List<BodySegment> vListBodySegments = vBody.BodySegments;
+        foreach (BodySegment vBodySegment in vListBodySegments)
+        {
+            //of the current body segment, get the appropriate subsegments
+            List<BodyStructureMap.SensorPositions> vSensPosList =
+                BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
+            //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
+            //to the segment
+            Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(2);
 
+            foreach (BodyStructureMap.SensorPositions vSenPos in vSensPosList)
+            {
+                if (vDic.ContainsKey(vSenPos))
+                {
+                    float[,] vTrackedMatrix = vDic[vSenPos];
+                    vFilteredDictionary.Add(vSenPos, vTrackedMatrix);
+                }
+            }
+            vBodySegment.UpdateSegment(vFilteredDictionary);
+        }
+    }
+    /**
+    * GetTracking()
+    * @brief  Play a recording from the given recording UUID. 
+    * @return Returns a dictionary and their respective   transformation matrix
+    */
+    public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetTracking(Body vBody)
+    {
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
+        //from the current frame, get the list of keys and apply the tracking algorithm on individual subframes
+        List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
+        for (int i = 0; i < vKeyList.Count; i++)
+        {
+            //get the current value
+            BodyStructureMap.SensorPositions vKey = vKeyList[i];
+            Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
+            Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
+            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitialRawEuler.z, vInitialRawEuler.x, vInitialRawEuler.y);
+            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrentRawEuler.z, vCurrentRawEuler.x, vCurrentRawEuler.y);
+            float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
+            vDic.Add(vKey, vOrientationMatrix);
+        }
+        return vDic;
+    }
+
+    /**
+    *  GetSegmentFromSegmentType(BodyStructureMap.SegmentTypes vSegmentType)
+    * @param  BodyStructureMap.SegmentTypes vSegmentType the interested segment the caller wants
+    * @brief  Based off the passed parameter, return a segment of that type
+    * @param  Returns a segment from body that is of type vSegmentType
+    */
+    public BodySegment GetSegmentFromSegmentType(BodyStructureMap.SegmentTypes vSegmentType)
+    {
+        BodySegment vSegment = BodySegments.First(x => x.SegmentType == vSegmentType);
+        return vSegment;
+    }
     public void PauseRecording(string vRecUUID)
     {
         //TODO: 
@@ -238,15 +301,7 @@ public class Body
     {
         //TODO: 
     }
-    /**
-    * ApplyTracking()
-    * @param Applies tracking on the passed in
-    * @brief  Play a recording from the given recording UUID. 
-    */
-    void ApplyTracking(BodyFrame frame)
-    {
 
-    }
     /**
     * StopThread()
     * @param Stops the current thread
@@ -254,10 +309,15 @@ public class Body
     */
     internal void StopThread()
     {
-
-        mBodyFrameThread.StopThread();
+        if (mBodyFrameThread != null)
+        {
+            mBodyFrameThread.StopThread();
+        }
+        if (mTrackingThread != null)
+        {
+            mTrackingThread.StopThread();
+        }
     }
-
     #region Unity functions
 
 

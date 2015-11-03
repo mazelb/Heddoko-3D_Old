@@ -1,13 +1,15 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-using System;
-
+﻿
 /**
 * @file JsonUtilities.cs
 * @brief Contains the JsonUtilities class
 * @author Mohammed Haider(mohammed@heddoko.com)
+* Copyright Heddoko(TM) 2015, all rights reserved
 * @date June 2015
 */
+using Newtonsoft.Json;
+using System.IO;
+using System;
+
 namespace Assets.Scripts.Utils
 {
 

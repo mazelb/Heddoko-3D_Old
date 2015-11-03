@@ -3,9 +3,12 @@
 * @brief Contains the BodyView class and functionalities required to execute it The view for a body . 
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date October 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 */
+
+using Assets.Scripts.Body_Pipeline.Tracking;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -16,9 +19,28 @@ namespace Assets.Scripts.Body_Data.view
     public class BodyView : MonoBehaviour
     {
        
-        private BodyFrameBuffer mBuffer;
+        //private BodyFrameBuffer mBuffer;
+        private TrackingBuffer mBuffer;
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
+
+        /**
+        * AssociatedBody
+        * @param Internally set the Body associated to this view
+        * @brief Class property that returns the Body associated with this view
+        * @return returns the property's value
+        */
+        public Body AssociatedBody
+        {
+            get
+            {
+                return mAssociatedBody;
+            }
+            internal set
+            {
+                mAssociatedBody = value;
+            }
+        }
 
         /**
         * StartUpdating
@@ -37,21 +59,21 @@ namespace Assets.Scripts.Body_Data.view
         * @brief StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body 
         * @return returns the property's value
         */
-        public void Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
+        public void Init(Body vAssociatedBody, TrackingBuffer vBuffer)
         {
             this.mBuffer = vBuffer;
             this.mAssociatedBody = vAssociatedBody;
 
         }
         /**
-        * ResetJoint()
+        * SetInitialFrameToCurrent()
         * @brief sets the current frame to be the initial body frame
         */
-        public void ResetJoint()
+        public void SetInitialFrameToCurrent()
         {
             if (mCurreBodyFrame != null)
             {
-                mAssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
+                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame); 
             }
         }
         /**
@@ -60,9 +82,9 @@ namespace Assets.Scripts.Body_Data.view
         */
         void OnApplicationQuit()
         {
-            if (mAssociatedBody != null)
+            if (AssociatedBody != null)
             {
-                mAssociatedBody.StopThread();
+                AssociatedBody.StopThread();
             }
         }
 
@@ -74,15 +96,33 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (StartUpdating)
             {
-                if (mBuffer != null)
+                if (mBuffer != null && mBuffer.Count>0)
                 {
-                    mCurreBodyFrame = mBuffer.Dequeue();
-                    mAssociatedBody.UpdateBody(mCurreBodyFrame);
-                }
+                    Dictionary<BodyStructureMap.SensorPositions, float[,]> v  = mBuffer.Dequeue();
+                    AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
+                    Body.ApplyTracking(AssociatedBody);
+                } 
             }
 
         }
-
+        /**
+         * Awake()
+         * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
+         * and set the body view to this.
+         */
+        private void Awake()
+        {
+            if(name != "body view guid: e75115c356218d84fa35dbd8a3159284")
+            {
+                GameObject vGo = GameObject.FindGameObjectWithTag("debug");
+                if( vGo)
+                { 
+                    Debugger vDebugger = vGo.GetComponent<Debugger>();
+                    vDebugger.View = this;
+                }
+            }
+          
+        }
 
     }
 }
