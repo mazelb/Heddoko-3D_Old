@@ -69,7 +69,11 @@ namespace Assets.Scripts.Body_Data.view
         * SetInitialFrameToCurrent()
         * @brief sets the current frame to be the initial body frame
         */
+<<<<<<< HEAD
         public void SetInitialFrameToCurrent()
+=======
+        public void ResetInitialFrame()
+>>>>>>> origin/master
         {
             if (mCurreBodyFrame != null)
             {
@@ -103,8 +107,8 @@ namespace Assets.Scripts.Body_Data.view
                     Body.ApplyTracking(AssociatedBody);
                 } 
             }
-
         }
+<<<<<<< HEAD
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
@@ -124,5 +128,7 @@ namespace Assets.Scripts.Body_Data.view
           
         }
 
+=======
+>>>>>>> origin/master
     }
 }

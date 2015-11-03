@@ -55,7 +55,11 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     */
     public void ResetInitialFrame()
     {
+<<<<<<< HEAD
         mBody.View.SetInitialFrameToCurrent();
+=======
+        mBody.View.ResetInitialFrame();
+>>>>>>> origin/master
     }
     /**
     * Pause 
