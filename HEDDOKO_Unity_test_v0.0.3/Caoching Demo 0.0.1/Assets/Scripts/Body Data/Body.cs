@@ -258,6 +258,36 @@ public class Body
         }
     }
     /**
+    * ApplyTracking(Body vBody)
+    * @param Body vBody: The body to apply tracking to. 
+    * @brief  Applies tracking on the requested body. 
+    */
+    public static void ApplyTracking(Body vBody, Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic)
+    {
+        
+        //get the list of segments of the speicied vBody
+        List<BodySegment> vListBodySegments = vBody.BodySegments;
+        foreach (BodySegment vBodySegment in vListBodySegments)
+        {
+            //of the current body segment, get the appropriate subsegments
+            List<BodyStructureMap.SensorPositions> vSensPosList =
+                BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
+            //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
+            //to the segment
+            Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(2);
+
+            foreach (BodyStructureMap.SensorPositions vSenPos in vSensPosList)
+            {
+                if (vDic.ContainsKey(vSenPos))
+                {
+                    float[,] vTrackedMatrix = vDic[vSenPos];
+                    vFilteredDictionary.Add(vSenPos, vTrackedMatrix);
+                }
+            }
+            vBodySegment.UpdateSegment(vFilteredDictionary);
+        }
+    }
+    /**
     * GetTracking()
     * @brief  Play a recording from the given recording UUID. 
     * @return Returns a dictionary and their respective   transformation matrix
@@ -273,6 +303,7 @@ public class Body
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
+           
             float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitialRawEuler.z, vInitialRawEuler.x, vInitialRawEuler.y);
             float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrentRawEuler.z, vCurrentRawEuler.x, vCurrentRawEuler.y);
             float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);

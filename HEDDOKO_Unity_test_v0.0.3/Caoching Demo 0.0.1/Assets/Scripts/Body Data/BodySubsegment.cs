@@ -22,6 +22,7 @@ public class BodySubSegment
     //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
     private Quaternion mSubsegmentOrientation;
     public float[,] OrientationMatrix = MatrixTools.Identity3X3Matrix();
+    [SerializeField]
     private Quaternion vInitialInverseOrientation = Quaternion.identity;
     private SubSegmentOrientationType mSubsegmentOrientationType;
     public BodySubsegmentView AssociatedView;

@@ -64,6 +64,10 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                     {
                         break;
                     }
+                    if(mOutputBuffer.IsFull() && !mOutputBuffer.AllowOverflow)
+                    {
+                        continue;
+                    }
                     try
                     { 
                         BodyFrame vProcessedBodyFrame = mInputBuffer.Dequeue();

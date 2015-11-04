@@ -65,5 +65,6 @@ namespace Assets.Scripts.Body_Data.view
         {
             SubSegmentTransform.rotation = vNewOrientation; 
         }
+
     }
 }

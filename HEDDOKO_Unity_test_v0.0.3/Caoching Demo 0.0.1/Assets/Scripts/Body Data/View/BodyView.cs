@@ -74,7 +74,7 @@ namespace Assets.Scripts.Body_Data.view
         public void ResetInitialFrame()
  
         {
-            if (mCurreBodyFrame != null)
+            if (mAssociatedBody != null)
             {
                 AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame); 
             }
@@ -101,9 +101,9 @@ namespace Assets.Scripts.Body_Data.view
             {
                 if (mBuffer != null && mBuffer.Count>0)
                 {
-                    Dictionary<BodyStructureMap.SensorPositions, float[,]> v  = mBuffer.Dequeue();
+                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic  = mBuffer.Dequeue();
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
-                    Body.ApplyTracking(AssociatedBody);
+                    Body.ApplyTracking(AssociatedBody,vDic);
                 } 
             }
         }

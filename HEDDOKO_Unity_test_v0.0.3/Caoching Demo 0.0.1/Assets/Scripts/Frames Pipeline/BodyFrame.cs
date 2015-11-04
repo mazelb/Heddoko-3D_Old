@@ -105,7 +105,7 @@ public class BodyFrame
                 key--;
                 vSensorPosAsKey = ImuSensorFromPos(key);
                 vBodyFrame.FrameData.Add(vSensorPosAsKey, vPlaceholderV3);
-                vBodyFrame.MappedRotationMatrixData.Add(vSensorPosAsKey, vPlaceholderMat);
+                //vBodyFrame.MappedRotationMatrixData.Add(vSensorPosAsKey, vPlaceholderMat);
             }
             else
             {
@@ -116,13 +116,17 @@ public class BodyFrame
                 {
                     float.TryParse(v3data[j], out value[j]);
                 }
-                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
+                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[1], value[0], value[2]);
             } 
 
         }
-
+        //check if lower spine exists
+        if(!vBodyFrame.FrameData.ContainsKey(BodyStructureMap.SensorPositions.SP_LowerSpine))
+        {
+            vBodyFrame.FrameData.Add(BodyStructureMap.SensorPositions.SP_LowerSpine, Vector3.zero);
+        }
         //todo stretch sense data extrapolation starting from the updated startingIndex
- 
+
         return vBodyFrame;
 
     }
