@@ -14,11 +14,13 @@ using System;
 /// <summary>
 /// The frame of data that is populated to sensors, and contains the list of sensors to access sensors data
 /// </summary>
+[Serializable]
 public class BodyFrame 
 {
+    [SerializeField]
     //The frame of data populated to sensors 
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData; 
-
+    [SerializeField]
     private List<Sensor> sensorData;
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
     {
@@ -36,26 +38,26 @@ public class BodyFrame
         }
     }
 
-    private Dictionary<BodyStructureMap.SensorPositions, float[,]> mMappedRotationMatrixData;
-
-    internal Dictionary<BodyStructureMap.SensorPositions, float[,]> MappedRotationMatrixData
-    {
-        get
-        {
-            if (mMappedRotationMatrixData == null)
-            {
-                mMappedRotationMatrixData = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(3);
-            }
-            return mMappedRotationMatrixData;
-        }
-        set
-        {
-            mMappedRotationMatrixData = value;
-        }
-    }
 
 
     #region static helper functions
+    /**
+   * ToString()
+   * @brief Prepares the current body frame as a string 
+   * @return current body frame as a string
+   * 
+   */
+
+    public override string ToString()
+    {
+        string vOutput = "";
+        foreach(KeyValuePair<BodyStructureMap.SensorPositions, Vector3> vPair in FrameData)
+        {
+            vOutput += "" + vPair.Key + " " + vPair.Value+"\n";
+        }
+        return vOutput;
+    }
+
     /**
     * ConvertRawFrame(BodyRawFrame rawData)
     * @brief Pass in a BodyRawFrame and convert it to a body frame
@@ -203,6 +205,8 @@ public class BodyFrame
             return BodyStructureMap.SensorPositions.SP_LeftKnee; 
         }
     } 
+
+    
     
 #endregion
 }

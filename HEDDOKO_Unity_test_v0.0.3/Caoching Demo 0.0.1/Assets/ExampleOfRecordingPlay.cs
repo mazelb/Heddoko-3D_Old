@@ -20,7 +20,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     public Button PlayButton;
     private bool mPlayButtonPushed;
     public Button ResetButton;
-    private string mBodyRecordingUUID = "482D9E97-B37D-403E-A8BB-35B4971F0BE2";
+    public string mBodyRecordingUUID = "482D9E97-B37D-403E-A8BB-35B4971F0BE2";
     /**
     * Start()
     * @brief Automatically called by unity on start. This start function will prep the body to be able to play a recording 

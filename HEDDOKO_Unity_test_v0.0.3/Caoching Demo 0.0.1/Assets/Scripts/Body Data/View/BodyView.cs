@@ -21,6 +21,7 @@ namespace Assets.Scripts.Body_Data.view
        
         //private BodyFrameBuffer mBuffer;
         private TrackingBuffer mBuffer;
+        [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
 
@@ -104,10 +105,14 @@ namespace Assets.Scripts.Body_Data.view
                     Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic  = mBuffer.Dequeue();
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
                     Body.ApplyTracking(AssociatedBody,vDic);
+                    if(AssociatedBody.InitialBodyFrame != null)
+                    {
+                        debuggablestring = AssociatedBody.InitialBodyFrame.ToString();
+                    }
                 } 
-            }
+            } 
         }
- 
+        public string debuggablestring;
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 

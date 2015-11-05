@@ -66,8 +66,8 @@ public class BodySegment
     * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information
     */
     public void UpdateInitialSensorsData(BodyFrame vFrame)
-    {
-        //get the sensor 
+    { 
+
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
         foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
         {
@@ -94,10 +94,10 @@ public class BodySegment
                         if (BodySubSegmentsDictionary.ContainsKey(vKey))
                         {
                             //update these subsegments only with their parent's initial position
-                            if (vKey == (int)BodyStructureMap.SensorPositions.SP_UpperSpine)
+                            if (vKey == (int)BodyStructureMap.SensorPositions.SP_LowerSpine)
                             {
                                BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
-                               BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_LowerSpine].UpdateInverseQuaternion(vRawEuler);
+                               BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_UpperSpine].UpdateInverseQuaternion(vRawEuler);
                            }
                            if (vKey == (int)BodyStructureMap.SensorPositions.SP_RightUpperArm)
                             {
@@ -136,10 +136,10 @@ public class BodySegment
         BodySubSegment vLSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
         float[,] vaTorsoOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine];
-        float[,] vaSpinOrientation = new float[3, 3];
+        float[,] vaSpinOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine];
 
         vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
-        vLSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
+       vLSSubsegment.UpdateSubsegmentOrientation(vaSpinOrientation);
     }
 
     /**
@@ -175,7 +175,7 @@ public class BodySegment
         ////////////////// setting Hip to Final Body orientation ///////////////////////////////
 
         Vector3 u = new Vector3(vTrackedHipOrientation[0, 1], vTrackedHipOrientation[1, 1], vTrackedHipOrientation[2, 1]);
-        //   vCurrentKneeOrientation = MatrixTools.RVector(u, (float)3.1415);
+        //  vCurrentKneeOrientation = MatrixTools.RVector(u, (float)3.1415);
         vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
 
         vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vTrackedHipOrientation);
@@ -193,7 +193,7 @@ public class BodySegment
         vHipB7 = MatrixTools.multi(vCurrentKneeOrientation, vHipB6);
 
         u.Set(0, 1, 0);
-        //  vCurrentKneeOrientation = MatrixTools.RVector(u, (float)3.1415);
+         // vCurrentKneeOrientation = MatrixTools.RVector(u, (float)3.1415);
         vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
 
         vHipOrientation = MatrixTools.multi(vCurrentKneeOrientation, vHipB7);
@@ -202,20 +202,22 @@ public class BodySegment
         ////////////////// setting Knee to Final Body orientation ///////////////////////////////
 
         Vector3 u2 = new Vector3(vTrackedKneeOrientation[0, 1], vTrackedKneeOrientation[1, 1], vTrackedKneeOrientation[2, 1]);
-        //  vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        // vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
 
         KneeB5 = MatrixTools.multi(vCurrentKneeOrientation, vTrackedKneeOrientation);
 
 
 
         u2.Set(KneeB5[0, 2], KneeB5[1, 2], KneeB5[2, 2]);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
-
+         vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
+       // vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         KneeB6 = MatrixTools.multi(vCurrentKneeOrientation, KneeB5);
 
         u2.Set(0, 0, 1);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
+         vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
+      //  vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
 
         KneeB7 = MatrixTools.multi(vCurrentKneeOrientation, KneeB6);
 
@@ -223,7 +225,7 @@ public class BodySegment
         // vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)3.1415);
         vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, KneeB7);
-
+        //////////////////////////////ASSIGN TO SUBSEGMENT///////////////////////////
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
@@ -260,8 +262,8 @@ public class BodySegment
         Vector3 u = new Vector3(vHipOrientationMatrix[0, 1], vHipOrientationMatrix[1, 1], vHipOrientationMatrix[2, 1]);
 
         float vPi = 3.1415f;
-        vCurrentKneeOrientation = MatrixTools.RVector(u, vPi);
-
+        // vCurrentKneeOrientation = MatrixTools.RVector(u, vPi);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, 0);
         vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipOrientationMatrix);
 
 
@@ -339,8 +341,8 @@ public class BodySegment
 
         ////////////////// setting to Final Body orientation lower arm ///////////////////////////////
         Vector3 u = new Vector3(LoArB4[0, 1], LoArB4[1, 1], LoArB4[2, 1]);
-        //  CurrentLoArOrientation = MatrixTools.RVector(u, (float)3.1415);
-        CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)3.1415);
+         CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
 
 
         LoArB5 = MatrixTools.multi(CurrentLoArOrientation, LoArB4);
@@ -358,16 +360,16 @@ public class BodySegment
 
 
         u.Set(0, 0, 1);
-        CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-
+           CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)3.1415);
         LoArOrientation = MatrixTools.multi(CurrentLoArOrientation, LoArB7);
 
 
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
         Vector3 u2 = new Vector3(UpArB3[0, 1], UpArB3[1, 1], UpArB3[2, 1]);
-        CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
-
+          CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+      //  CurrentLoArOrientation = MatrixTools.RVector(u, (float)3.1415);
         UpArB4 = MatrixTools.multi(CurrentLoArOrientation, UpArB3);
 
         u2.Set(UpArB4[0, 0], UpArB4[1, 0], UpArB4[2, 0]);
@@ -382,8 +384,8 @@ public class BodySegment
 
 
         u2.Set(0, 0, 1);
-        CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
-
+            CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+       // CurrentLoArOrientation = MatrixTools.RVector(u, (float)3.1415);
         UpArOrientation = MatrixTools.multi(CurrentLoArOrientation, UpArB6);
 
         vUASubsegment.UpdateSubsegmentOrientation(UpArOrientation);
@@ -404,9 +406,9 @@ public class BodySegment
         //Intermediate arrays until achieve final orientation for shoulder and elbow
         //they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
         // UpAr stands for upper arm sensor orientation and lower arm stands for lower arm (forearm) orientation
-
-        float[,] vLoArOrientation = new float[3, 3];
         float[,] vUpArOrientation = new float[3, 3];
+        float[,] vLoArOrientation = new float[3, 3];
+       
 
         float[,] vUpArB3 = new float[3, 3];
         float[,] vUpArB4 = new float[3, 3];
@@ -592,23 +594,23 @@ public class BodySegment
 
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {
-            //  MapTorsoSegment(vFilteredDictionary);
+             MapTorsoSegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
-            MapRightArmSubsegment(vFilteredDictionary);
+           MapRightArmSubsegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
         {
-            MapLeftArmSubsegment(vFilteredDictionary);
+          MapLeftArmSubsegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
         {
-             MapRightLegSegment(vFilteredDictionary);
+              MapRightLegSegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
         {
-            //   MapLeftLegSegment(vFilteredDictionary);
+            MapLeftLegSegment(vFilteredDictionary);
         }
     }
     #endregion

@@ -17,20 +17,24 @@ using Assets.Scripts.Body_Pipeline.Tracking;
 * Body class 
 * @brief Body class (represents one body suit)
 */
+[Serializable]
 public class Body
 {
+    [SerializeField]
     //Body Unique GUID for ease of cloud access
     public string BodyGuid;
+    [SerializeField]
     //Currently connected suit GUID 
     public string SuitGuid;
     //Currently playing recording``` GUIDCurrentBodyFrame
     //Body Composition
+    [SerializeField]
     public List<BodySegment> BodySegments = new List<BodySegment>();
 
-
+    [SerializeField]
     //Current body Frame 
     public BodyFrame CurrentBodyFrame;
-
+    [SerializeField]
     //Initial body Frame
     public BodyFrame InitialBodyFrame;
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
@@ -171,34 +175,10 @@ public class Body
         InitialBodyFrame = vInitialFrame;
         for (int i = 0; i < BodySegments.Count; i++)
         {
-            BodySegments[i].UpdateInitialSensorsData(vInitialFrame);
-        }
+            BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
+        } 
     }
-
-    /**
-     * Tracking( )
-     * @param Tracking function within the pipeline
-     * @brief  Tracking transforms the raw data from the sensors into 9 transformation matrices that will be ultimately applied to 9 body joints.  
-     * It also applies the adjustments necessary to the IMU sensors local coordinate system
-     */
-    private void Tracking()
-    {
-        //get the list of keys from the current body frame
-        List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(CurrentBodyFrame.FrameData.Keys);
-        for (int i = 0; i < vKeyList.Count; i++)
-        {
-            //get the current value
-            BodyStructureMap.SensorPositions vKey = vKeyList[i];
-            Vector3 vInitialRawEuler = InitialBodyFrame.FrameData[vKey];
-            Vector3 vCurrentRawEuler = CurrentBodyFrame.FrameData[vKey];
-            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitialRawEuler.z, vInitialRawEuler.x, vInitialRawEuler.y);
-            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrentRawEuler.z, vCurrentRawEuler.x, vCurrentRawEuler.y);
-            float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
-
-            CurrentBodyFrame.MappedRotationMatrixData[vKey] = vOrientationMatrix;
-        }
-
-    }
+ 
     /**
     * PlayRecording(string vRecUUID)
     * @param vRecUUID, the recording UUID
@@ -299,13 +279,22 @@ public class Body
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
         for (int i = 0; i < vKeyList.Count; i++)
         {
-            //get the current value
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
-           
-            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitialRawEuler.z, vInitialRawEuler.x, vInitialRawEuler.y);
-            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrentRawEuler.z, vCurrentRawEuler.x, vCurrentRawEuler.y);
+            //get the current value
+
+            if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
+            {
+                vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
+                vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine]; 
+            }
+
+            Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);
+            Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.x, vCurrentRawEuler.y, vCurrentRawEuler.z);
+
+            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);
+            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrRawEuler.z, vCurrRawEuler.x, vCurrRawEuler.y);
             float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
             vDic.Add(vKey, vOrientationMatrix);
         }
