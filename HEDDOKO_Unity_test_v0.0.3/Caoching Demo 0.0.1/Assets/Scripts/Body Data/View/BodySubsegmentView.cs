@@ -17,7 +17,9 @@ namespace Assets.Scripts.Body_Data.view
         #region fields
         //the transforms required to transform
   
-        public  Transform vSubSegmentTransform;
+        public Transform vSubSegmentTransform;
+        public Transform vSubSegmentInitialTransform;
+
         public BodySubSegment AssociatedSubSegment;
         #endregion
         #region properties
@@ -54,6 +56,7 @@ namespace Assets.Scripts.Body_Data.view
             //find the object in the scene with the tag
             GameObject go = GameObject.FindWithTag(gameObject.name);
             vSubSegmentTransform = go.transform;
+            vSubSegmentInitialTransform = vSubSegmentTransform;
         }
 
         /**
@@ -64,6 +67,15 @@ namespace Assets.Scripts.Body_Data.view
         internal void UpdateOrientation(Quaternion vNewOrientation)
         {
             SubSegmentTransform.rotation = vNewOrientation; 
+        }
+
+        /**
+        * ResetOrientation()
+        * @brief Resets the current orientation to its initial value
+        */
+        internal void ResetOrientation()
+        {
+            SubSegmentTransform.rotation = vSubSegmentInitialTransform.rotation;// vNewOrientation;
         }
 
     }

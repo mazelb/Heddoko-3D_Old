@@ -125,7 +125,6 @@ public class Body
         CreateBodyStructure(vBodyType);
 
         //TODO: Current body Frame  
-
         //TODO: body thread
         //TODO: Body Pipeline
         //TODO: Body state machine

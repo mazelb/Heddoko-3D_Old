@@ -220,7 +220,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_Torso:
                     {
                         List<SubSegmentTypes> vTorsoSubSegments = new List<SubSegmentTypes>();
-                       vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_LowerSpine);
+                        vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_LowerSpine);
                         vTorsoSubSegments.Add(SubSegmentTypes.SubsegmentType_UpperSpine);
                         SegmentToSubSegmentMap.Add(SegmentTypes.SegmentType_Torso, vTorsoSubSegments);
                     }

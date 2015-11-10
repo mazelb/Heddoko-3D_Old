@@ -8,12 +8,14 @@ public class CameraOrbit : MonoBehaviour {
 
     public float xSpeed = 250.0f;
     public float ySpeed = 120.0f;
+    public float zSpeed = 120.0f;
 
     public float yMinLimit = -20;
     public float yMaxLimit = 80;
 
     private double x = 0.0;
     private double y = 0.0;
+    private double z = 0.0;
 
 
     // Use this for initialization
@@ -22,6 +24,7 @@ public class CameraOrbit : MonoBehaviour {
         var angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
+        z = distance;
 
         // Make the rigid body not change rotation
         if (GetComponent< Rigidbody > ())
@@ -29,17 +32,25 @@ public class CameraOrbit : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if (target && Input.GetMouseButton(0))
         {
             x += Input.GetAxis("Mouse X") * xSpeed * 0.02;
             y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02;
-
+            if(Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                z -= Input.GetAxis("Mouse ScrollWheel") * zSpeed * 0.02;
+            }
+            else
+            {
+                z += Input.GetAxis("Mouse ScrollWheel") * zSpeed * 0.02;
+            }
+            
             y = ClampAngle((float)y, yMinLimit, yMaxLimit);
 
             var rotation = Quaternion.Euler((float)y, (float)x, 0);
-            Vector3 vec = new Vector3(0.0f, 0.0f, -distance);
+            Vector3 vec = new Vector3(0.0f, 0.0f, (float)-z);
             var position = rotation * vec + target.position;
 
             transform.rotation = rotation;
