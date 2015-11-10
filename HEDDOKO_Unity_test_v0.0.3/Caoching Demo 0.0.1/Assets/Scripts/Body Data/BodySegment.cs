@@ -289,8 +289,6 @@ public class BodySegment
         vCurrentKneeOrientation = MatrixTools.RVector(u, 0);
         vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipOrientationMatrix);
 
-
-
         u.Set(vHipB5[0, 2], vHipB5[1, 2], vHipB5[2, 2]);
         vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
 
