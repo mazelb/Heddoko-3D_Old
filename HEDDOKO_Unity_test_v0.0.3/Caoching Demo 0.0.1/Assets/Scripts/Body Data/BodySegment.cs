@@ -137,11 +137,34 @@ public class BodySegment
         BodySubSegment vUSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
         BodySubSegment vLSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
-        float[,] vaTorsoOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine];
-        float[,] vaSpineOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine];
+        //        float[,] vaTorsoOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine];
+        //        float[,] vaSpineOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine];
 
+        float[,] vaTorsoOrientation = new float[3, 3];
+        float[,] vaSpineOrientation = new float[3, 3];
+
+        float[,] vTrackedTorsoOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine];
+        float[,] vTrackedSpineOrientation = vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine];
+
+        float[,] TorsoB3 = new float[3, 3];
+        float[,] TorsoB4 = new float[3, 3];
+
+        float[,] vCurrentTorsoOrientation = new float[3, 3];
+
+        Vector3 u = new Vector3(vTrackedTorsoOrientation[0, 1], vTrackedTorsoOrientation[1, 1], vTrackedTorsoOrientation[2, 1]);
+   
+        //vCurrentTorsoOrientation = MatrixTools.RVector(u,0f);
+        vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)3.1415);
+
+        TorsoB3 = MatrixTools.multi(vCurrentTorsoOrientation, vTrackedTorsoOrientation);
+
+        u.Set(0, 1, 0);
+         vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)3.1415);
+        //vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
+        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);
         vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
         //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
+
     }
 
     /**
@@ -341,8 +364,8 @@ public class BodySegment
 
         ////////////////// setting to Final Body orientation lower arm ///////////////////////////////
         Vector3 u = new Vector3(LoArB4[0, 1], LoArB4[1, 1], LoArB4[2, 1]);
-        CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        //CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
 
         LoArB5 = MatrixTools.multi(CurrentLoArOrientation, LoArB4);
 
@@ -357,14 +380,14 @@ public class BodySegment
         LoArB7 = MatrixTools.multi(CurrentLoArOrientation, LoArB6);
 
         u.Set(0, 0, 1);
-        //CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-        CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
         LoArOrientation = MatrixTools.multi(CurrentLoArOrientation, LoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
         Vector3 u2 = new Vector3(UpArB3[0, 1], UpArB3[1, 1], UpArB3[2, 1]);
-        //CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
-        CurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         UpArB4 = MatrixTools.multi(CurrentLoArOrientation, UpArB3);
 
         u2.Set(UpArB4[0, 0], UpArB4[1, 0], UpArB4[2, 0]);
@@ -380,6 +403,7 @@ public class BodySegment
 
         u2.Set(0, 0, 1);
         CurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        //CurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         UpArOrientation = MatrixTools.multi(CurrentLoArOrientation, UpArB6);
 
         vUASubsegment.UpdateSubsegmentOrientation(UpArOrientation);
@@ -427,28 +451,28 @@ public class BodySegment
 
         ////////////////// setting to Final Body orientation lower arm///////////////////////////////
         Vector3 u = new Vector3(vLoArB4[0, 0], vLoArB4[1, 0], vLoArB4[2, 0]);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
-        vCurrentLoArOrientation= MatrixTools.RVector(u, -(float)Math.PI / 2 );
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        //vCurrentLoArOrientation= MatrixTools.RVector(u, -(float)Math.PI / 2 );
 
         vLoArB5 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB4);
 
 
         u.Set(vLoArB5[0, 1], vLoArB5[1, 1], vLoArB5[2, 1]);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
 
         vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        
         vCurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
 
         LoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
 
         u.Set(0, 0, 1);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
 
         vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, LoArB7);
 
@@ -472,8 +496,8 @@ public class BodySegment
 
 
         u2.Set(0, 0, 1);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, UpArB6);
 
         // getting the current Torso orientation for shoulder angle extraction
