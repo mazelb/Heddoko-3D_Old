@@ -292,8 +292,8 @@ public class Body
             Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);
             Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.x, vCurrentRawEuler.y, vCurrentRawEuler.z);
 
-            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);
-            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrRawEuler.z, vCurrRawEuler.x, vCurrRawEuler.y);
+            float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.y, vInitRawEuler.x);
+            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrRawEuler.z, vCurrRawEuler.y, vCurrRawEuler.x);
             float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
             vDic.Add(vKey, vOrientationMatrix);
         }
