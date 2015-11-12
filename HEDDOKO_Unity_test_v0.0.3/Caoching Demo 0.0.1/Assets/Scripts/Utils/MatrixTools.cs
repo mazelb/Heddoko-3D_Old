@@ -129,10 +129,11 @@ namespace Assets.Scripts.Utils
 
             return result;
         }
+
         /**
-       //	* Identity3X3Matrix()  
-       //	* @return 3*3  identity matrix
-       //	*/
+        //	* Identity3X3Matrix()  
+        //	* @return 3*3  identity matrix
+        //	*/
         // 
         public static float[,] Identity3X3Matrix()
         {

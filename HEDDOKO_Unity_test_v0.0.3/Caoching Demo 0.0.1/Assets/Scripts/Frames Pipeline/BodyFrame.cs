@@ -118,7 +118,7 @@ public class BodyFrame
                 {
                     float.TryParse(v3data[j], out value[j]);
                 }
-                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[1], value[0], value[2]);
+                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
             } 
 
         }
