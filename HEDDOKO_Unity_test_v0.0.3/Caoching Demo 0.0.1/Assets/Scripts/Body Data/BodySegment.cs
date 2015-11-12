@@ -620,17 +620,14 @@ public class BodySegment
         Vector3 u = new Vector3(LoArB4[0, 1], LoArB4[1, 1], LoArB4[2, 1]);
         //CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
         CurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-
         LoArB5 = MatrixTools.multi(CurrentLoArOrientation, LoArB4);
 
         u.Set(LoArB5[0, 0], LoArB5[1, 0], LoArB5[2, 0]);
         CurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
-
         LoArB6 = MatrixTools.multi(CurrentLoArOrientation, LoArB5);
 
         u.Set(1, 0, 0);
         CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
-
         LoArB7 = MatrixTools.multi(CurrentLoArOrientation, LoArB6);
 
         u.Set(0, 0, 1);

@@ -283,11 +283,11 @@ public class Body
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
             //get the current value
 
-            if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
-            {
-                vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
-                vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine]; 
-            }
+            //if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
+            //{
+            //    vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
+            //    vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine]; 
+            //}
 
             Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);
             Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.x, vCurrentRawEuler.y, vCurrentRawEuler.z);

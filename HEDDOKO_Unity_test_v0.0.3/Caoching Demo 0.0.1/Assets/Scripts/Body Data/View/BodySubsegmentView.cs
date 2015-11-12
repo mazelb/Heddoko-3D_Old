@@ -75,7 +75,7 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void ResetOrientation()
         {
-            SubSegmentTransform.rotation = vSubSegmentInitialTransform.rotation;// vNewOrientation;
+            SubSegmentTransform.rotation = Quaternion.identity; // vSubSegmentInitialTransform.rotation;// vNewOrientation;
         }
 
     }
