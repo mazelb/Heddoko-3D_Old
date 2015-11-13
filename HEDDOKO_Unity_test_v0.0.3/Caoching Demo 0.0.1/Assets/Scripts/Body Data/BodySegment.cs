@@ -192,7 +192,7 @@ public class BodySegment
         float[,] vKneeB6 = new float[3, 3];
         float[,] vKneeB7 = new float[3, 3];
 
-        bool fusion = true;
+        bool fusion = false;
 
         /////////// Initial Frame Adjustments /////////////////// 
         vHipOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh];
@@ -235,7 +235,7 @@ public class BodySegment
 
             Vector3 NcrossHipKneeRoll = Vector3.Cross(YawHip, YawKnee).normalized;
 
-            if (Vector3.Dot(RollHip, YawKnee) < 0) /// this case when not obey 180 degree constraint
+            if (Vector3.Dot(RollHip, YawKnee) > 0) /// this case when not obey 180 degree constraint
             {
                 vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
 
@@ -277,8 +277,8 @@ public class BodySegment
         ////////////////// setting Hip to Final Body orientation ///////////////////////////////
 
         Vector3 u = new Vector3(vHipB4[0, 1], vHipB4[1, 1], vHipB4[2, 1]);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
         vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipB4);
 
         u.Set(vHipB5[0, 2], vHipB5[1, 2], vHipB5[2, 2]);
@@ -290,16 +290,15 @@ public class BodySegment
         vHipB7 = MatrixTools.multi(vCurrentKneeOrientation, vHipB6);
 
         u.Set(0, 1, 0);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
-
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
         vHipOrientation = MatrixTools.multi(vCurrentKneeOrientation, vHipB7);
 
         ////////////////// setting Knee to Final Body orientation ///////////////////////////////
 
         Vector3 u2 = new Vector3(vKneeB4[0, 1], vKneeB4[1, 1], vKneeB4[2, 1]);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeB5 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB4);
 
         u2.Set(vKneeB5[0, 2], vKneeB5[1, 2], vKneeB5[2, 2]);
@@ -311,8 +310,8 @@ public class BodySegment
         vKneeB7 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB6);
 
         u2.Set(0, 1, 0);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
         
         //////////////////////////////ASSIGN TO SUBSEGMENT///////////////////////////
@@ -372,7 +371,7 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -405,7 +404,7 @@ public class BodySegment
             Vector3 YawHip = new Vector3(vHipB3[0, 1], vHipB3[1, 1], vHipB3[2, 1]);
 
             Vector3 NcrossHipKneeRoll = Vector3.Cross(YawHip, YawKnee).normalized;
-            if (Vector3.Dot(RollHip, YawKnee) < 0) /// this case when not obey 180 degree constraint
+            if (Vector3.Dot(RollHip, YawKnee) > 0) /// this case when not obey 180 degree constraint
             {
                 vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
 
@@ -449,8 +448,8 @@ public class BodySegment
         ////////////////// setting Hip to Final Body orientation ///////////////////////////////
 
         Vector3 u = new Vector3(vHipB4[0, 1], vHipB4[1, 1], vHipB4[2, 1]);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u, 0);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0);
         vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipB4);
 
         u.Set(vHipB5[0, 2], vHipB5[1, 2], vHipB5[2, 2]);
@@ -462,15 +461,15 @@ public class BodySegment
         vHipB7 = MatrixTools.multi(vCurrentKneeOrientation, vHipB6);
 
         u.Set(0, 1, 0);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
         vHipOrientation = MatrixTools.multi(vCurrentKneeOrientation, vHipB7);
 
         ////////////////// setting Knee to Final Body orientation ///////////////////////////////
 
         Vector3 u2 = new Vector3(vKneeB4[0, 1], vKneeB4[1, 1], vKneeB4[2, 1]);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeB5 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB4);
 
         u2.Set(vKneeB5[0, 2], vKneeB5[1, 2], vKneeB5[2, 2]);
@@ -482,10 +481,9 @@ public class BodySegment
         vKneeB7 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB6);
 
         u2.Set(0, 1, 0);
-        //vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
-        vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
-
 
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
@@ -530,7 +528,7 @@ public class BodySegment
         vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm];
         vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm];
 
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -614,8 +612,8 @@ public class BodySegment
 
         ////////////////// setting to Final Body orientation lower arm ///////////////////////////////
         Vector3 u = new Vector3(vLoArB4[0, 1], vLoArB4[1, 1], vLoArB4[2, 1]);
-        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
         vLoArB5 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB4);
 
         u.Set(vLoArB5[0, 0], vLoArB5[1, 0], vLoArB5[2, 0]);
@@ -627,14 +625,14 @@ public class BodySegment
         vLoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
         u.Set(0, 0, 1);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-        //CurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vLoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
         Vector3 u2 = new Vector3(vUpArB3[0, 1], vUpArB3[1, 1], vUpArB3[2, 1]);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
-        //CurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArB4 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB3);
 
         u2.Set(vUpArB4[0, 0], vUpArB4[1, 0], vUpArB4[2, 0]);
@@ -646,8 +644,8 @@ public class BodySegment
         vUpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
 
         u2.Set(0, 0, 1);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
-        //CurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
 
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
@@ -700,7 +698,7 @@ public class BodySegment
 
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -789,8 +787,8 @@ public class BodySegment
 
 
         u.Set(vLoArB5[0, 1], vLoArB5[1, 1], vLoArB5[2, 1]);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
@@ -798,8 +796,8 @@ public class BodySegment
         LoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
         u.Set(0, 0, 1);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, LoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
@@ -808,8 +806,8 @@ public class BodySegment
         vUpArB4 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB3);
 
         u2.Set(vUpArB4[0, 1], vUpArB4[1, 1], vUpArB4[2, 1]);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArB5 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB4);
 
         u2.Set(1, 0, 0);
@@ -818,8 +816,8 @@ public class BodySegment
 
 
         u2.Set(0, 0, 1);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
-        //vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, UpArB6);
 
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
@@ -857,7 +855,7 @@ public class BodySegment
             tuple.InitSensor = new Sensor(newSensor);
 
             SensorsTuple.Add(tuple);
-            //              sensorList.Add(tuple.CurrentSensor);
+            //sensorList.Add(tuple.CurrentSensor);
         }
 
         foreach (BodyStructureMap.SubSegmentTypes sstype in subsegmentTypes)
