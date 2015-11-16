@@ -528,7 +528,7 @@ public class BodySegment
         vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm];
         vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm];
 
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -572,7 +572,7 @@ public class BodySegment
             Vector3 NcrossUpArLoArRoll = new Vector3(0, 0, 0);
             NcrossUpArLoArRoll = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
 
-            if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
+            /*if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
             {
 
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
@@ -589,7 +589,7 @@ public class BodySegment
                 vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
 
             }
-            else  /// this case when obey 180 degree constraint just to improve LoAr angle estimation
+            else //*/ /// this case when obey 180 degree constraint just to improve LoAr angle estimation
             {
 
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
@@ -700,7 +700,7 @@ public class BodySegment
 
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -740,7 +740,7 @@ public class BodySegment
             Vector3 NcrossUpArLoArRoll = new Vector3(0, 0, 0);
             NcrossUpArLoArRoll = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
 
-            if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
+            /*if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
             {
 
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
@@ -757,7 +757,7 @@ public class BodySegment
                 vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
 
             }
-            else  /// this case when obey 180 degree constraint just to improve LoAr angle estimation
+            else//*/  /// this case when obey 180 degree constraint just to improve LoAr angle estimation
             {
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
 

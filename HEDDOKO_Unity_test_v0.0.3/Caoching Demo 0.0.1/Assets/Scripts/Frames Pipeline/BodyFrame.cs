@@ -47,13 +47,12 @@ public class BodyFrame
    * @return current body frame as a string
    * 
    */
-
     public override string ToString()
     {
         string vOutput = "";
         foreach(KeyValuePair<BodyStructureMap.SensorPositions, Vector3> vPair in FrameData)
         {
-            vOutput += "" + vPair.Key + " " + vPair.Value+"\n";
+            vOutput += "" + vPair.Key + " " + vPair.Value + "\n";
         }
         return vOutput;
     }
@@ -195,11 +194,12 @@ public class BodyFrame
                 {
                     value[j] = ConversionTools.ConvertHexStringToFloat((v3data[j])); 
                 }
-                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[1], value[0], value[2]);
+                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
             }
         } 
         return vBodyFrame;
     }
+
     /// <summary>
     /// Returns a sensor position fromt eh given position
     /// </summary>
@@ -248,6 +248,7 @@ public class BodyFrame
             return BodyStructureMap.SensorPositions.SP_LowerSpine;
         }
     }
+
     /// <summary>
     /// Returns a sensor position of a stretch sensor from the given int pos
     /// </summary>
