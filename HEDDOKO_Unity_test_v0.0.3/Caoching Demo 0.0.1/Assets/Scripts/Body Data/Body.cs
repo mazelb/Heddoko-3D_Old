@@ -337,6 +337,19 @@ public class Body
             mTrackingThread.StopThread();
         }
     }
+
+    internal void PauseThread()
+    {
+        if (mBodyFrameThread != null)
+        {
+            mBodyFrameThread.PauseWorker();
+        }
+        if (mTrackingThread != null)
+        {
+            mTrackingThread.PauseWorker();
+        }
+    }
+
     #region Unity functions
 
 

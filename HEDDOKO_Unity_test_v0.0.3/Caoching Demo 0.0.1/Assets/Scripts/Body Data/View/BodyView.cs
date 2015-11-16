@@ -9,6 +9,7 @@
 using Assets.Scripts.Body_Pipeline.Tracking;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -24,6 +25,7 @@ namespace Assets.Scripts.Body_Data.view
         [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
+        private bool mIsPaused;
 
         /**
         * AssociatedBody
@@ -79,6 +81,15 @@ namespace Assets.Scripts.Body_Data.view
                 AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame); 
             }
         }
+
+        public void PauseFrame()
+        {
+            if (mAssociatedBody != null)
+            {
+                AssociatedBody.PauseThread();
+                mIsPaused = !mIsPaused;
+            }
+        }
         /**
         * OnDisable()
         * @brief Automatically called by Unity when the app is exited. Tells the associated body to stop its tasks
@@ -99,19 +110,19 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (StartUpdating)
             {
-                if (mBuffer != null && mBuffer.Count>0)
+                if (mIsPaused)
+                {
+                    return;
+                }
+                if (mBuffer != null && mBuffer.Count>0 )
                 {
                     Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic  = mBuffer.Dequeue();
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
                     Body.ApplyTracking(AssociatedBody,vDic);
-                    if(AssociatedBody.InitialBodyFrame != null)
-                    {
-                        debuggablestring = AssociatedBody.InitialBodyFrame.ToString();
-                    }
+                   
                 } 
             } 
-        }
-        public string debuggablestring;
+        } 
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 

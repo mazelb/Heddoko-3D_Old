@@ -8,10 +8,13 @@
 
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Utils;
+using HeddokoLib.adt;
+using HeddokoLib.networking;
+
 /**
 * BodyFrameThread class 
 * @brief child class for communication threads
+todo: can create an interface for handling these, subsequently every routine that needs to use the bodyframe buffer can just use an interface call. 
 */
 public class BodyFrameThread : ThreadedJob
 {
@@ -20,7 +23,8 @@ public class BodyFrameThread : ThreadedJob
     private SourceDataType mDataSourceType;
     private List<BodyRawFrame> mRawFrames;
     private bool mContinueWorking;
-
+    private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>();
+    private bool mPauseWorker;
     #endregion
     #region properties
     internal BodyFrameBuffer BodyFrameBuffer
@@ -34,6 +38,12 @@ public class BodyFrameThread : ThreadedJob
             return mBuffer;
         }
     }
+
+    internal CircularQueue<HeddokoPacket> InboundSuitBuffer
+    {
+        get { return mInboundSuitBuffer; }
+    }
+
     #endregion
 
 
@@ -70,7 +80,10 @@ public class BodyFrameThread : ThreadedJob
         base.Start();
         mContinueWorking = true;
     }
-
+    public void PauseWorker()
+    {
+        mPauseWorker = !mPauseWorker;
+    }
     #endregion
     /**
     * ThreadFunction()
@@ -115,11 +128,15 @@ public class BodyFrameThread : ThreadedJob
         int vBodyFrameIndex = 0;
         while (mContinueWorking)
         {
-            while (!BodyFrameBuffer.IsFull())
+            while (true)
             {
                 if (!mContinueWorking)
                 {
                     break;
+                }
+                if (BodyFrameBuffer.IsFull() || mPauseWorker)
+                {
+                    continue;
                 }
                 try
                 {
@@ -149,7 +166,38 @@ public class BodyFrameThread : ThreadedJob
     */
     private void BrainFrameTask()
     {
-        //todo
+        while (true)
+        {
+
+            if (!mContinueWorking)
+            {
+                //finished working
+                break;
+            }
+            try
+            {
+                HeddokoPacket vPacket = InboundSuitBuffer.Dequeue();
+                string vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
+                BodyRawFrame vRawFrame = new BodyRawFrame
+                {
+                    RawFrameData = vUnwrappedString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                };
+                if (vRawFrame.RawFrameData.Length > 2)
+                {
+                    //todo: //the first column is the timestamp(int) and the second column is extra information. we just care about the remaining columns
+                    Array.Copy(vRawFrame.RawFrameData, 2, vRawFrame.RawFrameData, 0, vRawFrame.RawFrameData.Length - 2);
+
+                    //convert to bodyframe
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(vRawFrame);
+                }
+
+            }
+            catch (EmptyCircularQueueException vECQx)
+            {
+                //this error is fine, continue
+            }
+
+        }
     }
     /**
     * DataStreamTask()

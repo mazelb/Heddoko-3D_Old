@@ -16,7 +16,7 @@ using Assets.Scripts.Interfaces;
 * RecordingsManager class 
 * @brief manager class for recordings (interface later)
 */
-public class BodyRecordingsMgr : MonoBehaviour
+public class BodyRecordingsMgr 
 {
     #region Singleton definition
     private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr();
@@ -49,6 +49,10 @@ public class BodyRecordingsMgr : MonoBehaviour
     //Map Body UUID to Recording UUID
     Dictionary<string, List<string>> RecordingsDictionary = new Dictionary<string, List<string>>();
 
+    public string[] FilePaths
+    {
+        get { return mFilePaths; }
+    }
 
     /**
     * ScanRecordings()

@@ -5,6 +5,8 @@
 * @date October 2015
 */
 using Assets.Scripts.Utils;
+using HeddokoLib.adt;
+
 /**
 * BodyFrameBuffer  class 
 * @brief BodySubsegmentView class, that acts as a circular buffer for BodyFrames by inheriting from CircularQueue.cs
