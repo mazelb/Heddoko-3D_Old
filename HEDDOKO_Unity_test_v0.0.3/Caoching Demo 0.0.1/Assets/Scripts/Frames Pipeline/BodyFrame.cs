@@ -9,8 +9,8 @@
 
 using UnityEngine; 
 using System.Collections.Generic;
-using System;
-
+using System; 
+using HeddokoLib.utils; 
 /// <summary>
 /// The frame of data that is populated to sensors, and contains the list of sensors to access sensors data
 /// </summary>
@@ -58,6 +58,11 @@ public class BodyFrame
         return vOutput;
     }
 
+    public BodyFrame()
+    {
+        
+    }
+ 
     /**
     * ConvertRawFrame(BodyRawFrame rawData)
     * @brief Pass in a BodyRawFrame and convert it to a body frame
@@ -132,7 +137,69 @@ public class BodyFrame
         return vBodyFrame;
 
     }
-
+    /// <summary>
+    /// Converts a string received by the body frame server service into a bodyframe
+    /// </summary>
+    /// <param name="vHexPacket"></param>
+    /// <returns></returns>
+    public static BodyFrame ConvertFromHexaString(string vHexPacket)
+    {
+        string[] VRawData = vHexPacket.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+        //from startIndex to endIndex, we check the subframes and extrapolate the IMU data. 
+        int vStartIndex = 1;
+        int vEndIndex = 20;
+        //The check index is made such that when we iterate through the list, it is possible that the 19th index isn't of an IMU type, then it must be that it is a stretch sensor
+        int vCheckIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        bool vFinishLoop = false;
+        BodyFrame vBodyFrame = new BodyFrame();
+        Vector3 vPlaceholderV3 = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
+         
+        int key = 0;
+        BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
+        for (int i = vStartIndex; i < vEndIndex; i++)
+        {
+            //first check if the current index falls on a position that can be interpreted as an int
+            if (i%2 == 1)
+            {
+                if (i == vCheckIndex)
+                {
+                    try
+                    {
+                        int.TryParse(VRawData[i], out key);
+                    }
+                    finally
+                    {
+                        if (key != 10)
+                        {
+                            vFinishLoop = true;
+                        }
+                    }
+                    if (vFinishLoop)
+                    {
+                        //set the start index for the next iteration
+                        vStartIndex = i; //todo:Start index in the hexa string method is to be used when grabbing stretch sense data
+                        break;
+                    }
+                }
+                int.TryParse(VRawData[i], out key);
+                key--;
+                vSensorPosAsKey = ImuSensorFromPos(key);
+                vBodyFrame.FrameData.Add(vSensorPosAsKey, vPlaceholderV3); 
+            }
+            else
+            {
+                //split the string into three floats
+                string[] v3data = VRawData[i].Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                float[] value = new float[3];
+                for (int j = 0; j < 3; j++)
+                {
+                    value[j] = ConversionTools.ConvertHexStringToFloat((v3data[j])); 
+                }
+                vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[1], value[0], value[2]);
+            }
+        } 
+        return vBodyFrame;
+    }
     /// <summary>
     /// Returns a sensor position fromt eh given position
     /// </summary>

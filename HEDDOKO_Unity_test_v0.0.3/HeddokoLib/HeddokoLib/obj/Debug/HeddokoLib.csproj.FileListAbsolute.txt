@@ -1,0 +1,5 @@
+C:\Users\Mohammed\documents\visual studio 2015\Projects\HeddokoLib\HeddokoLib\bin\Debug\HeddokoLib.dll
+C:\Users\Mohammed\documents\visual studio 2015\Projects\HeddokoLib\HeddokoLib\bin\Debug\HeddokoLib.pdb
+C:\Users\Mohammed\documents\visual studio 2015\Projects\HeddokoLib\HeddokoLib\obj\Debug\HeddokoLib.dll
+C:\Users\Mohammed\documents\visual studio 2015\Projects\HeddokoLib\HeddokoLib\obj\Debug\HeddokoLib.pdb
+C:\Users\Mohammed\Documents\Visual Studio 2015\Projects\HeddokoLib\HeddokoLib\obj\Debug\HeddokoLib.csprojResolveAssemblyReference.cache

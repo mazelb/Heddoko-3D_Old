@@ -4,6 +4,8 @@
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date October 2015
 */
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Utils;
@@ -21,6 +23,9 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     private bool mPlayButtonPushed;
     public Button ResetButton;
     public string mBodyRecordingUUID = "482D9E97-B37D-403E-A8BB-35B4971F0BE2";
+    public float PauseThreadTimer = 1f;
+    private float mInternalTimer = 1f;
+    private bool mResetRoutStarted = false; // pause thread routine started
     /**
     * Start()
     * @brief Automatically called by unity on start. This start function will prep the body to be able to play a recording 
@@ -55,16 +60,39 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     */
     public void ResetInitialFrame()
     {
-        mBody.View.ResetInitialFrame(); 
+        mBody.View.ResetInitialFrame();
+        StartCoroutine(StartCountdown());
     }
     /**
     * Pause 
     * @brief Pauses the recording's play back
     */
-    public void Pause()
+    public void ChangePauseState()
     {
-        //todo
+        mBody.View.PauseFrame();
     }
 
+    private IEnumerator StartCountdown()
+    {
+        if (mResetRoutStarted)
+        {
+            mInternalTimer += PauseThreadTimer; //if this has already started, just add to the timer and then exit
+            yield  break;
+        }
+        mInternalTimer = PauseThreadTimer;
+        mResetRoutStarted = true;
+        ChangePauseState();
+        while (true)
+        {
+            mInternalTimer -= Time.deltaTime;
+            if (mInternalTimer < 0)
+            {
+                break;
+            }
+            yield return null;
+        }
+        ChangePauseState();
+        mResetRoutStarted = false;
+    }
 
 }

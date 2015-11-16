@@ -74,10 +74,10 @@
             </summary>
             <returns>If a Dispatch happened or not, which shows if more Dispatches might be needed.</returns>
         </member>
-        <member name="M:ExitGames.Client.Photon.PeerBase.SendOutgoingCommands">
+        <member name="M:ExitGames.Client.Photon.PeerBase.SendOutvGoingCommands">
             <summary>
-            Checks outgoing queues for commands to send and puts them on their way.
-            This creates one package per go in UDP.
+            Checks outvGoing queues for commands to send and puts them on their way.
+            This creates one package per vGo in UDP.
             </summary>
             <returns>If commands are not sent, cause they didn't fit into the package that's sent.</returns>
         </member>
@@ -122,7 +122,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PeerBase.BytesOut">
             <summary>
-            Count of all bytes going out (including headers)
+            Count of all bytes vGoing out (including headers)
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PeerBase.BytesIn">
@@ -150,7 +150,7 @@
             <remarks>Please note that calling operations is only possible after the OnStatusChanged() with StatusCode.Connect.</remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.PeerBase.ConnectionStateValue.Disconnecting">
-            <summary>Connection going to be ended. Wait for status callback.</summary>
+            <summary>Connection vGoing to be ended. Wait for status callback.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.PeerBase.ConnectionStateValue.AcknowledgingDisconnect">
             <summary>Acknowledging a disconnect from Photon. Wait for status callback.</summary>
@@ -164,7 +164,7 @@
         <member name="F:ExitGames.Client.Photon.EnetPeer.sentReliableCommands">
             <summary>One list for all channels keeps sent commands (for re-sending).</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.EnetPeer.outgoingAcknowledgementsList">
+        <member name="F:ExitGames.Client.Photon.EnetPeer.outvGoingAcknowledgementsList">
             <summary>One list for all channels keeps acknowledgements.</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.EnetPeer.DispatchIncomingCommands">
@@ -178,16 +178,16 @@
             gathers acks until udp-packet is full and sends it!
             </summary>
         </member>
-        <member name="M:ExitGames.Client.Photon.EnetPeer.SendOutgoingCommands">
+        <member name="M:ExitGames.Client.Photon.EnetPeer.SendOutvGoingCommands">
             <summary>
             gathers commands from all (out)queues until udp-packet is full and sends it!
             </summary>
         </member>
         <member name="M:ExitGames.Client.Photon.EnetPeer.AreReliableCommandsInTransit">
             <summary>
-            Checks if any channel has a outgoing reliable command.
+            Checks if any channel has a outvGoing reliable command.
             </summary>
-            <returns>True if any channel has a outgoing reliable command. False otherwise.</returns>
+            <returns>True if any channel has a outvGoing reliable command. False otherwise.</returns>
         </member>
         <member name="M:ExitGames.Client.Photon.EnetPeer.EnqueueOperation(System.Collections.Generic.Dictionary{System.Byte,System.Object},System.Byte,System.Boolean,System.Byte,System.Boolean,ExitGames.Client.Photon.PeerBase.EgMessageType)">
             <summary>
@@ -245,17 +245,17 @@
         <member name="F:ExitGames.Client.Photon.StatusCode.SecurityExceptionOnConnect">
             <summary>Used on platforms that throw a security exception on connect. Unity3d does this, e.g., if a webplayer build could not fetch a policy-file from a remote server.</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutgoingReliableWarning">
-            <summary>PhotonPeer outgoing queue is filling up. send more often.</summary>
+        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutvGoingReliableWarning">
+            <summary>PhotonPeer outvGoing queue is filling up. send more often.</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutgoingUnreliableWarning">
-            <summary>PhotonPeer outgoing queue is filling up. send more often.</summary>
+        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutvGoingUnreliableWarning">
+            <summary>PhotonPeer outvGoing queue is filling up. send more often.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.StatusCode.SendError">
             <summary>Sending command failed. Either not connected, or the requested channel is bigger than the number of initialized channels.</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutgoingAcksWarning">
-            <summary>PhotonPeer outgoing queue is filling up. send more often.</summary>
+        <member name="F:ExitGames.Client.Photon.StatusCode.QueueOutvGoingAcksWarning">
+            <summary>PhotonPeer outvGoing queue is filling up. send more often.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.StatusCode.QueueIncomingReliableWarning">
             <summary>PhotonPeer incoming queue is filling up. Dispatch more often.</summary>
@@ -397,7 +397,7 @@
             <summary> Internal class for "commands" - the package in which operations are sent.</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.NCommand.#ctor(ExitGames.Client.Photon.EnetPeer,System.Byte,System.Byte[],System.Byte)">
-            <summary>this variant does only create outgoing commands and increments . incoming ones are created from a DataInputStream</summary>
+            <summary>this variant does only create outvGoing commands and increments . incoming ones are created from a DataInputStream</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.NCommand.#ctor(ExitGames.Client.Photon.EnetPeer,System.Byte[],System.Int32@)">
             <summary>reads the command values (commandHeader and command-values) from incoming bytestream and populates the incoming command*</summary>
@@ -433,20 +433,20 @@
             If the network is slow in reality, this will add even more lag.
             The jitter values will affect the lag positive and negative, so the lag settings 
             describe the medium lag even with jitter. The jitter influence is: [-jitter..+jitter].
-            Packets "lost" due to OutgoingLossPercentage count for BytesOut and LostPackagesOut.
+            Packets "lost" due to OutvGoingLossPercentage count for BytesOut and LostPackagesOut.
             Packets "lost" due to IncomingLossPercentage count for BytesIn and LostPackagesIn.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.isSimulationEnabled">
             <summary>internal</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outgoingLag">
+        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outvGoingLag">
             <summary>internal</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outgoingJitter">
+        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outvGoingJitter">
             <summary>internal</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outgoingLossPercentage">
+        <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.outvGoingLossPercentage">
             <summary>internal</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.NetworkSimulationSet.incomingLag">
@@ -461,14 +461,14 @@
         <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.IsSimulationEnabled">
             <summary>This setting overrides all other settings and turns simulation on/off. Default: false.</summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutgoingLag">
-            <summary>Outgoing packages delay in ms. Default: 100.</summary>
+        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutvGoingLag">
+            <summary>OutvGoing packages delay in ms. Default: 100.</summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutgoingJitter">
-            <summary>Randomizes OutgoingLag by [-OutgoingJitter..+OutgoingJitter]. Default: 0.</summary>
+        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutvGoingJitter">
+            <summary>Randomizes OutvGoingLag by [-OutvGoingJitter..+OutvGoingJitter]. Default: 0.</summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutgoingLossPercentage">
-            <summary>Percentage of outgoing packets that should be lost. Between 0..100. Default: 1. TCP ignores this setting.</summary>
+        <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.OutvGoingLossPercentage">
+            <summary>Percentage of outvGoing packets that should be lost. Between 0..100. Default: 1. TCP ignores this setting.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.IncomingLag">
             <summary>Incoming packages delay in ms. Default: 100.</summary>
@@ -480,10 +480,10 @@
             <summary>Percentage of incoming packets that should be lost. Between 0..100. Default: 1. TCP ignores this setting.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.LostPackagesOut">
-            <summary>Counts how many outgoing packages actually got lost. TCP connections ignore loss and this stays 0.</summary>
+            <summary>Counts how many outvGoing packages actually vGot lost. TCP connections ignore loss and this stays 0.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.NetworkSimulationSet.LostPackagesIn">
-            <summary>Counts how many incoming packages actually got lost. TCP connections ignore loss and this stays 0.</summary>
+            <summary>Counts how many incoming packages actually vGot lost. TCP connections ignore loss and this stays 0.</summary>
         </member>
         <member name="T:Photon.SocketServer.Security.OakleyGroups">
             <summary>
@@ -640,7 +640,7 @@
              This method does a DNS lookup (if necessary) and connects to the given serverAddress.
             
              The return value gives you feedback if the address has the correct format. If so, this
-             starts the process to establish the connection itself, which might take a few seconds.
+             starts the process to establish the connection itself, which might take a few vCountdown.
             
              When the connection is established, a callback to IPhotonPeerListener.OnStatusChanged
              will be done. If the connection can't be established, despite having a valid address,
@@ -670,7 +670,7 @@
              <remarks>
              Calling this method does not immediately close a connection. Disconnect lets the server
              know that this client is no longer listening. For the server, this is a much faster way
-             to detect that the client is gone but it requires the client to send a few final messages.
+             to detect that the client is vGone but it requires the client to send a few final messages.
             
              On completion, OnStatusChanged is called with the StatusCode.Disconnect.
             
@@ -691,7 +691,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.PhotonPeer.FetchServerTimestamp">
              <summary>
-             This will fetch the server's timestamp and update the approximation for property ServerTimeInMilliseconds.
+             This will fetch the server's timestamp and update the approximation for property ServerTimeInMillivCountdown.
             
              The server time approximation will NOT become more accurate by repeated calls. Accuracy currently depends
              on a single roundtrip which is done as fast as possible.
@@ -715,7 +715,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.PhotonPeer.Service">
              <summary>
-             This method excutes DispatchIncomingCommands and SendOutgoingCommands in your application Thread-context.
+             This method excutes DispatchIncomingCommands and SendOutvGoingCommands in your application Thread-context.
              </summary>
              <remarks>
              The Photon client libraries are designed to fit easily into a game or application. The application
@@ -723,11 +723,11 @@
              full control of the creation of UDP/TCP packages.
             
              Sending packages and dispatching received messages are two separate tasks. Service combines them
-             into one method at the cost of control. It calls DispatchIncomingCommands and SendOutgoingCommands.
+             into one method at the cost of control. It calls DispatchIncomingCommands and SendOutvGoingCommands.
             
              Call this method regularly (2..20 times a second).
             
-             This will Dispatch ANY remaining buffered responses and events AND will send queued outgoing commands.
+             This will Dispatch ANY remaining buffered responses and events AND will send queued outvGoing commands.
              Fewer calls might be more effective if a device cannot send many packets per second, as multiple
              operations might be combined into one package.
              </remarks>
@@ -735,21 +735,21 @@
              You could replace Service by:
             
                  while (DispatchIncomingCommands()); //Dispatch until everything is Dispatched...
-                 SendOutgoingCommands(); //Send a UDP/TCP package with outgoing messages
+                 SendOutvGoingCommands(); //Send a UDP/TCP package with outvGoing messages
              </example>
              <seealso cref="M:ExitGames.Client.Photon.PhotonPeer.DispatchIncomingCommands"/>
-             <seealso cref="M:ExitGames.Client.Photon.PhotonPeer.SendOutgoingCommands"/>
+             <seealso cref="M:ExitGames.Client.Photon.PhotonPeer.SendOutvGoingCommands"/>
         </member>
-        <member name="M:ExitGames.Client.Photon.PhotonPeer.SendOutgoingCommands">
+        <member name="M:ExitGames.Client.Photon.PhotonPeer.SendOutvGoingCommands">
              <summary>
-             This method creates a UDP/TCP package for outgoing commands (operations and acknowledgements)
+             This method creates a UDP/TCP package for outvGoing commands (operations and acknowledgements)
              and sends them to the server.
              This method is also called by Service().
              </summary>
              <remarks>
              As the Photon library does not create any UDP/TCP packages by itself. Instead, the application
              fully controls how many packages are sent and when. A tradeoff, an application will
-             lose connection, if it is no longer calling SendOutgoingCommands or Service.
+             lose connection, if it is no longer calling SendOutvGoingCommands or Service.
             
              If multiple operations and ACKs are waiting to be sent, they will be aggregated into one
              package. The package fills in this order:
@@ -791,7 +791,7 @@
             Returns a string of the most interesting connection statistics.
             When you have issues on the client side, these might contain hints about the issue's cause.
             </summary>
-            <param name="all">If true, Incoming and Outgoing low-level stats are included in the string.</param>
+            <param name="all">If true, Incoming and OutvGoing low-level stats are included in the string.</param>
             <returns>Stats as string.</returns>
         </member>
         <member name="M:ExitGames.Client.Photon.PhotonPeer.OpCustom(System.Byte,System.Collections.Generic.Dictionary{System.Byte,System.Object},System.Boolean)">
@@ -905,7 +905,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.BytesOut">
             <summary>
-            Gets count of all bytes going out (including headers, excluding UDP/TCP overhead)
+            Gets count of all bytes vGoing out (including headers, excluding UDP/TCP overhead)
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.ByteCountCurrentDispatch">
@@ -943,13 +943,13 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsEnabled">
             <summary>
-            Enables the traffic statistics of a peer: TrafficStatsIncoming, TrafficStatsOutgoing and TrafficstatsGameLevel (nothing else).
+            Enables the traffic statistics of a peer: TrafficStatsIncoming, TrafficStatsOutvGoing and TrafficstatsGameLevel (nothing else).
             Default value: false (disabled).
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsElapsedMs">
             <summary>
-            Returns the count of milliseconds the stats are enabled for tracking.
+            Returns the count of millivCountdown the stats are enabled for tracking.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsIncoming">
@@ -958,18 +958,18 @@
             These include all headers, except those of the underlying internet protocol Udp or Tcp.
             </summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsOutgoing">
+        <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsOutvGoing">
             <summary>
-            Gets the byte-count of outgoing "low level" messages, which are either Enet Commands or Tcp Messages.
+            Gets the byte-count of outvGoing "low level" messages, which are either Enet Commands or Tcp Messages.
             These include all headers, except those of the underlying internet protocol Udp or Tcp.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TrafficStatsGameLevel">
             <summary>
-            Gets a statistic of incoming and outgoing traffic, split by operation, operation-result and event.
+            Gets a statistic of incoming and outvGoing traffic, split by operation, operation-result and event.
             </summary>
             <remarks>
-            Operations are outgoing traffic, results and events are incoming.
+            Operations are outvGoing traffic, results and events are incoming.
             Includes the per-command header sizes (Udp: Enet Command Header or Tcp: Message Header).
             </remarks>
         </member>
@@ -1001,18 +1001,18 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.CommandBufferSize">
              <summary>
-             Initial size internal lists for incoming/outgoing commands (reliable and unreliable).
+             Initial size internal lists for incoming/outvGoing commands (reliable and unreliable).
              </summary>
              <remarks>
              This sets only the initial size. All lists simply grow in size as needed. This means that
-             incoming or outgoing commands can pile up and consume heap size if Service is not called
+             incoming or outvGoing commands can pile up and consume heap size if Service is not called
              often enough to handle the messages in either direction.
             
              Configure the WarningSize, to get callbacks when the lists reach a certain size.
             
-             UDP: Incoming and outgoing commands each have separate buffers for reliable and unreliable sending.
+             UDP: Incoming and outvGoing commands each have separate buffers for reliable and unreliable sending.
              There are additional buffers for &quot;sent commands&quot; and &quot;ACKs&quot;.
-             TCP: Only two buffers exist: incoming and outgoing commands.
+             TCP: Only two buffers exist: incoming and outvGoing commands.
              </remarks>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.RhttpMinConnections">
@@ -1044,9 +1044,9 @@
             (events and operation results) from all channels.
             </summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.PhotonPeer.QueuedOutgoingCommands">
+        <member name="P:ExitGames.Client.Photon.PhotonPeer.QueuedOutvGoingCommands">
             <summary>
-            Count of all commands currently queued as outgoing, including all channels and reliable, unreliable.
+            Count of all commands currently queued as outvGoing, including all channels and reliable, unreliable.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.ChannelCount">
@@ -1078,7 +1078,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.ResentReliableCommands">
             <summary>
-            Count of commands that got repeated (due to local repeat-timing before an ACK was received).
+            Count of commands that vGot repeated (due to local repeat-timing before an ACK was received).
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.WarningSize">
@@ -1104,7 +1104,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.TimePingInterval">
             <summary>
-            Sets the milliseconds without reliable command before a ping command (reliable) will be sent (Default: 1000ms).
+            Sets the millivCountdown without reliable command before a ping command (reliable) will be sent (Default: 1000ms).
             The ping command is used to keep track of the connection in case the client does not send reliable commands
             by itself.
             A ping (or reliable commands) will update the RoundTripTime calculation.
@@ -1112,7 +1112,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.DisconnectTimeout">
              <summary>
-             Milliseconds after which a reliable UDP command triggers a timeout disconnect, unless acknowledged by server.
+             MillivCountdown after which a reliable UDP command triggers a timeout disconnect, unless acknowledged by server.
              This value currently only affects UDP connections.
              DisconnectTimeout is not an exact value for a timeout. The exact timing of the timeout depends on the frequency
              of Service() calls and commands that are sent with long roundtrip-times and variance are checked less often for
@@ -1149,7 +1149,7 @@
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.LocalTimeInMilliSeconds">
             <summary>
-            Gets a local timestamp in milliseconds by calling SupportClass.GetTickCount().
+            Gets a local timestamp in millivCountdown by calling SupportClass.GetTickCount().
             See LocalMsTimestampDelegate.
             </summary>
         </member>
@@ -1197,7 +1197,7 @@
             The server address which was used in PhotonPeer.Connect() or null (before Connect() was called).
             </summary>
             <remarks>
-            The ServerAddress can only be changed for HTTP connections (to replace one that goes through a Loadbalancer with a direct URL).
+            The ServerAddress can only be changed for HTTP connections (to replace one that vGoes through a Loadbalancer with a direct URL).
             </remarks>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.UsedProtocol">
@@ -1217,14 +1217,14 @@
             Once obtained, the settings can be modified by changing the properties.
             </summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.PhotonPeer.OutgoingStreamBufferSize">
+        <member name="P:ExitGames.Client.Photon.PhotonPeer.OutvGoingStreamBufferSize">
             <summary>
             Defines the initial size of an internally used MemoryStream for Tcp.
             The MemoryStream is used to aggregate operation into (less) send calls,
             which uses less resoures.
             </summary>
             <remarks>
-            The size is not restricing the buffer and does not affect when poutgoing data is actually sent.
+            The size is not restricing the buffer and does not affect when poutvGoing data is actually sent.
             </remarks>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.MaximumTransferUnit">
@@ -1469,7 +1469,7 @@
             Type of deserialization methods to add custom type support.
             Use PhotonPeer.RegisterType() to register new types with serialization and deserialization methods.
             </summary>
-            <param name="serializedCustomObject">The framwork passes in the data it got by the associated SerializeMethod. The type code and length are stripped and applied before a DeserializeMethod is called.</param>
+            <param name="serializedCustomObject">The framwork passes in the data it vGot by the associated SerializeMethod. The type code and length are stripped and applied before a DeserializeMethod is called.</param>
             <returns>Return a object of the type that was associated with this method through RegisterType().</returns>
         </member>
         <member name="T:ExitGames.Client.Photon.Protocol">
@@ -1584,13 +1584,13 @@
         </member>
         <member name="M:ExitGames.Client.Photon.SupportClass.GetTickCount">
             <summary>
-            Gets the local machine's "milliseconds since start" value (precision is described in remarks).
+            Gets the local machine's "millivCountdown since start" value (precision is described in remarks).
             </summary>
             <remarks>
             This method uses Environment.TickCount (cheap but with only 16ms precision).
             PhotonPeer.LocalMsTimestampDelegate is available to set the delegate (unless already connected).
             </remarks>
-            <returns>Fraction of the current time in Milliseconds (this is not a proper datetime timestamp).</returns>
+            <returns>Fraction of the current time in MillivCountdown (this is not a proper datetime timestamp).</returns>
         </member>
         <member name="M:ExitGames.Client.Photon.SupportClass.CallInBackground(System.Func{System.Boolean})">
             <summary>
@@ -1603,7 +1603,7 @@
             Creates a background thread that calls the passed function in 100ms intervals, as long as that returns true.
             </summary>
             <param name="myThread"></param>
-            <param name="millisecondsInterval">Milliseconds to sleep between calls of myThread.</param>
+            <param name="millivCountdownInterval">MillivCountdown to sleep between calls of myThread.</param>
         </member>
         <member name="M:ExitGames.Client.Photon.SupportClass.WriteStackTrace(System.Exception,System.IO.TextWriter)">
             <summary>
@@ -1688,7 +1688,7 @@
             not, which shows if more Dispatches might be needed.
             </summary>
         </member>
-        <member name="M:ExitGames.Client.Photon.TPeer.SendOutgoingCommands">
+        <member name="M:ExitGames.Client.Photon.TPeer.SendOutvGoingCommands">
             <summary>
             gathers commands from all (out)queues until udp-packet is full and sends it!
             </summary>
@@ -1724,10 +1724,10 @@
             </remarks>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.OperationByteCount">
-            <summary>Gets sum of outgoing operations in bytes.</summary>
+            <summary>Gets sum of outvGoing operations in bytes.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.OperationCount">
-            <summary>Gets count of outgoing operations.</summary>
+            <summary>Gets count of outvGoing operations.</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.ResultByteCount">
             <summary>Gets sum of byte-cost of incoming operation-results.</summary>
@@ -1761,14 +1761,14 @@
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.LongestDeltaBetweenDispatching">
             <summary>
-            Gets longest time between subsequent calls to DispatchIncomginCommands in milliseconds.
+            Gets longest time between subsequent calls to DispatchIncomginCommands in millivCountdown.
             Note: This is not a crucial timing for the networking. Long gaps just add "local lag" to events that are available already.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.LongestDeltaBetweenSending">
             <summary>
-            Gets longest time between subsequent calls to SendOutgoingCommands in milliseconds.
-            Note: This is a crucial value for network stability. Without calling SendOutgoingCommands,
+            Gets longest time between subsequent calls to SendOutvGoingCommands in millivCountdown.
+            Note: This is a crucial value for network stability. Without calling SendOutvGoingCommands,
             nothing will be sent to the server, who might time out this client.
             </summary>
         </member>
@@ -1782,9 +1782,9 @@
             Gets number of calls of DispatchIncomingCommands.
             </summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.SendOutgoingCommandsCalls">
+        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.SendOutvGoingCommandsCalls">
             <summary>
-            Gets number of calls of SendOutgoingCommands.
+            Gets number of calls of SendOutvGoingCommands.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalByteCount">
@@ -1799,11 +1799,11 @@
         <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalIncomingMessageCount">
             <summary>Gets sum of counted incoming "logic level" messages.</summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalOutgoingByteCount">
-            <summary>Gets sum of byte-cost of all outgoing "logic level" messages (= OperationByteCount).</summary>
+        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalOutvGoingByteCount">
+            <summary>Gets sum of byte-cost of all outvGoing "logic level" messages (= OperationByteCount).</summary>
         </member>
-        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalOutgoingMessageCount">
-            <summary>Gets sum of counted outgoing "logic level" messages (= OperationCount).</summary>
+        <member name="P:ExitGames.Client.Photon.TrafficStatsGameLevel.TotalOutvGoingMessageCount">
+            <summary>Gets sum of counted outvGoing "logic level" messages (= OperationCount).</summary>
         </member>
         <member name="P:ExitGames.Client.Photon.TrafficStats.PackageHeaderSize">
             <summary>Gets the byte-size of per-package headers.</summary>

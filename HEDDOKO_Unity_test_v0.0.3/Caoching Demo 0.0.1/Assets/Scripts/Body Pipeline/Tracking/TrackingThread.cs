@@ -23,7 +23,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
         
         private List<BodyRawFrame> mRawFrames;
         private bool mContinueWorking;
-
+        private bool mPauseWorker;
         #endregion
        
   
@@ -49,6 +49,11 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
             mContinueWorking = true;
         }
 
+        public void PauseWorker()
+        {
+            mPauseWorker = !mPauseWorker;
+        }
+
         #endregion
         /**
         * ThreadFunction()
@@ -64,7 +69,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                     {
                         break;
                     }
-                    if(mOutputBuffer.IsFull() && !mOutputBuffer.AllowOverflow)
+                    if(  mPauseWorker || mOutputBuffer.IsFull() && !mOutputBuffer.AllowOverflow )
                     {
                         continue;
                     }
@@ -78,7 +83,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                     }
                     catch (Exception e)
                     {
-                        UnityEngine.Debug.Log(e.StackTrace);
+                        UnityEngine.Debug.Log(e.StackTrace + "\n"+e);
                     }
                 }
             }

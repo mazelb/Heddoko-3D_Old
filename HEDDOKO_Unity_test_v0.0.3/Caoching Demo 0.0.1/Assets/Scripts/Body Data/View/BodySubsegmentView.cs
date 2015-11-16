@@ -18,7 +18,8 @@ namespace Assets.Scripts.Body_Data.view
         //the transforms required to transform
   
         public Transform vSubSegmentTransform;
-        public Transform vSubSegmentInitialTransform;
+      //  public Transform vSubSegmentInitialTransform;
+        private Quaternion vSubSegmentInitialOrientation;
 
         public BodySubSegment AssociatedSubSegment;
         #endregion
@@ -54,9 +55,9 @@ namespace Assets.Scripts.Body_Data.view
         public void AssignTransform()
         {
             //find the object in the scene with the tag
-            GameObject go = GameObject.FindWithTag(gameObject.name);
-            vSubSegmentTransform = go.transform;
-            vSubSegmentInitialTransform = vSubSegmentTransform;
+            GameObject vGameObject = GameObject.FindWithTag(gameObject.name);
+            vSubSegmentTransform = vGameObject.transform;
+            //vSubSegmentInitialTransform = vSubSegmentTransform;
         }
 
         /**
@@ -75,8 +76,24 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void ResetOrientation()
         {
+<<<<<<< HEAD
             SubSegmentTransform.rotation = Quaternion.identity; // vSubSegmentInitialTransform.rotation;// vNewOrientation;
+=======
+            SubSegmentTransform.rotation = vSubSegmentInitialOrientation;
+                // vSubSegmentInitialTransform.rotation;// vNewOrientation;
+>>>>>>> origin/master
         }
+
+        #region Unity functions
+        /**
+        * Awake()
+        * @brief On Awake: set the segment's initial orientation .
+        */
+        internal void Awake()
+        {
+            vSubSegmentInitialOrientation = SubSegmentTransform.rotation;
+        }
+        #endregion
 
     }
 }

@@ -4,11 +4,12 @@
 * @date October 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Assets.Scripts.Utils
+namespace HeddokoLib.adt
 {
 
     /**
@@ -28,7 +29,7 @@ namespace Assets.Scripts.Utils
         private const int mDefaultCapacity = 64; //default size to use in the parameterles constructor 
         #region properties
         public bool AllowOverflow { get; set; }
-
+        private object mQueueLock = new object();
         public int Capacity
         {
             get
@@ -152,12 +153,12 @@ namespace Assets.Scripts.Utils
             }
             return false;
         }
-       /**
-       * Clear()
-       * @brief  clears the circular queue 
-       * @param  
-       * @return  
-       */
+        /**
+        * Clear()
+        * @brief  clears the circular queue 
+        * @param  
+        * @return  
+        */
         public void Clear()
         {
             mCount = 0;
@@ -215,12 +216,19 @@ namespace Assets.Scripts.Utils
             {
                 throw new CircularQueueOverflowException();
             }
-            mQueue[mTailIndex] = vItem;
-            if (++mTailIndex == mCapacity)
+            lock (mQueueLock)
             {
-                mTailIndex = 0;
+                if (++mTailIndex == mCapacity)
+                {
+                    mTailIndex = 0;
+                }
+                if (mCount < Capacity)
+                {
+                    mCount++;
+                }
+                mQueue[mTailIndex] = vItem;
             }
-            mCount++;
+            
         }
         /**
         * IsFull( )
@@ -233,19 +241,19 @@ namespace Assets.Scripts.Utils
             return mCount == mCapacity;
         }
 
-       /**
-       * Skip(int nAmount)
-       * @brief Moves the head of circular buffer by nAmount
-       * @note if the amount is larger than the number of actual elements in the buffer, then wrap the skip by count -1
-       * @param nAmount
-       * @return  
-       */
+        /**
+        * Skip(int nAmount)
+        * @brief Moves the head of circular buffer by nAmount
+        * @note if the amount is larger than the number of actual elements in the buffer, then wrap the skip by count -1
+        * @param nAmount
+        * @return  
+        */
         public void Skip(int nAmount)
         {
             mHeadIndex += nAmount;
             if (mHeadIndex >= Count)
             {
-                mHeadIndex -= Count -1; //wrap
+                mHeadIndex -= Count - 1; //wrap
             }
         }
 
@@ -270,15 +278,19 @@ namespace Assets.Scripts.Utils
         {
             int actualCount = Math.Min(length, mCount);
             int startIndex = offset;
-            for (int i = 0; i < actualCount; i++, mHeadIndex++, startIndex++)
+            lock (mQueueLock)
             {
-                if (mHeadIndex == mCapacity)
+                for (int i = 0; i < actualCount; i++, mHeadIndex++, startIndex++)
                 {
-                    mHeadIndex = 0;
+                    if (mHeadIndex == mCapacity)
+                    {
+                        mHeadIndex = 0;
+                    }
+                    tA[startIndex] = mQueue[mHeadIndex];
                 }
-                tA[startIndex] = mQueue[mHeadIndex];
+                mCount -= actualCount;
             }
-            mCount -= actualCount;
+            
             return actualCount;
         }
 
@@ -296,13 +308,17 @@ namespace Assets.Scripts.Utils
                 throw new EmptyCircularQueueException();
             }
             var item = mQueue[mHeadIndex];
-            if (++mHeadIndex == mCapacity)
+            lock (mQueueLock)
             {
-                mHeadIndex = 0;
+                if (++mHeadIndex == mCapacity)
+                {
+                    mHeadIndex = 0;
+                }
+                mCount--;
             }
-            mCount--;
+           
             return item;
-        } 
+        }
         /**
         * Peek()
         * @brief Peek at the head of the circular queue, without moving the head
@@ -325,7 +341,7 @@ namespace Assets.Scripts.Utils
         * @brief  Copy the circular queue into the requested array tA without modifying the circular queue
         * @param  T[] vA: the array to copy the CircularQueue into
         */
-        public void CopyTo(  T[] vA)
+        public void CopyTo(T[] vA)
         {
             CopyTo(vA, 0);
         }
@@ -334,7 +350,7 @@ namespace Assets.Scripts.Utils
         * @brief  Copy the circular queue into the requested array tA without modifying the circular queue
         * @param  T[] vA: : the array to copy the CircularQueue into ,int vIndex: the index where to start copying into
         */
-        public void CopyTo(  T[] vA, int vIndex)
+        public void CopyTo(T[] vA, int vIndex)
         {
             CopyTo(vA, vIndex, mCount);
         }
@@ -345,7 +361,7 @@ namespace Assets.Scripts.Utils
         * vLength the length of the circular queue to copy
         * @note: Will throw an argument out of range exception if requested length is larger than the number of elements in the queue
         */
-        public void CopyTo(  T[] vA, int vArrayIndex, int vLength)
+        public void CopyTo(T[] vA, int vArrayIndex, int vLength)
         {
             if (vLength > Count)
             {
@@ -353,14 +369,18 @@ namespace Assets.Scripts.Utils
             }
 
             int queueindex = mHeadIndex;
-            for (int i = 0; i < mCount; i++, queueindex++, vArrayIndex++)
+            lock (mQueueLock)
             {
-                if (queueindex == mCapacity)
+                for (int i = 0; i < mCount; i++, queueindex++, vArrayIndex++)
                 {
-                    queueindex = 0;
+                    if (queueindex == mCapacity)
+                    {
+                        queueindex = 0;
+                    }
+                    vA[vArrayIndex] = mQueue[queueindex];
                 }
-                vA[vArrayIndex] = mQueue[queueindex];
             }
+            
         }
 
         #endregion
