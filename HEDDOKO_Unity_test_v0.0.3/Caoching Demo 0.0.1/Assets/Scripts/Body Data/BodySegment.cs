@@ -192,7 +192,7 @@ public class BodySegment
         float[,] vKneeB6 = new float[3, 3];
         float[,] vKneeB7 = new float[3, 3];
 
-        bool fusion = false;
+        bool fusion = true;
 
         /////////// Initial Frame Adjustments /////////////////// 
         vHipOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh];
@@ -371,7 +371,7 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -437,8 +437,8 @@ public class BodySegment
         }
         else
         {
-            vKneeB4 = vKneeOrientationMatrix;
-            vHipB4 = vHipOrientationMatrix;
+            vKneeB4 = vKneeB2;
+            vHipB4 = vHipB2;
         }
 
         ///////////////////////////////////////
@@ -572,13 +572,13 @@ public class BodySegment
             Vector3 NcrossUpArLoArRoll = new Vector3(0, 0, 0);
             NcrossUpArLoArRoll = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
 
-            if (Vector3.Dot(RollUpAr, yawLoAr) < 0) /// this case when not obey 180 degree constraint
+            if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
             {
 
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
 
                 //Finding yaw compensation Angle
-                vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
 
                 // Building yaw compensation rotation matrices
                 vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
@@ -617,11 +617,11 @@ public class BodySegment
         vLoArB5 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB4);
 
         u.Set(vLoArB5[0, 0], vLoArB5[1, 0], vLoArB5[2, 0]);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
         vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
         vLoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
         u.Set(0, 0, 1);
@@ -636,11 +636,11 @@ public class BodySegment
         vUpArB4 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB3);
 
         u2.Set(vUpArB4[0, 0], vUpArB4[1, 0], vUpArB4[2, 0]);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, -(float)Math.PI / 2);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
         vUpArB5 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB4);
 
         u2.Set(1, 0, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, -(float)Math.PI / 2);
         vUpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
 
         u2.Set(0, 0, 1);
@@ -673,7 +673,8 @@ public class BodySegment
         float[,] vUpArB3 = new float[3, 3];
         float[,] vUpArB4 = new float[3, 3];
         float[,] vUpArB5 = new float[3, 3];
-        float[,] UpArB6 = new float[3, 3];
+        float[,] vUpArB6 = new float[3, 3];
+        float[,] vUpArB7 = new float[3, 3];
 
 
         float[,] vLoArB2 = new float[3, 3];
@@ -681,7 +682,8 @@ public class BodySegment
         float[,] vLoArB4 = new float[3, 3];
         float[,] vLoArB5 = new float[3, 3];
         float[,] vLoArB6 = new float[3, 3];
-        float[,] LoArB7 = new float[3, 3];
+        float[,] vLoArB7 = new float[3, 3];
+        float[,] vLoArB8 = new float[3, 3];
 
 
         float[,] vCompensationRotationLoAr = new float[3, 3];
@@ -744,7 +746,7 @@ public class BodySegment
                 vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
 
                 // Finding yaw compensation Angle
-                vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
 
                 // Building yaw compensation rotation matrices
                 vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
@@ -792,13 +794,13 @@ public class BodySegment
         vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
-        LoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        vLoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
         u.Set(0, 0, 1);
         //vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
         vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
-        vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, LoArB7);
+        vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vLoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
         Vector3 u2 = new Vector3(vUpArB3[0, 0], vUpArB3[1, 0], vUpArB3[2, 0]);
@@ -811,14 +813,14 @@ public class BodySegment
         vUpArB5 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB4);
 
         u2.Set(1, 0, 0);
-        vCurrentLoArOrientation = MatrixTools.RVector(u2, -(float)Math.PI / 2);
-        UpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
+        vUpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
 
 
         u2.Set(0, 0, 1);
         //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
         vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
-        vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, UpArB6);
+        vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
 
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
