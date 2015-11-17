@@ -115,7 +115,7 @@ namespace Assets.Scripts.Communication
                     byte[] vConverted = PacketSetting.Encoding.GetBytes(result);
                     HeddokoPacket vPacket = new HeddokoPacket(vConverted, 4);
                     string command = vPacket.Command;
-                    SocketCommandRouter.Instance.Process(command, vPacket);
+                    PacketCommandRouter.Instance.Process(command, vPacket);
                     mSocketReady = false;
                 }
                 if (!mIsWorking)

@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Text;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
+using UnityEngine;
 
 namespace Assets.Scripts.Communication
 {
@@ -21,18 +22,18 @@ namespace Assets.Scripts.Communication
     * @note Do not process a command within a registered command. This will cause a cause a stackoverflow exception. 
     * Reroute commands to other functions and not to itself. 
     */
-    public class SocketCommandRouter
+    public class PacketCommandRouter
     {
-        private static SocketCommandRouter sInstance;
+        private static PacketCommandRouter sInstance;
         public SocketClient ClientSocket { get; set; }
 
-        public static SocketCommandRouter Instance
+        public static PacketCommandRouter Instance
         {
             get
             {
                 if (sInstance == null)
                 {
-                    sInstance = new SocketCommandRouter();
+                    sInstance = new PacketCommandRouter();
                     sInstance.Initialize();
                 }
                 return sInstance;
@@ -51,7 +52,7 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.BPConnectionSucess, SuitConnectionSuccess);
             mCommand.Register(HeddokoCommands.RequestToConnectToBP, BrainpackDeviceConnectionRequest);
             mCommand.Register(HeddokoCommands.SendBPData, ReRouteRawFrameData);
-            mCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData); 
+            mCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData);
         }
         /**
         * Process(object vSender, HeddokoPacket vPacket)
@@ -174,5 +175,6 @@ namespace Assets.Scripts.Communication
             //  AsynchronousSocketListener.Send(vSocket, vPacketBody); 
         }
 
+    
     }
 }

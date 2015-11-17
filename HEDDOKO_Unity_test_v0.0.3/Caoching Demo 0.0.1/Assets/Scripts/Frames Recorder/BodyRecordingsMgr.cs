@@ -63,7 +63,8 @@ public class BodyRecordingsMgr
     public int  ScanRecordings(string vDirectoryPath)
     {
         mDirectoryPath = vDirectoryPath;
-        mFilePaths = Directory.GetFiles(mDirectoryPath);
+        mFilePaths = Directory.GetFiles(mDirectoryPath,  "*.csv"); 
+ 
         return mFilePaths.Length;
     }
 
@@ -128,7 +129,7 @@ public class BodyRecordingsMgr
             Recordings.Add(vTempRecording);
         }
     }
-
+ 
     /**
     * CreateNewRecording()
     * @brief Creates a new recording and adds it to the list

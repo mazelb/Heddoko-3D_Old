@@ -36,7 +36,7 @@ public class Body
     public BodyFrame CurrentBodyFrame;
     [SerializeField]
     //Initial body Frame
-    public BodyFrame InitialBodyFrame;
+    public BodyFrame InitialBodyFrame { get; set; }
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
     private TrackingThread mTrackingThread;
 
@@ -175,9 +175,9 @@ public class Body
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
-        } 
+        }
     }
- 
+
     /**
     * PlayRecording(string vRecUUID)
     * @param vRecUUID, the recording UUID
@@ -191,19 +191,33 @@ public class Body
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
+            BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+
+            SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
             TrackingBuffer vBuffer2 = new TrackingBuffer();
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
             mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
             //get the first frame and set it as the initial frame
-            BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
-            SetInitialFrame(frame);
+           
             View.Init(this, vBuffer2);
             mBodyFrameThread.Start();
             mTrackingThread.Start();
             View.StartUpdating = true;
         }
+    }
+    /**
+    * StreamFromBrainpack( )
+    * @param Set the body to be ready to play from brainpack
+    * @brief  Play a recording from the given recording UUID. 
+    */
+    /// <summary>
+    /// 
+    /// </summary>
+    public void StreamFromBrainpack()
+    {
+
     }
     /**
     * ApplyTracking(Body vBody)
@@ -243,7 +257,6 @@ public class Body
     */
     public static void ApplyTracking(Body vBody, Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic)
     {
-        
         //get the list of segments of the speicied vBody
         List<BodySegment> vListBodySegments = vBody.BodySegments;
         foreach (BodySegment vBodySegment in vListBodySegments)
@@ -286,7 +299,7 @@ public class Body
             if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
             {
                 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
-                vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine]; 
+                vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
             }
 
             Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);

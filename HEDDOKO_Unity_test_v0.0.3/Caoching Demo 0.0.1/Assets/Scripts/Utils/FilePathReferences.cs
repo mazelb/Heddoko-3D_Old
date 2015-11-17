@@ -24,7 +24,16 @@ namespace Assets.Scripts.Utils
         {
             return Application.persistentDataPath + "/" + vSuffixedDataPath;
         }
-
+        /// <summary>
+        /// The directory of recordings
+        /// </summary>
+        public static string RecordingsDirectory
+        {
+            get
+            {
+                return Application.dataPath + "/Resources/Recordings";
+            }
+        }
         public static string sCsvDirectory = Application.dataPath + "/Resources/Recordings";
 
     }

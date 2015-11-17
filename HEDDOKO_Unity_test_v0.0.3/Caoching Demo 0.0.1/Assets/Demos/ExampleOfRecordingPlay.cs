@@ -39,7 +39,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     }
 
     /**
-    * Start 
+    * Play 
     * @brief Will play the recording for the prepped body
     */
     public void Play()

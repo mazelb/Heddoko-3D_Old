@@ -57,7 +57,7 @@ public sealed class BodiesManager : MonoBehaviour
     public void CreateNewBody(string vBodyUUID = "")
     {
         Body vBody = new Body();
-        vBody.InitBody(vBodyUUID);
+     vBody.InitBody(vBodyUUID);
         Bodies.Add(vBody);
     }
 

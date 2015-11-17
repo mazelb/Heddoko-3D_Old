@@ -21,6 +21,9 @@ namespace HeddokoLib.utils
         public static string RequestBPData = "0x09";
         public static string RequestConnection = "0x10";
         public static string ConnectionAck = "0x11";
+        public static string UseRecordingForBody = "0x12";
+        public static string UseBrainpackForBody = "0x13";
+        public static string StartSceneWithBrainpackConnect = "0x14";
 
         public static string ExtractCommandFromBytes(int vStartIndex, int vLength, byte[] vData)
         {
