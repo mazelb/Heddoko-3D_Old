@@ -76,8 +76,7 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void ResetOrientation()
         {
-            SubSegmentTransform.rotation = vSubSegmentInitialOrientation;
-                // vSubSegmentInitialTransform.rotation;// vNewOrientation;
+            SubSegmentTransform.rotation = Quaternion.identity; // vSubSegmentInitialTransform.rotation;// vNewOrientation;
         }
 
         #region Unity functions

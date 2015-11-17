@@ -27,7 +27,7 @@ public class BodySubSegment
     private SubSegmentOrientationType mSubsegmentOrientationType;
     public BodySubsegmentView AssociatedView;
     [SerializeField]
-    private Vector3 mRotationFactor = new Vector3(0, 90, 0);
+    private Vector3 mRotationFactor = new Vector3(0, -90, 0);
 
     /**
     * SubSegmentOrientationType enum
