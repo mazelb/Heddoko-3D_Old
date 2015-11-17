@@ -12,31 +12,38 @@ using UnityEngine;
 
 public class UGUITools : MonoBehaviour
 {
+    /**
+   * AnchorsToCorners 
+   * @brief Sets the anchors of the UI object to the corners  
+   */
     [MenuItem("uGUI/Anchors to Corners %[")]
     static void AnchorsToCorners()
     {
-        RectTransform t = Selection.activeTransform as RectTransform;
-        RectTransform pt = Selection.activeTransform.parent as RectTransform;
+        RectTransform vRectTransform = Selection.activeTransform as RectTransform;
+        RectTransform vParentRectTransform = Selection.activeTransform.parent as RectTransform;
 
-        if (t == null || pt == null) return;
+        if (vRectTransform == null || vParentRectTransform == null) return;
 
-        Vector2 newAnchorsMin = new Vector2(t.anchorMin.x + t.offsetMin.x / pt.rect.width,
-                                            t.anchorMin.y + t.offsetMin.y / pt.rect.height);
-        Vector2 newAnchorsMax = new Vector2(t.anchorMax.x + t.offsetMax.x / pt.rect.width,
-                                            t.anchorMax.y + t.offsetMax.y / pt.rect.height);
+        Vector2 vNewAnchorMin = new Vector2(vRectTransform.anchorMin.x + vRectTransform.offsetMin.x / vParentRectTransform.rect.width,
+                                            vRectTransform.anchorMin.y + vRectTransform.offsetMin.y / vParentRectTransform.rect.height);
+        Vector2 vNewAnchorMax = new Vector2(vRectTransform.anchorMax.x + vRectTransform.offsetMax.x / vParentRectTransform.rect.width,
+                                            vRectTransform.anchorMax.y + vRectTransform.offsetMax.y / vParentRectTransform.rect.height);
 
-        t.anchorMin = newAnchorsMin;
-        t.anchorMax = newAnchorsMax;
-        t.offsetMin = t.offsetMax = new Vector2(0, 0);
+        vRectTransform.anchorMin = vNewAnchorMin;
+        vRectTransform.anchorMax = vNewAnchorMax;
+        vRectTransform.offsetMin = vRectTransform.offsetMax = new Vector2(0, 0);
     }
-
+    /**
+    * CornersToAnchors 
+    * @brief Sets the corners of the Ui object according to its anchors 
+    */
     [MenuItem("uGUI/Corners to Anchors %]")]
     static void CornersToAnchors()
     {
-        RectTransform t = Selection.activeTransform as RectTransform;
+        RectTransform vRectTransform = Selection.activeTransform as RectTransform;
 
-        if (t == null) return;
+        if (vRectTransform == null) return;
 
-        t.offsetMin = t.offsetMax = new Vector2(0, 0);
+        vRectTransform.offsetMin = vRectTransform.offsetMax = new Vector2(0, 0);
     }
 }
