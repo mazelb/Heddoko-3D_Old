@@ -336,13 +336,15 @@ public class Body
         //TODO: 
     }
 
-    /**
-    * StopThread()
-    * @param Stops the current thread
-    * @brief  Play a recording from the given recording UUID. 
-    */
+   /**
+   * StopThread() 
+   * @brief  Stops the current thread and tells the view to stop playback
+   */
+    /// <summary>
+    /// Stops the current thread and tells the view to stop playback
+    /// </summary>
     internal void StopThread()
-    {
+    { 
         if (mBodyFrameThread != null)
         {
             mBodyFrameThread.StopThread();
@@ -350,6 +352,10 @@ public class Body
         if (mTrackingThread != null)
         {
             mTrackingThread.StopThread();
+        }
+        if (View != null)
+        {
+            View.StartUpdating = false; 
         }
     }
 

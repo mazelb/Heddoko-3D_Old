@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using System;
 using System.Collections.Generic;
 using Assets.Scripts.Communication;
 using Assets.Scripts.Utils;
@@ -20,8 +21,14 @@ namespace Assets.Scripts.UI.MainScene.Model
     {
         private static BodySelectedInfo mInstance;
 
+        public delegate void BodyRecordingChanged();
+
+        public event BodyRecordingChanged BodyRecordingChangedEvent;
+
         [SerializeField]
         private SuitSocketClientSettings mSocketClientSettings; 
+
+        
         public string mSelectedRecordingPath;
         public string mSelectedBody;
         public int TotalRecordingsAvailable;
@@ -51,11 +58,11 @@ namespace Assets.Scripts.UI.MainScene.Model
         {
             get
             {
-                if (mBodyRecordingMap.ContainsKey(mSelectedRecordingPath))
+                if (!string.IsNullOrEmpty(mSelectedRecordingPath)  && mBodyRecordingMap.ContainsKey(mSelectedRecordingPath))
                 {
                     return mBodyRecordingMap[mSelectedRecordingPath];
                 }
-                else
+                else if(!string.IsNullOrEmpty(mSelectedRecordingPath))
                 {
                     UpdateCurrentBodyFrameRecording();
                     return mBodyRecordingMap[mSelectedRecordingPath];
@@ -90,10 +97,17 @@ namespace Assets.Scripts.UI.MainScene.Model
         /// </summary>
         public void UpdateSelectedRecording(int vRecordingIndex)
         {
+            if (TotalRecordingsAvailable == 0)
+            {
+                TotalRecordingsAvailable = BodyRecordingsMgr.Instance.FilePaths.Length;
+            }
             if (vRecordingIndex >= 0 && vRecordingIndex < TotalRecordingsAvailable)
             {
                 mSelectedRecordingPath = BodyRecordingsMgr.Instance.FilePaths[vRecordingIndex];
-               
+                if (BodyRecordingChangedEvent != null)
+                {
+                    BodyRecordingChangedEvent();
+                } 
             }
 
         }
@@ -112,6 +126,8 @@ namespace Assets.Scripts.UI.MainScene.Model
                 //the latest item to be placed in the list is now the current body frame recording
                 BodyFramesRecording vCurrBFR = BodyRecordingsMgr.Instance.Recordings[BodyRecordingsMgr.Instance.Recordings.Count - 1];
                 mBodyRecordingMap.Add(mSelectedRecordingPath,vCurrBFR);
+                //notify interested listeners that the recording has changed
+          
             }
         }
     }

@@ -30,8 +30,8 @@ public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
     { 
         mCurrentRectTransform = GetComponent<RectTransform>();
         mCollider2D = GetComponent<Collider2D>();
-        GameObject vInformationPanelGo = GameObject.FindGameObjectWithTag("InformationPanel");
-        mInformationPanel = vInformationPanelGo.GetComponent<InformationPanel>();
+      //  GameObject vInformationPanelGo = GameObject.FindGameObjectWithTag("InformationPanel");
+     //   mInformationPanel = vInformationPanelGo.GetComponent<InformationPanel>();
     }
     /**
       *  IsRaycastLocationValid(Vector2 vScreenPoint, Camera vEventCamera)
@@ -57,7 +57,7 @@ public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
         if (vIsInside)
         {
             vIsInside = mCollider2D.OverlapPoint(vWorlderPoint);
-            mInformationPanel.UpdateInformationPanel(InformationText);
+//            mInformationPanel.UpdateInformationPanel(InformationText);
         }
         return vIsInside;
 

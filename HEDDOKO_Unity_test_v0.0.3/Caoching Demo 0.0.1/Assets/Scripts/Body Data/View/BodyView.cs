@@ -25,8 +25,10 @@ namespace Assets.Scripts.Body_Data.view
         [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
+        [SerializeField]
         private bool mIsPaused;
-
+        [SerializeField]
+        private bool mStartUpdating;
         /**
         * AssociatedBody
         * @param Internally set the Body associated to this view
@@ -53,8 +55,15 @@ namespace Assets.Scripts.Body_Data.view
         */
         public bool StartUpdating
         {
-            get;
-            set;
+            get { return mStartUpdating; }
+            set
+            {
+                if (value)
+                {
+                    mStartUpdating = false;
+                }
+                mStartUpdating = value;
+            }
         }
         /**
         * Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
@@ -118,7 +127,11 @@ namespace Assets.Scripts.Body_Data.view
                 {
                     Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic  = mBuffer.Dequeue();
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
-                    Body.ApplyTracking(AssociatedBody,vDic);
+                    if (vDic != null)
+                    {
+                        Body.ApplyTracking(AssociatedBody, vDic);
+                    }
+                    
                    
                 } 
             } 

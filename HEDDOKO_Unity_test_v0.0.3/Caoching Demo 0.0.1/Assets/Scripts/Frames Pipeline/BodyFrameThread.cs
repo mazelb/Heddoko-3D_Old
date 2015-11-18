@@ -25,8 +25,31 @@ public class BodyFrameThread : ThreadedJob
     private bool mContinueWorking;
     private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>();
     private bool mPauseWorker;
+    private object mWorkerThreadLockHandle = new object();
     #endregion
     #region properties
+
+    public bool ContinueWorking
+    {
+        get
+        {
+            bool tmp;
+            lock (mWorkerThreadLockHandle)
+            {
+                tmp = mContinueWorking;
+            }
+            return tmp;
+        }
+        set
+        {
+            lock (mWorkerThreadLockHandle)
+            {
+                mContinueWorking = value;
+            }
+        }
+    }
+
+
     internal BodyFrameBuffer BodyFrameBuffer
     {
         get
@@ -77,8 +100,9 @@ public class BodyFrameThread : ThreadedJob
 
     public override void Start()
     {
+        ContinueWorking = true;
         base.Start();
-        mContinueWorking = true;
+       
     }
     public void PauseWorker()
     {
@@ -126,11 +150,11 @@ public class BodyFrameThread : ThreadedJob
     private void RecordingTask()
     {
         int vBodyFrameIndex = 0;
-        while (mContinueWorking)
+        while (ContinueWorking)
         {
             while (true)
             {
-                if (!mContinueWorking)
+                if (!ContinueWorking)
                 {
                     break;
                 }
@@ -151,7 +175,7 @@ public class BodyFrameThread : ThreadedJob
                 }
                 catch (Exception e)
                 {
-                    mContinueWorking = false;
+                    //ContinueWorking = false;
                     UnityEngine.Debug.Log(e.StackTrace);
                     break;
                 }
@@ -169,7 +193,7 @@ public class BodyFrameThread : ThreadedJob
         while (true)
         {
 
-            if (!mContinueWorking)
+            if (!ContinueWorking)
             {
                 //finished working
                 break;
@@ -221,7 +245,7 @@ public class BodyFrameThread : ThreadedJob
 
     public void StopThread()
     {
-        mContinueWorking = false;
+        ContinueWorking = false;
     }
     /**
     * OnFinished()

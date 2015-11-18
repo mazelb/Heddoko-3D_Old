@@ -20,7 +20,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
         private BodyFrameBuffer mInputBuffer;  //buffer 
         private TrackingBuffer mOutputBuffer;
         private Body mBody;
-        
+        private object mWorkerThreadLockHandle = new object();
         private List<BodyRawFrame> mRawFrames;
         private bool mContinueWorking;
         private bool mPauseWorker;
@@ -41,12 +41,34 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
         }
 
         #endregion
+
+        #region properties
+        public bool ContinueWorking
+        {
+            get
+            {
+                bool tmp;
+                lock (mWorkerThreadLockHandle)
+                {
+                    tmp = mContinueWorking;
+                }
+                return tmp;
+            }
+            set
+            {
+                lock (mWorkerThreadLockHandle)
+                {
+                    mContinueWorking = value;
+                }
+            }
+        }
+        #endregion
         #region polymorphic functions
 
         public override void Start()
         {
+            ContinueWorking = true;
             base.Start();
-            mContinueWorking = true;
         }
 
         public void PauseWorker()
@@ -61,11 +83,11 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
         */
         protected override void ThreadFunction()
         {
-            while (mContinueWorking)
+            while (ContinueWorking)
             {
                 while (mInputBuffer.Count > 0)
                 {
-                    if (!mContinueWorking)
+                    if (!ContinueWorking)
                     {
                         break;
                     }
@@ -102,7 +124,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
 
         public void StopThread()
         {
-            mContinueWorking = false;
+            ContinueWorking = false;
         }
         /**
         * OnFinished()

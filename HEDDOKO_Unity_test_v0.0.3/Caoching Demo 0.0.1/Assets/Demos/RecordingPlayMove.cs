@@ -31,8 +31,10 @@ namespace Assets.Demos
         public Button ResetButton; 
         public float PauseThreadTimer = 1f;
         private float mInternalTimer = 1f;
-        private bool mResetRoutStarted = false; // pause thread routine started
+        private bool mResetRoutineStarted = false; // pause thread routine started
         private string mBodyRecordingUUID;
+ 
+
         #region unity functions
         /**
         * Start 
@@ -44,10 +46,22 @@ namespace Assets.Demos
         void Start()
         {
             BodyFramesRecording vRec =  BodySelectedInfo.Instance.CurrentSelectedRecording;
-            mBodyRecordingUUID = vRec.BodyRecordingGuid;
-            mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+            if (vRec != null)
+            {
+                mBodyRecordingUUID = vRec.BodyRecordingGuid;
+                mBodyRecordingUUID = vRec.BodyRecordingGuid;
+                mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+            }
+        
             PlayButton.onClick.AddListener(Play);
             ResetButton.onClick.AddListener(ResetInitialFrame);
+            BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
+ 
+        }
+
+        void OnDisable()
+        {
+            BodySelectedInfo.Instance.BodyRecordingChangedEvent -= ListenToBodyRecordingsChange;
         }
         #endregion
         /**
@@ -86,13 +100,13 @@ namespace Assets.Demos
 
         private IEnumerator StartCountdown()
         {
-            if (mResetRoutStarted)
+            if (mResetRoutineStarted)
             {
                 mInternalTimer += PauseThreadTimer; //if this has already started, just add to the timer and then exit
                 yield break;
             }
             mInternalTimer = PauseThreadTimer;
-            mResetRoutStarted = true;
+            mResetRoutineStarted = true;
             ChangePauseState();
             while (true)
             {
@@ -104,8 +118,24 @@ namespace Assets.Demos
                 yield return null;
             }
             ChangePauseState();
-            mResetRoutStarted = false;
+            mResetRoutineStarted = false;
         }
+
+        private void ListenToBodyRecordingsChange()
+        {
+            PlayButton.gameObject.SetActive(true);
+            if (mBody != null)
+            {
+
+                mBody.StopThread();
+                mBody.View.ResetInitialFrame();
+            } 
+            BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
+            mBodyRecordingUUID = vRec.BodyRecordingGuid;
+            mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+            mPlayButtonPushed = false;
+        }
+ 
 
     }
 }

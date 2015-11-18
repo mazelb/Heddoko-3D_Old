@@ -532,6 +532,12 @@
         <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.UnwrapByteArray">
             <summary>Sets the shim of HeddokoPacket.Unwrap(Byte[] vBytes)</summary>
         </member>
+        <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.UnwrapRemovedCommandString">
+            <summary>Sets the shim of HeddokoPacket.UnwrapRemovedCommand(String vWrappedString)</summary>
+        </member>
+        <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.UnwrapString">
+            <summary>Sets the shim of HeddokoPacket.Unwrap(String vWrappedString)</summary>
+        </member>
         <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.WrapHeddokoPacket">
             <summary>Sets the shim of HeddokoPacket.Wrap(HeddokoPacket vPacket)</summary>
         </member>
@@ -595,6 +601,33 @@
         <member name="P:HeddokoLib.networking.Fakes.StubHeddokoPacket.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
+        <member name="T:HeddokoLib.utils.Fakes.ShimConversionTools">
+            <summary>Shim type of HeddokoLib.utils.ConversionTools</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimConversionTools.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimConversionTools.#ctor(HeddokoLib.utils.ConversionTools)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:HeddokoLib.utils.Fakes.ShimConversionTools.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimConversionTools.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimConversionTools.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.ShimConversionTools.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.ShimConversionTools.Constructor">
+            <summary>Sets the shim of ConversionTools.ConversionTools()</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.ShimConversionTools.ConvertHexStringToFloatString">
+            <summary>Sets the shim of ConversionTools.ConvertHexStringToFloat(String vHexVal)</summary>
+        </member>
         <member name="T:HeddokoLib.utils.Fakes.ShimHeddokoCommands">
             <summary>Shim type of HeddokoLib.utils.HeddokoCommands</summary>
         </member>
@@ -615,6 +648,24 @@
         </member>
         <member name="P:HeddokoLib.utils.Fakes.ShimHeddokoCommands.StaticConstructor">
             <summary>Sets the shim of HeddokoCommands.HeddokoCommands()</summary>
+        </member>
+        <member name="T:HeddokoLib.utils.Fakes.StubConversionTools">
+            <summary>Stub type of HeddokoLib.utils.ConversionTools</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.StubConversionTools.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubConversionTools.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.StubConversionTools.InitializeStub">
+            <summary>Initializes a new instance of type StubConversionTools</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubConversionTools.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubConversionTools.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
         </member>
         <member name="T:Microsoft.QualityTools.Testing.Fakes.Delegates.HeddokoLibDelegates">
             <summary>Contains custom delegates used for the stubs and shims of HeddokoLib</summary>

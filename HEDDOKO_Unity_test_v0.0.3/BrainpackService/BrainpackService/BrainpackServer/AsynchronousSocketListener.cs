@@ -109,7 +109,7 @@ namespace BrainpackService.BrainpackServer
                 vState.mStringBuilder.Append(PacketSetting.Encoding.GetString(vState.Buffer, 0, bytesRead));
                 //check for EOF tag, if not there read more data
                 vContent = vState.mStringBuilder.ToString();
-                if (vContent.IndexOf(PacketSetting.EndOfLine) > -1)
+                if (vContent.IndexOf(PacketSetting.EndOfPacketDelim) > -1)
                 {
                     byte[] vData = vState.Buffer;
                     //first 4 bytes are the command codes
