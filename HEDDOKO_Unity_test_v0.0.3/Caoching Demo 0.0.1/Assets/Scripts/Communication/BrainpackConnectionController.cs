@@ -12,9 +12,7 @@ namespace Assets.Scripts.Communication
 {
     /**
     * BrainpackConnectionController class that controls the connection to the heddoko body suit
-    * @brief BrainpackConnectionModule class that 
-    * @note something 
-
+    * @brief BrainpackConnectionModule class that  
     */
     public class BrainpackConnectionController : MonoBehaviour
     {

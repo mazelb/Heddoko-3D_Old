@@ -53,6 +53,7 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.RequestToConnectToBP, BrainpackDeviceConnectionRequest);
             mCommand.Register(HeddokoCommands.SendBPData, ReRouteRawFrameData);
             mCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData);
+            mCommand.Register(HeddokoCommands.ConnectionAck, ConnectionAcknowledged);
         }
         /**
         * Process(object vSender, HeddokoPacket vPacket)
@@ -76,6 +77,16 @@ namespace Assets.Scripts.Communication
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket);
              ClientSocket.SendMessage(vOutBound);
+        }
+
+        /// <summary>
+        /// Connection has been acknowledged by the brainpack server
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
+        private void ConnectionAcknowledged(object vSender, object vArgs)
+        {
+            //todo: send message to interested parties that need to know if the brainpack connection is finished
         }
         /**
        * BrainpackListRxRequest(object vSender, object vArgs) 

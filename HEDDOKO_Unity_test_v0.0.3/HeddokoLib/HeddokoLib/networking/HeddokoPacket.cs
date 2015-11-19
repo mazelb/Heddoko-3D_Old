@@ -7,7 +7,8 @@
 
 */
 
-using System; 
+using System;
+using System.Net.Sockets;
 using System.Text;
 using HeddokoLib.utils;
 
@@ -24,7 +25,13 @@ namespace HeddokoLib.networking
        
         public byte[]  Payload;
         public string Command;
+        public Socket Socket;
 
+        public HeddokoPacket()
+        {
+            Payload = new byte[1024];
+            
+        }
         public HeddokoPacket(string vCommand, byte[] vPayload)
         {
             Command = vCommand;

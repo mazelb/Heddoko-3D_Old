@@ -39,7 +39,11 @@ namespace BrainpackService.BrainpackServer
                 return sInstance;
             }
         }
+
         private Command mHeddokoCommand = new Command();
+
+        private BrainpackServer mServer;
+        public BrainpackServer ServerConnection { set { mServer = value; } }
         /**
        * BeginRegistration 
        * @brief Begins command delegate registration. Please see documentation for HeddokoCommand for further information on what each numerical value 
@@ -55,7 +59,7 @@ namespace BrainpackService.BrainpackServer
             mHeddokoCommand.Register(HeddokoCommands.CloseConnectionToServer, CloseSocketToServer);
             mHeddokoCommand.Register(HeddokoCommands.SendBPData, SendBrainPackData);
             mHeddokoCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData);
-
+            mHeddokoCommand.Register(HeddokoCommands.RequestConnection, RequestConnectionToServer);
         }
         /// <summary>
         /// Sends a frame of brain pack data back to the sender
@@ -71,6 +75,27 @@ namespace BrainpackService.BrainpackServer
             AsynchronousSocketListener.Send(vSocket, vHeddokoPacket.Payload);
         }
         /// <summary>
+        /// Sends a message that the request has been ack
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
+        private void RequestConnectionToServer(object vSender, object vArgs)
+        {
+            if (mServer.IsConnected())
+            {
+                Socket vSocket = (Socket) vSender;
+                string vAckCmd = HeddokoCommands.ConnectionAck;
+                StringBuilder vSb = new StringBuilder();
+                string vConnectionResult = "ack";
+               
+                vSb.AppendLine(vAckCmd);
+                vSb.Append(vConnectionResult);
+                vSb.Append(PacketSetting.EndOfPacketDelim);
+                mServer.Send(vSocket,vSb.ToString());
+                //string vWrapped = HeddokoPacket.Wrap(vResultPacket);
+            }
+        }
+        /// <summary>
         /// A client is requesting a frame of brain pack data
         /// </summary>
         /// <param name="vSender"></param>
@@ -78,11 +103,16 @@ namespace BrainpackService.BrainpackServer
         private void RequestBrainPackData(object vSender, object vArgs)
         { 
             Socket vSocket = (Socket)vSender; 
+            StringBuilder vSb = new StringBuilder();
+            vSb.AppendLine(HeddokoCommands.SendBPData); 
             string vPacketBody = BrainpackSerialConnector.Instance.GetNextFrame();
-            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SendBPData, vPacketBody);
+            vSb.AppendLine(vPacketBody);
+            vSb.Append(PacketSetting.EndOfPacketDelim);
+           //HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SendBPData, vPacketBody);
             //wrap the data and then send the data to (SendBrainPackData)
-            string vWrappedPacket = HeddokoPacket.Wrap(vHeddokoPacket);
-            AsynchronousSocketListener.Send(vSocket, vWrappedPacket);
+           // string vWrappedPacket = HeddokoPacket.Wrap(vHeddokoPacket);
+            //AsynchronousSocketListener.Send(vSocket, vWrappedPacket);
+            mServer.Send(vSocket,vSb.ToString() );
         }
 
 
