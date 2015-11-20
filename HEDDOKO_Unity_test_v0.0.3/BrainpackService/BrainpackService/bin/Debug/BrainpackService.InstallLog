@@ -939,3 +939,268 @@ Affected parameters are:
    logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
    assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
 Restoring event log to previous state for source BrainpackService.
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Warning: The source BrainpackService is not registered on the local machine.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Creating EventLog source BrainpackService in log Application...
+Rolling back assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Restoring event log to previous state for source BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Creating EventLog source BrainpackService in log Application...
+Rolling back assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Restoring event log to previous state for source BrainpackService.
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Warning: The source BrainpackService is not registered on the local machine.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Creating EventLog source BrainpackService in log Application...
+Rolling back assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Restoring event log to previous state for source BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Creating EventLog source BrainpackService in log Application...
+Rolling back assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Restoring event log to previous state for source BrainpackService.
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Attempt to stop service BrainpackService.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Uninstalling assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
+Installing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe

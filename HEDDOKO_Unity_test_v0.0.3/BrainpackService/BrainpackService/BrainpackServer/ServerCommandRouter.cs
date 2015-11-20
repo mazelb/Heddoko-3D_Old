@@ -103,16 +103,16 @@ namespace BrainpackService.BrainpackServer
         private void RequestBrainPackData(object vSender, object vArgs)
         { 
             Socket vSocket = (Socket)vSender; 
-            StringBuilder vSb = new StringBuilder();
-            vSb.AppendLine(HeddokoCommands.SendBPData); 
+         //   StringBuilder vSb = new StringBuilder();
+       //     vSb.AppendLine(HeddokoCommands.SendBPData); 
             string vPacketBody = BrainpackSerialConnector.Instance.GetNextFrame();
-            vSb.AppendLine(vPacketBody);
-            vSb.Append(PacketSetting.EndOfPacketDelim);
-           //HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SendBPData, vPacketBody);
+           // vSb.AppendLine(vPacketBody);
+       //        vSb.Append(PacketSetting.EndOfPacketDelim);
+          HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SendBPData, vPacketBody);
             //wrap the data and then send the data to (SendBrainPackData)
-           // string vWrappedPacket = HeddokoPacket.Wrap(vHeddokoPacket);
-            //AsynchronousSocketListener.Send(vSocket, vWrappedPacket);
-            mServer.Send(vSocket,vSb.ToString() );
+          string vWrappedPacket = HeddokoPacket.Wrap(vHeddokoPacket);
+          AsynchronousSocketListener.Send(vSocket, vWrappedPacket);
+         //   mServer.Send(vSocket,vSb.ToString() );
         }
 
 

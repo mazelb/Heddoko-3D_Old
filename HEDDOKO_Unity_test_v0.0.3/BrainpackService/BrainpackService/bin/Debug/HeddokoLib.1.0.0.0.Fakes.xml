@@ -520,6 +520,9 @@
         <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.Behavior">
             <summary>Assigns the behavior for all methods of the shimmed type</summary>
         </member>
+        <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.Constructor">
+            <summary>Sets the shim of HeddokoPacket.HeddokoPacket()</summary>
+        </member>
         <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.ConstructorByteArrayInt32">
             <summary>Sets the shim of HeddokoPacket.HeddokoPacket(Byte[] dataBytes, Int32 vCommandLength)</summary>
         </member>
@@ -540,6 +543,9 @@
         </member>
         <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.WrapHeddokoPacket">
             <summary>Sets the shim of HeddokoPacket.Wrap(HeddokoPacket vPacket)</summary>
+        </member>
+        <member name="P:HeddokoLib.networking.Fakes.ShimHeddokoPacket.WrapStringString">
+            <summary>Sets the shim of HeddokoPacket.Wrap(String vCommand, String vPayload)</summary>
         </member>
         <member name="T:HeddokoLib.networking.Fakes.ShimPacketSetting">
             <summary>Shim type of HeddokoLib.networking.PacketSetting</summary>
@@ -580,13 +586,16 @@
         <member name="T:HeddokoLib.networking.Fakes.StubHeddokoPacket">
             <summary>Stub type of HeddokoLib.networking.HeddokoPacket</summary>
         </member>
+        <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
         <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor(System.Byte[],System.Int32)">
             <summary>Initializes a new instance</summary>
         </member>
-        <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor(System.String,System.Byte[])">
+        <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor(System.String,System.String)">
             <summary>Initializes a new instance</summary>
         </member>
-        <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor(System.String,System.String)">
+        <member name="M:HeddokoLib.networking.Fakes.StubHeddokoPacket.#ctor(System.String,System.Byte[])">
             <summary>Initializes a new instance</summary>
         </member>
         <member name="P:HeddokoLib.networking.Fakes.StubHeddokoPacket.CallBase">
@@ -628,6 +637,30 @@
         <member name="P:HeddokoLib.utils.Fakes.ShimConversionTools.ConvertHexStringToFloatString">
             <summary>Sets the shim of ConversionTools.ConvertHexStringToFloat(String vHexVal)</summary>
         </member>
+        <member name="T:HeddokoLib.utils.Fakes.ShimGenericStateMachine">
+            <summary>Shim type of HeddokoLib.utils.GenericStateMachine</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimGenericStateMachine.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimGenericStateMachine.#ctor(HeddokoLib.utils.GenericStateMachine)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:HeddokoLib.utils.Fakes.ShimGenericStateMachine.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimGenericStateMachine.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.ShimGenericStateMachine.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.ShimGenericStateMachine.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.ShimGenericStateMachine.Constructor">
+            <summary>Sets the shim of GenericStateMachine.GenericStateMachine()</summary>
+        </member>
         <member name="T:HeddokoLib.utils.Fakes.ShimHeddokoCommands">
             <summary>Shim type of HeddokoLib.utils.HeddokoCommands</summary>
         </member>
@@ -665,6 +698,24 @@
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="P:HeddokoLib.utils.Fakes.StubConversionTools.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:HeddokoLib.utils.Fakes.StubGenericStateMachine">
+            <summary>Stub type of HeddokoLib.utils.GenericStateMachine</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.StubGenericStateMachine.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubGenericStateMachine.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:HeddokoLib.utils.Fakes.StubGenericStateMachine.InitializeStub">
+            <summary>Initializes a new instance of type StubGenericStateMachine</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubGenericStateMachine.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:HeddokoLib.utils.Fakes.StubGenericStateMachine.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
         <member name="T:Microsoft.QualityTools.Testing.Fakes.Delegates.HeddokoLibDelegates">
