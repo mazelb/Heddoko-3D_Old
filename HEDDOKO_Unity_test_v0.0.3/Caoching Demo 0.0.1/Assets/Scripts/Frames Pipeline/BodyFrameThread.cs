@@ -254,8 +254,7 @@ public class BodyFrameThread : ThreadedJob
                 int vStartIndex = 2;
                 int vEndIndex = 11;
                 int vBitmaskCheck = 0;
-                int vSetterIndex = 0; //is used to set vPreviouslyValid values indicies
-                BodyRawFrame vRawFrame = new BodyRawFrame();
+                int vSetterIndex = 0; //is used to set vPreviouslyValid values indicies 
                 for (int i = vStartIndex; i < vEndIndex; i++, vBitmaskCheck++, vSetterIndex++)
                 {
                     //get the bitmask and check if the sensors values are valid(not disconnected)
@@ -266,7 +265,8 @@ public class BodyFrameThread : ThreadedJob
                         float vYaw = ConversionTools.ConvertHexStringToFloat((v3data[0]));
                         float vPitch = ConversionTools.ConvertHexStringToFloat((v3data[1]));
                         float vRoll = ConversionTools.ConvertHexStringToFloat((v3data[2]));
-                        vPreviouslyValidValues[vSetterIndex] = new Vector3(vYaw, vPitch, vRoll);
+ 
+                        vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
                 BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
