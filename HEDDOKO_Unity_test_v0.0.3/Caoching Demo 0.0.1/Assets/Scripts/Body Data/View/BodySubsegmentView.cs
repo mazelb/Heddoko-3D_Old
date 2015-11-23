@@ -5,6 +5,8 @@
 * @date October 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
+using System;
 using UnityEngine; 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -67,7 +69,14 @@ namespace Assets.Scripts.Body_Data.view
        */
         internal void UpdateOrientation(Quaternion vNewOrientation)
         {
-            SubSegmentTransform.rotation = vNewOrientation; 
+            try
+            {
+                SubSegmentTransform.rotation = vNewOrientation;
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         /**

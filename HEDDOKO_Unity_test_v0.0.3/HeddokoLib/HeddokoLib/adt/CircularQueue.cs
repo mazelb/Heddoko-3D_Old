@@ -218,6 +218,7 @@ namespace HeddokoLib.adt
             }
             lock (mQueueLock)
             {
+                mQueue[mTailIndex] = vItem;
                 if (++mTailIndex == mCapacity)
                 {
                     mTailIndex = 0;
@@ -226,9 +227,9 @@ namespace HeddokoLib.adt
                 {
                     mCount++;
                 }
-                mQueue[mTailIndex] = vItem;
+                
             }
-            
+
         }
         /**
         * IsFull( )
@@ -290,7 +291,7 @@ namespace HeddokoLib.adt
                 }
                 mCount -= actualCount;
             }
-            
+
             return actualCount;
         }
 
@@ -316,7 +317,7 @@ namespace HeddokoLib.adt
                 }
                 mCount--;
             }
-           
+
             return item;
         }
         /**
@@ -380,7 +381,7 @@ namespace HeddokoLib.adt
                     vA[vArrayIndex] = mQueue[queueindex];
                 }
             }
-            
+
         }
 
         #endregion

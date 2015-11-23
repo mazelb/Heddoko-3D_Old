@@ -20,8 +20,8 @@ public class BodyFrame
     [SerializeField]
     //The frame of data populated to sensors 
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData; 
-    [SerializeField]
-    private List<Sensor> sensorData;
+  //  [SerializeField]
+  //  private List<Sensor> sensorData;
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
     {
           get
@@ -137,7 +137,7 @@ public class BodyFrame
 
     }
     /// <summary>
-    /// Converts a string received by the body frame server service into a bodyframe
+    /// Converts a string received by the Brainpack server service into a bodyframe
     /// </summary>
     /// <param name="vHexPacket"></param>
     /// <returns></returns>
@@ -157,6 +157,9 @@ public class BodyFrame
         BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
         for (int i = vStartIndex; i < vEndIndex; i++)
         {
+
+
+
             //first check if the current index falls on a position that can be interpreted as an int
             if (i%2 == 1)
             {
@@ -199,7 +202,22 @@ public class BodyFrame
         } 
         return vBodyFrame;
     }
-
+    /// <summary>
+    /// Creates a bodyframe from an array of vectors
+    /// </summary>
+    /// <param name="vBodyFrameData"></param>
+    /// <returns></returns>
+    public static BodyFrame CreateBodyFrame(Vector3[] vBodyFrameData)
+    {
+        BodyFrame vBodyFrame = new BodyFrame();
+        vBodyFrame.FrameData.Add(BodyStructureMap.SensorPositions.SP_LowerSpine, Vector3.zero);
+        for (int i = 0; i < vBodyFrameData.Length; i++)
+        {
+         BodyStructureMap.SensorPositions vSenPos=   ImuSensorFromPos(i);
+            vBodyFrame.FrameData.Add(vSenPos, vBodyFrameData[i]);
+        }
+        return vBodyFrame;
+    }
     /// <summary>
     /// Returns a sensor position fromt eh given position
     /// </summary>
@@ -277,4 +295,5 @@ public class BodyFrame
     
     
 #endregion
+ 
 }

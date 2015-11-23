@@ -91,7 +91,7 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                     {
                         break;
                     }
-                    if(  mPauseWorker || mOutputBuffer.IsFull() && !mOutputBuffer.AllowOverflow )
+                    if(  mPauseWorker || (mOutputBuffer.IsFull() && !mOutputBuffer.AllowOverflow )  )
                     {
                         continue;
                     }
@@ -99,6 +99,13 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                     { 
                         BodyFrame vProcessedBodyFrame = mInputBuffer.Dequeue();
                         mBody.CurrentBodyFrame = vProcessedBodyFrame;
+                        //check if the body has an initialframe set, if not set it
+                        if (mBody.InitialBodyFrame == null)
+                        { 
+                            // we need to tell the view that this initial frame has been set. wait until the next iteration before updating. 
+                            mBody.SafelySetInitialBodyFrame(vProcessedBodyFrame);
+                            continue;
+                        }
                         Dictionary<BodyStructureMap.SensorPositions, float[,]> vTrackedRotationMatrix =
                             Body.GetTracking( mBody);
                         mOutputBuffer.Enqueue(vTrackedRotationMatrix);

@@ -24,6 +24,8 @@ namespace HeddokoLib.utils
         public static string UseRecordingForBody = "0x12";
         public static string UseBrainpackForBody = "0x13";
         public static string StartSceneWithBrainpackConnect = "0x14";
+        public static string StopHeddokoUnityClient = "9x99";
+        public static string ClientError = "9x00";
 
         public static string ExtractCommandFromBytes(int vStartIndex, int vLength, byte[] vData)
         {

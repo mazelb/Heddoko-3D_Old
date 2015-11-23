@@ -14,8 +14,7 @@ using BrainpackService.brainpack_serial_connect;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 using InTheHand.Net;
-using InTheHand.Net.Sockets;
-using Command = BrainpackService.Tools_and_Utilities.Command;
+using InTheHand.Net.Sockets; 
 
 namespace BrainpackService.BrainpackServer
 {
@@ -43,7 +42,7 @@ namespace BrainpackService.BrainpackServer
         private Command mHeddokoCommand = new Command();
 
         private BrainpackServer mServer;
-        public BrainpackServer ServerConnection { set { mServer = value; } }
+       // public BrainpackServer ServerConnection { set { mServer = value; } }
         /**
        * BeginRegistration 
        * @brief Begins command delegate registration. Please see documentation for HeddokoCommand for further information on what each numerical value 

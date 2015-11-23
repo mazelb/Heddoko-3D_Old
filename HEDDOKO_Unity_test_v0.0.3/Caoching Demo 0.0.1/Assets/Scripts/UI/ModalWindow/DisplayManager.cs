@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 namespace Assets.Scripts.UI.MainScene
 {
+    /// <summary>
+    /// Display manager for the modal window
+    /// 
+    /// </summary>
    public  class DisplayManager : MonoBehaviour
     {
         public Text mDisplayText;

@@ -35,6 +35,10 @@ public class BodySegment
     * @param BodyFrame vFrame: the body frame containing the sensor data to be updated to the segment's sensors
     * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
     */
+    /// <summary>
+    /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
+    /// </summary>
+    /// <param name="vFrame"></param>
     public void UpdateSensorsData(BodyFrame vFrame)
     {
         //get the sensor 
@@ -67,7 +71,7 @@ public class BodySegment
     * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information
     */
     public void UpdateInitialSensorsData(BodyFrame vFrame)
-    { 
+    {
 
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
         foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
@@ -140,7 +144,7 @@ public class BodySegment
         float[,] vCurrentTorsoOrientation = new float[3, 3];
 
         Vector3 u = new Vector3(vTrackedTorsoOrientation[0, 1], vTrackedTorsoOrientation[1, 1], vTrackedTorsoOrientation[2, 1]);
-        vCurrentTorsoOrientation = MatrixTools.RVector(u,0f);
+        vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
         //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
         TorsoB3 = MatrixTools.multi(vCurrentTorsoOrientation, vTrackedTorsoOrientation);
 
@@ -313,12 +317,12 @@ public class BodySegment
         vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
-        
+
         //////////////////////////////ASSIGN TO SUBSEGMENT///////////////////////////
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
-    
+
     /**
     * MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     * @brief  Performs mapping on the left leg subsegment from the available sensor data
@@ -341,7 +345,7 @@ public class BodySegment
 
         float vOrientationError = 0;
         float vCompensationAngle = 0;
-        
+
         //Intermediate arrays until achieve final orientation for hip and knee, they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
 
         float[,] vHipOrientationMatrix = new float[3, 3];
@@ -488,7 +492,7 @@ public class BodySegment
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
-    
+
     /**
     * MapRightArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     * @brief  Updates the right arm subsegment from the available sensor data
@@ -661,7 +665,7 @@ public class BodySegment
     {
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftUpperArm];
         BodySubSegment vLASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftForeArm];
-        
+
         //Intermediate arrays until achieve final orientation for shoulder and elbow
         //they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
         // UpAr stands for upper arm sensor orientation and lower arm stands for lower arm (forearm) orientation
@@ -867,7 +871,7 @@ public class BodySegment
             subSegment.InitializeBodySubsegment(sstype);
             //BodySubSegments.Add(subSegment);
             BodySubSegmentsDictionary.Add((int)sstype, subSegment);
-            
+
             #region use of unity functions
 
             subSegment.AssociatedView.transform.parent = AssociatedView.transform;

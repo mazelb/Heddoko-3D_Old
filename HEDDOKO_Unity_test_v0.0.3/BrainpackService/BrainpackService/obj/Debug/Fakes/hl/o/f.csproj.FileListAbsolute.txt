@@ -1,0 +1,11 @@
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\HeddokoLib.1.0.0.0.Fakes.xml
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\HeddokoLib.1.0.0.0.Fakes.dll
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\HeddokoLib.1.0.0.0.Fakes.pdb
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\HeddokoLib.dll
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\InTheHand.Net.Personal.dll
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\Microsoft.QualityTools.Testing.Fakes.dll
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\HeddokoLib.pdb
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\b\InTheHand.Net.Personal.xml
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\f.csprojResolveAssemblyReference.cache
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\HeddokoLib.1.0.0.0.Fakes.dll
+C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\HeddokoLib.1.0.0.0.Fakes.pdb

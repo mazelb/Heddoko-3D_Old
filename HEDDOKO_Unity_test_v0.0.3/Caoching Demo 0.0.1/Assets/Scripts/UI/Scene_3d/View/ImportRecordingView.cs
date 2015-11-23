@@ -13,10 +13,12 @@ namespace Assets.Scripts.UI.Scene_3d.View
         public GameObject AvailableRecordingPanel;
         public GameObject AvailableRecordingButtonPrefab;
         private bool mImportCompleted;
+        /// <summary>
+        /// hides the current view from the scene(the button remains active)
+        /// </summary>
         public void Hide()
         {
-           // gameObject.SetActive(false);
-           // AvailableRecordingPanel.SetActive(false);
+            AvailableRecordingPanel.SetActive(false); 
         }
         public Button CurrentButton
         {
@@ -25,6 +27,9 @@ namespace Assets.Scripts.UI.Scene_3d.View
                 return gameObject.GetComponent<Button>();
             }
         }
+        /// <summary>
+        /// Shows the view in the scene 
+        /// </summary>
         public void Show()
         {
             if (!mImportCompleted)

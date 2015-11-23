@@ -9,8 +9,9 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using Assets.Scripts.Interfaces;
 using HeddokoLib.networking;
+using HeddokoLib.utils;
+using UnityEngine;
 
 
 namespace Assets.Scripts.Communication
@@ -18,9 +19,9 @@ namespace Assets.Scripts.Communication
     /**
     * SocketClient class 
     * @brief SocketClient class: a socket connection to the windows Brainpack service
-    * @note something 
+ 
     */
-
+    //TODO: need to check for forcible connection closes
     public class SocketClient
     {
         private TcpClient mSocket;
@@ -28,9 +29,6 @@ namespace Assets.Scripts.Communication
         StreamWriter mStreamWriter;
         StreamReader mStreamReader;
         private bool mSocketReady { get; set; }
-
-
-
         private bool mSocketOpen = false;
         private bool mIsWorking = false;
         private Thread mWorkerThread;
@@ -59,12 +57,42 @@ namespace Assets.Scripts.Communication
             }
             try
             {
-                mStreamWriter.Write(vMsg);
+                mStreamWriter.WriteLine(vMsg);
                 mStreamWriter.Flush();
             }
             catch (IOException e)
             {
-                UnityEngine.Debug.Log(e.Message);
+                string vMessage =
+                    "A connection to the Heddoko service failed. Please ensure that the service is operational and try again." +
+                    "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                    "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                    "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                    "---End of GetBaseException stacktrace---" +
+                    "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                    "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                    "---End of InnerException StackTrace---";
+                HeddokoPacket vPacket = new HeddokoPacket(HeddokoCommands.ClientError, vMessage);
+                PacketCommandRouter.Instance.Process(this, vPacket);
+            }
+            catch (NullReferenceException vNullReferenceException)
+            {
+                //this error occurs if the mstreamwriter hasn't been instantiated and most likely will occur because the socket failed
+                //to open a connection to the brainpack service. It was handled before
+                //todo: check if there are any other cases where this exception can be raised
+
+            }
+            catch (Exception e)
+            {
+                string vMessage =
+                       "A connection to the Heddoko service failed. Please ensure that the service is operational and try again." +
+                       "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                       "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                       "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                       "---End of GetBaseException stacktrace---" +
+                       "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                       "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                       "---End of InnerException StackTrace---";
+                UnityEngine.Debug.Log(vMessage);
             }
         }
 
@@ -89,9 +117,25 @@ namespace Assets.Scripts.Communication
                 mStreamReader = new StreamReader(mNetworkStream);
                 mSocketReady = true;
             }
+            catch (SocketException)
+            {
+                HeddokoPacket vPacket = new HeddokoPacket(HeddokoCommands.ClientError, "A connection to the Heddoko service failed. Please ensure that " +
+                                                                                       "the service is operational and try again.");
+                PacketCommandRouter.Instance.Process(this, vPacket);
+
+            }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log(e.Message);
+                /*                string vMessage =
+                                         "A connection to the Heddoko service failed. Please ensure that the service is operational and try again." +
+                                         "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                                         "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                                         "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                                         "---End of GetBaseException stacktrace---" +
+                                         "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                                         "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                                         "---End of InnerException StackTrace---";
+                                UnityEngine.Debug.Log(vMessage);*/
             }
         }
 
@@ -105,24 +149,49 @@ namespace Assets.Scripts.Communication
        * to the CommandRouter singleton. Closes the thread if no longer working
        *  
        */
+        int resetClientSocket = -1;
         public void ReadServerSocket()
         {
+            resetClientSocket++;
+            string debugcommand = "";
             while (true)
             {
-                if (mNetworkStream.DataAvailable)
+                
+                try
                 {
-                    string result = mStreamReader.ReadToEnd();
-                    byte[] vConverted = PacketSetting.Encoding.GetBytes(result);
-                    HeddokoPacket vPacket = new HeddokoPacket(vConverted, 4);
-                    string command = vPacket.Command;
-                    PacketCommandRouter.Instance.Process(command, vPacket);
-                    mSocketReady = false;
+                    if (mNetworkStream.DataAvailable)
+                    {
+                        string result = mStreamReader.ReadLine(); 
+                        if (!string.IsNullOrEmpty(result) && result.Contains("<EOL>"))
+                        { 
+                            byte[] vConverted = PacketSetting.Encoding.GetBytes(result);
+                            HeddokoPacket vPacket = new HeddokoPacket(vConverted, 4);
+                            string command = vPacket.Command;
+ 
+                            PacketCommandRouter.Instance.Process(command, vPacket); 
+                        }
+                        mSocketReady = false;
+                    }
+                    if (!mIsWorking)
+                    {
+                        CloseSocket();
+                        break;
+                    }
                 }
-                if (!mIsWorking)
+                catch (Exception e)
                 {
-                    CloseSocket();
-                    break;
+                    string vMessage ="Internal failure with  "+
+                       "  command" + debugcommand + ". Reset client times: "+ resetClientSocket+  " at Current time "+ DateTime.Now + 
+                       "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                       "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                       "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                       "---End of GetBaseException stacktrace---" +
+                       "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                       "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                       "---End of InnerException StackTrace---";
+                    UnityEngine.Debug.Log(vMessage);
                 }
+
             }
 
         }
@@ -170,6 +239,7 @@ namespace Assets.Scripts.Communication
         */
         public void Initialize(ISocketClientSetting vSettings)
         {
+            ClientSocketSettings = vSettings;
             mWorkerThread = new Thread(ReadServerSocket);
             OpenSocket();
         }
@@ -184,6 +254,7 @@ namespace Assets.Scripts.Communication
         {
             if (mWorkerThread != null)
             {
+                mIsWorking = true;
                 mWorkerThread.Start();
             }
         }

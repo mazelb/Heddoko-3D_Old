@@ -10,6 +10,7 @@ using Assets.Scripts.Body_Pipeline.Tracking;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Net;
+using Assets.Scripts.Utils.UnityUtilities;
 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -19,7 +20,7 @@ namespace Assets.Scripts.Body_Data.view
     */
     public class BodyView : MonoBehaviour
     {
-       
+
         //private BodyFrameBuffer mBuffer;
         private TrackingBuffer mBuffer;
         [SerializeField]
@@ -29,6 +30,7 @@ namespace Assets.Scripts.Body_Data.view
         private bool mIsPaused;
         [SerializeField]
         private bool mStartUpdating;
+        OutterThreadToUnityTrigger InitialFrameSetTrigger = new OutterThreadToUnityTrigger();
         /**
         * AssociatedBody
         * @param Internally set the Body associated to this view
@@ -80,17 +82,29 @@ namespace Assets.Scripts.Body_Data.view
         /**
         * SetInitialFrameToCurrent()
         * @brief sets the current frame to be the initial body frame
-        */
-
- 
+        */ 
+        /// <summary>
+        /// Reset the initial frame
+        /// </summary>
         public void ResetInitialFrame()
         {
             if (mAssociatedBody != null)
             {
-                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame); 
+                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
             }
         }
-
+        /// <summary>
+        /// Will be called on by an external thread in the case that the initial frame needs to be set 
+        /// </summary>
+        /// <param name="vInitialBodyframe">The initial bodyframe</param>
+        internal void SetInitialBodyFrame(BodyFrame vInitialBodyframe)
+        {
+            InitialFrameSetTrigger.Triggered = true;
+            InitialFrameSetTrigger.Args = vInitialBodyframe;
+        }
+        /// <summary>
+        /// pause the current frame
+        /// </summary>
         public void PauseFrame()
         {
             if (mAssociatedBody != null)
@@ -123,19 +137,23 @@ namespace Assets.Scripts.Body_Data.view
                 {
                     return;
                 }
-                if (mBuffer != null && mBuffer.Count>0 )
+                if (InitialFrameSetTrigger.Triggered)
                 {
-                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic  = mBuffer.Dequeue();
+                    InitialFrameSetTrigger.Reset();
+                    BodyFrame vInitBodyFrame = (BodyFrame) InitialFrameSetTrigger.Args;
+                    AssociatedBody.SetInitialFrame(vInitBodyFrame);
+                }
+                if (mBuffer != null && mBuffer.Count > 0)
+                {
+                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = mBuffer.Dequeue();
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
                     if (vDic != null)
                     {
                         Body.ApplyTracking(AssociatedBody, vDic);
-                    }
-                    
-                   
-                } 
-            } 
-        } 
+                    } 
+                }
+            }
+        }
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
@@ -143,18 +161,18 @@ namespace Assets.Scripts.Body_Data.view
          */
         private void Awake()
         {
-            if(name != "body view guid: e75115c356218d84fa35dbd8a3159284")
+            if (name != "body view guid: e75115c356218d84fa35dbd8a3159284")
             {
                 GameObject vGo = GameObject.FindGameObjectWithTag("debug");
-                if( vGo)
+                if (vGo)
                 {
                     Application.targetFrameRate = 10;
                     Debugger vDebugger = vGo.GetComponent<Debugger>();
                     vDebugger.View = this;
                 }
             }
-          
+
         }
- 
+
     }
 }

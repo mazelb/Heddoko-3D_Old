@@ -68,8 +68,8 @@ namespace Assets.Scripts.UI.Scene_3d.Controller
                         ShowMenuButton.gameObject.SetActive(false);
                         ExitMenuButton.gameObject.SetActive(true);
                         MainMenu.Show();
-                        ImportRecordingView.Show();
-                        ConnectToBrainPackPanel.Show();
+                        ImportRecordingView.Hide();
+                        ConnectToBrainPackPanel.Hide();
                     }
 
                     PlayRecordingButton.interactable = false; 

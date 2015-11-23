@@ -9,6 +9,7 @@
 
 using System;
 using System.Net.Sockets;
+using System.Security.Policy;
 using System.Text;
 using HeddokoLib.utils;
 
@@ -66,6 +67,7 @@ namespace HeddokoLib.networking
                 Array.Copy(dataBytes, vStartIndex, Payload, 0, vCopyLength); 
             }
         }
+ 
         /// <summary>
         /// Unwrap a byte array that is in the wrapped HeddokoPacket format
         /// </summary>
@@ -77,6 +79,8 @@ namespace HeddokoLib.networking
             vSb.Append(PacketSetting.Encoding.GetString(vBytes));
             string vUnwrappedString = vSb.ToString();
             vUnwrappedString= vUnwrappedString.Replace(PacketSetting.EndOfPacketDelim, null);
+
+            vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfCommandDelim + "", null);
             vUnwrappedString = vUnwrappedString.Replace("\r", null);
             vUnwrappedString = vUnwrappedString.Replace("\n", null); 
             vUnwrappedString = vUnwrappedString.TrimEnd((char) 0);
@@ -90,7 +94,8 @@ namespace HeddokoLib.networking
         public static string Unwrap(string vWrappedString)
         {
             string vUnwrappedString  =vWrappedString;
-            vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfPacketDelim, null);
+            vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfPacketDelim, null); 
+            vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfCommandDelim + "", null);
             vUnwrappedString = vUnwrappedString.Replace("\r", null);
             vUnwrappedString = vUnwrappedString.Replace("\n", null);
             vUnwrappedString = vUnwrappedString.TrimEnd((char)0);
@@ -106,6 +111,7 @@ namespace HeddokoLib.networking
         {
             string vUnwrappedString = vWrappedString;
             vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfPacketDelim, null);
+            vUnwrappedString = vUnwrappedString.Replace(PacketSetting.EndOfCommandDelim+"", null);
             vUnwrappedString = vUnwrappedString.Replace("\r", null);
             vUnwrappedString = vUnwrappedString.Replace("\n", null);
             vUnwrappedString = vUnwrappedString.TrimEnd((char)0);
@@ -119,8 +125,24 @@ namespace HeddokoLib.networking
         public static string Wrap(HeddokoPacket vPacket)
         {
             StringBuilder vSb = new StringBuilder();
-            vSb.AppendLine(vPacket.Command);
+            vSb.Append(vPacket.Command);
+            vSb.Append(PacketSetting.EndOfCommandDelim);
             vSb.Append(PacketSetting.Encoding.GetString(vPacket.Payload));
+            vSb.Append(PacketSetting.EndOfPacketDelim);
+            return vSb.ToString();
+        }
+        /// <summary>
+        /// Wraps a comman and payload for transmission
+        /// </summary>
+        /// <param name="vCommand">The command</param>
+        /// <param name="vPayload">The payload</param>
+        /// <returns></returns>
+        public static string Wrap(string vCommand, string vPayload)
+        {
+            StringBuilder vSb = new StringBuilder();
+            vSb.Append(vCommand);
+            vSb.Append(PacketSetting.EndOfCommandDelim);
+            vSb.Append(vPayload);
             vSb.Append(PacketSetting.EndOfPacketDelim);
             return vSb.ToString();
         }

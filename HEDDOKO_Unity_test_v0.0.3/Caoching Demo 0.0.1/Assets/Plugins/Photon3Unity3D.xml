@@ -141,7 +141,7 @@
         <member name="F:ExitGames.Client.Photon.PeerBase.ConnectionStateValue.Connecting">
             <summary>Establishing a connection already. The app should wait for a status callback.</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.PeerBase.ConnectionStateValue.Connected">
+        <member name="F:ExitGames.Client.Photon.PeerBase.ConnectionStateValue.IsConnected">
             <summary>
             The low level connection with Photon is established. On connect, the library will automatically
             send an Init package to select the application it connects to (see also PhotonPeer.Connect()).
@@ -548,7 +548,7 @@
             <summary>The connection is established and now sends the application name to Photon.</summary>
             <remarks>You set the "application name" by calling PhotonPeer.Connect().</remarks>
         </member>
-        <member name="F:ExitGames.Client.Photon.PeerStateValue.Connected">
+        <member name="F:ExitGames.Client.Photon.PeerStateValue.IsConnected">
             <summary>The peer is connected and initialized (selected an application). You can now use operations.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.PeerStateValue.Disconnecting">
@@ -595,7 +595,7 @@
         </member>
         <member name="T:ExitGames.Client.Photon.PhotonPeer">
             <summary>
-            Instances of the PhotonPeer class are used to connect to a Photon server and communicate with it.
+            mInstances of the PhotonPeer class are used to connect to a Photon server and communicate with it.
             </summary>
             <remarks>
             A PhotonPeer instance allows communication with the Photon Server, which in turn distributes messages

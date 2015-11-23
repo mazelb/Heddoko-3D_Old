@@ -10,6 +10,7 @@ namespace HeddokoLib.networking
     public static class PacketSetting
     {
         public static Encoding Encoding = Encoding.UTF8;
+        public static char EndOfCommandDelim = '$';
         public static string EndOfPacketDelim = "<EOL>";
         public static int PacketCommandSize = 4;
     }

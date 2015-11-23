@@ -8,8 +8,11 @@
 
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Communication;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
+using HeddokoLib.utils;
+using UnityEngine;
 
 /**
 * BodyFrameThread class 
@@ -23,9 +26,10 @@ public class BodyFrameThread : ThreadedJob
     private SourceDataType mDataSourceType;
     private List<BodyRawFrame> mRawFrames;
     private bool mContinueWorking;
-    private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>();
+    private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>(1024, true);
     private bool mPauseWorker;
     private object mWorkerThreadLockHandle = new object();
+    private Vector3[] vPreviouslyValidValues = new Vector3[9];
     #endregion
     #region properties
 
@@ -94,6 +98,24 @@ public class BodyFrameThread : ThreadedJob
     {
 
     }
+    /// <summary>
+    /// Preps the buffer to accept raw data from brainpacks
+    /// </summary>
+    /// <param name="vBuffer"></param>
+    public BodyFrameThread(BodyFrameBuffer vBuffer, SourceDataType vDataType)
+    {
+        this.mBuffer = vBuffer;
+        if (vDataType == SourceDataType.BrainFrame)
+        {
+            mBuffer.AllowOverflow = true;
+        }
+        if (vDataType == SourceDataType.Recording)
+        {
+            mBuffer.AllowOverflow = false;
+        }
+       
+        mDataSourceType = SourceDataType.BrainFrame;
+    }
 
     #endregion
     #region polymorphic functions
@@ -102,7 +124,7 @@ public class BodyFrameThread : ThreadedJob
     {
         ContinueWorking = true;
         base.Start();
-       
+
     }
     public void PauseWorker()
     {
@@ -167,7 +189,6 @@ public class BodyFrameThread : ThreadedJob
                     BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
-                    //todo: can set a flag for restarting this task over again
                     if (vBodyFrameIndex >= mRawFrames.Count) //reset back to 0
                     {
                         vBodyFrameIndex = 0;
@@ -176,7 +197,10 @@ public class BodyFrameThread : ThreadedJob
                 catch (Exception e)
                 {
                     //ContinueWorking = false;
-                    UnityEngine.Debug.Log(e.StackTrace);
+                    string vMessage = e.GetBaseException().Message;
+                    vMessage += "\n" + e.Message;
+                    vMessage += "\n" + e.StackTrace;
+                    UnityEngine.Debug.Log(vMessage);
                     break;
                 }
 
@@ -198,29 +222,69 @@ public class BodyFrameThread : ThreadedJob
                 //finished working
                 break;
             }
+
+            if (InboundSuitBuffer.Count == 0)
+            {
+                continue;
+            }
+            //  HeddokoPacket vOutboundPacket = new HeddokoPacket(HeddokoCommands.RequestBPData,"");
+            //     PacketCommandRouter.Instance.Process(this, vOutboundPacket);
+
+            HeddokoPacket vPacket = InboundSuitBuffer.Dequeue();
+            if (vPacket == null)
+            {
+                continue;
+            }
+            string vUnwrappedString = "";
             try
             {
-                HeddokoPacket vPacket = InboundSuitBuffer.Dequeue();
-                string vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
-                BodyRawFrame vRawFrame = new BodyRawFrame
+                bool vAllClear = false;
+                //first unwrap the string and break it down 
+                  vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
+                    //todo place a check here for valid data
+                string[] vExploded = vUnwrappedString.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                if (vExploded.Length < 12)
                 {
-                    RawFrameData = vUnwrappedString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                };
-                if (vRawFrame.RawFrameData.Length > 2)
-                {
-                    //todo: //the first column is the timestamp(int) and the second column is extra information. we just care about the remaining columns
-                    Array.Copy(vRawFrame.RawFrameData, 2, vRawFrame.RawFrameData, 0, vRawFrame.RawFrameData.Length - 2);
-
-                    //convert to bodyframe
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(vRawFrame);
+                    string s = " debug break;";
                 }
-
+                //the first value is a timestamp in int
+                int vTimeStamp = Convert.ToInt32(vExploded[0]);
+                //get the bitmask from index 1
+                Int16 vBitmask = Convert.ToInt16(vExploded[1], 16);
+                int vStartIndex = 2;
+                int vEndIndex = 11;
+                int vBitmaskCheck = 0;
+                int vSetterIndex = 0; //is used to set vPreviouslyValid values indicies
+                BodyRawFrame vRawFrame = new BodyRawFrame();
+                for (int i = vStartIndex; i < vEndIndex; i++, vBitmaskCheck++, vSetterIndex++)
+                {
+                    //get the bitmask and check if the sensors values are valid(not disconnected)
+                    if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck)) //data is valid 
+                    {
+                        //conversion happens here, todo: place a check here for invalid data(less than 4 bytes in length
+                        string[] v3data = vExploded[i].Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                        float vYaw = ConversionTools.ConvertHexStringToFloat((v3data[0]));
+                        float vPitch = ConversionTools.ConvertHexStringToFloat((v3data[1]));
+                        float vRoll = ConversionTools.ConvertHexStringToFloat((v3data[2]));
+                        vPreviouslyValidValues[vSetterIndex] = new Vector3(vYaw, vPitch, vRoll);
+                    }
+                }
+                BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
+                BodyFrameBuffer.Enqueue(vBodyFrame);
             }
-            catch (EmptyCircularQueueException vECQx)
+            catch (IndexOutOfRangeException)
             {
-                //this error is fine, continue
+                string vExcMsg = "IndexOutOfRangeException in BodyFrameThread. Contents of vUnwrappedString are " +
+                                 vUnwrappedString;
             }
-
+            catch (Exception e)
+            {
+                string vExcMsg = e.Message + "\n" + e.GetBaseException() + "\n" + e.StackTrace;
+                UnityEngine.Debug.Log(vExcMsg);
+                continue;
+            }
+        
+           
         }
     }
     /**

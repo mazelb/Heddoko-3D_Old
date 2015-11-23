@@ -12,6 +12,7 @@ using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
 using System.Linq;
 using Assets.Scripts.Body_Pipeline.Tracking;
+using Assets.Scripts.Communication.Controller;
 
 /**
 * Body class 
@@ -185,6 +186,7 @@ public class Body
     */
     public void PlayRecording(string vRecUUID)
     {
+        StopThread();//Stops the current thread from running.
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
         BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
@@ -200,7 +202,7 @@ public class Body
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
             mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
             //get the first frame and set it as the initial frame
-           
+
             View.Init(this, vBuffer2);
             mBodyFrameThread.Start();
             mTrackingThread.Start();
@@ -211,24 +213,92 @@ public class Body
     * StreamFromBrainpack( )
     * @param Set the body to be ready to play from brainpack
     * @brief  Play a recording from the given recording UUID. 
-    */
+    */ 
     /// <summary>
-    /// 
+    /// Start stream from brainpack
     /// </summary>
     public void StreamFromBrainpack()
     {
 
+        // ===================== How this function works ==================================================================//
+        //when trying to connect to the brain pack, first we need to ensure that 
+        //1. the brainpack can be connected to 
+        //1a.   once we can establish a connection, we need to find a way to get the latest data. This is ensured by the server
+        //      which clears out the buffer on any new connections.
+        //1b.   once condition 1a is met, plug the body frame thread into the brainpack connector. The connector 
+        //      then feeds data into the BodyFramethread.
+        //1c.   in case of failure, a message must be brought into the view. and immediately pause the connection.  
+        // ===================== End of "How this functions works" ========================================================//
+        //stop the current thread and get ready for a new connection. 
+        StopThread(); 
+        
+        BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
+        TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
+        mBodyFrameThread = new BodyFrameThread(vBuffer1 , BodyFrameThread.SourceDataType.BrainFrame);
+        mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
+        View.Init(this, vBuffer2);
+        mBodyFrameThread.Start();
+        mTrackingThread.Start();
+        View.StartUpdating = true;
+
+        //1 inform the brainpack connection controller to establish a new connection
+        //1i: Listen to the event that the brainpack has been disconnected
+        BrainpackConnectionController.DisconnectedStateEvent += BrainPackStreamDisconnectedListener;
+        bool vRegisteredEvent = false;
+        //1ii: check if the controller already is already connected. 
+        if (BrainpackConnectionController.Instance.ConnectionState == BrainpackConnectionState.Connected)
+        {
+            BrainPackStreamReadyListener();
+            vRegisteredEvent = true;
+        }
+        if (!vRegisteredEvent)
+        {
+            BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
+            BrainpackConnectionController.ConnectedStateEvent += BrainPackStreamReadyListener;
+        }
+        //check if the event has already been registered  
+    }
+    /**
+    * BrainPackStreamReadyListener( ) 
+    * @brief   Listener whos responsibility is to plug the bodyframe thread into controller.
+    */
+    /// <summary>
+    /// Listener whos responsibility is to plug the bodyframe thread into controller.
+    /// </summary>
+    private void BrainPackStreamReadyListener()
+    {
+        BrainpackConnectionController.Instance.ReadyToLinkBodyToBP(mBodyFrameThread);
+    }
+
+    /**
+    * BrainPackStreamDisconnectedListener( ) 
+    * @brief Listens to when the brainpack controller has been disconnected from the brainpack
+    */
+    /// <summary>
+    /// Listens to when the brainpack controller has been disconnected from the brainpack
+    /// </summary>
+    private void BrainPackStreamDisconnectedListener()
+    {
+        StopThread();
+        //remove listeners
+        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
+        //1ii: Listen to the event that the brainpack has been disconnected
+        BrainpackConnectionController.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
     }
     /**
     * ApplyTracking(Body vBody)
     * @param Body vBody: The body to apply tracking to. 
     * @brief  Applies tracking on the requested body. 
     */
+    /// <summary>
+    /// Applies tracking on the requested body. 
+    /// </summary>
+    /// <param name="vBody">Body vBody: The body to apply tracking to. </param> 
     public static void ApplyTracking(Body vBody)
     {
         //get a collection of transformation matrices
         Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = GetTracking(vBody);
-        //get the list of segments of the speicied vBody
+        //get the list of segments of the specified vBody
         List<BodySegment> vListBodySegments = vBody.BodySegments;
         foreach (BodySegment vBodySegment in vListBodySegments)
         {
@@ -257,7 +327,7 @@ public class Body
     */
     public static void ApplyTracking(Body vBody, Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic)
     {
-        //get the list of segments of the speicied vBody
+        //get the list of segments of the speicfied vBody
         List<BodySegment> vListBodySegments = vBody.BodySegments;
         foreach (BodySegment vBodySegment in vListBodySegments)
         {
@@ -287,14 +357,14 @@ public class Body
     public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetTracking(Body vBody)
     {
         Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
-        //from the current frame, get the list of keys and apply the tracking algorithm on individual subframes
+
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
         for (int i = 0; i < vKeyList.Count; i++)
         {
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
- 
+
             //get the current value
 
             if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
@@ -302,7 +372,7 @@ public class Body
                 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
                 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
             }
- 
+
 
             Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);
             Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.x, vCurrentRawEuler.y, vCurrentRawEuler.z);
@@ -336,15 +406,15 @@ public class Body
         //TODO: 
     }
 
-   /**
-   * StopThread() 
-   * @brief  Stops the current thread and tells the view to stop playback
-   */
+    /**
+    * StopThread() 
+    * @brief  Stops the current thread and tells the view to stop playback
+    */
     /// <summary>
     /// Stops the current thread and tells the view to stop playback
     /// </summary>
     internal void StopThread()
-    { 
+    {
         if (mBodyFrameThread != null)
         {
             mBodyFrameThread.StopThread();
@@ -355,10 +425,16 @@ public class Body
         }
         if (View != null)
         {
-            View.StartUpdating = false; 
+            View.StartUpdating = false;
         }
     }
-
+    /**
+    * StopThread() 
+    * @brief Pause all worker threads that are current working on the body
+    */
+    /// <summary>
+    /// Pause all worker threads that are current working on the body
+    /// </summary>
     internal void PauseThread()
     {
         if (mBodyFrameThread != null)
@@ -375,10 +451,17 @@ public class Body
 
 
     #endregion
-
-
-
-
-
-
+    /**
+    * StopThread() 
+    * @brief  Will be called on by an external thread in the case that the initial frame needs to be set 
+    * @param BodyFrame vProcessedBodyFrame The processed body frame to be set as the initial bodyframe
+    */
+    /// <summary>
+    /// Will be called on by an external thread in the case that the initial frame needs to be set 
+    /// </summary>
+    /// <param name="vProcessedBodyFrame">The processed body frame to be set as the initial bodyframe</param>
+    public void SafelySetInitialBodyFrame(BodyFrame vProcessedBodyFrame)
+    {
+        View.SetInitialBodyFrame(vProcessedBodyFrame);
+    }
 }
