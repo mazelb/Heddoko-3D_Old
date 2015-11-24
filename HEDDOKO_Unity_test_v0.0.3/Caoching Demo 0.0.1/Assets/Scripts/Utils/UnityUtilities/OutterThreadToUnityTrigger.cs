@@ -16,11 +16,14 @@ namespace Assets.Scripts.Utils.UnityUtilities
             Triggered = false;
             InterestedVariable = false;
         }
-
-        public void Trigger(bool vPlaceholdername)
+        /// <summary>
+        /// The object has been triggered and the vVariableOfInterest has been set.
+        /// </summary>
+        /// <param name="vVariableOfInterest"></param>
+        public void Trigger(bool vVariableOfInterest)
         {
             Triggered = true;
-            InterestedVariable = vPlaceholdername;
+            InterestedVariable = vVariableOfInterest;
         }
     }
 }
