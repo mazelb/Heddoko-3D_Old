@@ -384,6 +384,19 @@ public class Body
         }
         return vDic;
     }
+    /**
+    * GetFusion(Body vBody)
+    * @brief  Apply adjustments to the 9 joints in order to increase precision and reliabilitie of the transforms.  
+    * @return Returns a dictionary and their respective   transformation matrix
+    */
+    public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetFusion(Body vBody)
+    {
+
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
+
+
+        return vDic;
+    }
 
     /**
     *  GetSegmentFromSegmentType(BodyStructureMap.SegmentTypes vSegmentType)

@@ -19,7 +19,9 @@ public class BodyFrame
 {
     [SerializeField]
     //The frame of data populated to sensors 
-    private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData; 
+    private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData;
+
+    private float mTimeStamp;//The timestamp of a bodybody frame 
   //  [SerializeField]
   //  private List<Sensor> sensorData;
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
@@ -36,6 +38,12 @@ public class BodyFrame
         {
             mFrameData = value;
         }
+    }
+
+    internal float Timestamp
+    {
+        get { return mTimeStamp; }
+        set { mTimeStamp = value; } 
     }
 
 
@@ -71,6 +79,9 @@ public class BodyFrame
     */
     public static BodyFrame ConvertRawFrame(BodyRawFrame rawData)
     {
+        float vTimestamp = 0;
+        float.TryParse(rawData.RawFrameData[0], out vTimestamp);
+        
         //from startIndex to endIndex, we check the subframes and extrapolate the IMU data. 
         int vStartIndex= 1;
         int vEndIndex = 20;
@@ -78,8 +89,9 @@ public class BodyFrame
         int vCheckIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
         bool vFinishLoop = false;
         BodyFrame vBodyFrame = new BodyFrame();
+        vBodyFrame.Timestamp = vTimestamp;
         Vector3 vPlaceholderV3 = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
-        float[,] vPlaceholderMat = new float[3, 3];
+      
         int key = 0;
         BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
         for (int i = vStartIndex; i < vEndIndex; i++)

@@ -219,13 +219,13 @@ namespace Assets.Demos
             if (CurrentBodyInPlay != null)
             {
                 CurrentBodyInPlay.StopThread();
-                CurrentBodyInPlay.View.ResetInitialFrame();
+             //   CurrentBodyInPlay.View.ResetInitialFrame();
             }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             mBodyRecordingUUID = vRec.BodyRecordingGuid;
             CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
             mPlayButtonPushed = false;
-            ChangeState(BodyPlaybackState.PlayingRecording);
+            ChangeState(BodyPlaybackState.Waiting);
         }
         /// <summary>
         /// Listens to when the brainpackcontroller is in a connected state
