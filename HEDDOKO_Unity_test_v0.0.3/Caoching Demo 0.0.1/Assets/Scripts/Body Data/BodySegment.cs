@@ -541,15 +541,21 @@ public class BodySegment
             // finding compensated yaw axis of lower arm in one plane with upper arm
             float temp1, temp2, temp3, temp4;
             temp1 = vLoArB2[0, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[0, 2];
+            //Debug.Log("temp1 " + temp1);
             temp2 = vLoArB2[1, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[1, 2];
+            //Debug.Log("temp2 " + temp2);
             temp3 = vLoArB2[2, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[2, 2];
+            //Debug.Log("temp3 " + temp3);
             temp4 = (float)Math.Sqrt((float)(temp1 * temp1 + temp2 * temp2 + temp3 * temp3));
+            //Debug.Log("temp4 " + temp4);
             Vector3 yawLoAr = new Vector3(temp1 / temp4, temp2 / temp4, temp3 / temp4);
+            //Debug.Log("yawLoAr " + yawLoAr);
 
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
-            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
-            //print("CompensationAngle"+CompensationAngle);
+            //Debug.Log("vOrientationError " + vOrientationError);
+            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : (1-vOrientationError));
+            //Debug.Log("CompensationAngle "+ vCompensationAngle);
             //CompensationAngle = 0;
             // Finding yaw compensation axis
             Vector3 yawLoAr2 = new Vector3(vLoArB2[0, 1], vLoArB2[1, 1], vLoArB2[2, 1]);
@@ -719,6 +725,7 @@ public class BodySegment
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
             vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
+            //Debug.Log("LEFT CompensationAngle " + vCompensationAngle);
 
             // Finding yaw compensation axis
             Vector3 yawLoAr2 = new Vector3(vLoArB2[0, 1], vLoArB2[1, 1], vLoArB2[2, 1]);
@@ -948,6 +955,35 @@ public class BodySegment
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
         {
             MapLeftLegSegment(vFilteredDictionary);
+        }
+    }
+
+    /**
+    * private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
+    * @brief Perform mapping on the current segments and its respective subsegments 
+    * @param 
+    */
+    private void CalculateSubSegmentsAngles(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
+    {
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
+        {
+            //CalculateTorsoSegmentAngles(vFilteredDictionary);
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
+        {
+            //CalculateRightArmSubsegmentAngles(vFilteredDictionary);
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
+        {
+            //CalculateLeftArmSubsegmentAngles(vFilteredDictionary);
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
+        {
+            //CalculateRightLegSegmentAngles(vFilteredDictionary);
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
+        {
+            //CalculateLeftLegSegmentAngles(vFilteredDictionary);
         }
     }
     #endregion

@@ -7,7 +7,8 @@
 */
 
 using System;
-using UnityEngine; 
+using System.Collections.Generic;
+using UnityEngine;
 namespace Assets.Scripts.Body_Data.view
 {
     /**
@@ -16,36 +17,9 @@ namespace Assets.Scripts.Body_Data.view
     */
     public class BodySubsegmentView : MonoBehaviour
     {
-        #region fields
         //the transforms required to transform
-  
-        public Transform vSubSegmentTransform;
-      //  public Transform vSubSegmentInitialTransform;
-        private Quaternion vSubSegmentInitialOrientation;
-
         public BodySubSegment AssociatedSubSegment;
-        #endregion
-        #region properties
-        /**
-        * JointTransform
-        * @param 
-        * @brief The joint transform associated with this subsegment view, if not assigned, calls on the AssignTransform helper function
-        * @return returns the Transform associated with this body
-        */
-        public Transform SubSegmentTransform
-        {
-            get
-            {
-                if (vSubSegmentTransform == null)
-                {
-                    AssignTransform();
-                }
-                return vSubSegmentTransform;
-            }
-            set { vSubSegmentTransform = value; }
-        }
-  
-        #endregion
+        public List<Transform> SubSegmentTransforms = new List<Transform>();
 
         /**
         * View
@@ -54,24 +28,44 @@ namespace Assets.Scripts.Body_Data.view
         * @note: a new gameobject is created and this Body is added into it as a component
         * @return returns the view associated with this body
         */
-        public void AssignTransform()
+        public void AssignTransforms()
         {
             //find the object in the scene with the tag
-            GameObject vGameObject = GameObject.FindWithTag(gameObject.name);
-            vSubSegmentTransform = vGameObject.transform;
-            //vSubSegmentInitialTransform = vSubSegmentTransform;
+            GameObject[] vGameObjects = GameObject.FindGameObjectsWithTag(gameObject.name);
+            foreach (GameObject vObj in vGameObjects)
+            {
+                Transform vTransform = vObj.transform;
+
+                SubSegmentTransforms.Add(vTransform);
+            }
+        }
+
+        public void ApplyTransformations(Quaternion vNewOrientation)
+        {
+            foreach (Transform vObjTransform in SubSegmentTransforms)
+            {
+                vObjTransform.rotation = vNewOrientation;
+            }
+        }
+
+        public void ResetOrientations()
+        {
+            foreach (Transform vObjTransform in SubSegmentTransforms)
+            {
+                vObjTransform.rotation = Quaternion.identity;
+            }
         }
 
         /**
-       * UpdateOrientation(Quaternion vNewOrientation)
-       * @param Quaternion vNewOrientation: the new orientation of the subsegment
-       * @brief Updates the current orientation with the passed in parameter
-       */
+        * UpdateOrientation(Quaternion vNewOrientation)
+        * @param Quaternion vNewOrientation: the new orientation of the subsegment
+        * @brief Updates the current orientation with the passed in parameter
+        */
         internal void UpdateOrientation(Quaternion vNewOrientation)
         {
             try
             {
-                SubSegmentTransform.rotation = vNewOrientation;
+                ApplyTransformations(vNewOrientation);
             }
             catch (Exception)
             {
@@ -85,18 +79,20 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void ResetOrientation()
         {
-            SubSegmentTransform.rotation = Quaternion.identity; // vSubSegmentInitialTransform.rotation;// vNewOrientation;
+            ResetOrientations();
         }
 
         #region Unity functions
+
         /**
         * Awake()
         * @brief On Awake: set the segment's initial orientation .
         */
         internal void Awake()
         {
-            vSubSegmentInitialOrientation = SubSegmentTransform.rotation;
+            AssignTransforms();
         }
+
         #endregion
 
     }
