@@ -207,6 +207,45 @@ public class BodyFrameThread : ThreadedJob
             }
         }
     }
+    private void RecordingPlaybackTask()
+    {
+        int vBodyFrameIndex = 0;
+        float vStartTime = Time.time;
+        while (ContinueWorking)
+        {
+            while (true)
+            {
+                if (!ContinueWorking)
+                {
+                    break;
+                }
+                if (BodyFrameBuffer.IsFull() || mPauseWorker)
+                {
+                    continue;
+                }
+                try
+                {
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                    BodyFrameBuffer.Enqueue(vBodyFrame);
+                    vBodyFrameIndex++;
+                    if (vBodyFrameIndex >= mRawFrames.Count) //reset back to 0
+                    {
+                        vBodyFrameIndex = 0;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //ContinueWorking = false;
+                    string vMessage = e.GetBaseException().Message;
+                    vMessage += "\n" + e.Message;
+                    vMessage += "\n" + e.StackTrace;
+                    UnityEngine.Debug.Log(vMessage);
+                    break;
+                }
+
+            }
+        }
+    }
     /**
     * BrainFrameTask()
     * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
