@@ -11,8 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using HeddokoLib.adt;
-using HeddokoLib.networking;
+using HeddokoLib.adt; 
 using InTheHand.Net;
 using InTheHand.Net.Sockets;
 
