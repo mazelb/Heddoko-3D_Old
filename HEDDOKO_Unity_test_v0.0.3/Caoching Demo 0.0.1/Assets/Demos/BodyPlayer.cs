@@ -117,7 +117,7 @@ namespace Assets.Demos
         */
         public void ResetInitialFrame()
         {
-             CurrentBodyInPlay.View.ResetInitialFrame();
+            CurrentBodyInPlay.View.ResetInitialFrame();
             StartCoroutine(StartPausingCountdown());
         }
 
@@ -199,7 +199,8 @@ namespace Assets.Demos
             }
             mInternalTimer = PauseThreadTimer;
             mResetRoutineStarted = true;
-      ChangePauseState();
+            ChangePauseState();
+
             while (true)
             {
                 mInternalTimer -= Time.deltaTime;
