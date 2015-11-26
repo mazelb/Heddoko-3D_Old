@@ -7,6 +7,37 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
    public class TorsoAnalysis: SegmentAnalysis
    {
         /**
+<<<<<<< HEAD
+* FunctionName(object args)
+* @brief Performs x function 
+* @param object args: the parameters necessary for this
+* function to perform
+* @note Please not that this will throw an exception if
+* y requirements are not met with the given parameter
+* @return returns an arbitrary value
+*/
+
+      //  public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
+
+      // public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
+       private float[,] mTorsoOrientation = new float[3,3];
+       private float mAngleTorsoFlexion;
+       private float mAngularAccelerationTorsoFlection;
+       private float mAngularVelocityTorsoFlexion;
+       private float mAngleTorsoLateral;
+       private float mAngularAccelerationTorsoLateral;
+       private float mAngularVelocityTorsoLateral;
+       private float mAngleTorsoRotation;
+        public float AngleIntegrationTurns { get; private set; }
+        public int NumberOfTurns { get; private set; }
+       public  int NumberOfFlips { get; private set; }
+        private float mAngularAccelerationTorsoRotation;
+       private float mAngularVelocityTorsoRotation;
+       private float mAngleTorsoVertical;
+       public float AngleIntegrationFlips { get; private set; }
+        private float mAngularAccelerationTorsoVertical;
+       private float mAngularVelocityTorsoVertical;
+=======
         * FunctionName(object args)
         * @brief Performs x function 
         * @param object args: the parameters necessary for this
@@ -36,6 +67,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
         private float mAngularAccelerationTorsoVertical;
         private float mAngularVelocityTorsoVertical;
 
+>>>>>>> origin/master
         /// <summary>
         /// The main torso orientation. On set, all listeners will be notified of new orientation
         /// </summary>
@@ -141,16 +173,16 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             //===========================================Turn detection===============================================================//
             if (Math.Abs(vAngleTorsoRotationNew) < 3)
             {
-                mAngleIntegrationTurns = 0;
+                AngleIntegrationTurns = 0;
             }
             else
             {
-                mAngleIntegrationTurns += (vAngularVelocityTorsoRotationNew * vTimeDifference);
+                AngleIntegrationTurns += (vAngularVelocityTorsoRotationNew * vTimeDifference);
             } 
-            if (Math.Abs(mAngleIntegrationTurns) > 330)
+            if (Math.Abs(AngleIntegrationTurns) > 330)
             { 
-                mAngleIntegrationTurns = 0;
-                mNumberOfTurns++; 
+                AngleIntegrationTurns = 0;
+                NumberOfTurns++; 
             }
              
             //====================================End of turn detection=========================================//
@@ -179,16 +211,16 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             //============================================beginning of Flip detection ===============================================//
             if (Math.Abs(vAngleTorsoVerticalNew) < 3)
             {
-                mAngleIntegrationFlips = 0;
+                AngleIntegrationFlips = 0;
             }
             else
             {
-                mAngleIntegrationFlips += (vAngularVelocityTorsoVerticalNew * vTimeDifference);
+                AngleIntegrationFlips += (vAngularVelocityTorsoVerticalNew * vTimeDifference);
             }
-            if (Math.Abs(mAngleIntegrationFlips) > 330)
+            if (Math.Abs(AngleIntegrationFlips) > 330)
             { 
-                mNumberOfFlips++;
-                mAngleIntegrationFlips = 0; 
+                NumberOfFlips++;
+                AngleIntegrationFlips = 0; 
             } 
             //===============================================End of Flip detection ===============================================//
 

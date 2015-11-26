@@ -25,14 +25,11 @@ namespace Assets.Scripts.Body_Data.view
         private BodyFrameBuffer mBuffer;
         [SerializeField]
         private Body mAssociatedBody;
-        //private BodyFrame mCurreBodyFrame;
+        private BodyFrame mCurreBodyFrame;
         [SerializeField]
         private bool mIsPaused;
         [SerializeField]
         private bool mStartUpdating;
-        [SerializeField]
-        private bool mIsResetting = false;
-
         OutterThreadToUnityTrigger InitialFrameSetTrigger = new OutterThreadToUnityTrigger();
         /**
         * AssociatedBody
@@ -93,7 +90,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mAssociatedBody != null)
             {
-                mIsResetting = true;
+                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
             }
         }
         /// <summary>
@@ -118,13 +115,14 @@ namespace Assets.Scripts.Body_Data.view
         }
         /**
         * OnDisable()
-        * @brief Automatically called by Unity when the app is exited. Tells the associated body to stop its tasks
+        * @brief Automatically called by Unity when the app is exited. Cleans up tasks and unhooks event listeners  
         */
         void OnApplicationQuit()
         {
             if (AssociatedBody != null)
             {
                 AssociatedBody.StopThread();
+                AssociatedBody.UnhookBrainpackListeners();
             }
         }
 
@@ -136,44 +134,29 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (StartUpdating)
             {
-                if (!mIsResetting)
+                if (mIsPaused)
                 {
-                    if (mIsPaused)
-                    {
-                        return;
-                    }
-                    if (InitialFrameSetTrigger.Triggered)
-                    {
-                        InitialFrameSetTrigger.Reset();
-                        BodyFrame vInitBodyFrame = (BodyFrame)InitialFrameSetTrigger.Args;
-                        AssociatedBody.SetInitialFrame(vInitBodyFrame);
-                    }
-                    if (mBuffer != null && mBuffer.Count > 0)
-                    {
-                        //AssociatedBody.CurrentBodyFrame = mBuffer.Dequeue();
-                        AssociatedBody.UpdateBody(mBuffer.Dequeue());
-                        Body.ApplyTracking(AssociatedBody);
-
-                        //Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = mBuffer.Dequeue();
-                        //AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
-                        //if (vDic != null)
-                        //{
-                        //    Body.ApplyTracking(AssociatedBody, vDic);
-                        //}
-                    }
+                    return;
                 }
-                else
+                if (InitialFrameSetTrigger.Triggered)
                 {
-                    Debug.Log("resetting");
-                    AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
-                    //AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
-                    //Body.ApplyTracking(AssociatedBody);
-                    Debug.Log("resetting Finished");
-                    mIsResetting = false;
+                    InitialFrameSetTrigger.Reset();
+                    BodyFrame vInitBodyFrame = (BodyFrame) InitialFrameSetTrigger.Args;
+                    AssociatedBody.SetInitialFrame(vInitBodyFrame);
+                }
+                if (mBuffer != null && mBuffer.Count > 0)
+                {
+                    BodyFrame vBodyFrame = mBuffer.Dequeue(); 
+                    AssociatedBody.UpdateBody(vBodyFrame);
+                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody); 
+                   
+                    if (vDic != null)
+                    {
+                        Body.ApplyTracking(AssociatedBody, vDic);//todo: extract this from the view and place it in its own module
+                    } 
                 }
             }
         }
-
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 

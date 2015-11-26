@@ -87,7 +87,7 @@ namespace Assets.Demos
         /// <summary>
         /// OnDisable, unhook listeners
         /// </summary>
-        void OnDisable()
+        public void OnDisable()
         { 
             BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
@@ -117,7 +117,7 @@ namespace Assets.Demos
         */
         public void ResetInitialFrame()
         {
-            CurrentBodyInPlay.View.ResetInitialFrame();
+             CurrentBodyInPlay.View.ResetInitialFrame();
             StartCoroutine(StartPausingCountdown());
         }
 
@@ -199,8 +199,7 @@ namespace Assets.Demos
             }
             mInternalTimer = PauseThreadTimer;
             mResetRoutineStarted = true;
-            ChangePauseState();
-
+      ChangePauseState();
             while (true)
             {
                 mInternalTimer -= Time.deltaTime;

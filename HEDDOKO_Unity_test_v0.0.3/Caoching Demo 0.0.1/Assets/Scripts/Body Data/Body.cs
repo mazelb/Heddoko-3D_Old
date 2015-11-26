@@ -14,8 +14,7 @@ using System.Linq;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
-using Assets.Scripts.Body_Pipeline.Analysis.Torso;
-using Assets.Scripts.Body_Pipeline.Tracking;
+using Assets.Scripts.Body_Pipeline.Analysis.Torso; 
 using Assets.Scripts.Communication.Controller;
 
 /**
@@ -28,35 +27,26 @@ public class Body
     [SerializeField]
     //Body Unique GUID for ease of cloud access
     public string BodyGuid;
-
     [SerializeField]
     //Currently connected suit GUID 
     public string SuitGuid;
-    
     //Currently playing recording``` GUIDCurrentBodyFrame
-    
     //Body Composition
     [SerializeField]
     public List<BodySegment> BodySegments = new List<BodySegment>();
 
     [SerializeField]
     //Current body Frame 
-    public BodyFrame CurrentBodyFrame
-    { get; set; }
-
+    public BodyFrame CurrentBodyFrame;
     [SerializeField]
     //Initial body Frame
     public BodyFrame InitialBodyFrame { get; set; }
-
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
-
-    //private TrackingThread mTrackingThread;
-
+    //AssociatedBody private TrackingThread mTrackingThread;
     public Dictionary<BodyStructureMap.SegmentTypes,SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
-
     //view associated with this model
+    #region properties
     private BodyView mView;
-    
     /**
     * View
     * @param 
@@ -76,6 +66,7 @@ public class Body
             }
             return mView;
         }
+
     }
 
     /**
@@ -95,6 +86,7 @@ public class Body
             return mBodyFrameThread;
         }
     }
+    #endregion
 
 
     /**
@@ -115,12 +107,11 @@ public class Body
     {
         InitBody(vBodyUUID, BodyStructureMap.BodyTypes.BodyType_FullBody);
     }
-
     /**
-    * InitBody(string vBodyUUID , BodyStructureMap.BodyTypes vBodyType)
-    * @param vBodyUUID the new body UUID (could be empty), BodyType is the desired BodyType
-    * @brief Initializes a new body with a certain body type
-    */
+ * InitBody(string vBodyUUID , BodyStructureMap.BodyTypes vBodyType)
+ * @param vBodyUUID the new body UUID (could be empty), BodyType is the desired BodyType
+ * @brief Initializes a new body with a certain body type
+ */
     public void InitBody(string vBodyUUID, BodyStructureMap.BodyTypes vBodyType)
     {
         //Init the body UUID (given or created)
@@ -161,8 +152,9 @@ public class Body
             vSegment.InitializeBodySegment(type);
             vSegment.ParentBody = this;
             BodySegments.Add(vSegment); 
+            #region using unity functions
             vSegment.AssociatedView.transform.parent = View.transform;
-            
+            #endregion
             //Todo: this can can be abstracted and mapped nicely. 
             if (type == BodyStructureMap.SegmentTypes.SegmentType_Torso)
             {
@@ -203,6 +195,7 @@ public class Body
             }
         }
     }
+
  
     /**
     * UpdateBody(BodyFrame vFrame )
@@ -218,7 +211,6 @@ public class Body
             BodySegments[i].UpdateSensorsData(vFrame);
         }
     }
-
     /**
     * SetInitialFrame(BodyFrame vInitialFrame)
     * @param BodyFrame vInitialFrame, sets the initial frame, subsequently the initial orientations point of the body's subsegment
@@ -230,7 +222,6 @@ public class Body
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
-            //BodySegments[i].AssociatedView.
         }
     }
 
@@ -251,21 +242,24 @@ public class Body
             BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
             SetInitialFrame(frame);
-            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
-            //TrackingBuffer vBuffer2 = new TrackingBuffer();
-            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-            //mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
-            //get the first frame and set it as the initial frame
+            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(); 
+
+             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+     
 
             View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
-            //mTrackingThread.Start();
+         //   mTrackingThread.Start();
             View.StartUpdating = true;
         }
     }
-
+    /**
+    * StreamFromBrainpack( )
+    * @param Set the body to be ready to play from brainpack
+    * @brief  Play a recording from the given recording UUID. 
+    */ 
     /// <summary>
-    /// Set the body to be ready to play from brainpack. Start stream from brainpack
+    /// Start stream from brainpack
     /// </summary>
     public void StreamFromBrainpack()
     {
@@ -283,12 +277,12 @@ public class Body
         StopThread(); 
         
         BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
-        //TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
+       // TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
         mBodyFrameThread = new BodyFrameThread(vBuffer1 , BodyFrameThread.SourceDataType.BrainFrame);
-        //mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
-        View.Init(this, vBuffer1);
+     //   mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
+        //View.Init(this, vBuffer2);
         mBodyFrameThread.Start();
-        //mTrackingThread.Start();
+      //  mTrackingThread.Start();
         View.StartUpdating = true;
 
         //1 inform the brainpack connection controller to establish a new connection
@@ -308,7 +302,10 @@ public class Body
         }
         //check if the event has already been registered  
     }
-
+    /**
+    * BrainPackStreamReadyListener( ) 
+    * @brief   Listener whos responsibility is to plug the bodyframe thread into controller.
+    */
     /// <summary>
     /// Listener whos responsibility is to plug the bodyframe thread into controller.
     /// </summary>
@@ -317,18 +314,31 @@ public class Body
         BrainpackConnectionController.Instance.ReadyToLinkBodyToBP(mBodyFrameThread);
     }
 
+    /**
+    * BrainPackStreamDisconnectedListener( ) 
+    * @brief Listens to when the brainpack controller has been disconnected from the brainpack
+    */
     /// <summary>
     /// Listens to when the brainpack controller has been disconnected from the brainpack
     /// </summary>
     private void BrainPackStreamDisconnectedListener()
     {
         StopThread();
-        //remove listeners
-        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
-        //1ii: Listen to the event that the brainpack has been disconnected
+        UnhookBrainpackListeners();
+    }
+
+
+    public void UnhookBrainpackListeners()
+    {
+        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener; 
         BrainpackConnectionController.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
     }
 
+    /**
+    * ApplyTracking(Body vBody)
+    * @param Body vBody: The body to apply tracking to. 
+    * @brief  Applies tracking on the requested body. 
+    */
     /// <summary>
     /// Applies tracking on the requested body. 
     /// </summary>
@@ -359,7 +369,6 @@ public class Body
             vBodySegment.UpdateSegment(vFilteredDictionary);
         }
     }
-
     /**
     * ApplyTracking(Body vBody)
     * @param Body vBody: The body to apply tracking to. 
@@ -389,7 +398,6 @@ public class Body
             vBodySegment.UpdateSegment(vFilteredDictionary);
         }
     }
-
     /**
     * GetTracking()
     * @brief  Play a recording from the given recording UUID. 
@@ -397,17 +405,14 @@ public class Body
     */
     public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetTracking(Body vBody)
     {
-        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
-
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9); 
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
         for (int i = 0; i < vKeyList.Count; i++)
         {
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
-
-            //get the current value
-
+             
             if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
             {
                 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
@@ -425,7 +430,6 @@ public class Body
         }
         return vDic;
     }
-
     /**
     * GetFusion(Body vBody)
     * @brief  Apply adjustments to the 9 joints in order to increase precision and reliabilitie of the transforms.  
@@ -451,7 +455,6 @@ public class Body
         BodySegment vSegment = BodySegments.First(x => x.SegmentType == vSegmentType);
         return vSegment;
     }
-
     public void PauseRecording(string vRecUUID)
     {
         //TODO: 
@@ -475,16 +478,19 @@ public class Body
         {
             mBodyFrameThread.StopThread();
         }
-        //if (mTrackingThread != null)
-        //{
-        //    mTrackingThread.StopThread();
-        //}
+       /* if (mTrackingThread != null)
+        {
+            mTrackingThread.StopThread();
+        }*/
         if (View != null)
         {
             View.StartUpdating = false;
         }
     }
-
+    /**
+    * StopThread() 
+    * @brief Pause all worker threads that are current working on the body
+    */
     /// <summary>
     /// Pause all worker threads that are current working on the body
     /// </summary>
@@ -494,13 +500,21 @@ public class Body
         {
             mBodyFrameThread.PauseWorker();
         }
-
-        //if (mTrackingThread != null)
-        //{
-        //    mTrackingThread.PauseWorker();
-        //}
+/*        if (mTrackingThread != null)
+        {
+            mTrackingThread.PauseWorker();
+        }*/
     }
 
+    #region Unity functions
+
+
+    #endregion
+    /**
+    * StopThread() 
+    * @brief  Will be called on by an external thread in the case that the initial frame needs to be set 
+    * @param BodyFrame vProcessedBodyFrame The processed body frame to be set as the initial bodyframe
+    */
     /// <summary>
     /// Will be called on by an external thread in the case that the initial frame needs to be set 
     /// </summary>
