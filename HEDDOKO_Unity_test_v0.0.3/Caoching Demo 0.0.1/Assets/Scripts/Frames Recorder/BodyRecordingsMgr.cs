@@ -42,10 +42,13 @@ public class BodyRecordingsMgr
 
     //Scanned files 
     private string[] mFilePaths;
+
     //Main recordings directory path 
     private string mDirectoryPath;
+    
     //Recordings available
     public List<BodyFramesRecording> Recordings = new List<BodyFramesRecording>();
+    
     //Map Body UUID to Recording UUID
     Dictionary<string, List<string>> RecordingsDictionary = new Dictionary<string, List<string>>();
 
@@ -228,7 +231,4 @@ public class BodyRecordingsMgr
 
         return null;
     }
-
-
- 
 }

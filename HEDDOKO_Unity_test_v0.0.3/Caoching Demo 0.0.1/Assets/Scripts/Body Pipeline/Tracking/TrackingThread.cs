@@ -16,19 +16,14 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
     */
     public class TrackingThread : ThreadedJob
     {
-        #region class fields
-        private BodyFrameBuffer mInputBuffer;  //buffer 
+        private BodyFrameBuffer mInputBuffer;
         private TrackingBuffer mOutputBuffer;
         private Body mBody;
         private object mWorkerThreadLockHandle = new object();
         private List<BodyRawFrame> mRawFrames;
         private bool mContinueWorking;
         private bool mPauseWorker;
-        #endregion
-       
-  
 
-        #region Constructors
         /** 
         * @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
         * @param recording 
@@ -40,9 +35,6 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
             mOutputBuffer = vOutputBuffer;
         }
 
-        #endregion
-
-        #region properties
         public bool ContinueWorking
         {
             get
@@ -62,8 +54,6 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
                 }
             }
         }
-        #endregion
-        #region polymorphic functions
 
         public override void Start()
         {
@@ -76,7 +66,6 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
             mPauseWorker = !mPauseWorker;
         }
 
-        #endregion
         /**
         * ThreadFunction()
         * @brief The thread loop, overwrite this in the base class
@@ -119,20 +108,15 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
 
         }
 
-
-
-        #region threading functions
-
-
         /**
         * CleanUp
         * @brief Helping function cleans ups  
         */
-
         public void StopThread()
         {
             ContinueWorking = false;
         }
+
         /**
         * OnFinished()
         * @brief Callback when the thread is done executing
@@ -142,9 +126,5 @@ namespace Assets.Scripts.Body_Pipeline.Tracking
             //This is executed by the Unity main thread when the job is finished 
             //TODO: 
         }
-        #endregion
-
- 
-
     }
 }

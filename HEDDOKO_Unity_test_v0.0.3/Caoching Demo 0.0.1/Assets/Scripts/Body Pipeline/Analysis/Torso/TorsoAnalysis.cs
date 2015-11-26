@@ -1,4 +1,11 @@
-﻿
+﻿/** 
+* @file TorsoAnalysis.cs
+* @brief TorsoAnalysis class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date November 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
+
 using System; 
 using UnityEngine;
 
@@ -6,49 +13,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
 {
    public class TorsoAnalysis: SegmentAnalysis
    {
-        /**
-<<<<<<< HEAD
-* FunctionName(object args)
-* @brief Performs x function 
-* @param object args: the parameters necessary for this
-* function to perform
-* @note Please not that this will throw an exception if
-* y requirements are not met with the given parameter
-* @return returns an arbitrary value
-*/
-
-      //  public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
-
-      // public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
-       private float[,] mTorsoOrientation = new float[3,3];
-       private float mAngleTorsoFlexion;
-       private float mAngularAccelerationTorsoFlection;
-       private float mAngularVelocityTorsoFlexion;
-       private float mAngleTorsoLateral;
-       private float mAngularAccelerationTorsoLateral;
-       private float mAngularVelocityTorsoLateral;
-       private float mAngleTorsoRotation;
-        public float AngleIntegrationTurns { get; private set; }
-        public int NumberOfTurns { get; private set; }
-       public  int NumberOfFlips { get; private set; }
-        private float mAngularAccelerationTorsoRotation;
-       private float mAngularVelocityTorsoRotation;
-       private float mAngleTorsoVertical;
-       public float AngleIntegrationFlips { get; private set; }
-        private float mAngularAccelerationTorsoVertical;
-       private float mAngularVelocityTorsoVertical;
-=======
-        * FunctionName(object args)
-        * @brief Performs x function 
-        * @param object args: the parameters necessary for this
-        * function to perform
-        * @note Please not that this will throw an exception if
-        * y requirements are not met with the given parameter
-        * @return returns an arbitrary value
-        */
-        //  public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
-
-        // public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
         private float[,] mTorsoOrientation = new float[3,3];
         private float mAngleTorsoFlexion;
         private float mAngularAccelerationTorsoFlection;
@@ -56,18 +20,23 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
         private float mAngleTorsoLateral;
         private float mAngularAccelerationTorsoLateral;
         private float mAngularVelocityTorsoLateral;
+
         private float mAngleTorsoRotation;
-        private float mAngleIntegrationTurns;
-        private int mNumberOfTurns;
-        private int mNumberOfFlips;
+        public float AngleIntegrationTurns { get; private set; }
+
+        public int NumberOfTurns { get; private set; }
+
+        public  int NumberOfFlips { get; private set; }
+
         private float mAngularAccelerationTorsoRotation;
         private float mAngularVelocityTorsoRotation;
+
         private float mAngleTorsoVertical;
-        private float mAngleIntegrationFlips;
+        public float AngleIntegrationFlips { get; private set; }
+
         private float mAngularAccelerationTorsoVertical;
         private float mAngularVelocityTorsoVertical;
 
->>>>>>> origin/master
         /// <summary>
         /// The main torso orientation. On set, all listeners will be notified of new orientation
         /// </summary>

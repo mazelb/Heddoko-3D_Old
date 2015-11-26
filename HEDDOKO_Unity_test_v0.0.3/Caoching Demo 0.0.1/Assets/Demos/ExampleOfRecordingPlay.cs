@@ -64,8 +64,9 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     public void ResetInitialFrame()
     {
         mBody.View.ResetInitialFrame();
-        StartCoroutine(StartCountdown());
+        //StartCoroutine(StartCountdown());
     }
+
     /**
     * Pause 
     * @brief Pauses the recording's play back

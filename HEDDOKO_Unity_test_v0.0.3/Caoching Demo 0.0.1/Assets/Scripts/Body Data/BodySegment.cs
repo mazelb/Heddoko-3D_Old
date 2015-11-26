@@ -5,6 +5,7 @@
 * @date October 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,14 +28,15 @@ public class BodySegment
 
     //Body SubSegments 
     public Dictionary<int, BodySubSegment> BodySubSegmentsDictionary = new Dictionary<int, BodySubSegment>();
+
     public Body ParentBody;
+    
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
+
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
     public BodySegmentView AssociatedView;
     public SegmentAnalysis mCurrentAnalysisSegment;
-    //a list of body segment neighbors
-
 
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
@@ -44,11 +46,13 @@ public class BodySegment
     {
         //get the sensor 
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
+
         //get subframes of data relevant to this body segment 
         foreach (BodyStructureMap.SensorPositions vSensorPosKey in vSensorPos)
         {
             //find a suitable sensor to update
             SensorTuple vSensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == vSensorPosKey);
+            
             //get the relevant data from vFrame 
             if (vFrame.FrameData.ContainsKey(vSensorPosKey))
             {
@@ -512,7 +516,6 @@ public class BodySegment
         //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
-
     }
 
     /**
@@ -578,7 +581,9 @@ public class BodySegment
             //Debug.Log("vOrientationError " + vOrientationError);
             vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
             //Debug.Log("CompensationAngle "+ vCompensationAngle);
+            
             //CompensationAngle = 0;
+            
             // Finding yaw compensation axis
             Vector3 yawLoAr2 = new Vector3(vLoArB2[0, 1], vLoArB2[1, 1], vLoArB2[2, 1]);
 
@@ -875,11 +880,8 @@ public class BodySegment
     */
     internal void InitializeBodySegment(BodyStructureMap.SegmentTypes vSegmentType)
     {
-        #region use of unity
         GameObject go = new GameObject(EnumUtil.GetName(vSegmentType));
         AssociatedView = go.AddComponent<BodySegmentView>();
-
-        #endregion
 
         List<BodyStructureMap.SubSegmentTypes> subsegmentTypes =
            BodyStructureMap.Instance.SegmentToSubSegmentMap[vSegmentType];
@@ -893,13 +895,10 @@ public class BodySegment
             newSensor.SensorBodyId = BodyStructureMap.Instance.SensorPosToSensorIDMap[sensorPos];
             newSensor.SensorType = BodyStructureMap.Instance.SensorPosToSensorTypeMap[sensorPos];
             newSensor.SensorPosition = sensorPos;
-            //Sensors.Add(newSensor);
             SensorTuple tuple = new SensorTuple();
             tuple.CurrentSensor = new Sensor(newSensor);
             tuple.InitSensor = new Sensor(newSensor);
-
             SensorsTuple.Add(tuple);
-            //sensorList.Add(tuple.CurrentSensor);
         }
 
         foreach (BodyStructureMap.SubSegmentTypes sstype in subsegmentTypes)
@@ -907,21 +906,11 @@ public class BodySegment
             BodySubSegment subSegment = new BodySubSegment();
             subSegment.subsegmentType = sstype;
             subSegment.InitializeBodySubsegment(sstype);
-            //BodySubSegments.Add(subSegment);
             BodySubSegmentsDictionary.Add((int)sstype, subSegment);
-
-            #region use of unity functions
-
             subSegment.AssociatedView.transform.parent = AssociatedView.transform;
-
-            #endregion
-
         }
 
     }
-
-    
-    #region helperfunctions
 
     /**
     * private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
@@ -951,36 +940,4 @@ public class BodySegment
             MapLeftLegSegment(vFilteredDictionary);
         }
     }
-
-    /**
-    * private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
-    * @brief Perform mapping on the current segments and its respective subsegments 
-    * @param 
-    */
-    private void CalculateSubSegmentsAngles(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
-    {
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
-        {
-            //CalculateTorsoSegmentAngles(vFilteredDictionary);
-        }
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
-        {
-            //CalculateRightArmSubsegmentAngles(vFilteredDictionary);
-        }
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
-        {
-            //CalculateLeftArmSubsegmentAngles(vFilteredDictionary);
-        }
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
-        {
-            //CalculateRightLegSegmentAngles(vFilteredDictionary);
-        }
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
-        {
-            //CalculateLeftLegSegmentAngles(vFilteredDictionary);
-        }
-    }
-    #endregion
-
-
 }
