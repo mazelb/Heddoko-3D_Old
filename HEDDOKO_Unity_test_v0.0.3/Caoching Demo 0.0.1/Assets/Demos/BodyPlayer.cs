@@ -39,6 +39,7 @@ namespace Assets.Demos
         private bool mUsingBrainpack = false;
         private Sprite mBluetoothIcon;
         private Sprite mPlayButtonOriginalIcon;
+        public DisplayLegAngleExtractions DisplayLegAngleExtractions;
         private Sprite BluetoothIcon 
         {
             get
@@ -106,6 +107,7 @@ namespace Assets.Demos
                     mPlayButtonPushed = true;
                     PlayButton.gameObject.SetActive(false);
                     ChangeState(BodyPlaybackState.PlayingRecording);
+                    DisplayLegAngleExtractions.CurrentBody = CurrentBodyInPlay;
                 }
             }
         }
@@ -115,8 +117,8 @@ namespace Assets.Demos
         */
         public void ResetInitialFrame()
         {
-            CurrentBodyInPlay.View.ResetInitialFrame();
-            StartCoroutine(StartCountdown());
+             CurrentBodyInPlay.View.ResetInitialFrame();
+            StartCoroutine(StartPausingCountdown());
         }
 
 
@@ -188,7 +190,7 @@ namespace Assets.Demos
             CurrentBodyInPlay.View.PauseFrame();
         }
 
-        private IEnumerator StartCountdown()
+        private IEnumerator StartPausingCountdown()
         {
             if (mResetRoutineStarted)
             {
@@ -197,7 +199,7 @@ namespace Assets.Demos
             }
             mInternalTimer = PauseThreadTimer;
             mResetRoutineStarted = true;
-            ChangePauseState();
+      ChangePauseState();
             while (true)
             {
                 mInternalTimer -= Time.deltaTime;
@@ -218,8 +220,7 @@ namespace Assets.Demos
             PlayButton.gameObject.SetActive(true);
             if (CurrentBodyInPlay != null)
             {
-                CurrentBodyInPlay.StopThread();
-             //   CurrentBodyInPlay.View.ResetInitialFrame();
+                CurrentBodyInPlay.StopThread(); 
             }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             mBodyRecordingUUID = vRec.BodyRecordingGuid;

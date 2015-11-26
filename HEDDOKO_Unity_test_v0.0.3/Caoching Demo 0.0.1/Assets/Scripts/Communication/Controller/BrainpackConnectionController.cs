@@ -40,7 +40,7 @@ namespace Assets.Scripts.Communication.Controller
         [SerializeField]
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Idle;
      
-        public string BrainpackComPort = "COM14";
+        public string BrainpackComPort = "COM15";
         [SerializeField]
         private int vTotalTries;
 

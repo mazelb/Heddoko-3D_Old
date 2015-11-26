@@ -6,9 +6,19 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
 {
    public class TorsoAnalysis: SegmentAnalysis
    {
-       public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
+        /**
+* FunctionName(object args)
+* @brief Performs x function 
+* @param object args: the parameters necessary for this
+* function to perform
+* @note Please not that this will throw an exception if
+* y requirements are not met with the given parameter
+* @return returns an arbitrary value
+*/
 
-       public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
+      //  public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
+
+      // public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
        private float[,] mTorsoOrientation = new float[3,3];
        private float mAngleTorsoFlexion;
        private float mAngularAccelerationTorsoFlection;
@@ -29,7 +39,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
         /// <summary>
         /// The main torso orientation. On set, all listeners will be notified of new orientation
         /// </summary>
-        public override float[,] TorsoOrientation
+        public   float[,] TorsoOrientation
        {
            get
            {
@@ -37,11 +47,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
            }
            set
            {
-               mTorsoOrientation = value;
-               if (TorsoUpdatedEvent != null)
-               {
-                   TorsoUpdatedEvent(mTorsoOrientation);
-               }
+               mTorsoOrientation = value; 
            }
        }
         /// <summary>

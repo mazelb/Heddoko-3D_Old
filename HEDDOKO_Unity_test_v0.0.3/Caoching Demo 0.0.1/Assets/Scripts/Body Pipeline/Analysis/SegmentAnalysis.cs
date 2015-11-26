@@ -7,22 +7,22 @@ using UnityEngine;
 namespace Assets.Scripts.Body_Pipeline.Analysis
 {
     /// <summary>
-    /// Parent class to the specific subsegment. 
+    /// Parent class to the specific abstracted segment type(leg or arm). 
     /// </summary>
     public abstract class SegmentAnalysis
     {
-        public virtual float[,] TorsoOrientation { get; set; }
+        //public virtual float[,] TorsoOrientation { get; set; }
         internal float DeltaTime;
         internal BodyStructureMap.SegmentTypes SegmentType;
         internal float mLastTimeCalled;
-        /// <summary>
+/*        /// <summary>
         /// Listener that is notified when the torso orientation has been updated
         /// </summary>
         /// <param name="vNewTorsoOrientation"></param>
         internal void UpdateTorsoOrientationListener(float[,] vNewTorsoOrientation)
         {
             TorsoOrientation = vNewTorsoOrientation;
-        }
+        }*/
         /// <summary>
         /// Extraction of angles. The parent class Updates Delta time
         /// </summary>

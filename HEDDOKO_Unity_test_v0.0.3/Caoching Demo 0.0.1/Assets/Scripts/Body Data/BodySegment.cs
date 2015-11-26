@@ -11,6 +11,10 @@ using System.Linq;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
 using System;
+using Assets.Scripts.Body_Pipeline.Analysis;
+using Assets.Scripts.Body_Pipeline.Analysis.Arms;
+using Assets.Scripts.Body_Pipeline.Analysis.Legs;
+using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 
 /**
 * BodySegment class 
@@ -28,6 +32,7 @@ public class BodySegment
     public bool IsTracked = true;
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
     public BodySegmentView AssociatedView;
+    public SegmentAnalysis mCurrentAnalysisSegment;
     //a list of body segment neighbors
 
     /**
@@ -150,8 +155,11 @@ public class BodySegment
         u.Set(0, 1, 0);
         //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
-        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);
+        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3); 
 
+        TorsoAnalysis vTorsoAnalysis = (TorsoAnalysis)mCurrentAnalysisSegment;
+        vTorsoAnalysis.TorsoOrientation = vCurrentTorsoOrientation;
+        vTorsoAnalysis.AngleExtraction();
         vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
         //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
     }
@@ -318,6 +326,10 @@ public class BodySegment
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
         //////////////////////////////ASSIGN TO SUBSEGMENT///////////////////////////
+        RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
+        vRightLegAnalysis.HipOrientation = vHipOrientation;
+        vRightLegAnalysis.KneeOrientation = vKneeOrientation;
+        vRightLegAnalysis.AngleExtraction();
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
@@ -488,6 +500,10 @@ public class BodySegment
         //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
+        LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
+        vLeftLegAnalysis.HipOrientation = vHipOrientation;
+        vLeftLegAnalysis.KneeOrientation = vKneeOrientation;
+        vLeftLegAnalysis.AngleExtraction();
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
@@ -832,6 +848,9 @@ public class BodySegment
         vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
 
+        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis) mCurrentAnalysisSegment;
+        vLeftArmAnalysis.LoArOrientation = vLoArOrientation;
+        vLeftArmAnalysis.UpArOrientation = vUpArOrientation;
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
     }
