@@ -6,6 +6,7 @@
 */
 
 using System.Collections;
+using Assets.Demos;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Utils;
@@ -22,10 +23,11 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     public Button PlayButton;
     private bool mPlayButtonPushed;
     public Button ResetButton;
-    public string mBodyRecordingUUID = "482D9E97-B37D-403E-A8BB-35B4971F0BE2";
+    public string mBodyRecordingUUID = "FBBE8B37-151D-4D8A-8138-CC2BAAFA5BF7";
     public float PauseThreadTimer = 1f;
     private float mInternalTimer = 1f;
     private bool mResetRoutStarted = false; // pause thread routine started
+    public DisplayAngleExtractions DisplayAngleExtractions;
     /**
     * Start()
     * @brief Automatically called by unity on start. This start function will prep the body to be able to play a recording 
@@ -35,7 +37,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
         BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.sCsvDirectory); //scan recordings in directory
         BodyRecordingsMgr.Instance.ReadAllRecordings(); //read the recordings
         mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID); //set the body
-   
+        
     }
 
     /**
@@ -51,6 +53,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
                 mPlayButtonPushed = true;
                 PlayButton.gameObject.SetActive(false);
                 mBody.PlayRecording(mBodyRecordingUUID);
+                DisplayAngleExtractions.CurrentBody = mBody;
             }
         }        
     }

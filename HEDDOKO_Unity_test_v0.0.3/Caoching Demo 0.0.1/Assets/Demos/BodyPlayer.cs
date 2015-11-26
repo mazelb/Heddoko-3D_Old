@@ -87,7 +87,7 @@ namespace Assets.Demos
         /// <summary>
         /// OnDisable, unhook listeners
         /// </summary>
-        void OnDisable()
+        public void OnDisable()
         { 
             BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;

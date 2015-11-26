@@ -218,7 +218,7 @@ public class BodySegment
         /////////////////////////////////////// 
         if (fusion)
         {
-            ///////////// Pitch Compensation Step ///////////////////
+            ///////////// Pitch Compensation StepForward ///////////////////
             Vector3 pitchHip = new Vector3(vHipB2[0, 2], vHipB2[1, 2], vHipB2[2, 2]);
             Vector3 pitchKnee = new Vector3(vKneeB2[0, 2], vKneeB2[1, 2], vKneeB2[2, 2]);
             Vector3 NcrossHipKnee = new Vector3(0, 0, 0);
@@ -391,7 +391,7 @@ public class BodySegment
 
         if (fusion)
         {
-            ///////////// Pitch Compensation Step ///////////////////
+            ///////////// Pitch Compensation StepForward ///////////////////
             Vector3 pitchHip = new Vector3(vHipB2[0, 2], vHipB2[1, 2], vHipB2[2, 2]);
             Vector3 pitchKnee = new Vector3(vKneeB2[0, 2], vKneeB2[1, 2], vKneeB2[2, 2]);
             Vector3 NcrossHipKnee = new Vector3(0, 0, 0);
@@ -507,6 +507,7 @@ public class BodySegment
         vLeftLegAnalysis.AngleExtraction();
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
+
     }
 
     /**
@@ -552,7 +553,7 @@ public class BodySegment
 
         if (fusion)
         {
-            ///////////// Yaw Compensation Step ///////////////////constraint
+            ///////////// Yaw Compensation StepForward ///////////////////constraint
 
             // finding compensated yaw axis of lower arm in one plane with upper arm
             float temp1, temp2, temp3, temp4;
@@ -674,8 +675,13 @@ public class BodySegment
         vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
         vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
 
+        RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
+        vRightArmAnalysis.LoArOrientation = vLoArOrientation;
+        vRightArmAnalysis.UpArOrientation = vUpArOrientation;
+        vRightArmAnalysis.AngleExtraction();
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
+     
     }
 
     /**
@@ -852,6 +858,7 @@ public class BodySegment
         LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis) mCurrentAnalysisSegment;
         vLeftArmAnalysis.LoArOrientation = vLoArOrientation;
         vLeftArmAnalysis.UpArOrientation = vUpArOrientation;
+        vLeftArmAnalysis.AngleExtraction();
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
     }

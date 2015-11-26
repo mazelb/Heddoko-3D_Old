@@ -27,14 +27,14 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
        private float mAngularAccelerationTorsoLateral;
        private float mAngularVelocityTorsoLateral;
        private float mAngleTorsoRotation;
-       private float mAngleIntegrationTurns;
-       private int mNumberOfTurns;
-       private int mNumberOfFlips;
-       private float mAngularAccelerationTorsoRotation;
+        public float AngleIntegrationTurns { get; private set; }
+        public int NumberOfTurns { get; private set; }
+       public  int NumberOfFlips { get; private set; }
+        private float mAngularAccelerationTorsoRotation;
        private float mAngularVelocityTorsoRotation;
        private float mAngleTorsoVertical;
-       private float mAngleIntegrationFlips;
-       private float mAngularAccelerationTorsoVertical;
+       public float AngleIntegrationFlips { get; private set; }
+        private float mAngularAccelerationTorsoVertical;
        private float mAngularVelocityTorsoVertical;
         /// <summary>
         /// The main torso orientation. On set, all listeners will be notified of new orientation
@@ -140,16 +140,16 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             //===========================================Turn detection===============================================================//
             if (Math.Abs(vAngleTorsoRotationNew) < 3)
             {
-                mAngleIntegrationTurns = 0;
+                AngleIntegrationTurns = 0;
             }
             else
             {
-                mAngleIntegrationTurns += (vAngularVelocityTorsoRotationNew * vTimeDifference);
+                AngleIntegrationTurns += (vAngularVelocityTorsoRotationNew * vTimeDifference);
             } 
-            if (Math.Abs(mAngleIntegrationTurns) > 330)
+            if (Math.Abs(AngleIntegrationTurns) > 330)
             { 
-                mAngleIntegrationTurns = 0;
-                mNumberOfTurns++; 
+                AngleIntegrationTurns = 0;
+                NumberOfTurns++; 
             }
              
             //====================================End of turn detection=========================================//
@@ -178,16 +178,16 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             //============================================beginning of Flip detection ===============================================//
             if (Math.Abs(vAngleTorsoVerticalNew) < 3)
             {
-                mAngleIntegrationFlips = 0;
+                AngleIntegrationFlips = 0;
             }
             else
             {
-                mAngleIntegrationFlips += (vAngularVelocityTorsoVerticalNew * vTimeDifference);
+                AngleIntegrationFlips += (vAngularVelocityTorsoVerticalNew * vTimeDifference);
             }
-            if (Math.Abs(mAngleIntegrationFlips) > 330)
+            if (Math.Abs(AngleIntegrationFlips) > 330)
             { 
-                mNumberOfFlips++;
-                mAngleIntegrationFlips = 0; 
+                NumberOfFlips++;
+                AngleIntegrationFlips = 0; 
             } 
             //===============================================End of Flip detection ===============================================//
 

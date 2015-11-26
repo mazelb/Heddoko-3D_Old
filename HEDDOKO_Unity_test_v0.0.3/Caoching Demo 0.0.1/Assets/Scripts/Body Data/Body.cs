@@ -14,8 +14,7 @@ using System.Linq;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
-using Assets.Scripts.Body_Pipeline.Analysis.Torso;
-using Assets.Scripts.Body_Pipeline.Tracking;
+using Assets.Scripts.Body_Pipeline.Analysis.Torso; 
 using Assets.Scripts.Communication.Controller;
 
 /**
@@ -43,7 +42,7 @@ public class Body
     //Initial body Frame
     public BodyFrame InitialBodyFrame { get; set; }
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
-    private TrackingThread mTrackingThread;
+    //AssociatedBody private TrackingThread mTrackingThread;
     public Dictionary<BodyStructureMap.SegmentTypes,SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
     //view associated with this model
     #region properties
@@ -243,17 +242,14 @@ public class Body
             BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
             SetInitialFrame(frame);
-            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
-            TrackingBuffer vBuffer2 = new TrackingBuffer();
+            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(); 
 
              mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-            //mBodyFrameThread = new BodyFrameThread(bodyFramesRec , vBuffer1);
-            mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
-            //get the first frame and set it as the initial frame
+     
 
-            View.Init(this, vBuffer2);
+            View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
-            mTrackingThread.Start();
+         //   mTrackingThread.Start();
             View.StartUpdating = true;
         }
     }
@@ -281,12 +277,12 @@ public class Body
         StopThread(); 
         
         BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
-        TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
+       // TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
         mBodyFrameThread = new BodyFrameThread(vBuffer1 , BodyFrameThread.SourceDataType.BrainFrame);
-        mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
-        View.Init(this, vBuffer2);
+     //   mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
+        //View.Init(this, vBuffer2);
         mBodyFrameThread.Start();
-        mTrackingThread.Start();
+      //  mTrackingThread.Start();
         View.StartUpdating = true;
 
         //1 inform the brainpack connection controller to establish a new connection
@@ -328,11 +324,16 @@ public class Body
     private void BrainPackStreamDisconnectedListener()
     {
         StopThread();
-        //remove listeners
-        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
-        //1ii: Listen to the event that the brainpack has been disconnected
+        UnhookBrainpackListeners();
+    }
+
+
+    public void UnhookBrainpackListeners()
+    {
+        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener; 
         BrainpackConnectionController.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
     }
+
     /**
     * ApplyTracking(Body vBody)
     * @param Body vBody: The body to apply tracking to. 
@@ -404,17 +405,14 @@ public class Body
     */
     public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetTracking(Body vBody)
     {
-        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
-
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9); 
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
         for (int i = 0; i < vKeyList.Count; i++)
         {
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
-
-            //get the current value
-
+             
             if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
             {
                 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
@@ -480,10 +478,10 @@ public class Body
         {
             mBodyFrameThread.StopThread();
         }
-        if (mTrackingThread != null)
+       /* if (mTrackingThread != null)
         {
             mTrackingThread.StopThread();
-        }
+        }*/
         if (View != null)
         {
             View.StartUpdating = false;
@@ -502,10 +500,10 @@ public class Body
         {
             mBodyFrameThread.PauseWorker();
         }
-        if (mTrackingThread != null)
+/*        if (mTrackingThread != null)
         {
             mTrackingThread.PauseWorker();
-        }
+        }*/
     }
 
     #region Unity functions

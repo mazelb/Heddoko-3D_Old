@@ -22,7 +22,7 @@ namespace Assets.Scripts.Body_Data.view
     {
 
         //private BodyFrameBuffer mBuffer;
-        private TrackingBuffer mBuffer;
+        private BodyFrameBuffer mBuffer;
         [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
@@ -73,7 +73,7 @@ namespace Assets.Scripts.Body_Data.view
         * @brief StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body 
         * @return returns the property's value
         */
-        public void Init(Body vAssociatedBody, TrackingBuffer vBuffer)
+        public void Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
         {
             this.mBuffer = vBuffer;
             this.mAssociatedBody = vAssociatedBody;
@@ -115,13 +115,14 @@ namespace Assets.Scripts.Body_Data.view
         }
         /**
         * OnDisable()
-        * @brief Automatically called by Unity when the app is exited. Tells the associated body to stop its tasks
+        * @brief Automatically called by Unity when the app is exited. Cleans up tasks and unhooks event listeners  
         */
         void OnApplicationQuit()
         {
             if (AssociatedBody != null)
             {
                 AssociatedBody.StopThread();
+                AssociatedBody.UnhookBrainpackListeners();
             }
         }
 
@@ -145,8 +146,10 @@ namespace Assets.Scripts.Body_Data.view
                 }
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
-                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = mBuffer.Dequeue();
-                    AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
+                    BodyFrame vBodyFrame = mBuffer.Dequeue(); 
+                    AssociatedBody.UpdateBody(vBodyFrame);
+                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody); 
+                   
                     if (vDic != null)
                     {
                         Body.ApplyTracking(AssociatedBody, vDic);//todo: extract this from the view and place it in its own module

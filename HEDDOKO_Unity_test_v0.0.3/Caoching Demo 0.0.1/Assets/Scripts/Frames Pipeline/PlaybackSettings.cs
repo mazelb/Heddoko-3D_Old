@@ -19,5 +19,8 @@ namespace Assets.Scripts.Frames_Pipeline
         public float PlaybackSpeed;
         public float RewindSpeed;
         public int CurrentFramePos;
+        public bool Loop { get; set; }
+        public int StepForwardIncrement=1;
+        public int StepBackwardsIncrements=1;
     }
 }
