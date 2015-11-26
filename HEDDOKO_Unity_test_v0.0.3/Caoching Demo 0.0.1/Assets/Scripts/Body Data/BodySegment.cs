@@ -35,11 +35,7 @@ public class BodySegment
     public SegmentAnalysis mCurrentAnalysisSegment;
     //a list of body segment neighbors
 
-    /**
-    * UpdateSensorsData(BodyFrame vFrame)
-    * @param BodyFrame vFrame: the body frame containing the sensor data to be updated to the segment's sensors
-    * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
-    */
+
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
     /// </summary>
@@ -61,6 +57,7 @@ public class BodySegment
             }
         }
     }
+
     /**
     * UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
     * @param UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary): A filtered list of transformation matrices. 
@@ -70,6 +67,7 @@ public class BodySegment
     {
         MapSubSegments(vFilteredDictionary);
     }
+
     /**
     * UpdateInitialSensorsData(BodyFrame vFrame)
     * @param BodyFrame vFrame: the body frame whose subframes will updates to initial sensors
@@ -77,7 +75,6 @@ public class BodySegment
     */
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
-
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
         foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
         {
@@ -156,11 +153,14 @@ public class BodySegment
         u.Set(0, 1, 0);
         //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
-        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3); 
+        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);
 
+        //Update the analysis inputs
         TorsoAnalysis vTorsoAnalysis = (TorsoAnalysis)mCurrentAnalysisSegment;
         vTorsoAnalysis.TorsoOrientation = vCurrentTorsoOrientation;
         vTorsoAnalysis.AngleExtraction();
+
+        //Update the segment's and segment's view orientations
         vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
         //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
     }
@@ -326,11 +326,13 @@ public class BodySegment
         //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
-        //////////////////////////////ASSIGN TO SUBSEGMENT///////////////////////////
+        //Update the analysis inputs
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
         vRightLegAnalysis.HipOrientation = vHipOrientation;
         vRightLegAnalysis.KneeOrientation = vKneeOrientation;
         vRightLegAnalysis.AngleExtraction();
+
+        //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
     }
@@ -501,10 +503,13 @@ public class BodySegment
         //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
         vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
+        //Update the analysis inputs
         LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
         vLeftLegAnalysis.HipOrientation = vHipOrientation;
         vLeftLegAnalysis.KneeOrientation = vKneeOrientation;
         vLeftLegAnalysis.AngleExtraction();
+
+        //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
 
@@ -571,7 +576,7 @@ public class BodySegment
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
             //Debug.Log("vOrientationError " + vOrientationError);
-            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : (1-vOrientationError));
+            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
             //Debug.Log("CompensationAngle "+ vCompensationAngle);
             //CompensationAngle = 0;
             // Finding yaw compensation axis
@@ -915,43 +920,7 @@ public class BodySegment
 
     }
 
-
-    public void InitSegment(/*SegmentTypes vSegType, bool vIsTracked = true*/)
-    {
-        //SegmentType = vSegType;
-
-        //switch (SegmentType)
-        //{
-        //    case SegmentTypes.SegmentType_Torso:
-        //        {
-
-        //        }
-        //        break;
-        //    case SegmentTypes.SegmentType_RightArm:
-        //        {
-
-        //        }
-        //        break;
-        //    case SegmentTypes.SegmentType_LeftArm:
-        //        {
-
-        //        }
-        //        break;
-        //    case SegmentTypes.SegmentType_RightLeg:
-        //        {
-
-        //        }
-        //        break;
-        //    case SegmentTypes.SegmentType_LeftLeg:
-        //        {
-
-        //        }
-        //        break;
-        //    default:
-        //        //TODO: Invalid Body Type
-        //        break;
-        //}
-    }
+    
     #region helperfunctions
 
     /**
@@ -961,7 +930,6 @@ public class BodySegment
     */
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
     {
-
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {
             MapTorsoSegment(vFilteredDictionary);

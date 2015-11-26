@@ -214,6 +214,7 @@ public class BodyFrame
         } 
         return vBodyFrame;
     }
+
     /// <summary>
     /// Creates a bodyframe from an array of vectors
     /// </summary>
@@ -225,11 +226,12 @@ public class BodyFrame
         vBodyFrame.FrameData.Add(BodyStructureMap.SensorPositions.SP_LowerSpine, Vector3.zero);
         for (int i = 0; i < vBodyFrameData.Length; i++)
         {
-         BodyStructureMap.SensorPositions vSenPos=   ImuSensorFromPos(i);
+            BodyStructureMap.SensorPositions vSenPos = ImuSensorFromPos(i);
             vBodyFrame.FrameData.Add(vSenPos, vBodyFrameData[i]);
         }
         return vBodyFrame;
     }
+
     /// <summary>
     /// Returns a sensor position fromt eh given position
     /// </summary>

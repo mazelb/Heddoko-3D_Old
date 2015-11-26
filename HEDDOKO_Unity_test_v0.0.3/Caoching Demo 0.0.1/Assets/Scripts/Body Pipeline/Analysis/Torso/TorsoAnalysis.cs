@@ -7,6 +7,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
    public class TorsoAnalysis: SegmentAnalysis
    {
         /**
+<<<<<<< HEAD
 * FunctionName(object args)
 * @brief Performs x function 
 * @param object args: the parameters necessary for this
@@ -36,25 +37,57 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
        public float AngleIntegrationFlips { get; private set; }
         private float mAngularAccelerationTorsoVertical;
        private float mAngularVelocityTorsoVertical;
+=======
+        * FunctionName(object args)
+        * @brief Performs x function 
+        * @param object args: the parameters necessary for this
+        * function to perform
+        * @note Please not that this will throw an exception if
+        * y requirements are not met with the given parameter
+        * @return returns an arbitrary value
+        */
+        //  public delegate void TorsoOrientationUpdatedDelegate(float[,] vNewOrientation);
+
+        // public event TorsoOrientationUpdatedDelegate TorsoUpdatedEvent;
+        private float[,] mTorsoOrientation = new float[3,3];
+        private float mAngleTorsoFlexion;
+        private float mAngularAccelerationTorsoFlection;
+        private float mAngularVelocityTorsoFlexion;
+        private float mAngleTorsoLateral;
+        private float mAngularAccelerationTorsoLateral;
+        private float mAngularVelocityTorsoLateral;
+        private float mAngleTorsoRotation;
+        private float mAngleIntegrationTurns;
+        private int mNumberOfTurns;
+        private int mNumberOfFlips;
+        private float mAngularAccelerationTorsoRotation;
+        private float mAngularVelocityTorsoRotation;
+        private float mAngleTorsoVertical;
+        private float mAngleIntegrationFlips;
+        private float mAngularAccelerationTorsoVertical;
+        private float mAngularVelocityTorsoVertical;
+
+>>>>>>> origin/master
         /// <summary>
         /// The main torso orientation. On set, all listeners will be notified of new orientation
         /// </summary>
         public   float[,] TorsoOrientation
-       {
-           get
-           {
-               return mTorsoOrientation;
-           }
-           set
-           {
-               mTorsoOrientation = value; 
-           }
-       }
+        {
+            get
+            {
+                return mTorsoOrientation;
+            }
+            set
+            {
+                mTorsoOrientation = value; 
+            }
+        }
+
         /// <summary>
         /// Extract angles of torso
         /// </summary>
-       public override void AngleExtraction()
-       {
+        public override void AngleExtraction()
+        {
             float vTimeDifference = Time.time - mLastTimeCalled;
             if(  vTimeDifference == 0)
             {
@@ -198,5 +231,5 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             //====================================== End Angle extraction ==============================================//
 
         }
-    }
+        }
 }
