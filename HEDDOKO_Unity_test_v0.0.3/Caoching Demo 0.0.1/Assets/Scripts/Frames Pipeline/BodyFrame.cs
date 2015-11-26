@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System; 
 using HeddokoLib.utils; 
+
 /// <summary>
 /// The frame of data that is populated to sensors, and contains the list of sensors to access sensors data
 /// </summary>
@@ -20,10 +21,10 @@ public class BodyFrame
     [SerializeField]
     //The frame of data populated to sensors 
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData;
+    
+    //The timestamp of a bodybody frame 
+    private float mTimeStamp;
 
-    private float mTimeStamp;//The timestamp of a bodybody frame 
-  //  [SerializeField]
-  //  private List<Sensor> sensorData;
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
     {
           get
@@ -46,15 +47,12 @@ public class BodyFrame
         set { mTimeStamp = value; } 
     }
 
-
-
-    #region static helper functions
     /**
-   * ToString()
-   * @brief Prepares the current body frame as a string 
-   * @return current body frame as a string
-   * 
-   */
+    * ToString()
+    * @brief Prepares the current body frame as a string 
+    * @return current body frame as a string
+    * 
+    */
     public override string ToString()
     {
         string vOutput = "";
@@ -85,12 +83,16 @@ public class BodyFrame
         //from startIndex to endIndex, we check the subframes and extrapolate the IMU data. 
         int vStartIndex= 1;
         int vEndIndex = 20;
+
         //The check index is made such that when we iterate through the list, it is possible that the 19th index isn't of an IMU type, then it must be that it is a stretch sensor
-        int vCheckIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        int vCheckIndex = 19; 
         bool vFinishLoop = false;
         BodyFrame vBodyFrame = new BodyFrame();
         vBodyFrame.Timestamp = vTimestamp;
-        Vector3 vPlaceholderV3 = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
+        
+        //placeholder data to be used in the dictionary until it gets populated by the following loop
+        Vector3 vPlaceholderV3 = Vector3.zero; 
       
         int key = 0;
         BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
@@ -123,7 +125,6 @@ public class BodyFrame
                 key--;
                 vSensorPosAsKey = ImuSensorFromPos(key);
                 vBodyFrame.FrameData.Add(vSensorPosAsKey, vPlaceholderV3);
-                //vBodyFrame.MappedRotationMatrixData.Add(vSensorPosAsKey, vPlaceholderMat);
             }
             else
             {
@@ -138,16 +139,19 @@ public class BodyFrame
             } 
 
         }
+
         //check if lower spine exists
         if(!vBodyFrame.FrameData.ContainsKey(BodyStructureMap.SensorPositions.SP_LowerSpine))
         {
             vBodyFrame.FrameData.Add(BodyStructureMap.SensorPositions.SP_LowerSpine, Vector3.zero);
         }
+        
         //todo stretch sense data extrapolation starting from the updated startingIndex
 
         return vBodyFrame;
 
     }
+
     /// <summary>
     /// Converts a string received by the Brainpack server service into a bodyframe
     /// </summary>
@@ -156,22 +160,26 @@ public class BodyFrame
     public static BodyFrame ConvertFromHexaString(string vHexPacket)
     {
         string[] VRawData = vHexPacket.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+    
         //from startIndex to endIndex, we check the subframes and extrapolate the IMU data. 
         int vStartIndex = 1;
         int vEndIndex = 20;
         //The check index is made such that when we iterate through the list, it is possible that the 19th index isn't of an IMU type, then it must be that it is a stretch sensor
-        int vCheckIndex = 19; //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        //at this index we check if we actually hold data for the lower spine. If we do, then we continue, otherwise, we clear and the stretch data is gathered. 
+        int vCheckIndex = 19; 
         bool vFinishLoop = false;
         BodyFrame vBodyFrame = new BodyFrame();
-        Vector3 vPlaceholderV3 = Vector3.zero; //placeholder data to be used in the dictionary until it gets populated by the following loop
+
+        //placeholder data to be used in the dictionary until it gets populated by the following loop
+        Vector3 vPlaceholderV3 = Vector3.zero; 
          
         int key = 0;
-        BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; //initializing sensor positions to some default value
+
+        //initializing sensor positions to some default value
+        BodyStructureMap.SensorPositions vSensorPosAsKey = BodyStructureMap.SensorPositions.SP_RightElbow; 
+
         for (int i = vStartIndex; i < vEndIndex; i++)
         {
-
-
-
             //first check if the current index falls on a position that can be interpreted as an int
             if (i%2 == 1)
             {
@@ -191,7 +199,8 @@ public class BodyFrame
                     if (vFinishLoop)
                     {
                         //set the start index for the next iteration
-                        vStartIndex = i; //todo:Start index in the hexa string method is to be used when grabbing stretch sense data
+                        //todo:Start index in the hexa string method is to be used when grabbing stretch sense data
+                        vStartIndex = i; 
                         break;
                     }
                 }
@@ -305,9 +314,4 @@ public class BodyFrame
             return BodyStructureMap.SensorPositions.SP_LeftKnee; 
         }
     } 
-
-    
-    
-#endregion
- 
 }

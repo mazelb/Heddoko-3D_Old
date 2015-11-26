@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Assets.Scripts.Utils;
 using System.IO;
+
 [JsonObject(MemberSerialization.OptIn)]
 public class BodyStructureMap 
 {
@@ -143,6 +144,7 @@ public class BodyStructureMap
         this.SensorPosToSensorIDMap = vBSm.SensorPosToSensorIDMap;
         vBSm = null; //discard bsm
     }
+
     /// <summary>
     /// Writes a bodystructure map to file
     /// </summary>

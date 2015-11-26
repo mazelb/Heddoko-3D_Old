@@ -57,7 +57,7 @@ public sealed class BodiesManager : MonoBehaviour
     public void CreateNewBody(string vBodyUUID = "")
     {
         Body vBody = new Body();
-     vBody.InitBody(vBodyUUID);
+        vBody.InitBody(vBodyUUID);
         Bodies.Add(vBody);
     }
 
@@ -104,7 +104,6 @@ public sealed class BodiesManager : MonoBehaviour
         if(vTempRecording != null)
         {
             //Find the related body
-           // return GetBodyFromUUID(vTempRecording.BodyRecordingGuid);
             return GetBodyFromUUID(vTempRecording.BodyGuid);
         }
           

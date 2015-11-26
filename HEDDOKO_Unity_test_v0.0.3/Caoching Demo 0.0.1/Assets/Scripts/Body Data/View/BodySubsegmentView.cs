@@ -46,17 +46,14 @@ namespace Assets.Scripts.Body_Data.view
             {
                 vObjTransform.rotation = vNewOrientation;
             }
-            //Camera.main.Render();
         }
 
         public void ResetOrientations()
         {
-            //Debug.Log("resetting objects");
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 vObjTransform.rotation = Quaternion.identity;
             }
-            //Debug.Log("resetting objects Finished");
             Camera.main.Render();
         }
 
@@ -86,8 +83,6 @@ namespace Assets.Scripts.Body_Data.view
             ResetOrientations();
         }
 
-        #region Unity functions
-
         /**
         * Awake()
         * @brief On Awake: set the segment's initial orientation .
@@ -96,8 +91,5 @@ namespace Assets.Scripts.Body_Data.view
         {
             AssignTransforms();
         }
-
-        #endregion
-
     }
 }

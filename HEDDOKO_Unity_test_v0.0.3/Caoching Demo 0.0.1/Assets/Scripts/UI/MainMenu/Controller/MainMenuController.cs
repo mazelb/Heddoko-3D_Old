@@ -24,7 +24,10 @@ namespace Assets.Scripts.UI.MainScene.Controller
         public GameObject LoadingScreen;
         public GameObject AvailableRecordingsPanelPrefab;
         public GameObject AvailableRecordingButtonPrefab;
-        private bool mStart3D; //indicates if the user is using 3D to load the scene or starting the scene with a brainpack feed
+        
+        //indicates if the user is using 3D to load the scene or starting the scene with a brainpack feed
+        private bool mStart3D;
+
         private GameObject mCurrentRecordingPanel;
 
         public InformationPanel InfoPanel
@@ -40,11 +43,6 @@ namespace Assets.Scripts.UI.MainScene.Controller
             }
         }
 
-        #region unity functions
-        /**
-        * Awake 
-        * @brief On awake, initialize all the control UI elements in the scene 
-        */
         /// <summary>
         /// On  awake, initialize all the control UI elements in the scene
         /// </summary>
@@ -64,11 +62,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             Visualize3DButton.onClick.AddListener(Visualize3DButtonClicked);
 
         }
-        #endregion
-        /**
-        * ChangeTo3DSceneView() 
-        * @brief Switches scenes to the 3d scene view
-        */
+
         /// <summary>
         /// Switches scenes to the 3d view 
         /// </summary>
@@ -78,10 +72,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             StartCoroutine(LoadMainScene());
 
         }
-        /**
-        * LoadMainScene() 
-        * @brief Coroutine to load the main scene asychronously
-        */
+ 
         /// <summary>
         /// Coroutine to load the main scene asychronously
         /// </summary>
@@ -92,10 +83,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             yield return async;
             LoadingScreen.SetActive(false); 
         }
-        /**
-        * ImportButtonClick() 
-        * @brief Import button in scene has been clicked
-        */
+
         /// <summary>
         /// Import button in scene has been clicked
         /// </summary>
@@ -143,6 +131,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             }
           
         }
+
         /// <summary>
         /// The visualize3d button has been clicked
         /// </summary>
@@ -152,10 +141,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             EnableAllButLeaveoneInactive(Visualize3DButton);
             BrainpackInfoPanel.Show();
         }
-        /**
-        * DeactivateAllButtons() 
-        * @brief deactivate all buttons in the scene
-        */
+
         /// <summary>
         /// Deactivate all buttons in the scene
         /// </summary>
@@ -166,6 +152,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
                 vButton.interactable = false;
             }
         }
+
         /// <summary>
         /// Sets all the buttons to interactive except for the passed in one.
         /// </summary>
@@ -178,10 +165,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
             }
             vB.interactable = false;
         }
-        /**
-        * DeactivateAllButtons() 
-        * @brief reactivate all buttons in the scene
-        */
+
         /// <summary>
         /// Reactivate all buttons
         /// </summary>
@@ -193,10 +177,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
                 vButton.interactable = true;
             }
         }
-        /**
-        * DisplayAllAvailableRecordings() 
-        * @brief Display all available recordings 
-        */
+
         /// <summary>
         /// Display all available recordings 
         /// </summary>
@@ -204,10 +185,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
         {
             mCurrentRecordingPanel.GetComponent<AvailableRecordingPanelView>().Show();
         }
-        /**
-        * HideAllAvailableRecordings() 
-        * @brief Hides all available recordings 
-        */
+
         /// <summary>
         /// Hides all available recordings 
         /// </summary>
@@ -215,11 +193,7 @@ namespace Assets.Scripts.UI.MainScene.Controller
         {
             mCurrentRecordingPanel.GetComponent<AvailableRecordingPanelView>().Hide();
         }
-        /**
-        * ChooseRecording(int vRecordingIndex)
-        * @brief he in scene recording button selects the wanted recording. 
-        * @param int vRecordingIndex: The recording index
-        */
+
         /// <summary>
         /// The in scene recording button selects the wanted recording. 
         /// </summary>

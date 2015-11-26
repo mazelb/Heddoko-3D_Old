@@ -36,5 +36,4 @@ public class SuitsCommunicationMgr : MonoBehaviour
     }
     #endregion
 
- 
 }

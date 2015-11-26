@@ -1,16 +1,15 @@
 ﻿/** 
 * @file LeftLegAnalysis.cs
-* @brief LeftArmAnalysis the Joint class
+* @brief LeftArmAnalysis class
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
-
 */
+
 using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
-
     /// <summary>
     /// Analysis to be performed on the left leg 
     /// </summary>
@@ -19,13 +18,17 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         public float AngleKneeFlexion { get; private set; }
         private float mAngularAccelerationKneeFlexion;
         private float mAngularVelocityKneeFlexion;
+
         public float AngleKneeRotation { get; private set; }
         private float mAngularAccelerationKneeRotation;
+
         public float AngleLeftHipRotation { get; private set; }
         private float mAngularVelocityKneeRotation;
+
         public float AngleLeftHipFlexion { get; private set; }
         private float mAngularVelocityLeftHipFlexion;
         private float mAngularAccelerationLeftHipFlexion;
+
         public float AngleLeftHipAbduction { get; private set; }
         private float mAngularAccelerationLeftHipAbduction;
         private float mAngularVelocityLeftHipAbduction;
@@ -50,13 +53,10 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             float vAngleKneeFlexionNew = Vector3.Angle(vAxis1, vAxis2);
             float vAngularVelocityKneeFlexionNew = (vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
 
-
             /// step2 ///
             mAngularAccelerationKneeFlexion = (vAngularVelocityKneeFlexionNew - mAngularVelocityKneeFlexion) / vDeltaTime;
             mAngularVelocityKneeFlexion = vAngularVelocityKneeFlexionNew;
             AngleKneeFlexion = vAngleKneeFlexionNew;
-            //Debug.Log ("Knee Flection Angles" + AngleKneeFlexion + ", and, " + mAngularVelocityKneeFlexion + ", and, " + mAngularAccelerationKneeFlexion);
-
 
             //////////////// calculate the Knee Rotation angle ////////////////////////////////////////
 
@@ -77,10 +77,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationKneeRotation = (vAngularVelocityKneeRotationNew - mAngularVelocityKneeRotation) / vDeltaTime;
             mAngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
             AngleKneeRotation = vAngleKneeRotationNew;
-
-
-            //Debug.Log ("Knee Rotation Angles" + AngleKneeRotation + ", and, " + mAngularVelocityKneeRotation + ", and, " + mAngularAccelerationKneeRotation);
-
 
             //////////////// calculate the Left Hip Flection angle ////////////////////////////////////////
 
@@ -104,10 +100,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationLeftHipFlexion = (vAngularVelocityLeftHipFlexionNew - mAngularVelocityLeftHipFlexion) / vDeltaTime;
             mAngularVelocityLeftHipFlexion = vAngularVelocityLeftHipFlexionNew;
             AngleLeftHipFlexion = vAngleLeftHipFlexionNew;
-
-            //Debug.Log ("EHip Flexion Angles" + vAngleLeftHipFlexionNew + ", and, " + mAngularVelocityLeftHipFlexion + ", and, " + mAngularAccelerationLeftHipFlexion);
-
-
 
             //////////////// calculate the Left Hip Abduction angle ////////////////////////////////////////
 

@@ -77,12 +77,8 @@ namespace Assets.Scripts.Body_Data.view
         {
             this.mBuffer = vBuffer;
             this.mAssociatedBody = vAssociatedBody;
-
         }
-        /**
-        * SetInitialFrameToCurrent()
-        * @brief sets the current frame to be the initial body frame
-        */ 
+
         /// <summary>
         /// Reset the initial frame
         /// </summary>
@@ -93,6 +89,7 @@ namespace Assets.Scripts.Body_Data.view
                 AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
             }
         }
+
         /// <summary>
         /// Will be called on by an external thread in the case that the initial frame needs to be set 
         /// </summary>
@@ -102,6 +99,7 @@ namespace Assets.Scripts.Body_Data.view
             InitialFrameSetTrigger.Triggered = true;
             InitialFrameSetTrigger.Args = vInitialBodyframe;
         }
+
         /// <summary>
         /// pause the current frame
         /// </summary>
@@ -113,6 +111,7 @@ namespace Assets.Scripts.Body_Data.view
                 mIsPaused = !mIsPaused;
             }
         }
+
         /**
         * OnDisable()
         * @brief Automatically called by Unity when the app is exited. Cleans up tasks and unhooks event listeners  
@@ -152,16 +151,18 @@ namespace Assets.Scripts.Body_Data.view
                    
                     if (vDic != null)
                     {
-                        Body.ApplyTracking(AssociatedBody, vDic);//todo: extract this from the view and place it in its own module
+                        Body.ApplyTracking(AssociatedBody, vDic);
+                        //todo: extract this from the view and place it in its own module
                     } 
                 }
             }
         }
+
         /**
-         * Awake()
-         * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
-         * and set the body view to this.
-         */
+        * Awake()
+        * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
+        * and set the body view to this.
+        */
         private void Awake()
         {
             if (name != "body view guid: e75115c356218d84fa35dbd8a3159284")

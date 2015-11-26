@@ -5,16 +5,14 @@
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
-
 */
 using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 {
     /**
-     * Body class 
+    * RightArmAnalysis class 
     * @brief RightArmAnalysis class 
-
     */
     public class RightArmAnalysis: ArmAnalysis
     {
@@ -39,6 +37,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         public float mAngleRightShoulderRotation = 0;
         public float mAngularVelocityRightShoulderRotation = 0;
         public float mAngularAccelerationRightShoulderRotation = 0;
+
         /// <summary>
         /// Extract angles from orientations
         /// </summary>
@@ -71,9 +70,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             mAngularVelocityRightElbowFlexion = vAngularVelocityRightElbowFlexionNew;
             mAngleRightElbowFlexion = vAngleRightElbowFlexionNew;
 
-
-            //Debug.Log ("Elbow Flection Angles" + mAngleRightElbowFlexion + ", and, " + mAngularVelocityRightElbowFlexion + ", and, " + mAngularAccelerationRightElbowFlexion);
-
             //////////////// calculate the Elbow Pronation angle ////////////////////////////////////////
 
             /// step 1///
@@ -89,12 +85,10 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
                 vAngleRightElbowPronationNew = -vAngleRightElbowPronationNew;
                 vAngularVelocityRightElbowPronationNew = -vAngularVelocityRightElbowPronationNew;
             }
+
             mAngularAccelerationRightElbowPronation = (vAngularVelocityRightElbowPronationNew - mAngularVelocityRightElbowPronation) / vDeltaTime;
             mAngularVelocityRightElbowPronation = vAngularVelocityRightElbowPronationNew;
             mAngleRightElbowPronation = vAngleRightElbowPronationNew;
-
-
-            //Debug.Log ("Elbow Pronation Angles" + mAngleRightElbowPronation + ", and, " + mAngularVelocityRightElbowPronation + ", and, " + mAngularAccelerationRightElbowPronation);
 
             //////////////// calculate the Shoulder Flection angle ////////////////////////////////////////
 
@@ -120,8 +114,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             mAngularVelocityRightShoulderFlexion = vAngularVelocityRightShoulderFlexionNew;
             mAngleRightShoulderFlexion = vAngleRightShoulderFlexionNew;
 
-            //Debug.Log ("EShoulder Flexion Angles" + vAngleRightShoulderFlexionNew + ", and, " + mAngularVelocityRightShoulderFlexion + ", and, " + mvAngularAccelerationRightShoulderFlexion);
-
             //////////////// calculate the Shoulder Abduction angle ////////////////////////////////////////
 
             /// step 1///
@@ -145,8 +137,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             mAngularVelocityRightShoulderAbduction = vAngularVelocityRightShoulderAbductionNew;
             mAngleRightShoulderAbduction = vAngleRightShoulderAbductionNew;
 
-            //Debug.Log ("Shoulder Abduction Angles" + vAngleRightShoulderAbductionNew + ", and, " + mAngularVelocityRightShoulderAbduction + ", and, " + mAngularAccelerationRightShoulderAbduction);
-
             //////////////// calculate the Shoulder Rotation angle ////////////////////////////////////////
 
             /// step 1///
@@ -165,6 +155,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
                 vAngleRightShoulderRotationNew = -vAngleRightShoulderRotationNew;
                 vAngularVelocityRightShoulderRotationNew = -vAngularVelocityRightShoulderRotationNew;
             }
+
             mAngularAccelerationRightShoulderRotation = (vAngularVelocityRightShoulderRotationNew - mAngularVelocityRightShoulderRotation) / vDeltaTime;
             mAngularVelocityRightShoulderRotation = vAngularVelocityRightShoulderRotationNew;
             mAngleRightShoulderRotation = vAngleRightShoulderRotationNew; 

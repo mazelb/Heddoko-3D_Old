@@ -13,13 +13,6 @@ using HeddokoLib.adt;
 */
 public class BodyFrameBuffer : CircularQueue<BodyFrame>
 {
-    /**
-    * BodyFrameBuffer(int capacity)
-    * @param int capacity: the capacity of the buffer
-    * @brief Constructor for a BodyFrameBuffer with a set capacity
-    * @return a new BodyFrameBuffer with a set capacity
-    */
-
     /// <summary>
     /// Constructor for a BodyFrameBuffer with a set capacity and allows for overflow
     /// </summary>
@@ -29,6 +22,7 @@ public class BodyFrameBuffer : CircularQueue<BodyFrame>
     {
         
     }
+
     /**
     * BodyFrameBuffer()
     * @brief Constructor for a BodyFrameBuffer 

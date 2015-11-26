@@ -17,13 +17,8 @@ using UnityEngine.UI;
 
 namespace Assets.Demos
 {
-    /**
-    * BodyPlayer class , essentially a player that streams from a brainpack or recording. Todo: this class holds both the view and controls. 
-    * @brief BodyPlayer class  
-    */
-
     /// <summary>
-    /// Preps the body for playing a recording 
+    /// Preps the body for playing a recording. BodyPlayer class , essentially a player that streams from a brainpack or recording. Todo: this class holds both the view and controls. 
     /// </summary>
     public class BodyPlayer : MonoBehaviour
     {
@@ -40,6 +35,7 @@ namespace Assets.Demos
         private Sprite mBluetoothIcon;
         private Sprite mPlayButtonOriginalIcon;
         public DisplayLegAngleExtractions DisplayLegAngleExtractions;
+
         private Sprite BluetoothIcon 
         {
             get
@@ -52,11 +48,6 @@ namespace Assets.Demos
             }
         }
         
-        #region unity functions
-        /**
-        * Start 
-        * @brief  On the start of the scene, initialize all the components to be able to start playing
-        */
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
@@ -75,6 +66,7 @@ namespace Assets.Demos
             ResetButton.onClick.AddListener(ResetInitialFrame);
 
         }
+
         /// <summary>
         /// OnEnable, hook listeners
         /// </summary>
@@ -84,6 +76,7 @@ namespace Assets.Demos
             BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent += OnBrainpackDisconnectListener;
         }
+
         /// <summary>
         /// OnDisable, unhook listeners
         /// </summary>
@@ -93,7 +86,6 @@ namespace Assets.Demos
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
 
-        #endregion
         /**
         * Play 
         * @brief Will play the recording for the prepped body
@@ -111,16 +103,16 @@ namespace Assets.Demos
                 }
             }
         }
+
         /**
         * ResetInitialFrame 
         * @brief will set the Initial Frame
         */
         public void ResetInitialFrame()
         {
-             CurrentBodyInPlay.View.ResetInitialFrame();
+            CurrentBodyInPlay.View.ResetInitialFrame();
             StartCoroutine(StartPausingCountdown());
         }
-
 
         /// <summary>
         /// Safely change the current state of the body player
@@ -181,6 +173,7 @@ namespace Assets.Demos
                     }
             }
         }
+
         /**
         * Pause 
         * @brief Pauses the recording's play back
@@ -199,7 +192,8 @@ namespace Assets.Demos
             }
             mInternalTimer = PauseThreadTimer;
             mResetRoutineStarted = true;
-      ChangePauseState();
+            ChangePauseState();
+
             while (true)
             {
                 mInternalTimer -= Time.deltaTime;
@@ -212,6 +206,7 @@ namespace Assets.Demos
             ChangePauseState();
             mResetRoutineStarted = false;
         }
+
         /// <summary>
         /// Listens to when a recording has been selected. sets the current state of the class accordingly
         /// </summary>
@@ -228,6 +223,7 @@ namespace Assets.Demos
             mPlayButtonPushed = false;
             ChangeState(BodyPlaybackState.Waiting);
         }
+        
         /// <summary>
         /// Listens to when the brainpackcontroller is in a connected state
         /// </summary>
@@ -255,6 +251,7 @@ namespace Assets.Demos
              
             ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
+
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state
         /// </summary>
@@ -271,6 +268,7 @@ namespace Assets.Demos
             PlayButton.interactable = true;
             ChangeState(BodyPlaybackState.Waiting);
         }
+
         /// <summary>
         /// Current state of the playback
         /// </summary>

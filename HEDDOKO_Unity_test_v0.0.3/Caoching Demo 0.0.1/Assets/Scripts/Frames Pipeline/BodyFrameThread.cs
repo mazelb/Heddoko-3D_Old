@@ -22,7 +22,6 @@ todo: can create an interface for handling these, subsequently every routine tha
 */
 public class BodyFrameThread : ThreadedJob
 {
-    #region class fields
     private BodyFrameBuffer mBuffer;  //buffer  
     private SourceDataType mDataSourceType;
     private PlaybackState mCurrentPlaybackState = PlaybackState.Pause;
@@ -34,9 +33,6 @@ public class BodyFrameThread : ThreadedJob
     private bool mPauseWorker;
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
-
-    #endregion
-    #region properties
 
     public bool ContinueWorking
     {
@@ -58,7 +54,6 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
-
     internal BodyFrameBuffer BodyFrameBuffer
     {
         get
@@ -76,16 +71,12 @@ public class BodyFrameThread : ThreadedJob
         get { return mInboundSuitBuffer; }
     }
 
-    #endregion
-
-
     //TODO: Handling different sources: Recording or Suit Comm
     //TODO: Handling Frame by Frame transmition  
 
     //From recording 
     //from suit comm
 
-    #region Constructors
     /** 
     * @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
     * @param recording 
@@ -96,23 +87,26 @@ public class BodyFrameThread : ThreadedJob
         this.mBuffer = vBuffer;
         mDataSourceType = SourceDataType.Recording;
     }
+
     /** 
-* @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
-* @param recording 
-*/
+    * @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
+    * @param recording 
+    */
     public BodyFrameThread(BodyFramesRecording vRecording, BodyFrameBuffer vBuffer)
     {
         mBodyFramesRecording = vRecording;
         this.mBuffer = vBuffer;
         mDataSourceType = SourceDataType.Recording;
     }
+
     /**
-     * @brief Default constructor
-     */
+    * @brief Default constructor
+    */
     public BodyFrameThread()
     {
 
     }
+
     /// <summary>
     /// Preps the buffer to accept raw data from brainpacks
     /// </summary>
@@ -132,20 +126,18 @@ public class BodyFrameThread : ThreadedJob
         mDataSourceType = SourceDataType.BrainFrame;
     }
 
-    #endregion
-    #region polymorphic functions
-
     public override void Start()
     {
         ContinueWorking = true;
         base.Start();
 
     }
+
     public void PauseWorker()
     {
         mPauseWorker = !mPauseWorker;
     }
-    #endregion
+
     /**
     * ThreadFunction()
     * @brief The thread loop, overwrite this in the base class
@@ -169,7 +161,7 @@ public class BodyFrameThread : ThreadedJob
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
            RecordingTask();
-             //   RecordingPlaybackTask();
+                //   RecordingPlaybackTask();
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -178,13 +170,11 @@ public class BodyFrameThread : ThreadedJob
 
     }
 
-    #region helper functions for ThreadFunction()
-
     /**
-   * TaskForRecording()
-   * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the tasks waits until cancelled. this task is for the case that the data 
-     * comes from a recording
-   */
+    * TaskForRecording()
+    * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the tasks waits until cancelled. this task is for the case that the data 
+    * comes from a recording
+    */
     private void RecordingTask()
     {
         int vBodyFrameIndex = 0;
@@ -202,10 +192,12 @@ public class BodyFrameThread : ThreadedJob
                 }
                 try
                 {
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                    //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
-                    if (vBodyFrameIndex >= mRawFrames.Count) //reset back to 0
+                    //reset back to 0
+                    if (vBodyFrameIndex >= mRawFrames.Count) 
                     {
                         vBodyFrameIndex = 0;
                     }
@@ -224,13 +216,13 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
-    #region playback
     private void RecordingPlaybackTask()
     {
 
         // long vStartTime = DateTime.Now.Ticks;
         float vStartTime = TimeUtility.Time;
-        int vPosition = 0; //frame position
+        //frame position
+        int vPosition = 0; 
 
         while (ContinueWorking)
         {
@@ -252,8 +244,9 @@ public class BodyFrameThread : ThreadedJob
                     float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
 
                     vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
-                  //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
+                    //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
                     vPosition = (int)(1 * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
+
                     if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
                     {
                         mPauseWorker = true;
@@ -261,47 +254,10 @@ public class BodyFrameThread : ThreadedJob
                         vStartTime = DateTime.Now.Ticks;
                         break;
                     }
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
+
+                    //convert to body frame 
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
-                    /*switch (mCurrentPlaybackState)
-                    {
-                        case PlaybackState.Pause:
-                            break;
-                        case PlaybackState.Forward:
-                            {
-
-                                float vDeltaTime = TimeUtility.Time - vStartTime;
-                                float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
-
-                                vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
-                                float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
-                                vPosition = (int)(mPlaybackSpeed * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
-                                if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
-                                {
-                                    mPauseWorker = true;
-                                    vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
-                                    vStartTime = DateTime.Now.Ticks;
-                                    break;
-                                }
-                                BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
-                                BodyFrameBuffer.Enqueue(vBodyFrame);
-                            }
-                            break;
-                        case PlaybackState.Rewind:
-                            {
-                                if (vPosition <= 0)
-                                {
-                                    break;
-                                }
-
-                                BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
-                                BodyFrameBuffer.Enqueue(vBodyFrame);
-                            }
-                            break;
-                        case PlaybackState.Stop:
-                            break;
-                    }*/
-
                 }
                 catch (Exception e)
                 {
@@ -316,6 +272,7 @@ public class BodyFrameThread : ThreadedJob
             }
         }
     }
+
     /**
     * BrainFrameTask()
     * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
@@ -335,8 +292,6 @@ public class BodyFrameThread : ThreadedJob
             {
                 continue;
             }
-            //  HeddokoPacket vOutboundPacket = new HeddokoPacket(HeddokoCommands.RequestBPData,"");
-            //     PacketCommandRouter.Instance.Process(this, vOutboundPacket);
 
             HeddokoPacket vPacket = InboundSuitBuffer.Dequeue();
             if (vPacket == null)
@@ -347,26 +302,34 @@ public class BodyFrameThread : ThreadedJob
             try
             {
                 bool vAllClear = false;
+
                 //first unwrap the string and break it down 
                 vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
+
                 //todo place a check here for valid data
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 if (vExploded.Length < 12)
                 {
                     string s = " debug break;";
                 }
+
                 //the first value is a timestamp in int
                 int vTimeStamp = Convert.ToInt32(vExploded[0]);
+                
                 //get the bitmask from index 1
                 Int16 vBitmask = Convert.ToInt16(vExploded[1], 16);
+
                 int vStartIndex = 2;
                 int vEndIndex = 11;
                 int vBitmaskCheck = 0;
-                int vSetterIndex = 0; //is used to set vPreviouslyValid values indicies 
+                //is used to set vPreviouslyValid values indicies 
+                int vSetterIndex = 0; 
+
                 for (int i = vStartIndex; i < vEndIndex; i++, vBitmaskCheck++, vSetterIndex++)
                 {
                     //get the bitmask and check if the sensors values are valid(not disconnected)
-                    if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck)) //data is valid 
+                    //data is valid 
+                    if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck)) 
                     {
                         //conversion happens here, todo: place a check here for invalid data(less than 4 bytes in length
                         string[] v3data = vExploded[i].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -396,32 +359,25 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
-
-    #endregion
     /**
     * DataStreamTask()
     * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
     * comes from a the brainframe
     */
-
     private void DataStreamTask()
     {
 
     }
-    #endregion
-
-    #region threading functions
-
 
     /**
     * CleanUp
     * @brief Helping function cleans ups  
     */
-
     public void StopThread()
     {
         ContinueWorking = false;
     }
+
     /**
     * OnFinished()
     * @brief Callback when the thread is done executing
@@ -431,8 +387,6 @@ public class BodyFrameThread : ThreadedJob
         //This is executed by the Unity main thread when the job is finished 
         //TODO: 
     }
-    #endregion
-
 
     /// <summary>
     /// Where does the data originate from?
@@ -445,6 +399,7 @@ public class BodyFrameThread : ThreadedJob
         DataStream,
         Other
     }
+
     /// <summary>
     /// Represent the recording playback state
     /// </summary>

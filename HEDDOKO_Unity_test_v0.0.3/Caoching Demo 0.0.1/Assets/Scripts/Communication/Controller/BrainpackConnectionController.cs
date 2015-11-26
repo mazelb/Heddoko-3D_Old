@@ -49,6 +49,8 @@ namespace Assets.Scripts.Communication.Controller
         private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
 
+        private BrainpackConnectionView mView;
+
         private GameObject LoadingScreen
         {
             get
@@ -68,23 +70,14 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// returns the current state of the controller
         /// </summary>
-        /**
-        * ConnectionState 
-        * @brief returns the current state of the controller
-        */
-
         public BrainpackConnectionState ConnectionState
         {
             get { return mCurrentConnectionState; }
         }
-        private BrainpackConnectionView mView;
+
         /// <summary>
         /// Returns the view associated with the controller
         /// </summary>
-        /**
-        * View 
-        * @brief Returns the view associated with the controller
-        */
         public BrainpackConnectionView View
         {
             get
@@ -104,10 +97,6 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Singleton instance
         /// </summary>
-        /**
-        * View 
-        * @brief Singleton instance
-        */
         public static BrainpackConnectionController Instance
         {
             get
@@ -130,10 +119,6 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Request to connect to brainpack
         /// </summary>
-        /**
-        * ConnectToBrainpack() 
-        * @brief Request to connect to brainpack
-        */
         public void ConnectToBrainpack()
         {
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
@@ -145,11 +130,6 @@ namespace Assets.Scripts.Communication.Controller
         /// FailedToConnect listener: listen to events that the brainpack failed to connect
         /// </summary>
         /// <param name="vArgs">The failure message</param>
-        /**
-        * FailedToConnectListener(string vArgs) 
-        * @brief FailedToConnect listener: listen to events that the brainpack failed to connect
-        * @param string vArgs: The failure message
-        */
         internal void FailedToConnectListener(string vArgs)
         {
             SocketClientErrorTrigger.Triggered = true;
@@ -160,11 +140,6 @@ namespace Assets.Scripts.Communication.Controller
         /// The result of the brainpack connection
         /// </summary>
         /// <param name="vConnectionRes">The connection result</param>
-        /**
-        * BrainpackConnectionResult(bool vConnectionRes)
-        * @brief The result of the brainpack connection
-        * @param  bool vConnectionRes: The connection result
-        */
         public void BrainpackConnectionResult(bool vConnectionRes)
         {
             if (!vConnectionRes)
@@ -187,13 +162,10 @@ namespace Assets.Scripts.Communication.Controller
 
             }
         }
+
         /// <summary>
         /// Changes the scene to the main 3d scene
         /// </summary>
-        /**
-        * ChangeTo3DSceneView()
-        * @brief Changes the scene to the main 3d scene
-        */
         private void ChangeTo3DSceneView()
         {
             LoadingScreen.SetActive(true);
@@ -204,10 +176,6 @@ namespace Assets.Scripts.Communication.Controller
         /// Helper method that asynchrounously loads the main 3d scene
         /// </summary>
         /// <returns></returns>
-        /**
-        * LoadMainScene()
-        * @brief Helper method that asynchrounously loads the main 3d scene
-        */
         private IEnumerator LoadMainScene()
         {
             AsyncOperation async = Application.LoadLevelAsync(1);
@@ -220,26 +188,17 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         /// <param name="vSeconds">the number of seconds to wait</param>
         /// <returns></returns>
-        /**
-        * WaitAndThenReconnect(float vSeconds)
-        * @brief Wait and then try to reconnect
-        * @param float vSeconds: the number of seconds to wait
-        */
         private IEnumerator WaitAndThenReconnect(float vSeconds)
         {
             yield return new WaitForSeconds(vSeconds);
             ConnectToBrainpack();
             vTotalTries++;
         }
+
         /// <summary>
         /// Change the current state of the controller and send out appropriate events
         /// </summary>
         /// <param name="vNewState">The new state to change to</param>
-        /**
-        * ChangeCurrentState(BrainpackConnectionState vNewState))
-        * @brief Change the current state of the controller and send out appropriate events
-        * @param BrainpackConnectionState vNewState: The new state to change to
-        */
         private void ChangeCurrentState(BrainpackConnectionState vNewState)
         {
             switch (mCurrentConnectionState)
@@ -321,56 +280,39 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Initialize the instance
         /// </summary>
-        /**
-        * Init()
-        * @brief Initialize the instance 
-        */
         private void Init()
         {
 
         }
-        #region unity functions
+
         /// <summary>
         /// on Awake: Initialize the instance 
         /// </summary>
-        /**
-        * Awake()
-        * @brief on Awake: Initialize the instance 
-        */
         void Awake()
         {
             Instance.Init();
         }
+
         /// <summary>
         /// On application quit, stop the socket client
         /// </summary>
-        /**
-        * OnApplicationQuit()
-        * @brief On application quit, stop the socket client
-        */
         void OnApplicationQuit()
         {
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
+        
         /// <summary>
         /// reset the number of reconnect tries
         /// </summary>
-        /**
-        * OnApplicationQuit()
-        * @brief reset the number of reconnect tries
-        */
         public void ResetTries()
         {
             vTotalTries = 0;
         }
+
         /// <summary>
         /// The update function monitors the connected flag and starts to pull data
         /// </summary>
-        /**
-        * Update()
-        * @brief The update function monitors the connected flag and starts to pull data
-        */
         void Update()
         {
             if (BrainpackConnectedTrigger.Triggered)
@@ -384,6 +326,7 @@ namespace Assets.Scripts.Communication.Controller
                 View.SetWarningBoxMessage((string)SocketClientErrorTrigger.Args);
                 ChangeCurrentState(BrainpackConnectionState.Disconnected); 
             }
+
             //start pulling data
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             {
@@ -396,12 +339,7 @@ namespace Assets.Scripts.Communication.Controller
                 Instance.ChangeTo3DSceneView();
             }
         }
-        #endregion
-        /**
-        * ReadyToLinkBodyToBP(BodyFrameThread vBodyFrameThread) 
-        * @brief Sets the body as being ready to connect to the brainpack, once the brainpack is connected, the body will stream the brainpack
-        * @param BodyFrameThread vBodyFrameThread:The body frame thread to connect to
-        */
+
         /// <summary>
         /// Sets the body as being ready to connect to the brainpack, once the brainpack is connected, the body will stream the brainpack
         /// </summary>
@@ -411,19 +349,6 @@ namespace Assets.Scripts.Communication.Controller
             PacketCommandRouter.Instance.SetBodyFrameThread(vBodyFrameThread);
         }
 
-/*        /**
-        * RequestNewConnectionFromBody() 
-        * @brief Sets the body as being ready to connect to the brainpack, once the brainpack is connected, the body will stream the brainpack
-        * @param BodyFrameThread vBodyFrameThread:The body frame thread to connect to
-        #1#
-        public void RequestNewConnectionFromBody()
-        {
-            //reset tries first
-            ResetTries();
-            ConnectToBrainpack();
-
-        }*/
-
         /// <summary>
         /// Disconnects the current body from the brainpack
         /// </summary>
@@ -432,8 +357,6 @@ namespace Assets.Scripts.Communication.Controller
             PacketCommandRouter.Instance.DisconnectFrameThread();
         }
     }
- 
-
 
     public enum BrainpackConnectionState
     {

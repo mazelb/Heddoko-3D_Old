@@ -1,11 +1,17 @@
 ﻿
+/** 
+* @file RightLegAnalysis.cs
+* @brief RightLegAnalysis class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date November 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
 
 using System; 
 using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
-
    /// <summary>
    /// Represents the anaylsis of the right leg segment
    /// </summary>
@@ -23,12 +29,11 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         public float mAngularVelocityRightHipFlexion = 0;
         public float mAngularAccelerationRightHipFlexion = 0;
 
-
         public float AngleRightHipAbduction { get; private set; }
         public float mAngularVelocityRightHipAbduction = 0;
         public float mAngularAccelerationRightHipAbduction = 0;
 
-        public   float AngleRightHipRotation { get; private set; }
+        public float AngleRightHipRotation { get; private set; }
         public float mAngularVelocityRightHipRotation = 0;
         public float mAngularAccelerationRightHipRotation = 0;
 
@@ -42,7 +47,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         /// Listens to events where squats need to be counted
         /// </summary>
         /// <param name="vFlag"></param>
-       private void StartCountingSquatsListener(bool vFlag)
+        private void StartCountingSquatsListener(bool vFlag)
         {
             mStartCountingSquats = vFlag;
         }
@@ -76,7 +81,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             float vAngleKneeFlexionNew = Vector3.Angle(vAxis1, vAxis2);
             float vAngularVelocityKneeFlexionNew = (vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
 
-            //        print(NumberofRightSquats + "angle" + AngleKneeFlexion + "vAngularVelocityKneeFlexionNew= "+ vAngularVelocityKneeFlexionNew);
             if ( mStartCountingSquats)
             {
                 if (Math.Abs(vAngleKneeFlexionNew) < 15)
@@ -88,7 +92,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
                     mAngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
                 }
 
-                //        print(mAngleSumRight + "mAngleSumRight");
                 if (Math.Abs(mAngleSumRight) > 140)
                 {
                     mAngleSumRight = 0;
@@ -124,10 +127,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
             AngleKneeRotation = vAngleKneeRotationNew;
 
-
-            //Debug.Log ("Knee Rotation Angles" + AngleKneeRotation + ", and, " + mAngularVelocityKneeRotation + ", and, " + mAngularAccelerationKneeRotation);
-
-
             //////////////// calculate the Hip Flection angle ////////////////////////////////////////
 
             /// step1 ///
@@ -151,10 +150,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularVelocityRightHipFlexion = vAngularVelocityRightHipFlexionNew;
             AngleRightHipFlexion = vAngleRightHipFlexionNew;
 
-            //Debug.Log ("EHip Flexion Angles" + vAngleRightHipFlexionNew + ", and, " + mAngularVelocityRightHipFlexion + ", and, " + mAngularAccelerationRightHipFlexion);
-
-
-
             //////////////// calculate the Hip Abduction angle ////////////////////////////////////////
 
             /// step1 ///
@@ -176,9 +171,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationRightHipAbduction = (vAngularVelocityRightHipAbductionNew - mAngularVelocityRightHipAbduction) / vDeltaTime;
             mAngularVelocityRightHipAbduction = vAngularVelocityRightHipAbductionNew;
             AngleRightHipAbduction = vAngleRightHipAbductionNew;
-
-            //Debug.Log ("Hip Abduction Angles" + vAngleRightHipAbductionNew + ", and, " + mAngularVelocityRightHipAbduction + ", and, " + mAngularAccelerationRightHipAbduction);
-
 
             //////////////// calculate the Hip Rotation angle ////////////////////////////////////////
 
