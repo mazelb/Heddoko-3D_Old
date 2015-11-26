@@ -72,7 +72,6 @@ public class BodySegment
     */
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
-
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
         foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
         {
@@ -554,7 +553,7 @@ public class BodySegment
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
             //Debug.Log("vOrientationError " + vOrientationError);
-            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : (1-vOrientationError));
+            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
             //Debug.Log("CompensationAngle "+ vCompensationAngle);
             //CompensationAngle = 0;
             // Finding yaw compensation axis
@@ -926,6 +925,7 @@ public class BodySegment
         //        break;
         //}
     }
+    
     #region helperfunctions
 
     /**
@@ -935,7 +935,6 @@ public class BodySegment
     */
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
     {
-
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {
             MapTorsoSegment(vFilteredDictionary);

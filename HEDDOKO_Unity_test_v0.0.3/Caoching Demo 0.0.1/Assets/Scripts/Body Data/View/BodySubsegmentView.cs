@@ -46,14 +46,18 @@ namespace Assets.Scripts.Body_Data.view
             {
                 vObjTransform.rotation = vNewOrientation;
             }
+            //Camera.main.Render();
         }
 
         public void ResetOrientations()
         {
+            //Debug.Log("resetting objects");
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 vObjTransform.rotation = Quaternion.identity;
             }
+            //Debug.Log("resetting objects Finished");
+            Camera.main.Render();
         }
 
         /**

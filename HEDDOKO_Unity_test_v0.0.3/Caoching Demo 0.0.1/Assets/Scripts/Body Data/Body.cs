@@ -34,7 +34,9 @@ public class Body
 
     [SerializeField]
     //Current body Frame 
-    public BodyFrame CurrentBodyFrame;
+    public BodyFrame CurrentBodyFrame
+    { get; set; }
+
     [SerializeField]
     //Initial body Frame
     public BodyFrame InitialBodyFrame { get; set; }
@@ -176,6 +178,7 @@ public class Body
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
+            //BodySegments[i].AssociatedView.
         }
     }
 
@@ -197,15 +200,15 @@ public class Body
 
             SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
-            TrackingBuffer vBuffer2 = new TrackingBuffer();
+            //TrackingBuffer vBuffer2 = new TrackingBuffer();
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-            mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
+            //mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
             //get the first frame and set it as the initial frame
 
-            View.Init(this, vBuffer2);
+            View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
-            mTrackingThread.Start();
+            //mTrackingThread.Start();
             View.StartUpdating = true;
         }
     }
@@ -233,12 +236,12 @@ public class Body
         StopThread(); 
         
         BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
-        TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
+        //TrackingBuffer vBuffer2 = new TrackingBuffer(1024);
         mBodyFrameThread = new BodyFrameThread(vBuffer1 , BodyFrameThread.SourceDataType.BrainFrame);
-        mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
-        View.Init(this, vBuffer2);
+        //mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
+        View.Init(this, vBuffer1);
         mBodyFrameThread.Start();
-        mTrackingThread.Start();
+        //mTrackingThread.Start();
         View.StartUpdating = true;
 
         //1 inform the brainpack connection controller to establish a new connection
@@ -349,6 +352,7 @@ public class Body
             vBodySegment.UpdateSegment(vFilteredDictionary);
         }
     }
+
     /**
     * GetTracking()
     * @brief  Play a recording from the given recording UUID. 
@@ -384,6 +388,7 @@ public class Body
         }
         return vDic;
     }
+
     /**
     * GetFusion(Body vBody)
     * @brief  Apply adjustments to the 9 joints in order to increase precision and reliabilitie of the transforms.  

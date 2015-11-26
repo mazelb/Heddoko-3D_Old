@@ -31,7 +31,5 @@ namespace Assets.Scripts.Body_Pipeline.Analysis
           
             
         }
-   
- 
     }
 }

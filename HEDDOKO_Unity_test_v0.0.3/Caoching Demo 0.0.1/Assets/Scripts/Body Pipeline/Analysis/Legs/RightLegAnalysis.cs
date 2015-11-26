@@ -88,7 +88,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
                 //        print(mAngleSumRight + "mAngleSumRight");
                 if (Math.Abs(mAngleSumRight) > 140)
                 {
-
                     mAngleSumRight = 0;
                     mNumberofRightSquats++;
                 }
@@ -99,8 +98,6 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationKneeFlexion = (vAngularVelocityKneeFlexionNew - mAngularVelocityKneeFlexion) / vDeltaTime;
             mAngularVelocityKneeFlexion = vAngularVelocityKneeFlexionNew;
             mAngleKneeFlexion = vAngleKneeFlexionNew;
-
-
 
             //////////////// calculate the Knee Rotation angle ////////////////////////////////////////
 

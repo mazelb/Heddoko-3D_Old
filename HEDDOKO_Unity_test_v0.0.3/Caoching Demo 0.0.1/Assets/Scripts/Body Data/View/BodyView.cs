@@ -22,14 +22,17 @@ namespace Assets.Scripts.Body_Data.view
     {
 
         //private BodyFrameBuffer mBuffer;
-        private TrackingBuffer mBuffer;
+        private BodyFrameBuffer mBuffer;
         [SerializeField]
         private Body mAssociatedBody;
-        private BodyFrame mCurreBodyFrame;
+        //private BodyFrame mCurreBodyFrame;
         [SerializeField]
         private bool mIsPaused;
         [SerializeField]
         private bool mStartUpdating;
+        [SerializeField]
+        private bool mIsResetting = false;
+
         OutterThreadToUnityTrigger InitialFrameSetTrigger = new OutterThreadToUnityTrigger();
         /**
         * AssociatedBody
@@ -73,7 +76,7 @@ namespace Assets.Scripts.Body_Data.view
         * @brief StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body 
         * @return returns the property's value
         */
-        public void Init(Body vAssociatedBody, TrackingBuffer vBuffer)
+        public void Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
         {
             this.mBuffer = vBuffer;
             this.mAssociatedBody = vAssociatedBody;
@@ -90,7 +93,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mAssociatedBody != null)
             {
-                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
+                mIsResetting = true;
             }
         }
         /// <summary>
@@ -133,27 +136,44 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (StartUpdating)
             {
-                if (mIsPaused)
+                if (!mIsResetting)
                 {
-                    return;
-                }
-                if (InitialFrameSetTrigger.Triggered)
-                {
-                    InitialFrameSetTrigger.Reset();
-                    BodyFrame vInitBodyFrame = (BodyFrame) InitialFrameSetTrigger.Args;
-                    AssociatedBody.SetInitialFrame(vInitBodyFrame);
-                }
-                if (mBuffer != null && mBuffer.Count > 0)
-                {
-                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = mBuffer.Dequeue();
-                    AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
-                    if (vDic != null)
+                    if (mIsPaused)
                     {
-                        Body.ApplyTracking(AssociatedBody, vDic);
-                    } 
+                        return;
+                    }
+                    if (InitialFrameSetTrigger.Triggered)
+                    {
+                        InitialFrameSetTrigger.Reset();
+                        BodyFrame vInitBodyFrame = (BodyFrame)InitialFrameSetTrigger.Args;
+                        AssociatedBody.SetInitialFrame(vInitBodyFrame);
+                    }
+                    if (mBuffer != null && mBuffer.Count > 0)
+                    {
+                        //AssociatedBody.CurrentBodyFrame = mBuffer.Dequeue();
+                        AssociatedBody.UpdateBody(mBuffer.Dequeue());
+                        Body.ApplyTracking(AssociatedBody);
+
+                        //Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = mBuffer.Dequeue();
+                        //AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
+                        //if (vDic != null)
+                        //{
+                        //    Body.ApplyTracking(AssociatedBody, vDic);
+                        //}
+                    }
+                }
+                else
+                {
+                    Debug.Log("resetting");
+                    AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
+                    //AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
+                    //Body.ApplyTracking(AssociatedBody);
+                    Debug.Log("resetting Finished");
+                    mIsResetting = false;
                 }
             }
         }
+
         /**
          * Awake()
          * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
