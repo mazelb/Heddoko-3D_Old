@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
+
+   /// <summary>
+   /// Represents the anaylsis of the right leg segment
+   /// </summary>
    public class RightLegAnalysis : LegAnalysis
     {
         public float AngleKneeFlexion { get; private set; }
@@ -30,7 +34,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 
         // This variable stores the time of current frame. It is used for angular velocity and acceleration extraction
  
-        public static float mNumberofRightSquats = 0;
+        public   float NumberofRightSquats { get;   set; }
         public float mAngleSumRight = 0;
         private bool mStartCountingSquats;
 
@@ -72,7 +76,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             float vAngleKneeFlexionNew = Vector3.Angle(vAxis1, vAxis2);
             float vAngularVelocityKneeFlexionNew = (vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
 
-            //        print(mNumberofRightSquats + "angle" + AngleKneeFlexion + "vAngularVelocityKneeFlexionNew= "+ vAngularVelocityKneeFlexionNew);
+            //        print(NumberofRightSquats + "angle" + AngleKneeFlexion + "vAngularVelocityKneeFlexionNew= "+ vAngularVelocityKneeFlexionNew);
             if ( mStartCountingSquats)
             {
                 if (Math.Abs(vAngleKneeFlexionNew) < 15)
@@ -89,7 +93,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
                 {
 
                     mAngleSumRight = 0;
-                    mNumberofRightSquats++;
+                    NumberofRightSquats++;
                 }
             }
 

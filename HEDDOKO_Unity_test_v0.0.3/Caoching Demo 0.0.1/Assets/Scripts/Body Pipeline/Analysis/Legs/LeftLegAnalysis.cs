@@ -12,8 +12,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
 
     /// <summary>
-    /// Analysis to be performed on the left leg
-    /// 
+    /// Analysis to be performed on the left leg 
     /// </summary>
     public class LeftLegAnalysis : LegAnalysis
     {

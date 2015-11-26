@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Assets.Scripts.Body_Pipeline.Analysis
 {
     /// <summary>
-    /// Parent class to the specific subsegment. 
+    /// Parent class to the specific abstracted segment type(leg or arm). 
     /// </summary>
     public abstract class SegmentAnalysis
     {

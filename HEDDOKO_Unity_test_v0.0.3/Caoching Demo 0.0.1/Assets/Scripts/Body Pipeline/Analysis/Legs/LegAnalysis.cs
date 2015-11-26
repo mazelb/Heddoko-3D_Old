@@ -11,6 +11,9 @@ using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
+    /// <summary>
+    /// Abstract class for Legs containing hip and knee orientation
+    /// </summary>
    public abstract class LegAnalysis : SegmentAnalysis
     {
         internal float[,] HipOrientation { get; set; }
