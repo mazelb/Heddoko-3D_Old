@@ -8,7 +8,8 @@
 
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Communication;
+using Assets.Scripts.Frames_Pipeline;
+using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
@@ -24,12 +25,16 @@ public class BodyFrameThread : ThreadedJob
     #region class fields
     private BodyFrameBuffer mBuffer;  //buffer  
     private SourceDataType mDataSourceType;
+    private PlaybackState mCurrentPlaybackState = PlaybackState.Pause;
+    private PlaybackSettings mPlaybackSettings;
     private List<BodyRawFrame> mRawFrames;
+    private BodyFramesRecording mBodyFramesRecording;
     private bool mContinueWorking;
     private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>(1024, true);
     private bool mPauseWorker;
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
+
     #endregion
     #region properties
 
@@ -91,6 +96,16 @@ public class BodyFrameThread : ThreadedJob
         this.mBuffer = vBuffer;
         mDataSourceType = SourceDataType.Recording;
     }
+    /** 
+* @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
+* @param recording 
+*/
+    public BodyFrameThread(BodyFramesRecording vRecording, BodyFrameBuffer vBuffer)
+    {
+        mBodyFramesRecording = vRecording;
+        this.mBuffer = vBuffer;
+        mDataSourceType = SourceDataType.Recording;
+    }
     /**
      * @brief Default constructor
      */
@@ -113,7 +128,7 @@ public class BodyFrameThread : ThreadedJob
         {
             mBuffer.AllowOverflow = false;
         }
-       
+
         mDataSourceType = SourceDataType.BrainFrame;
     }
 
@@ -153,7 +168,8 @@ public class BodyFrameThread : ThreadedJob
 
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
-                RecordingTask();
+           RecordingTask();
+             //   RecordingPlaybackTask();
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -207,10 +223,15 @@ public class BodyFrameThread : ThreadedJob
             }
         }
     }
+
+    #region playback
     private void RecordingPlaybackTask()
     {
-        int vBodyFrameIndex = 0;
-        float vStartTime = Time.time;
+
+        // long vStartTime = DateTime.Now.Ticks;
+        float vStartTime = TimeUtility.Time;
+        int vPosition = 0; //frame position
+
         while (ContinueWorking)
         {
             while (true)
@@ -221,17 +242,66 @@ public class BodyFrameThread : ThreadedJob
                 }
                 if (BodyFrameBuffer.IsFull() || mPauseWorker)
                 {
+                    //vStartTime = DateTime.Now.Ticks;  //reset the start time
                     continue;
                 }
                 try
                 {
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);//convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                    BodyFrameBuffer.Enqueue(vBodyFrame);
-                    vBodyFrameIndex++;
-                    if (vBodyFrameIndex >= mRawFrames.Count) //reset back to 0
+
+                    float vDeltaTime = TimeUtility.Time - vStartTime;
+                    float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
+
+                    vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
+                  //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
+                    vPosition = (int)(1 * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
+                    if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
                     {
-                        vBodyFrameIndex = 0;
+                        mPauseWorker = true;
+                        vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
+                        vStartTime = DateTime.Now.Ticks;
+                        break;
                     }
+                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
+                    BodyFrameBuffer.Enqueue(vBodyFrame);
+                    /*switch (mCurrentPlaybackState)
+                    {
+                        case PlaybackState.Pause:
+                            break;
+                        case PlaybackState.Forward:
+                            {
+
+                                float vDeltaTime = TimeUtility.Time - vStartTime;
+                                float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
+
+                                vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
+                                float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
+                                vPosition = (int)(mPlaybackSpeed * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
+                                if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
+                                {
+                                    mPauseWorker = true;
+                                    vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
+                                    vStartTime = DateTime.Now.Ticks;
+                                    break;
+                                }
+                                BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
+                                BodyFrameBuffer.Enqueue(vBodyFrame);
+                            }
+                            break;
+                        case PlaybackState.Rewind:
+                            {
+                                if (vPosition <= 0)
+                                {
+                                    break;
+                                }
+
+                                BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);//convert to body frame 
+                                BodyFrameBuffer.Enqueue(vBodyFrame);
+                            }
+                            break;
+                        case PlaybackState.Stop:
+                            break;
+                    }*/
+
                 }
                 catch (Exception e)
                 {
@@ -278,9 +348,9 @@ public class BodyFrameThread : ThreadedJob
             {
                 bool vAllClear = false;
                 //first unwrap the string and break it down 
-                  vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
-                    //todo place a check here for valid data
-                string[] vExploded = vUnwrappedString.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
+                //todo place a check here for valid data
+                string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 if (vExploded.Length < 12)
                 {
                     string s = " debug break;";
@@ -299,11 +369,11 @@ public class BodyFrameThread : ThreadedJob
                     if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck)) //data is valid 
                     {
                         //conversion happens here, todo: place a check here for invalid data(less than 4 bytes in length
-                        string[] v3data = vExploded[i].Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                        string[] v3data = vExploded[i].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                         float vRoll = ConversionTools.ConvertHexStringToFloat((v3data[0]));
                         float vPitch = ConversionTools.ConvertHexStringToFloat((v3data[1]));
                         float vYaw = ConversionTools.ConvertHexStringToFloat((v3data[2]));
- 
+
                         vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
@@ -321,10 +391,13 @@ public class BodyFrameThread : ThreadedJob
                 UnityEngine.Debug.Log(vExcMsg);
                 continue;
             }
-        
-           
+
+
         }
     }
+
+
+    #endregion
     /**
     * DataStreamTask()
     * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
@@ -372,6 +445,15 @@ public class BodyFrameThread : ThreadedJob
         DataStream,
         Other
     }
-
+    /// <summary>
+    /// Represent the recording playback state
+    /// </summary>
+    public enum PlaybackState
+    {
+        Pause,
+        Stop,
+        Rewind,
+        Forward //=> with this we have multiple playback speeds. 
+    }
 
 }

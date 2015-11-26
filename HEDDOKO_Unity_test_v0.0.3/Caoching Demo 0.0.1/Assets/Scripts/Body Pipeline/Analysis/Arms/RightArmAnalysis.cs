@@ -1,9 +1,21 @@
-﻿ 
+﻿
+/** 
+* @file RightArmAnalysis.cs
+* @brief RightArmAnalysis the Joint class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date November 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
 
+*/
 using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 {
+    /**
+     * Body class 
+    * @brief RightArmAnalysis class 
+
+    */
     public class RightArmAnalysis: ArmAnalysis
     {
         // Right Arm Extracted Angles, Angular velocities  and Angular accelerations, The names are choosed based on the human body angles document

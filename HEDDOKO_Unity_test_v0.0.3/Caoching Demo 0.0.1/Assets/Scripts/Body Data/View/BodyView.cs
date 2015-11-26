@@ -149,7 +149,7 @@ namespace Assets.Scripts.Body_Data.view
                     AssociatedBody.UpdateBody(AssociatedBody.CurrentBodyFrame);
                     if (vDic != null)
                     {
-                        Body.ApplyTracking(AssociatedBody, vDic);
+                        Body.ApplyTracking(AssociatedBody, vDic);//todo: extract this from the view and place it in its own module
                     } 
                 }
             }

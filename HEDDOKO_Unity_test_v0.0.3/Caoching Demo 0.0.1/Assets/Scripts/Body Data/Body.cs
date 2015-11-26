@@ -11,6 +11,10 @@ using System.Collections.Generic;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
 using System.Linq;
+using Assets.Scripts.Body_Pipeline.Analysis;
+using Assets.Scripts.Body_Pipeline.Analysis.Arms;
+using Assets.Scripts.Body_Pipeline.Analysis.Legs;
+using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 using Assets.Scripts.Body_Pipeline.Tracking;
 using Assets.Scripts.Communication.Controller;
 
@@ -40,7 +44,7 @@ public class Body
     public BodyFrame InitialBodyFrame { get; set; }
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
     private TrackingThread mTrackingThread;
-
+    public Dictionary<BodyStructureMap.SegmentTypes,SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
     //view associated with this model
     #region properties
     private BodyView mView;
@@ -133,24 +137,67 @@ public class Body
 
     /**
     * CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType )
-    * @param  vBodyType: the desired BodyType
+    * @param  vBodyType: the desired BodyType, this also initializes the body's analysis segment
     * @brief Initializes a new body structure's internal properties with the desired body type
     */
     public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
         List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
+        TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
+        vTorsoSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_Torso;
+       
         foreach (BodyStructureMap.SegmentTypes type in vSegmentList)
         {
             BodySegment vSegment = new BodySegment();
             vSegment.SegmentType = type;
             vSegment.InitializeBodySegment(type);
             vSegment.ParentBody = this;
-            BodySegments.Add(vSegment);
+            BodySegments.Add(vSegment); 
             #region using unity functions
             vSegment.AssociatedView.transform.parent = View.transform;
             #endregion
+            //Todo: this can can be abstracted and mapped nicely. 
+            if (type == BodyStructureMap.SegmentTypes.SegmentType_Torso)
+            {
+                vSegment.mCurrentAnalysisSegment = vTorsoSegmentAnalysis;
+                AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_Torso, vTorsoSegmentAnalysis);
+            }
+            if (type == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
+            {
+                LeftArmAnalysis vLeftArmSegmentAnalysis = new LeftArmAnalysis();
+                vLeftArmSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_LeftArm;
+                vLeftArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
+                vSegment.mCurrentAnalysisSegment = vLeftArmSegmentAnalysis;
+                AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftArm, vLeftArmSegmentAnalysis);
+            }
+            if (type == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
+            {
+                RightArmAnalysis vRightArmSegmentAnalysis = new RightArmAnalysis();
+                vRightArmSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_RightArm;
+                vRightArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
+                vSegment.mCurrentAnalysisSegment = vRightArmSegmentAnalysis;
+                AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightArm, vRightArmSegmentAnalysis);
+            }
+            if (type == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
+            {
+                LeftLegAnalysis vLeftLegAnalysisSegment = new LeftLegAnalysis();
+                vLeftLegAnalysisSegment.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_LeftLeg;
+                vLeftLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
+                vSegment.mCurrentAnalysisSegment = vLeftLegAnalysisSegment;
+                AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftLeg, vLeftLegAnalysisSegment);
+            }
+            if (type == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
+            {
+                RightLegAnalysis vRightLegAnalysisSegment = new RightLegAnalysis();
+                vRightLegAnalysisSegment.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_RightLeg;
+                vRightLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
+                vSegment.mCurrentAnalysisSegment = vRightLegAnalysisSegment;
+                AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightLeg, vRightLegAnalysisSegment);
+            }
         }
     }
+
+ 
     /**
     * UpdateBody(BodyFrame vFrame )
     * @param vFrame, the body frame, setCurrentBodyFrame: sets the passed in body frame as the current bodyframe
@@ -199,7 +246,8 @@ public class Body
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
             TrackingBuffer vBuffer2 = new TrackingBuffer();
 
-            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+            //mBodyFrameThread = new BodyFrameThread(bodyFramesRec , vBuffer1);
             mTrackingThread = new TrackingThread(this, vBuffer1, vBuffer2);
             //get the first frame and set it as the initial frame
 

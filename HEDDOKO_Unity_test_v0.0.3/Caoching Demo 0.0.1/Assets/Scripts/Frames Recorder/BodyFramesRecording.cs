@@ -9,6 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Frames_Pipeline;
 using Assets.Scripts.Interfaces;
 
 /**
@@ -35,7 +36,8 @@ public class BodyFramesRecording : IFrameStream
     public List<BodyRawFrame> RecordingRawFrames = new List<BodyRawFrame>();
     //current raw frame index
     private int currentRawFrameIndex;
-
+    // statistics of a recording
+    public RecordingStats Statistics = new RecordingStats();
     /**
     * CreateNewRecordingUUID()
     * @brief Creates a new recording UUID
@@ -113,6 +115,8 @@ public class BodyFramesRecording : IFrameStream
                 RecordingRawFrames.Add(vTempRaw);
             }
         }
+        //analyze statistics of a current recording
+        Statistics.InitAndAnalyze(this);
     }
 
 
