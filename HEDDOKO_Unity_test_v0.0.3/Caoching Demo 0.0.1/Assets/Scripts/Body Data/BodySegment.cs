@@ -38,6 +38,10 @@ public class BodySegment
     public BodySegmentView AssociatedView;
     public SegmentAnalysis mCurrentAnalysisSegment;
 
+    //TODO: extract this where appropriate
+    private float mRightLegHeight = 1.0f;
+    private float mLeftLegHeight = 1.0f; 
+
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
     /// </summary>
@@ -167,6 +171,21 @@ public class BodySegment
         //Update the segment's and segment's view orientations
         vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
         //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
+
+        //Update body height
+        float vLegMovement;
+        float vFootHeight = 0.1f;
+
+        if (mRightLegHeight > mLeftLegHeight)
+        {
+            vLegMovement = mRightLegHeight;
+        }
+        else
+        {
+            vLegMovement = mLeftLegHeight;
+        }
+
+        vLSSubsegment.UpdateSubsegmentPosition(vLegMovement + vFootHeight);
     }
 
     /**
@@ -350,6 +369,9 @@ public class BodySegment
         //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
+
+        //Update Leg height 
+        mRightLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
     }
 
     /**
@@ -534,6 +556,9 @@ public class BodySegment
         //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
+
+        //Update leg height 
+        mLeftLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
     }
 
     /**

@@ -48,6 +48,16 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
+        public void ApplyTranslations(float vNewDisplacement)
+        {
+            foreach (Transform vObjTransform in SubSegmentTransforms)
+            {
+                Vector3 v3 = vObjTransform.localPosition;
+                v3.y = vNewDisplacement;
+                vObjTransform.localPosition = v3;
+            }
+        }
+
         public void ResetOrientations()
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
@@ -71,6 +81,23 @@ namespace Assets.Scripts.Body_Data.view
             catch (Exception)
             {
                 
+            }
+        }
+
+        /**
+        * UpdateOrientation(Quaternion vNewOrientation)
+        * @param Quaternion vNewOrientation: the new orientation of the subsegment
+        * @brief Updates the current orientation with the passed in parameter
+        */
+        internal void UpdatePosition(float vNewDisplacemetn)
+        {
+            try
+            {
+                ApplyTranslations(vNewDisplacemetn);
+            }
+            catch (Exception)
+            {
+
             }
         }
 

@@ -35,12 +35,12 @@ namespace Assets.Scripts.Communication.Controller
         public static BpConnectionControllerDel FailedToConnectStateEvent;
         public OutterThreadToUnityTrigger BrainpackConnectedTrigger = new OutterThreadToUnityTrigger();
         public OutterThreadToUnityTrigger SocketClientErrorTrigger = new OutterThreadToUnityTrigger();
-
         public string Output = "";
+
         [SerializeField]
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Idle;
-     
         public string BrainpackComPort = "COM7";
+
         [SerializeField]
         private int vTotalTries;
 
@@ -48,7 +48,6 @@ namespace Assets.Scripts.Communication.Controller
         public int MaxConnectionAttempts = 4; 
         private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
-
         private BrainpackConnectionView mView;
 
         private GameObject LoadingScreen

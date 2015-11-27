@@ -73,6 +73,16 @@ public class BodySubSegment
     }
 
     /**
+    * UpdateSubsegmentPosition(Vector3 vNewPosition)
+    * @param  vOrientation: the orientation that will update the subsegment's orientation
+    * @brief  Updates the subsegments orientation
+    */
+    public void UpdateSubsegmentPosition(float vNewDisplacement)
+    {
+        AssociatedView.UpdatePosition(vNewDisplacement);
+    }
+
+    /**
     *  InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes sstype)
     * @param  sstype: the desired SubSegment Type
     * @brief Initializes a new  subsegment structure's internal properties with the desired subsegment Type 
