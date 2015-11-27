@@ -579,7 +579,9 @@ public class BodySegment
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
             //Debug.Log("vOrientationError " + vOrientationError);
-            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
+
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+                      
             //Debug.Log("CompensationAngle "+ vCompensationAngle);
             
             //CompensationAngle = 0;
@@ -756,7 +758,7 @@ public class BodySegment
 
             // Finding yaw compensation Angle
             vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
-            vCompensationAngle = (float)Math.Acos(vOrientationError < 1.00f ? 1f : vOrientationError);
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
             //Debug.Log("LEFT CompensationAngle " + vCompensationAngle);
 
             // Finding yaw compensation axis
