@@ -98,7 +98,7 @@ namespace Assets.Scripts.Utils.UnityUtilities
             StartEffect = true;
             Color vCurrColor = CurrentImage.color;
 
-            vCurrColor.a = 0;
+           // vCurrColor.a = 0;
             CurrentImage.color = vCurrColor;
             mLerpUpwards = true;
             MinAlpha /= 255f;

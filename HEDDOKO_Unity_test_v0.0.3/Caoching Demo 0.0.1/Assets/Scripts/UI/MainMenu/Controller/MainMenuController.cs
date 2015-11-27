@@ -1,4 +1,10 @@
-﻿
+﻿/** 
+* @file MainMenuController.cs
+* @brief Contains the MainMenuController class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date November 2015
+* Copyright Heddoko(TM) 2015, all rights reserved 
+*/
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Communication.View;
