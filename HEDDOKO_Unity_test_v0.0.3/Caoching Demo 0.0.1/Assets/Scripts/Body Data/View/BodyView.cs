@@ -31,6 +31,7 @@ namespace Assets.Scripts.Body_Data.view
         [SerializeField]
         private bool mStartUpdating;
         OutterThreadToUnityTrigger InitialFrameSetTrigger = new OutterThreadToUnityTrigger();
+
         /**
         * AssociatedBody
         * @param Internally set the Body associated to this view
@@ -145,7 +146,13 @@ namespace Assets.Scripts.Body_Data.view
                 }
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
-                    BodyFrame vBodyFrame = mBuffer.Dequeue(); 
+                    BodyFrame vBodyFrame = mBuffer.Dequeue();
+
+                    if (AssociatedBody.InitialBodyFrame == null)
+                    {
+                        AssociatedBody.SetInitialFrame(vBodyFrame);
+                    }
+
                     AssociatedBody.UpdateBody(vBodyFrame);
                     Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody); 
                    
@@ -175,8 +182,6 @@ namespace Assets.Scripts.Body_Data.view
                     vDebugger.View = this;
                 }
             }
-
         }
-
     }
 }

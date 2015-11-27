@@ -111,7 +111,7 @@ namespace Assets.Demos
         public void ResetInitialFrame()
         {
             CurrentBodyInPlay.View.ResetInitialFrame();
-            StartCoroutine(StartPausingCountdown());
+            //StartCoroutine(StartPausingCountdown());
         }
 
         /// <summary>
