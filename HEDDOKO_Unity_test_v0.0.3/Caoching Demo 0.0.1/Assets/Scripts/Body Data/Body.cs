@@ -243,9 +243,8 @@ public class Body
             SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(); 
 
-             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
      
-
             View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
             View.StartUpdating = true;
@@ -290,7 +289,8 @@ public class Body
             BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
             BrainpackConnectionController.ConnectedStateEvent += BrainPackStreamReadyListener;
         }
-        //check if the event has already been registered  
+
+        View.Init(this, vBuffer1);
     }
 
     /// <summary>

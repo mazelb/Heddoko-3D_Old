@@ -308,6 +308,7 @@ public class BodyFrameThread : ThreadedJob
 
                 //todo place a check here for valid data
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
                 if (vExploded.Length < 12)
                 {
                     string s = " debug break;";
@@ -322,6 +323,7 @@ public class BodyFrameThread : ThreadedJob
                 int vStartIndex = 2;
                 int vEndIndex = 11;
                 int vBitmaskCheck = 0;
+                
                 //is used to set vPreviouslyValid values indicies 
                 int vSetterIndex = 0; 
 

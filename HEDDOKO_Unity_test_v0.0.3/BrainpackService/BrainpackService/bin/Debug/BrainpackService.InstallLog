@@ -1875,3 +1875,16 @@ Affected parameters are:
    logtoconsole = 
    logfile = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
    assemblypath = C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing assembly 'E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Installing service BrainpackService...
+Service BrainpackService has been successfully installed.
+Creating EventLog source BrainpackService in log Application...
+Committing assembly 'E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = E:\HEDDOKO\QSYNC\Qsync\Mazen Elbawab\02_SOFTWARE\TESTING\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
