@@ -14,8 +14,8 @@ using UnityEngine.UI;
 /// This script will set up the vertices of polygoncolliders on awake
 /// positions 
 /// </summary>
-[RequireComponent(typeof(PolygonCollider2D))]
-public class GuiColliderResizer : MonoBehaviour
+[RequireComponent(typeof(PolygonCollider2D),typeof(RaycastMask))]
+public class ButtonColliderResizer : MonoBehaviour
 { 
     //RectTransforms that will anchor the collider points
     public List<RectTransform> Anchors;
