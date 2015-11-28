@@ -8,47 +8,47 @@
 */
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 /// <summary>
 /// GuiColliderResizerClass: Responsible for resizing the collider attached to the game objects according to the handles 
-/// positions
+/// This script will set up the vertices of polygoncolliders on awake
+/// positions 
 /// </summary>
 [RequireComponent(typeof(PolygonCollider2D))]
-public class GuiColliderResizer : MonoBehaviour {
-
-    public List<RectTransform> Handles;
-    public RectTransform obj;
+public class GuiColliderResizer : MonoBehaviour
+{ 
+    //RectTransforms that will anchor the collider points
+    public List<RectTransform> Anchors;
+    public RectTransform ButtonRectTransform;
     private PolygonCollider2D mPolygonCollider;
-    public Vector2 res;
-    public Camera UiCam;
-	// Use this for initialization
-	void Awake() {
-        Debug.Log(obj.position + " " + obj.localPosition);
+
+    void Start()
+    {
+        ButtonRectTransform = GetComponent<RectTransform>();
+        ResizeCollider();
+        
+    }
+
+    /// <summary>
+    /// Resize a collider
+    /// </summary>
+    public void ResizeCollider()
+    {
         mPolygonCollider = GetComponent<PolygonCollider2D>();
-        Vector3[] vVertices = new Vector3[mPolygonCollider.points.Length];//mPolygonCollider.points;
-        Vector2[] vVector2  = new Vector2[mPolygonCollider.points.Length];
-        for (int i = 0; i < vVertices.Length; i ++)
+
+        Vector2[] vVertices = new Vector2[mPolygonCollider.points.Length];
+        for (int i = 0; i < vVertices.Length; i++)
         {
-          //  Vector3[] vvv = new Vector3[4];
-        //    Handles[i].GetWorldCorners(vvv);
-         //   vVector2[i] = new Vector2(vvv[0].x, vvv[0].y);
-          //  vVector2[i] = new Vector2(Handles[i].localPosition.x * Handles[i].localScale.x, Handles[i].localPosition.y * Handles[i].localScale.y);//            vVector2[i]= Handles[i].parent.parent.parent.TransformPoint(Handles[i].localPosition);
-         vVertices[i] = Handles[i].localPosition;
-          
-          //  float vX = Screen.width * Handles[i].anchorMax.x  + Handles[i].anchoredPosition.x;
-          //    float vY = Screen.height * Handles[i].anchorMax.y  +  Handles[i].anchoredPosition.y;
-          //    RectTransformUtility.ScreenPointToWorldPointInRectangle(Handles[i],)
-          //  Vector2 vScreenPoint = new Vector2(vX, vY);
-          // RectTransformUtility.ScreenPointToWorldPointInRectangle(Handles[i], vScreenPoint, UiCam, out   vVertices[i]);
-          //  vVector2[i] = vVertices[i];
-
+            //Get the anchor point in world space
+            Vector2 vAnchoringPoint = Anchors[i].TransformPoint(Anchors[i].rect.center);
+            //Get the ButtonRectTransform point in world space
+            Vector2 vParentButtonPoint = ButtonRectTransform.TransformPoint(ButtonRectTransform.rect.center); 
+            vAnchoringPoint -= vParentButtonPoint;
+            //set the anchor point 
+            vVertices[i] = vAnchoringPoint;
         }
-        // mPolygonCollider.points[0] = new Vector2(10, 100);
-        mPolygonCollider.points = vVector2;
-    }
-	
-	// Update is called once per frame
-	void Update () {
 
-        mPolygonCollider.points[0] = res;
+        mPolygonCollider.points = vVertices;
     }
+
 }

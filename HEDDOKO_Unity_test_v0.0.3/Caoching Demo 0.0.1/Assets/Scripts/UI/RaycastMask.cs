@@ -21,23 +21,14 @@ using UnityEngine;
 public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
 { 
     private RectTransform mCurrentRectTransform;
-    private Collider2D mCollider2D;
-    private InformationPanel mInformationPanel;
-    public string InformationText;
+    private Collider2D mCollider2D; 
     #region unity function
 
     void Awake()
     { 
         mCurrentRectTransform = GetComponent<RectTransform>();
         mCollider2D = GetComponent<Collider2D>();
-      //  GameObject vInformationPanelGo = GameObject.FindGameObjectWithTag("InformationPanel");
-     //   mInformationPanel = vInformationPanelGo.GetComponent<InformationPanel>();
     }
-    /**
-      *  IsRaycastLocationValid(Vector2 vScreenPoint, Camera vEventCamera)
-      * @param : Vector2 vScreenPoint: location on screen.Camera vEventCamera: the camera capturing the event
-      * @brief Checked by unity, this checks if the point of contact is valid 
-      */
 
     /// <summary>
     /// Checked by unity, this checks if the point of contact is valid
@@ -54,10 +45,10 @@ public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
             vEventCamera,
             out vWorlderPoint
         );
+
         if (vIsInside)
         {
             vIsInside = mCollider2D.OverlapPoint(vWorlderPoint);
-//            mInformationPanel.UpdateInformationPanel(InformationText);
         }
         return vIsInside;
 
