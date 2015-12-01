@@ -8,10 +8,11 @@
 
 using System.Collections;
 using Assets.Scripts.Communication.View;
+using Assets.Scripts.Interfaces;
+using Assets.Scripts.UI.MainMenu.View;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
-using UnityEngine;
-using System;
+using UnityEngine; 
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
 
@@ -48,7 +49,7 @@ namespace Assets.Scripts.Communication.Controller
         public int MaxConnectionAttempts = 4; 
         private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
-        private BrainpackConnectionView mView;
+        private IBrainpackConnectionView mView;
 
         private GameObject LoadingScreen
         {
@@ -77,17 +78,27 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Returns the view associated with the controller
         /// </summary>
-        public BrainpackConnectionView View
+        public IBrainpackConnectionView View
         {
             get
             {
+                //Check what scene this instance is in
+                
                 if (mView == null)
                 {
-                    GameObject vCanvas = GameObject.FindGameObjectWithTag("UiCanvas");
-                    GameObject vInstantiated = Instantiate(PrefabRepo.BrainpackConnectionViewPrefab);
-                    vInstantiated.transform.SetParent(vCanvas.transform, false);
-                    vInstantiated.transform.SetAsLastSibling();
-                    mView = vInstantiated.GetComponent<BrainpackConnectionView>();
+                    if (Application.loadedLevelName == "Coaching_utility_scene - split_screen")
+                    {
+                        GameObject vCanvas = GameObject.FindGameObjectWithTag("UiCanvas");
+                        GameObject vInstantiated = Instantiate(PrefabRepo.BrainpackConnectionViewPrefab);
+                        vInstantiated.transform.SetParent(vCanvas.transform, false);
+                        vInstantiated.transform.SetAsLastSibling();
+                        mView = vInstantiated.GetComponent<BrainpackConnectionView>();
+                    }
+                    else
+                    { 
+                        mView = FindObjectOfType<MainMenuBrainpackView>(); 
+                    }
+                       
                 }
                 return mView;
             }
@@ -123,6 +134,14 @@ namespace Assets.Scripts.Communication.Controller
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
             ChangeCurrentState(BrainpackConnectionState.Connecting);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+        }
+
+        /// <summary>
+        /// Set the Brainpack controller to idle
+        /// </summary>
+        public void SetStateToIdle()
+        { 
+            ChangeCurrentState(BrainpackConnectionState.Idle); 
         }
 
         /// <summary>
@@ -255,10 +274,14 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 ConnectingStateEvent();
-                            } 
+                            }
+                            break;
                         }
-  
 
+                        if (vNewState == BrainpackConnectionState.Idle)
+                        {
+                            mCurrentConnectionState = vNewState;
+                        }
                         break;
                     }
                 case BrainpackConnectionState.Failure:
@@ -323,7 +346,7 @@ namespace Assets.Scripts.Communication.Controller
             {
                 SocketClientErrorTrigger.Reset();
                 View.SetWarningBoxMessage((string)SocketClientErrorTrigger.Args);
-                ChangeCurrentState(BrainpackConnectionState.Disconnected); 
+                ChangeCurrentState(BrainpackConnectionState.Failure); 
             }
 
             //start pulling data

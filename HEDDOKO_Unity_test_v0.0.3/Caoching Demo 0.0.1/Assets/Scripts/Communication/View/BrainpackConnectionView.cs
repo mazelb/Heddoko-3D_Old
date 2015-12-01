@@ -8,6 +8,7 @@
 */
 
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Interfaces;
 using Assets.Scripts.UI; 
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
@@ -18,32 +19,22 @@ namespace Assets.Scripts.Communication.View
 {
     /// <summary>
     /// Represents the brainpack connection view in scene
-    /// </summary>
-    /**
-     * BrainpackConnectionView class 
-     * @brief Represents the brainpack connection view in scene 
-     */
-    public class BrainpackConnectionView: MonoBehaviour
-    {
-        
-      
+    /// </summary> 
+    public class BrainpackConnectionView: MonoBehaviour, IBrainpackConnectionView
+    { 
         public Sprite HalomanConnected;
         public Sprite HalomanConnecting;
         public Sprite HalomanFailure;
         public Image Haloman;
         public Image HaloForHaloman;
         public Button PairButton;
-        public Image UnpairButton;
+        public Button UnpairButton;
         private WarningBoxView mWarningBoxView;
         public FadeInFadeOutEffect FadeInFadeOutEffect;
 
         /// <summary>
         /// Returns the WarningBoxView of this current view
-        /// </summary>
-        /**
-        * WarningBox
-        * @brief Returns the WarningBoxView of this current view  
-        */
+        /// </summary> 
         private WarningBoxView WarningBox
         {
             get
@@ -51,7 +42,7 @@ namespace Assets.Scripts.Communication.View
                 if (mWarningBoxView == null)
                 {
                     //find it the warning box in the scene
-                    mWarningBoxView = GameObject.FindObjectOfType<WarningBoxView>();
+                    mWarningBoxView = FindObjectOfType<WarningBoxView>();
                     if (mWarningBoxView == null)
                     {
                         GameObject vWarningBoxPanel = Instantiate(PrefabRepo.WarningIconPanelPrefab);
@@ -70,14 +61,9 @@ namespace Assets.Scripts.Communication.View
             }
         }
 
-
         /// <summary>
         /// Returns the RectTransform associated with this view
-        /// </summary>
-        /**
-        * RectTransform
-        * @brief Returns the RectTransform associated with this view
-        */
+        /// </summary> 
         public RectTransform RectTransform
         {
             get
@@ -86,14 +72,9 @@ namespace Assets.Scripts.Communication.View
             }
         }
 
-
         /// <summary>
         /// On Start, hook listener's into Controller events
-        /// </summary>
-        /**
-        * Start()
-        * @brief On Start, hook listener's into Controller events
-        */
+        /// </summary> 
         void Start()
         {
             BrainpackConnectionController.ConnectingStateEvent += OnConnection;
@@ -103,14 +84,11 @@ namespace Assets.Scripts.Communication.View
             PairButton.onClick.AddListener(PairButtonEngaged);
             DontDestroyOnLoad(gameObject);
         }
+
         /// <summary>
         ///  Display the failed connection views
-        /// </summary>
-        /**
-        * FailedConnection()
-        * @brief Display the failed connection views
-        */
-        private void FailedConnection()
+        /// </summary> 
+        public void FailedConnection()
         {
             FadeInFadeOutEffect.enabled = true;
             HaloForHaloman.enabled = true;
@@ -119,29 +97,22 @@ namespace Assets.Scripts.Communication.View
             FadeInFadeOutEffect.FadeEffectTime = 0.5f;
             BrainpackConnectionController.Instance.ResetTries();
             PairButton.gameObject.SetActive(true);
-            WarningBox.Show();
-            //ModalPanel.Instance().Choice(TryConnectionAgain, );
+            WarningBox.Show(); 
         }
+
         /// <summary>
-        ///  Display the failed Disconnected views
-        /// </summary>
-        /**
-        * FailedConnection()
-        * @brief Display the failed Disconnected views
-        */
-        private void OnDisconnect()
+        ///  Display the   Disconnected views
+        /// </summary> 
+        public void OnDisconnect()
         {
             HaloForHaloman.gameObject.SetActive(false);
             WarningBox.Show();
         }
+
         /// <summary>
         /// Display the connecting views
-        /// </summary>
-        /**
-        * FailedConnection()
-        * @brief Display the connecting views
-        */
-        private void OnConnection()
+        /// </summary> 
+        public void OnConnection()
         {
             FadeInFadeOutEffect.enabled = true;
             HaloForHaloman.enabled = true;
@@ -149,14 +120,11 @@ namespace Assets.Scripts.Communication.View
             HaloForHaloman.sprite = HalomanConnecting;
             FadeInFadeOutEffect.FadeEffectTime = 2.5f;
         }
+
         /// <summary>
         /// on connect view
-        /// </summary>
-        /**
-        * OnConnect()
-        * @brief Display the succesfull connection views
-        */
-        void OnConnect()
+        /// </summary> 
+        public void OnConnect()
         {
             FadeInFadeOutEffect.enabled = true;
             HaloForHaloman.enabled = true;
@@ -164,38 +132,29 @@ namespace Assets.Scripts.Communication.View
             HaloForHaloman.sprite = HalomanConnected;
             FadeInFadeOutEffect.FadeEffectTime = 1.5f; 
         }
+
         /// <summary>
         /// Enables and shows the brainpack connection view
         /// </summary>
-        /**
-        * Show()
-        * @brief Enables and shows the brainpack connection view
-        */
         public void Show()
         {
             gameObject.SetActive(true);
         }
+
         /// <summary>
         ///  Disables and hides the brainpack connection view
         /// </summary>
-        /**
-        * Show()
-        * @brief  Disables and hides the brainpack connection view
-        */
         public void Hide()
         {
             FadeInFadeOutEffect.enabled = false;
             HaloForHaloman.enabled = false;
             gameObject.SetActive(false);
         }
+
         /// <summary>
         ///  The pairing button has been engaged
         /// </summary>
-        /**
-        * PairButtonEngaged()
-        * @brief   The pairing button has been engaged
-        */
-        private void PairButtonEngaged()
+        public void PairButtonEngaged()
         {
             BrainpackConnectionController.Instance.ConnectToBrainpack();
             PairButton.gameObject.SetActive(false);
@@ -206,12 +165,7 @@ namespace Assets.Scripts.Communication.View
         /// Sets the warning box text to the passed in param
         /// </summary>
         /// <param name="vMsg">The message to change to </param>
-        /**
-        *  SetWarningBoxMessage(string vMsg)
-        * @brief Sets the warning box text to the passed in param
-        * @param string vMsg: The message to change to 
-        */
-        internal void SetWarningBoxMessage(string vMsg)
+        public void SetWarningBoxMessage(string vMsg)
         {
             WarningBox.WarningText.text= vMsg;
             WarningBox.WarningText.text.Replace("\\n", "\n");

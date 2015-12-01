@@ -5,211 +5,123 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Communication.View;
-using Assets.Scripts.UI.MainScene.Model;
-using Assets.Scripts.UI.MainScene.View;
-using Assets.Scripts.Utils;
-using UnityEngine;
-using UnityEngine.UI;
-namespace Assets.Scripts.UI.MainScene.Controller
+ 
+using Assets.Scripts.UI.MainMenu.View; 
+using UnityEngine; 
+
+namespace Assets.Scripts.UI.MainMenu.Controller
 {
     /// <summary>
-    /// Represents the controller for the main menu. This class allows for the changing of context
+    /// Represents the controller for the main menu. This class allows for the changing of context views
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
-        public Button ImportButton;
-        public Button AnalyzeButton;
-        public Button Visualize3DButton;
-        public BrainpackConnectionView BrainpackInfoPanel;
-        private List<Button> mRegisteredButtons = new List<Button>(3);
-        private InformationPanel mInfoPanel;
-        private bool vImportCompleted;
-        public GameObject LoadingScreen;
-        public GameObject AvailableRecordingsPanelPrefab;
-        public GameObject AvailableRecordingButtonPrefab;
-        
-        //indicates if the user is using 3D to load the scene or starting the scene with a brainpack feed
-        private bool mStart3D;
 
-        private GameObject mCurrentRecordingPanel;
+        //The main menu view
+        public MainMenuView MainMenuView;
 
-        public InformationPanel InfoPanel
-        {
-            get
-            {
-                if (mInfoPanel == null)
-                {
-                    GameObject vGo = SceneObjectFinder<InformationPanel>.FindObjecInSceneWithObjectAttached("InformationPanel");
-                    mInfoPanel = vGo.GetComponent<InformationPanel>();
-                }
-                return mInfoPanel;
-            }
-        }
+        public SplashScreen SplashScreen;
+        private MainMenuState mCurrentState = MainMenuState.SplashScreen;
 
-        /// <summary>
-        /// On  awake, initialize all the control UI elements in the scene
-        /// </summary>
+
         void Awake()
         {
-            //find the import button in the scene
-            ImportRecordingsButton vImportRecButton = (ImportRecordingsButton)FindObjectOfType(typeof(ImportRecordingsButton));
-            vImportRecButton.AssignAction(ImportButtonClick);
-            ImportButton = vImportRecButton.CurrentButton;
-            mCurrentRecordingPanel = Instantiate(AvailableRecordingsPanelPrefab);
-            mCurrentRecordingPanel.SetActive(false);
-            GameObject vGo = GameObject.FindGameObjectWithTag("UiCanvas");
-            mCurrentRecordingPanel.transform.SetParent(vGo.transform, false);
-            mRegisteredButtons.Add(ImportButton);
-            mRegisteredButtons.Add(AnalyzeButton);
-            mRegisteredButtons.Add(Visualize3DButton);
-            Visualize3DButton.onClick.AddListener(Visualize3DButtonClicked);
-
-        }
-
-        /// <summary>
-        /// Switches scenes to the 3d view 
-        /// </summary>
-        private void ChangeTo3DSceneView()
-        {
-            LoadingScreen.SetActive(true);
-            StartCoroutine(LoadMainScene());
-
-        }
- 
-        /// <summary>
-        /// Coroutine to load the main scene asychronously
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator LoadMainScene()
-        {
-            AsyncOperation async = Application.LoadLevelAsync(1);
-            yield return async;
-            LoadingScreen.SetActive(false); 
-        }
-
-        /// <summary>
-        /// Import button in scene has been clicked
-        /// </summary>
-        private void ImportButtonClick()
-        {
-            BrainpackInfoPanel.Hide();
-            EnableAllButLeaveoneInactive(ImportButton);
-
-
-            BodySelectedInfo.Instance.UpdateNumberOfRecordings();
-            InfoPanel.UpdateInformationPanel("");
-            int vNumberOfRec = BodySelectedInfo.Instance.TotalRecordingsAvailable;
-            if (vNumberOfRec == 0)
+            bool vSplashScreenEnabled = SplashScreen != null && SplashScreen.gameObject.activeSelf;
+            //if conditions fail, load directly into mainmenu view
+            if (!vSplashScreenEnabled)
             {
-                InfoPanel.UpdateInformationPanel("There are no recordings to import");
-                InfoPanel.FreezeText(1.25f);
-                ReactivateAllButtons();
+                ChangeState(MainMenuState.MainMenu);
             }
-            else
+            MainMenuView.BrainpackButton.onClick.AddListener(() => ChangeState(MainMenuState.BrainpackView));
+            MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
+            MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
+        }
+        /// <summary>
+        /// changes the state of the main menu
+        /// </summary>
+        /// <param name="vNewState"></param>
+        private void ChangeState(MainMenuState vNewState)
+        {
+            switch (mCurrentState)
             {
-                DisplayAllAvailableRecordings();
-            }
-            if (!vImportCompleted)
-            {
-                //start creating buttons
-                //first find the Scroll view from the available panels recording
-                Transform vContentPanel = SceneObjectFinder<Transform>.FindObjectByName(mCurrentRecordingPanel.transform, "ScrollView") as Transform;
-                string[] vRecordingsFiles = BodyRecordingsMgr.Instance.FilePaths;
-                if (vContentPanel != null)
-                {
-                    vContentPanel = vContentPanel.GetChild(0);
-                    for (int i = 0; i < vRecordingsFiles.Length; i++)
+
+                case (MainMenuState.SplashScreen):
+                    {
+                        if (vNewState == MainMenuState.MainMenu)
+                        {
+                            MainMenuView.ShowMainMenuContextView();
+                            mCurrentState = MainMenuState.MainMenu;
+                            break;
+                        }
+                        break;
+                    }
+
+                case (MainMenuState.ActivityContext):
+                    {
+                        if (vNewState == MainMenuState.MainMenu)
+                        {
+                            MainMenuView.HideActivityContextView();
+                            MainMenuView.ShowMainMenuContextView();
+                            mCurrentState = MainMenuState.MainMenu;
+                            break;
+                        }
+                        break;
+                    }
+
+                case (MainMenuState.BrainpackView):
                     {
 
-                        GameObject vNewAvRecButton = Instantiate(AvailableRecordingButtonPrefab);
-                        Button vAvRecButton = vNewAvRecButton.GetComponent<Button>();
-                        string vCleanedName = vRecordingsFiles[i].Replace(FilePathReferences.sCsvDirectory + "\\", null);
-                        vAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
-                        int vTemp = i; //copy the variable i and pass it into the listener
-                        vAvRecButton.onClick.AddListener(() => ChooseRecording(vTemp));
-                        vNewAvRecButton.transform.SetParent(vContentPanel, false);
+                        if (vNewState == MainMenuState.MainMenu)
+                        {
+                            MainMenuView.HideBrainpackContextView();
+                            MainMenuView.ShowMainMenuContextView();
+                            mCurrentState = MainMenuState.MainMenu;
+                            break;
+                        }
+                        break;
                     }
-                }
-                vImportCompleted = true;
-            }
-          
-        }
 
-        /// <summary>
-        /// The visualize3d button has been clicked
-        /// </summary>
-        private void Visualize3DButtonClicked()
-        {
-            mCurrentRecordingPanel.GetComponent<AvailableRecordingPanelView>().Hide();
-            EnableAllButLeaveoneInactive(Visualize3DButton);
-            BrainpackInfoPanel.Show();
-        }
+                case (MainMenuState.MainMenu):
+                    {
+                        if (vNewState == MainMenuState.ActivityContext)
+                        {
+                            MainMenuView.HideMainMenuContextView();
+                            MainMenuView.ShowActivitiesContextView();
+                            mCurrentState = MainMenuState.ActivityContext;
+                            break;
+                        }
 
-        /// <summary>
-        /// Deactivate all buttons in the scene
-        /// </summary>
-        private void DeactivateAllButtons()
-        {
-            foreach (var vButton in mRegisteredButtons)
-            {
-                vButton.interactable = false;
+                        if (vNewState == MainMenuState.BrainpackView)
+                        {
+                            MainMenuView.HideMainMenuContextView();
+                            MainMenuView.ShowBrainpackContextView();
+                            mCurrentState = MainMenuState.BrainpackView;
+                            break;
+                        }
+
+                        break;
+                    }
+
             }
         }
 
         /// <summary>
-        /// Sets all the buttons to interactive except for the passed in one.
+        /// The Splash screen has finished loading. 
         /// </summary>
-        /// <param name="vB"></param>
-        private void EnableAllButLeaveoneInactive(Button vB)
+        public void SplashScreenTransitionFinished()
         {
-            foreach (var vButton in mRegisteredButtons)
-            {
-                vButton.interactable = true;
-            }
-            vB.interactable = false;
+            ChangeState(MainMenuState.MainMenu);
         }
-
         /// <summary>
-        /// Reactivate all buttons
+        /// Determine which state the main menu is in
         /// </summary>
-        private void ReactivateAllButtons()
+        public enum MainMenuState
         {
-
-            foreach (var vButton in mRegisteredButtons)
-            {
-                vButton.interactable = true;
-            }
+            SplashScreen,
+            MainMenu,
+            BrainpackView,
+            ActivityContext
         }
-
-        /// <summary>
-        /// Display all available recordings 
-        /// </summary>
-        private void DisplayAllAvailableRecordings()
-        {
-            mCurrentRecordingPanel.GetComponent<AvailableRecordingPanelView>().Show();
-        }
-
-        /// <summary>
-        /// Hides all available recordings 
-        /// </summary>
-        private void HideAllAvailableRecordings()
-        {
-            mCurrentRecordingPanel.GetComponent<AvailableRecordingPanelView>().Hide();
-        }
-
-        /// <summary>
-        /// The in scene recording button selects the wanted recording. 
-        /// </summary>
-        /// <param name="vRecordingIndex">The recording index</param>
-        private void ChooseRecording(int vRecordingIndex)
-        {
-            HideAllAvailableRecordings();
-            ReactivateAllButtons();
-            BodySelectedInfo.Instance.UpdateSelectedRecording(vRecordingIndex);
-            ChangeTo3DSceneView(); 
-        }
+ 
     }
 }

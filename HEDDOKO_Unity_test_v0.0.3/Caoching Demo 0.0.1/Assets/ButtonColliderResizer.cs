@@ -19,7 +19,7 @@ public class ButtonColliderResizer : MonoBehaviour
 { 
     //RectTransforms that will anchor the collider points
     public List<RectTransform> Anchors;
-    public RectTransform ButtonRectTransform;
+    private RectTransform ButtonRectTransform;
     private PolygonCollider2D mPolygonCollider;
 
     void Start()
@@ -36,14 +36,15 @@ public class ButtonColliderResizer : MonoBehaviour
     {
         mPolygonCollider = GetComponent<PolygonCollider2D>();
 
-        Vector2[] vVertices = new Vector2[mPolygonCollider.points.Length];
+        Vector2[] vVertices = new Vector2[Anchors.Count];
         for (int i = 0; i < vVertices.Length; i++)
         {
             //Get the anchor point in world space
             Vector2 vAnchoringPoint = Anchors[i].TransformPoint(Anchors[i].rect.center);
+            vAnchoringPoint = ButtonRectTransform.InverseTransformPoint(vAnchoringPoint);
             //Get the ButtonRectTransform point in world space
-            Vector2 vParentButtonPoint = ButtonRectTransform.TransformPoint(ButtonRectTransform.rect.center); 
-            vAnchoringPoint -= vParentButtonPoint;
+            //Vector2 vParentButtonPoint = ButtonRectTransform.TransformPoint(ButtonRectTransform.rect.center); 
+            //vAnchoringPoint -= vParentButtonPoint;
             //set the anchor point 
             vVertices[i] = vAnchoringPoint;
         }
