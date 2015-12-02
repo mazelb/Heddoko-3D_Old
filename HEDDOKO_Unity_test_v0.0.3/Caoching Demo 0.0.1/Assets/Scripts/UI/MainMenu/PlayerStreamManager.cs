@@ -16,7 +16,7 @@ using UnityEngine.UI;
 namespace Assets.Scripts.UI.MainMenu
 {
     /// <summary>
-    /// Preps the body for playing a recording. BodyPlayer class , essentially a player that streams from a brainpack or recording. Todo: this class holds both the view and controls. 
+    /// Preps the body for playing a recording. PlayerStreamManager class , essentially a player that streams from a brainpack or recording. Todo: this class holds both the view and controls. 
     /// </summary>
     public class PlayerStreamManager : MonoBehaviour
     {
