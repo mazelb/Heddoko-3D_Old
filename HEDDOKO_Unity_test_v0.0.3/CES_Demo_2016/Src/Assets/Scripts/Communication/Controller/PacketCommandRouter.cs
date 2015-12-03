@@ -12,7 +12,7 @@ using System.Net.Sockets;
 using System.Text;
 using Assets.Scripts.Communication.Controller;
 using HeddokoLib.networking;
-using HeddokoLib.utils; 
+using HeddokoLib.utils;
 
 
 namespace Assets.Scripts.Communication
@@ -26,16 +26,16 @@ namespace Assets.Scripts.Communication
     public class PacketCommandRouter
     {
         private static PacketCommandRouter sInstance;
-        
+
         private SocketClient mSocketClient;
-        
+
         public SocketClient ClientSocket
         {
             get
             {
                 if (mSocketClient == null)
                 {
-                    mSocketClient  = new SocketClient();
+                    mSocketClient = new SocketClient();
                     mSocketClient.Initialize(new SuitSocketClientSettings());
                     mSocketClient.StartWorking();
                 }
@@ -54,9 +54,9 @@ namespace Assets.Scripts.Communication
                 }
                 return sInstance;
             }
-        } 
+        }
         private Command mCommand = new Command();
-       private object mFrameTheadAccessLock = new object();
+        private object mFrameTheadAccessLock = new object();
         private BodyFrameThread mBodyFrameThread; //On brainpack data retreival, send the data to the bodyframethread
 
         private BodyFrameThread FrameThread
@@ -73,7 +73,7 @@ namespace Assets.Scripts.Communication
                 BodyFrameThread vTemp = value;
                 lock (mFrameTheadAccessLock)
                 {
-                      mBodyFrameThread = vTemp;
+                    mBodyFrameThread = vTemp;
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace Assets.Scripts.Communication
        https://heddoko.sharepoint.com/_layouts/OneNote.aspx?id=%2FSiteAssets%2FTeam%20Site%20Notebook&wd=target%28Data%20structures.one%7CCB02DD1E-F126-43C5-A4F2-10252682A3FA%2F%29onenote:https://heddoko.sharepoint.com/SiteAssets/Team%20Site%20Notebook/Data%20structures.one#section-id={CB02DD1E-F126-43C5-A4F2-10252682A3FA}&end
        */
         public void Initialize()
-        { 
+        {
             mCommand.Register(HeddokoCommands.BPConnectionSucess, SuitConnectionSuccess);
             mCommand.Register(HeddokoCommands.RequestToConnectToBP, BrainpackDeviceConnectionRequest);
             mCommand.Register(HeddokoCommands.SendBPData, ReRouteRawFrameData);
@@ -120,7 +120,7 @@ namespace Assets.Scripts.Communication
         /// Disconnect the current body frame thread 
         /// </summary>
         /// <param name="vThread"></param>
-        public void DisconnectFrameThread( )
+        public void DisconnectFrameThread()
         {
             FrameThread = null;
         }
@@ -133,7 +133,7 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket);
-             ClientSocket.SendMessage(vOutBound);
+            ClientSocket.SendMessage(vOutBound);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Assets.Scripts.Communication
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             ClientSocket.SendMessage(vPayload);
-           
+
         }
         /// <summary>
         /// A error produced by the socket client and informs the BrainpackConnectionController
@@ -198,16 +198,16 @@ namespace Assets.Scripts.Communication
      * @brief Routes the incoming raw frame data to the BodyFrameThread. 
      * @param vSender: the sender, vArgs: the heddokopack containing the brainpack data. 
      */
-     
+
         private void ReRouteRawFrameData(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload); 
+            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
             // mClientSocket.WriteToServer(vPayload);
-            BrainpackConnectionController.Instance.Output =  vPayload;
+            BrainpackConnectionController.Instance.Output = vPayload;
             if (FrameThread != null && FrameThread.InboundSuitBuffer != null)
-            { 
-                    FrameThread.InboundSuitBuffer.Enqueue(vHeddokoPacket);
+            {
+                FrameThread.InboundSuitBuffer.Enqueue(vHeddokoPacket);
             }
             //todo send to buffer to be processed
         }
@@ -241,10 +241,10 @@ namespace Assets.Scripts.Communication
             byte[] vPayload = vHeddokoPacket.Payload;
             string vUnwrappedPayload = HeddokoPacket.Unwrap(vPayload);
             bool vConnectionSuccessfull = (vUnwrappedPayload == "true");
-           
-                BrainpackConnectionController.Instance.BrainpackConnectedTrigger.Trigger(vConnectionSuccessfull);
-                //BrainpackConnectionResult(vConnectionSuccessfull); //send a message to the BrainpackConnectionController with the result of the connection
-            
+
+            BrainpackConnectionController.Instance.BrainpackConnectedTrigger.Trigger(vConnectionSuccessfull);
+            //BrainpackConnectionResult(vConnectionSuccessfull); //send a message to the BrainpackConnectionController with the result of the connection
+
         }
 
         /// <summary>
@@ -269,6 +269,6 @@ namespace Assets.Scripts.Communication
         {
             ClientSocket.Stop();
         }
-    
+
     }
 }

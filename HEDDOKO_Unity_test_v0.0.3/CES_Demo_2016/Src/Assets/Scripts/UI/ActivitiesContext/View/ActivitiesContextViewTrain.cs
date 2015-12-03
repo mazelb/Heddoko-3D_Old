@@ -73,5 +73,16 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             PlayerStreamManager.ResetInitialFrame(); 
             gameObject.SetActive(false);
         }
+
+        void Update()
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                if (Input.GetKeyDown(KeyCode.F1))
+                {
+                    PlayerStreamManager.ResetInitialFrame();
+                }
+            }
+        }
     }
 }

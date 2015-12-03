@@ -361,10 +361,7 @@ namespace Assets.Scripts.Communication.Controller
                 PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
             }
 
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                Instance.ChangeTo3DSceneView();
-            }
+            
         }
 
         /// <summary>

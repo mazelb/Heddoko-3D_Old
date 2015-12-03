@@ -58,8 +58,8 @@ namespace BrainpackService.brainpack_serial_connect
                     {
                         Stop();
                         mSerialport = new SerialPort();
-                        mSerialport.ReadTimeout = 2000;//2 second timeout
-                        mSerialport.WriteTimeout = 2000;
+                        mSerialport.ReadTimeout = 30000;//2 second timeout
+                        mSerialport.WriteTimeout = 30000;
                         mPortName = vNewPort;
                         mSerialport.PortName = mPortName;
                         mSerialport.NewLine = "\r\n";
@@ -68,6 +68,15 @@ namespace BrainpackService.brainpack_serial_connect
                         mSerialport.Open();
                         Start();
                     }
+
+                    //check if the port isn't already opened
+                    else if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
+                    {
+                        mWorkerThread = new Thread(ThreadedFunction);
+                        this.mSerialport.BaudRate = 115200;
+                        mSerialport.Open();
+                        Start();
+                    } 
 
                     else
                     {
