@@ -112,6 +112,7 @@ namespace Assets.Scripts.Communication
             try
             {
                 mSocket = new TcpClient(ClientSocketSettings.ConnectionName, ClientSocketSettings.Port);
+                mSocket.NoDelay = true;
                 mNetworkStream = mSocket.GetStream();
                 mStreamWriter = new StreamWriter(mNetworkStream);
                 mStreamReader = new StreamReader(mNetworkStream);
