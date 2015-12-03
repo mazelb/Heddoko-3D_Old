@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
-        void Start()
+        void Awake()
         {
            // mPlayButtonOriginalIcon = PlayButton.image.sprite;
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
@@ -46,8 +46,23 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
-            } 
+                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID); 
+            }
+
+            if (CurrentBodyInPlay == null)
+            {
+                //check what the current count is
+                int vBodiesCount = BodiesManager.Instance.Bodies.Count;
+
+                if (vBodiesCount == 0)
+                {
+                    //create a new body from the body manager
+                    BodiesManager.Instance.CreateNewBody("BrainpackPlaceholderBody");
+                }
+
+                //get the first body
+                CurrentBodyInPlay = BodiesManager.Instance.Bodies[0];
+            }
         }
 
         /// <summary>
@@ -68,6 +83,8 @@ namespace Assets.Scripts.UI.MainMenu
             BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
+
+
         /**
         * Play 
         * @brief Will play the recording for the prepped body
@@ -260,6 +277,11 @@ namespace Assets.Scripts.UI.MainMenu
             Waiting, //waiting for a response
             PlayingRecording,
             StreamingFromBrainPack
+        }
+
+        public void Stop()
+        {
+            CurrentBodyInPlay.StopThread();
         }
     }
 }

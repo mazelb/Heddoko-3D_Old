@@ -28,15 +28,42 @@ namespace Assets.Scripts.UI.MainScene.Model
         [SerializeField]
         private SuitSocketClientSettings mSocketClientSettings; 
 
-        
         public string mSelectedRecordingPath;
         public string mSelectedBody;
         public int TotalRecordingsAvailable;
-        private Dictionary<string, BodyFramesRecording> mBodyRecordingMap = new Dictionary<string, BodyFramesRecording>(1); 
-        /**
-        * UpdateNumberOfRecordings 
-        * @brief Updates the number of recordings 
-        */
+        private Dictionary<string, BodyFramesRecording> mBodyRecordingMap = new Dictionary<string, BodyFramesRecording>(1);
+
+        /// <summary>
+        /// Singleton instance of the class
+        /// </summary>
+        public static BodySelectedInfo Instance
+        {
+            get
+            {
+                if (mInstance == null)
+                {
+
+                    GameObject vGo = GameObject.FindGameObjectWithTag("Controllers");
+                    if (vGo != null)
+                    {
+                        mInstance = vGo.GetComponent<BodySelectedInfo>();
+                    }
+                    if (mInstance == null)
+                    {
+                        mInstance = FindObjectOfType<BodySelectedInfo>();
+                    }
+                    if (mInstance == null)
+                    {
+                        GameObject vNewGo = new GameObject("BodySelectedInfo");
+                        mInstance = vNewGo.AddComponent<BodySelectedInfo>();
+                    }
+                    DontDestroyOnLoad(mInstance.gameObject);
+                }
+
+                return mInstance;
+
+            }
+        }
 
         /// <summary>
         /// Updates the number of recordings 
@@ -44,13 +71,8 @@ namespace Assets.Scripts.UI.MainScene.Model
         public void UpdateNumberOfRecordings()
         {
             TotalRecordingsAvailable = BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.RecordingsDirectory);
-
         }
 
-        /**
-        * CurrentSelectedRecording 
-        * @brief Returns the current selected Recording based on the selected recording from the main menu
-        */
         /// <summary>
         /// Returns the current selected Recording based on the selected recording from the main menu
         /// </summary>
@@ -71,53 +93,31 @@ namespace Assets.Scripts.UI.MainScene.Model
             }
         }
 
+       
         /// <summary>
-        /// Singleton instance of the class
+        /// On awake, initialize the instance
         /// </summary>
-        public static BodySelectedInfo Instance
-        {
-            get
-            {
-                if (mInstance == null)
-                { 
-                   
-                   GameObject vGo = GameObject.FindGameObjectWithTag("Controllers");
-                    if (vGo != null)
-                    {
-                        mInstance = vGo.GetComponent<BodySelectedInfo>();
-                    }
-                    if(mInstance ==null)
-                    {
-                        mInstance = FindObjectOfType<BodySelectedInfo>();
-                    }
-                    if (mInstance == null)
-                    {
-                        GameObject vNewGo = new GameObject("BodySelectedInfo");
-                        mInstance= vNewGo.AddComponent<BodySelectedInfo>();
-                    }
-                    DontDestroyOnLoad(mInstance.gameObject);
-                }
-                return mInstance;
-            }
-        }
-
         void Awake()
         {
             Instance.Init();
         }
 
+        /// <summary>
+        /// On application quit, removed listeners 
+        /// </summary>
         void OnApplicationQuit()
         {
             BodyRecordingChangedEvent = null;
         }
+
+        /// <summary>
+        /// Initializes the class
+        /// </summary>
         void Init()
         {
             
         }
-        /**
-        * UpdateNumberOfRecordings 
-        * @brief Updates the number of recordings 
-        */ 
+         
         /// <summary>
         /// Updates the number of recordings 
         /// </summary>
@@ -137,10 +137,7 @@ namespace Assets.Scripts.UI.MainScene.Model
             }
 
         }
-        /**
-        * UpdateCurrentBodyFrameRecording 
-        * @brief helper method update that the current bodyframes recording
-        */
+
         /// <summary>
         ///helper method update that updates the current bodyframes recording
         /// </summary>
@@ -152,8 +149,7 @@ namespace Assets.Scripts.UI.MainScene.Model
                 //the latest item to be placed in the list is now the current body frame recording
                 BodyFramesRecording vCurrBFR = BodyRecordingsMgr.Instance.Recordings[BodyRecordingsMgr.Instance.Recordings.Count - 1];
                 mBodyRecordingMap.Add(mSelectedRecordingPath,vCurrBFR);
-                //notify interested listeners that the recording has changed
-          
+                
             }
         }
     }

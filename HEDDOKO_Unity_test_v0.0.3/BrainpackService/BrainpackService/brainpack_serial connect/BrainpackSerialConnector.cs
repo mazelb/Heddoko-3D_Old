@@ -2,7 +2,7 @@
 using System.Data;
 using System.IO;
 using System.IO.Ports;
-using System.Threading; 
+using System.Threading;
 using BrainpackService.bluetooth_connector.BrainpackInterfaces;
 using BrainpackService.Tools_and_Utilities;
 using HeddokoLib.adt;
@@ -45,54 +45,69 @@ namespace BrainpackService.brainpack_serial_connect
 
         }
         /// <summary>
-        /// Try to set p the serial port
+        /// Try to set the serial port
         /// </summary>
         /// <param name="vNewPort">The name of the serial port</param>
         private void SerialPortOpen(string vNewPort)
         {
             try
             {
-                if (vNewPort != mPortName)
+                lock (mSerialPortLock)
                 {
-                    Stop();
-                    mSerialport = new SerialPort();
-                    mSerialport.ReadTimeout = 2000;//2 second timeout
-                    mSerialport.WriteTimeout = 2000;
-                    mPortName = vNewPort;
-                    mSerialport.PortName = mPortName;
-                    mSerialport.NewLine = "\r\n";
-                    mWorkerThread = new Thread(ThreadedFunction);
-                    this.mSerialport.BaudRate = 115200;
-                    Start(); 
-                }
-                else
-                {
-                    OutboundBuffer.Clear();
-                    Start();
-                }
+                    if (vNewPort != mPortName)
+                    {
+                        Stop();
+                        mSerialport = new SerialPort();
+                        mSerialport.ReadTimeout = 30000;//2 second timeout
+                        mSerialport.WriteTimeout = 30000;
+                        mPortName = vNewPort;
+                        mSerialport.PortName = mPortName;
+                        mSerialport.NewLine = "\r\n";
+                        mWorkerThread = new Thread(ThreadedFunction);
+                        this.mSerialport.BaudRate = 115200;
+                        mSerialport.Open();
+                        Start();
+                    }
 
+                    //check if the port isn't already opened
+                    else if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
+                    {
+                        mWorkerThread = new Thread(ThreadedFunction);
+                        this.mSerialport.BaudRate = 115200;
+                        mSerialport.Open();
+                        Start();
+                    } 
+
+                    else
+                    {
+                        OutboundBuffer.Clear();
+                        Start();
+                    }
+                }
             }
+
             catch (Exception e)
             {
                 BrainpackEventLogManager.InvokeEventLogError("Could not open serial port " + mSerialport + "\n Error:" + e.StackTrace + "\n" + e.ToString());
             }
 
-
         }
 
-        
+        /// <summary>
+        /// pulls data from the brainpack
+        /// </summary>
         public void ThreadedFunction()
         {
 
             while (true)
             {
-                if (mSerialport.IsOpen)
+                lock (mSerialPortLock)
                 {
-                    try
+                    if (mSerialport.IsOpen)
                     {
-                        if (!mMessageSent)
+                        try
                         {
-                            lock (mSerialPortLock)
+                            if (!mMessageSent)
                             {
                                 string line = mSerialport.ReadLine();
                                 if (line.Length < 100)
@@ -100,42 +115,41 @@ namespace BrainpackService.brainpack_serial_connect
                                     BrainpackEventLogManager.InvokeEventLogMessage("Is less than 100 chars");
                                 }
                                 OutboundBuffer.Enqueue(line);
+
                             }
 
-
-                            //mSerialport.DiscardInBuffer();
-
-                        }
-
-                    }
-                    catch (IOException vIoException)
-                    {
-                        BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
-                    }
-                    catch (TimeoutException vTimeout)
-                    {
-                        try
-                        {
-                            var vResult = QuestionBrainpack(); //ask the brainpack if it's still alive
-                            if (!vResult)
-                            {
-
-                                mSerialport.Close();
-                            }
                         }
                         catch (IOException vIoException)
                         {
                             BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
                         }
-                        catch (InvalidOperationException vInvalidOperationException)
+                        catch (NullReferenceException vNullReferenceException)
                         {
-                            BrainpackEventLogManager.InvokeEventLogError(vInvalidOperationException + "\r\n" + vInvalidOperationException.StackTrace);
+                            BrainpackEventLogManager.InvokeEventLogError(vNullReferenceException + "\r\n" + vNullReferenceException.StackTrace);
+                        }
+                        catch (TimeoutException vTimeout)
+                        {
+                            try
+                            {
+                                var vResult = QuestionBrainpack(); //ask the brainpack if it's still alive
+                                if (!vResult)
+                                {
+
+                                    mSerialport.Close();
+                                }
+                            }
+                            catch (IOException vIoException)
+                            {
+                                BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
+                            }
+                            catch (InvalidOperationException vInvalidOperationException)
+                            {
+                                BrainpackEventLogManager.InvokeEventLogError(vInvalidOperationException + "\r\n" + vInvalidOperationException.StackTrace);
+                            }
                         }
                     }
-
-
-
                 }
+
                 if (!mIsWorking)
                 {
                     Stop();
@@ -160,38 +174,6 @@ namespace BrainpackService.brainpack_serial_connect
 
         public void Start()
         {
-            try
-            {
-
-                //first check if the serial port isn't open and try to open it
-                if (!mSerialport.IsOpen)
-                {
-                    mSerialport.Open();
-                }
-                /*      //if it is already open, then send a message to it. See what its response is.
-                      else
-                      {
-                          var vResult = QuestionBrainpack();
-                          if (!vResult)
-                          {
-                              mSerialport.Close();
-                          }
-                      }*/
-            }
-            catch (IOException e)
-            {
-                BrainpackEventLogManager.InvokeEventLogError(e.ToString());
-            }
-            catch (TimeoutException vTimeout)
-            {
-                mSerialport.Close();
-                mMessageSent = false;
-                BrainpackEventLogManager.InvokeEventLogError(vTimeout + "\r\n" + vTimeout.StackTrace);
-            }
-            catch (InvalidOperationException vInvalid)
-            {
-                BrainpackEventLogManager.InvokeEventLogError(vInvalid + "\r\n" + vInvalid.StackTrace);
-            }
             if (!mIsWorking)
             {
                 mIsWorking = true;
@@ -236,9 +218,13 @@ namespace BrainpackService.brainpack_serial_connect
             OutboundBuffer.Clear();
             if (IsConnected)
             {
-                mSerialport.Close();
+                lock (mSerialPortLock)
+                {
+                    mSerialport.Close();
+                }
             }
         }
+
         /// <summary>
         /// Verify if the serial port is open and ready to send message back
         /// </summary>
@@ -257,7 +243,10 @@ namespace BrainpackService.brainpack_serial_connect
                     vResult = QuestionBrainpack();
                     if (!vResult)
                     {
-                        mSerialport.Close();
+                        lock (mSerialPortLock)
+                        {
+                            mSerialport.Close();
+                        }
                     }
                     return vResult;
                 }

@@ -34,10 +34,14 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     */
     private void Start()
     {
-        BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.sCsvDirectory); //scan recordings in directory
-        BodyRecordingsMgr.Instance.ReadAllRecordings(); //read the recordings
-        mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID); //set the body
-        
+        //scan recordings in directory
+        BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.sCsvDirectory);
+
+        //read the recordings
+        BodyRecordingsMgr.Instance.ReadAllRecordings();
+
+        //set the body
+        mBody = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
     }
 
     /**
@@ -57,6 +61,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
             }
         }        
     }
+
     /**
     * ResetInitialFrame 
     * @brief will set the Initial Frame

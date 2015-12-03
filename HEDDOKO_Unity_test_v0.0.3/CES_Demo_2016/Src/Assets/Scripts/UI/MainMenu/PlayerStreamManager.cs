@@ -53,6 +53,7 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 //check what the current count is
                 int vBodiesCount = BodiesManager.Instance.Bodies.Count;
+
                 if (vBodiesCount == 0)
                 {
                     //create a new body from the body manager
@@ -82,6 +83,8 @@ namespace Assets.Scripts.UI.MainMenu
             BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
+
+
         /**
         * Play 
         * @brief Will play the recording for the prepped body
@@ -274,6 +277,11 @@ namespace Assets.Scripts.UI.MainMenu
             Waiting, //waiting for a response
             PlayingRecording,
             StreamingFromBrainPack
+        }
+
+        public void Stop()
+        {
+            CurrentBodyInPlay.StopThread();
         }
     }
 }

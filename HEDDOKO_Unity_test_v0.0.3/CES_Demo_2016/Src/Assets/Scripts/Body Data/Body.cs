@@ -454,14 +454,15 @@ public class Body
     /// </summary>
     internal void StopThread()
     {
-        if (mBodyFrameThread != null)
-        {
-            mBodyFrameThread.StopThread();
-        }
         if (View != null)
         {
             View.StartUpdating = false;
         }
+        if (mBodyFrameThread != null)
+        {
+            mBodyFrameThread.StopThread();
+        }
+     
     }
 
     /// <summary>

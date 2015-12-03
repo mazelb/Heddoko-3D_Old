@@ -5,6 +5,9 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
+
+using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.MainScene.Model;
 using UnityEngine;
  
 namespace Assets.Scripts.UI.ActivitiesContext.View
@@ -15,8 +18,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public ActivitiesContextViewTrain TrainingView;
         public ActivitesContextViewLearn LearningView;
         public LearnFromRecordingView LearnFromRecordingView;
-
-        
+      
         /// <summary>
         /// Shows the ActivitiesContextView 
         /// </summary>
@@ -66,8 +68,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// Switches to the learning by recording view
         /// </summary>
         public void SwitchToLearnByRecordingView()
-        {
-            LearnFromRecordingView.Show();
+        { 
+             LearnFromRecordingView.Show();
         }
         /// <summary>
         /// hides the learn by recording view
