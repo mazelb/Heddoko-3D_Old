@@ -35,7 +35,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public GameObject BetaHighTorsoGeo;
         public Material RegularTrainingMaterial;
         public Material RegularJointstTrainingMaterial;
-
+        public Text NumberSquatsOfText;
         private PlayerStreamManager mPlayerStreamManager;
 
         public PlayerStreamManager PlayerStreamManager
@@ -83,6 +83,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                     PlayerStreamManager.ResetInitialFrame();
                 }
             }
+
         }
     }
 }
