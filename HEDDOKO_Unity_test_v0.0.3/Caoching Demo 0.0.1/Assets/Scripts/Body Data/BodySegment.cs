@@ -184,7 +184,7 @@ public class BodySegment
         {
             vLegMovement = mLeftLegHeight;
         }
-        Debug.Log("LegHeights: " + mRightLegHeight + " , " + mLeftLegHeight);
+        //Debug.Log("LegHeights: " + mRightLegHeight + " , " + mLeftLegHeight);
         vLSSubsegment.UpdateSubsegmentPosition(vLegMovement + vFootHeight);
     }
 
@@ -372,7 +372,7 @@ public class BodySegment
 
         //Update Leg height 
         mRightLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
-        Debug.Log("mRightLegHeight: " + mRightLegHeight);
+        Debug.Log("Right Leg Squatts: " + vRightLegAnalysis.NumberofRightSquats);
     }
 
     /**
@@ -560,7 +560,7 @@ public class BodySegment
 
         //Update leg height 
         mLeftLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
-        Debug.Log("mLeftLegHeight: " + mLeftLegHeight);
+        //Debug.Log("mLeftLegHeight: " + mLeftLegHeight);
     }
 
     /**
