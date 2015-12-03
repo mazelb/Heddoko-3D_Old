@@ -96,19 +96,9 @@ namespace BrainpackService
             //update the service state to running
             vServiceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(ServiceHandle, ref vServiceStatus);
-            //start the server
-
-            // BrainpackServer.BrainpackServer vServer = new BrainpackServer.BrainpackServer();
-            // vServer.SetupServer();
-
-
-            /**
-            If your OnStart and OnStop methods run long, 
-            your service can request more time by calling SetServiceStatus again with an incremented dwCheckPoint value.
-            */
-            //BrainpackSearcher connector = new BrainpackSearcher();
-            ServerCommandRouter.Instance.BeginRegistration();
-           // connector.Init();
+           
+            //Initialize the server
+            ServerCommandRouter.Instance.BeginRegistration(); 
             mNetworkThread.Start();
             BrainpackEventLogManager.RegisterEventLogMessage(WriteEventLogMessage);
         }
