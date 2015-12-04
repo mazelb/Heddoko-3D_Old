@@ -247,13 +247,6 @@ namespace Assets.Scripts.UI.MainMenu
             // ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
-        public void StartCountingSquatsOn()
-        {
-            if(CurrentBodyInPlay! = null)
-            {
-                
-            }
-        }
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state
         /// </summary>

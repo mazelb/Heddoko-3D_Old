@@ -5,9 +5,9 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
-
-using Assets.Scripts.UI.MainMenu.View;
-using UnityEngine;
+ 
+using Assets.Scripts.UI.MainMenu.View; 
+using UnityEngine; 
 
 namespace Assets.Scripts.UI.MainMenu.Controller
 {
@@ -35,8 +35,6 @@ namespace Assets.Scripts.UI.MainMenu.Controller
             MainMenuView.BrainpackButton.onClick.AddListener(() => ChangeState(MainMenuState.BrainpackView));
             MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
             MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
-            MainMenuView.LoadRecordingButton.onClick.AddListener(() => ChangeState(MainMenuState.RecordingSelection));
-            MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
         }
         /// <summary>
         /// changes the state of the main menu
@@ -100,28 +98,10 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             mCurrentState = MainMenuState.BrainpackView;
                             break;
                         }
-                        if (vNewState == MainMenuState.RecordingSelection)
-                        {
-                            MainMenuView.HideMainMenuContextView();
-                            MainMenuView.ShowRecordingSelectionView();
-                            mCurrentState = MainMenuState.RecordingSelection;
-                            break;
-                        }
 
                         break;
                     }
-                case (MainMenuState.RecordingSelection):
-                {
 
-                        if (vNewState == MainMenuState.MainMenu)
-                        {
-                            mCurrentState = MainMenuState.MainMenu;
-                            MainMenuView.HideRecordingSelectionView();
-                            MainMenuView.ShowMainMenuContextView(); 
-                            break;
-                        }
-                        break;
-                }
             }
         }
         /// <summary>
@@ -138,7 +118,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         {
             ChangeState(MainMenuState.MainMenu);
         }
-
+  
     }
     /// <summary>
     /// Determine which state the main menu is in
@@ -148,7 +128,6 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         SplashScreen,
         MainMenu,
         BrainpackView,
-        ActivityContext,
-        RecordingSelection
+        ActivityContext
     }
 }

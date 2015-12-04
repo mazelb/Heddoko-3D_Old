@@ -4,7 +4,10 @@
 * @author Mohammed Haider(mohamed@heddoko.com) 
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
-*/ 
+*/
+
+using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.MainScene.Model;
 using UnityEngine;
  
 namespace Assets.Scripts.UI.ActivitiesContext.View
