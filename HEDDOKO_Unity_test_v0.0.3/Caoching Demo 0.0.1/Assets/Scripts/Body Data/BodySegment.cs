@@ -142,11 +142,12 @@ public class BodySegment
         BodySubSegment vUSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
         BodySubSegment vLSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
+        float[,] vTrackedTorsoOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine]);
+        float[,] vTrackedSpineOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine]);
+
+        /*
         float[,] vaTorsoOrientation = new float[3, 3];
         float[,] vaSpineOrientation = new float[3, 3];
-
-        float[,] vTrackedTorsoOrientation = (vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine]);
-        float[,] vTrackedSpineOrientation = (vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine]);
 
         float[,] TorsoB3 = new float[3, 3];
         float[,] TorsoB4 = new float[3, 3];
@@ -161,15 +162,15 @@ public class BodySegment
         u.Set(0, 1, 0);
         //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
         vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
-        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);
+        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);//*/
 
         //Update the analysis inputs
         TorsoAnalysis vTorsoAnalysis = (TorsoAnalysis)mCurrentAnalysisSegment;
-        vTorsoAnalysis.TorsoOrientation = vCurrentTorsoOrientation;
+        vTorsoAnalysis.TorsoOrientation = vTrackedTorsoOrientation;
         vTorsoAnalysis.AngleExtraction();
 
         //Update the segment's and segment's view orientations
-        vUSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
+        vUSSubsegment.UpdateSubsegmentOrientation(vTrackedTorsoOrientation);
         //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
 
         //Update body height
@@ -229,8 +230,6 @@ public class BodySegment
         float[,] vKneeB7 = new float[3, 3];
         float[,] KneeB22 = new float[3, 3];
 
-        bool fusion = false;
-
         /////////// Initial Frame Adjustments /////////////////// 
         //vHipOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh];
         //vKneeOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf];
@@ -238,8 +237,8 @@ public class BodySegment
         //vHipB2 = vHipOrientationMatrix;
         //vKneeB2 = vKneeOrientationMatrix;
 
-        HipB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh]);
-        KneeB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf]);
+        HipB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh]);
+        KneeB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf]);
 
         vHipOrientationMatrix = HipB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh];
         vKneeOrientationMatrix = KneeB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf];
@@ -250,6 +249,8 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
+        bool fusion = true;
+
         if (fusion)
         {
             ///////////// Pitch Compensation StepForward ///////////////////
@@ -421,8 +422,8 @@ public class BodySegment
         float[,] KneeB22 = new float[3, 3];
 
         /////////// Initial Frame Adjustments /////////////////// 
-        HipB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh]);
-        KneeB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf]);
+        HipB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh]);
+        KneeB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf]);
 
         //vHipOrientationMatrix = HipB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh];
         //vKneeOrientationMatrix = KneeB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf];
@@ -433,7 +434,7 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -606,8 +607,8 @@ public class BodySegment
         //UpArB21 = multi(UpArFi, UpArB1);
         //LoArB21 = multi(LoArFi, LoArB1);
 
-        vUpArB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm]);
-        vLoArB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm]);
+        vUpArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm]);
+        vLoArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm]);
 
         vUpArB2 = vUpArB22;// GravityRefArm(UpArB22, vNodInitAcc0);
         vLoArB2 = vLoArB22;// GravityRefArm(LoArB22, vNodInitAcc1);
@@ -615,7 +616,7 @@ public class BodySegment
         //vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm];
         //vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm];
 
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -803,8 +804,8 @@ public class BodySegment
         //No tilt
         //UpArB22 = UpArB21;
         //LoArB22 = LoArB21;
-        vUpArB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm]);
-        vLoArB22 = TiltNod(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm]);
+        vUpArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm]);
+        vLoArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm]);
 
         vUpArB2 = vUpArB22;// GravityRefArm(UpArB22, vNodInitAcc0);
         vLoArB2 = vLoArB22;// GravityRefArm(LoArB22, vNodInitAcc1);
@@ -814,7 +815,7 @@ public class BodySegment
 
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
-        bool fusion = false;
+        bool fusion = true;
 
         if (fusion)
         {
@@ -946,11 +947,11 @@ public class BodySegment
     }
 
     /**
-    *  TiltNod()
+    *  SensorsTiltCorrection()
     * @param  
     * @brief 
     */
-    public float[,] TiltNod(float[,] B2)
+    public float[,] SensorsTiltCorrection(float[,] B2)
     {
         float[,] B3 = new float[3, 3];
         float[,] B4 = new float[3, 3];
