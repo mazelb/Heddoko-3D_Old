@@ -165,7 +165,7 @@ namespace Assets.Scripts.UI.MainScene.Model
                     break;
                 }
             }
-            if()
+           
 
         }
     }
