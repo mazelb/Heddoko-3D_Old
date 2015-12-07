@@ -39,15 +39,15 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 
         // This variable stores the time of current frame. It is used for angular velocity and acceleration extraction
  
-        public   float NumberofRightSquats { get;   set; }
+        public float NumberofRightSquats { get;   set; }
         public float mAngleSumRight = 0;
-        private bool mStartCountingSquats;
+        private bool mStartCountingSquats = false;
 
         /// <summary>
         /// Listens to events where squats need to be counted
         /// </summary>
         /// <param name="vFlag"></param>
-        private void StartCountingSquatsListener(bool vFlag)
+        public void StartCountingSquats(bool vFlag)
         {
             mStartCountingSquats = vFlag;
         }

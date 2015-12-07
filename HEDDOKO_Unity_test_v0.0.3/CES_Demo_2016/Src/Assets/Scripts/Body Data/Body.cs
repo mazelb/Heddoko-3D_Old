@@ -215,11 +215,15 @@ public class Body
     */
     public void SetInitialFrame(BodyFrame vInitialFrame)
     {
-        InitialBodyFrame = vInitialFrame;
-        for (int i = 0; i < BodySegments.Count; i++)
+        if (vInitialFrame != null)
         {
-            BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
+            InitialBodyFrame = vInitialFrame;
+            for (int i = 0; i < BodySegments.Count; i++)
+            {
+                BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
+            }
         }
+       
     }
 
     /**

@@ -1,4 +1,11 @@
-﻿ 
+﻿/** 
+* @file RecordingPanelView.cs
+* @brief Contains the RecordingPanelView class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date December 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
+using System;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.Utils;
@@ -20,9 +27,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         private bool mBottomButDisabled;
 
         private int mCurrentIndex = 0;
-        private bool mRecordingSelected;
-
-
+        private bool mRecordingSelected; 
         public Scrollbar Scrollbar;
 
         private PlayerStreamManager mPlayerStreamManager;
@@ -44,6 +49,8 @@ namespace Assets.Scripts.UI.Scene_3d.View
             Scrollbar.onValueChanged.AddListener(OnScrollValueChanged);
             LeftSelectionRecording.onClick.AddListener(LeftButtonEngaged);
             RightSelectionRecording.onClick.AddListener(RightButtonEngaged);
+            UpArrow.onClick.AddListener(UpButtonEngaged);
+            DownArrow.onClick.AddListener(DownButtonEngaged);
         }
 
         public void Show()
@@ -138,7 +145,16 @@ namespace Assets.Scripts.UI.Scene_3d.View
         private void ChooseAndPlayRecording(int vRecordingIndex)
         {
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetInitialFrame();
+            try
+            {
+                PlayerStreamManager.ResetInitialFrame();
+            }
+            catch (Exception)
+            {
+                
+             
+            }
+            
             BodySelectedInfo.Instance.UpdateSelectedRecording(vRecordingIndex);
             PlayerStreamManager.Play();
             mCurrentIndex = vRecordingIndex;
@@ -149,7 +165,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// </summary>
         private void OnScrollValueChanged(float vNewValue)
         {
-            if (vNewValue <= 0)
+           /* if (vNewValue <= 0)
             {
                 UpArrow.gameObject.SetActive(false);
             }
@@ -164,7 +180,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
                     DownArrow.gameObject.SetActive(true);
                 }
                 UpArrow.gameObject.SetActive(true);
-            }
+            }*/
         }
 
         /// <summary>
@@ -191,6 +207,24 @@ namespace Assets.Scripts.UI.Scene_3d.View
                 mCurrentIndex = BodyRecordingsMgr.Instance.FilePaths.Length;
             }
             ChooseAndPlayRecording(mCurrentIndex);
+        }
+
+        /// <summary>
+        /// the up arrow button has been engaged
+        /// </summary>
+        private void UpButtonEngaged()
+        {
+            float vNewVal = Scrollbar.value + 0.1f;
+            Scrollbar.value = vNewVal;
+        }
+
+        /// <summary>
+        /// the down arrow button has been engaged
+        /// </summary>
+        private void DownButtonEngaged()
+        {
+            float vNewVal = Scrollbar.value - 0.1f;
+            Scrollbar.value = vNewVal;
         }
     }
 }

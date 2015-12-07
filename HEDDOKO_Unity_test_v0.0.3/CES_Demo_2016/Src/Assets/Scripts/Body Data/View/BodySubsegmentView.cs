@@ -20,7 +20,11 @@ namespace Assets.Scripts.Body_Data.view
         //the transforms required to transform
         public BodySubSegment AssociatedSubSegment;
         public List<Transform> SubSegmentTransforms = new List<Transform>();
-
+        
+        //Sprite Transform2D
+        public Transform SpriteTransform;
+        //This flag turned on, mean that the assigned Transform is a 3D model, else use a 2D sprite
+        private bool mUsing3DModel = true;
         /**
         * View
         * @param 
@@ -38,6 +42,13 @@ namespace Assets.Scripts.Body_Data.view
 
                 SubSegmentTransforms.Add(vTransform);
             }
+            //Find the 2D representation of the object in the scene 
+            GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D"); 
+            if (v2DGameObject != null)
+            {
+                SpriteTransform = v2DGameObject.transform;
+            }
+
         }
 
         public void ApplyTransformations(Quaternion vNewOrientation)
@@ -46,7 +57,19 @@ namespace Assets.Scripts.Body_Data.view
             {
                 vObjTransform.rotation = vNewOrientation;
             }
+
+            //Apply 2D transformation
+            if (SpriteTransform != null)
+            {
+                //convert to Euler
+                Vector3 vEuler = vNewOrientation.eulerAngles;
+                vEuler.z = vEuler.x;
+                vEuler.x = 0;
+                vEuler.y = 0;
+                SpriteTransform.rotation = Quaternion.Euler(vEuler);
+            }
         }
+
 
         public void ApplyTranslations(float vNewDisplacement)
         {
@@ -56,6 +79,14 @@ namespace Assets.Scripts.Body_Data.view
                 v3.y = vNewDisplacement;
                 vObjTransform.localPosition = v3;
             }
+
+            //Apply 2D translations
+            if (SpriteTransform != null)
+            { 
+                Vector3 v3 = SpriteTransform.localPosition;
+                v3.y = vNewDisplacement;
+                SpriteTransform.localPosition = v3;
+            }
         }
 
         public void ResetOrientations()
@@ -64,6 +95,13 @@ namespace Assets.Scripts.Body_Data.view
             {
                 vObjTransform.rotation = Quaternion.identity;
             }
+
+            //Apply to 2D model
+            if (SpriteTransform != null)
+            {
+                SpriteTransform.rotation = Quaternion.identity;
+            } 
+
             Camera.main.Render();
         }
 

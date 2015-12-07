@@ -29,7 +29,9 @@ namespace Assets.Scripts.UI.RecordingLoading.View
 
         public Transform InviewAnchor;
         public Transform OutOfViewAnchor;
-        
+
+        public Model2D3DSwitch ModelSwitcher;
+
         /// <summary>
         /// shows the recording selection view
         /// </summary>
@@ -39,6 +41,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             HeddokoModel.transform.rotation = InviewAnchor.rotation;
             gameObject.SetActive(true);
             RecordingPanelView.Show();
+            ModelSwitcher.Show();
         }
 
         /// <summary>
@@ -50,6 +53,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             HeddokoModel.transform.rotation = OutOfViewAnchor.rotation;
             gameObject.SetActive(false);
             RecordingPanelView.Hide();
+            ModelSwitcher.Hide();
         }
 
         

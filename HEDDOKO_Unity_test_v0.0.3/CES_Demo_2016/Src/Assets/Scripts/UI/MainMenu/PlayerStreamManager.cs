@@ -249,7 +249,7 @@ namespace Assets.Scripts.UI.MainMenu
 
         public void StartCountingSquatsOn()
         {
-            if(CurrentBodyInPlay! = null)
+            if(CurrentBodyInPlay != null)
             {
                 
             }

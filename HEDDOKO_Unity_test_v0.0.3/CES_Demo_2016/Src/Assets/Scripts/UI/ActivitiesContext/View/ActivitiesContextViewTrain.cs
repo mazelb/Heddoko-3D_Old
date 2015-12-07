@@ -7,6 +7,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.MainMenu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,7 +38,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Material RegularJointstTrainingMaterial;
         public Text NumberSquatsOfText;
         private PlayerStreamManager mPlayerStreamManager;
-
+        private bool mIsActive;
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -61,6 +62,9 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             BetaHighLimbsGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
             BetaHighTorsoGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
             BetaHighJointsGeo.GetComponent<Renderer>().material = RegularJointstTrainingMaterial;
+
+            mIsActive = true;
+
         }
         /// <summary>
         /// Hides the view
@@ -72,6 +76,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetInitialFrame(); 
             gameObject.SetActive(false);
+            mIsActive = false;
         }
 
         void Update()
@@ -81,6 +86,27 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 if (Input.GetKeyDown(KeyCode.F1))
                 {
                     PlayerStreamManager.ResetInitialFrame();
+                    PlayerStreamManager.CurrentBodyInPlay.MBodyFrameThread.CreateNewFile = true;
+                }
+            }
+            if (mIsActive)
+            {
+                Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
+                if (vCurrentBody != null)
+                {
+                    RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
+                    vRightLegAnalysis.StartCountingSquats(true);
+                    NumberSquatsOfText.text = "number of squats = " + vRightLegAnalysis.NumberofRightSquats;
+                }
+            }
+            else
+            {
+                Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
+                if (vCurrentBody != null)
+                {
+                    RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
+                    vRightLegAnalysis.StartCountingSquats(false);
+                
                 }
             }
 

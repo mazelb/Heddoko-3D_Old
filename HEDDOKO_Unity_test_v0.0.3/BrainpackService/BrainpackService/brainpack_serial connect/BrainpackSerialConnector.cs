@@ -58,7 +58,7 @@ namespace BrainpackService.brainpack_serial_connect
                     {
                         Stop();
                         mSerialport = new SerialPort();
-                        mSerialport.ReadTimeout = 30000;//2 second timeout
+                        mSerialport.ReadTimeout = 30000;//30second timeout
                         mSerialport.WriteTimeout = 30000;
                         mPortName = vNewPort;
                         mSerialport.PortName = mPortName;
@@ -68,15 +68,22 @@ namespace BrainpackService.brainpack_serial_connect
                         mSerialport.Open();
                         Start();
                     }
-
-                    //check if the port isn't already opened
-                    else if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
-                    {
+                    if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
+                    { 
                         mWorkerThread = new Thread(ThreadedFunction);
                         this.mSerialport.BaudRate = 115200;
                         mSerialport.Open();
-                        Start();
-                    } 
+                        Start(); 
+                    }
+
+                    /*       //check if the port isn't already opened
+                           else if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
+                           {
+                               mWorkerThread = new Thread(ThreadedFunction);
+                               this.mSerialport.BaudRate = 115200;
+                               mSerialport.Open();
+                               Start();
+                           } */
 
                     else
                     {
@@ -167,7 +174,7 @@ namespace BrainpackService.brainpack_serial_connect
         {
             lock (mSerialPortLock)
             {
-                mSerialport.Write(vMsg + "/r/n");
+                mSerialport.Write(vMsg + "\r\n");
             }
         }
 
@@ -188,7 +195,7 @@ namespace BrainpackService.brainpack_serial_connect
             mMessageSent = true;
             try
             {
-                SendCommandToBrainpack("/?");
+                SendCommandToBrainpack("?");
                 lock (mSerialPortLock)
                 {
                     if (mSerialport.IsOpen)

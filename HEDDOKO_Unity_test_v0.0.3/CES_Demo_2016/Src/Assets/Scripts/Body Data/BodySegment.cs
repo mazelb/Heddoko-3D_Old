@@ -39,8 +39,8 @@ public class BodySegment
     public SegmentAnalysis mCurrentAnalysisSegment;
 
     //TODO: extract this where appropriate
-    private float mRightLegHeight = 1.0f;
-    private float mLeftLegHeight = 1.0f; 
+    private static float mRightLegHeight = 1.0f;
+    private static float mLeftLegHeight = 1.0f; 
 
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
@@ -174,7 +174,7 @@ public class BodySegment
 
         //Update body height
         float vLegMovement;
-        float vFootHeight = 0.1f;
+        float vFootHeight = 0.0f;
 
         if (mRightLegHeight > mLeftLegHeight)
         {
@@ -184,7 +184,7 @@ public class BodySegment
         {
             vLegMovement = mLeftLegHeight;
         }
-
+        //Debug.Log("LegHeights: " + mRightLegHeight + " , " + mLeftLegHeight);
         vLSSubsegment.UpdateSubsegmentPosition(vLegMovement + vFootHeight);
     }
 
@@ -372,6 +372,7 @@ public class BodySegment
 
         //Update Leg height 
         mRightLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
+        //Debug.Log("Right Leg Squatts: " + vRightLegAnalysis.NumberofRightSquats);
     }
 
     /**
@@ -559,6 +560,7 @@ public class BodySegment
 
         //Update leg height 
         mLeftLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
+        //Debug.Log("mLeftLegHeight: " + mLeftLegHeight);
     }
 
     /**
