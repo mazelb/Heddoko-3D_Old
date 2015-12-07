@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
                     {
 
                         GameObject vNewAvRecButton = Instantiate(AvailableRecordingButtonPrefab);
-                        Button vAvRecButton = vNewAvRecButton.GetComponentInChildren<Button>();
+                        Button vAvRecButton = vNewAvRecButton.GetComponent<Button>();
                         string vCleanedName = vRecordingsFiles[i].Replace(FilePathReferences.sCsvDirectory + "\\", null);
                         vAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
                         int vTemp = i; //copy the variable i and pass it into the listener

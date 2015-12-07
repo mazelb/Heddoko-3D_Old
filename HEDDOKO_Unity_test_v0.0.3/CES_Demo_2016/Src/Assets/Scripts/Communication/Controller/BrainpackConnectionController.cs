@@ -15,7 +15,6 @@ using HeddokoLib.utils;
 using UnityEngine; 
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Communication.Controller
 {
@@ -38,7 +37,6 @@ namespace Assets.Scripts.Communication.Controller
         public OutterThreadToUnityTrigger BrainpackConnectedTrigger = new OutterThreadToUnityTrigger();
         public OutterThreadToUnityTrigger SocketClientErrorTrigger = new OutterThreadToUnityTrigger();
         public string Output = "";
-        public InputField TODOREMOVETHIS;
 
         [SerializeField]
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Idle;
@@ -133,7 +131,10 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         public void ConnectToBrainpack()
         {
+<<<<<<< HEAD
            // BrainpackComPort = TODOREMOVETHIS.text;
+=======
+>>>>>>> refs/remotes/origin/master
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
             ChangeCurrentState(BrainpackConnectionState.Connecting);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
