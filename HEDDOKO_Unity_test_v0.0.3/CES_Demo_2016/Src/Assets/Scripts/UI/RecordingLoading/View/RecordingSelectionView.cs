@@ -7,7 +7,7 @@
 */
 
 
-using Assets.Scripts.UI.MainScene.View;
+ 
 using Assets.Scripts.UI.Scene_3d.View;
 using UnityEngine;
 using UnityEngine.UI;

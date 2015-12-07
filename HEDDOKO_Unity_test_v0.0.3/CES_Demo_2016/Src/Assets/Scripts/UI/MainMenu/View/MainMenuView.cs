@@ -8,6 +8,7 @@
 
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.ActivitiesContext.View;
+using Assets.Scripts.UI.RecordingLoading.View;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ namespace Assets.Scripts.UI.MainMenu.View
 
         public Button BrainpackButton;
         public Button ActivitiesButton;
+        public Button RecordingsSelectionButton;
 
         //The Activities context view
         public ActivitiesContextController ActivitiesContext;
@@ -28,6 +30,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         //The Brainpack/Bluetooth connection view
         public MainMenuBrainpackView BrainpackConnectionView;
 
+        public RecordingSelectionView RecordingSelectionView;
         /// <summary>
         /// Shows the Main menu view
         /// </summary>
@@ -79,6 +82,22 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void HideActivityContextView()
         {
             ActivitiesContext.SetToIdleState();
+        }
+
+        /// <summary>
+        /// Shows the recording selections view
+        /// </summary>
+        public void ShowRecordingsSelection()
+        {
+            RecordingSelectionView.Show();
+        }
+
+        /// <summary>
+        /// Hides the recordings selections view
+        /// </summary>
+        public void HideRecordingsSelection()
+        {
+            RecordingSelectionView.Hide();
         }
 
     }

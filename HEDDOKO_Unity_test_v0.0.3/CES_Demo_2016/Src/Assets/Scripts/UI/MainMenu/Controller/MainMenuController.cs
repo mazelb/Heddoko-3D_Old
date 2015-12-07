@@ -33,9 +33,14 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                 ChangeState(MainMenuState.MainMenu);
             }
             MainMenuView.BrainpackButton.onClick.AddListener(() => ChangeState(MainMenuState.BrainpackView));
-            MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
             MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
+
+            MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
+            
+            MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(()=> ChangeState(MainMenuState.MainMenu));
+            MainMenuView.RecordingsSelectionButton.onClick.AddListener(()=>ChangeState(MainMenuState.RecordingsSelection));
         }
+
         /// <summary>
         /// changes the state of the main menu
         /// </summary>
@@ -44,7 +49,6 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         {
             switch (mCurrentState)
             {
-
                 case (MainMenuState.SplashScreen):
                     {
                         if (vNewState == MainMenuState.MainMenu)
@@ -80,6 +84,18 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                         }
                         break;
                     }
+                case (MainMenuState.RecordingsSelection):
+                    {
+
+                        if (vNewState == MainMenuState.MainMenu)
+                        {
+                            MainMenuView.HideRecordingsSelection();
+                            MainMenuView.ShowMainMenuContextView();
+                            mCurrentState = MainMenuState.MainMenu;
+                            break;
+                        }
+                        break;
+                    }
 
                 case (MainMenuState.MainMenu):
                     {
@@ -96,6 +112,14 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             MainMenuView.HideMainMenuContextView();
                             MainMenuView.ShowBrainpackContextView();
                             mCurrentState = MainMenuState.BrainpackView;
+                            break;
+                        }
+
+                        if (vNewState == MainMenuState.RecordingsSelection)
+                        {
+                            MainMenuView.HideMainMenuContextView();
+                            MainMenuView.ShowRecordingsSelection();
+                            mCurrentState = MainMenuState.RecordingsSelection;
                             break;
                         }
 
@@ -128,6 +152,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         SplashScreen,
         MainMenu,
         BrainpackView,
-        ActivityContext
+        ActivityContext,
+        RecordingsSelection
     }
 }
