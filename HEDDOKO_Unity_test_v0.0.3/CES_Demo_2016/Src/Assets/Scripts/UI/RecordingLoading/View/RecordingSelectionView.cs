@@ -24,6 +24,9 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         public Button BackButton;
         public RecordingPanelView RecordingPanelView;
 
+        public Camera LoadRecordingsCamera;
+        public Camera TrainAndLearningCamera;
+
         //Gameobject that will play back the recording
         public GameObject HeddokoModel;
 
@@ -41,8 +44,10 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             HeddokoModel.transform.rotation = InviewAnchor.rotation;
             gameObject.SetActive(true);
             RecordingPanelView.Show();
-            ModelSwitcher.Show();
-        }
+            ModelSwitcher.Show();   
+          LoadRecordingsCamera.gameObject.SetActive(true);
+          TrainAndLearningCamera.gameObject.SetActive(false);
+    }
 
         /// <summary>
         /// hides the recording selection view
@@ -54,6 +59,8 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             gameObject.SetActive(false);
             RecordingPanelView.Hide();
             ModelSwitcher.Hide();
+            LoadRecordingsCamera.gameObject.SetActive(false);
+            TrainAndLearningCamera.gameObject.SetActive(true);
         }
 
         

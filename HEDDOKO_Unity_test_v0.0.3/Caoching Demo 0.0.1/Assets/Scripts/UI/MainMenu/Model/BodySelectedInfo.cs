@@ -139,7 +139,7 @@ namespace Assets.Scripts.UI.MainScene.Model
         }
 
         /// <summary>
-        ///helper method update that updates the current bodyframes recording
+        ///helper method update the current bodyframes recording
         /// </summary>
         public void UpdateCurrentBodyFrameRecording()
         {
@@ -151,6 +151,22 @@ namespace Assets.Scripts.UI.MainScene.Model
                 mBodyRecordingMap.Add(mSelectedRecordingPath,vCurrBFR);
                 
             }
+        }
+
+        public void UpdateSelectedRecording(string vSubPath)
+        {
+            //get the index of the passed in activityTypeSubPath
+            string[] vPaths =  BodyRecordingsMgr.Instance.FilePaths;
+            for (int i = 0; i < vPaths.Length; i++)
+            {
+                if (vPaths[i].Contains(vSubPath))
+                {
+                    mSelectedRecordingPath = vPaths[i];
+                    break;
+                }
+            }
+            if()
+
         }
     }
 }

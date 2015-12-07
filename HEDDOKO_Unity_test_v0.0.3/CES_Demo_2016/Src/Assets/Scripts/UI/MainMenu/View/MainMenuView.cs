@@ -23,6 +23,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Button BrainpackButton;
         public Button ActivitiesButton;
         public Button RecordingsSelectionButton;
+        public Camera TrainingAndLearningCam;
+        public Camera RecordingSelectionCam;
 
         //The Activities context view
         public ActivitiesContextController ActivitiesContext;
@@ -39,6 +41,8 @@ namespace Assets.Scripts.UI.MainMenu.View
             BrainpackButton.interactable = true;
             ActivitiesButton.interactable = true;
             gameObject.SetActive(true);
+            TrainingAndLearningCam.gameObject.SetActive(false);
+            RecordingSelectionCam.gameObject.SetActive(false);
 
         }
 
@@ -58,6 +62,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void ShowBrainpackContextView()
         {
             BrainpackConnectionView.Show();
+            TrainingAndLearningCam.gameObject.SetActive(false);
+            RecordingSelectionCam.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -74,6 +80,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void ShowActivitiesContextView()
         {
             ActivitiesContext.SwitchtoMainActivityView();
+            TrainingAndLearningCam.gameObject.SetActive(true);
+            RecordingSelectionCam.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -90,6 +98,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void ShowRecordingsSelection()
         {
             RecordingSelectionView.Show();
+            TrainingAndLearningCam.gameObject.SetActive(false);
+            RecordingSelectionCam.gameObject.SetActive(true);
         }
 
         /// <summary>

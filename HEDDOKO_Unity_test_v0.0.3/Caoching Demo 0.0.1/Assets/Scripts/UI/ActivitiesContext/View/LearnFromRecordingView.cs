@@ -8,6 +8,7 @@
 */
 
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,22 +22,26 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// When the model needs to be shown, it will be placed on this anchor
         /// </summary>
-        public Transform HeddokoModelEnabledAnchor;
+        public Transform HeddokoModel3DEnabledAnchor; 
+        public Transform HeddokoModel2DEnabledAnchor;
 
         /// <summary>
         /// When the model needs to be hidden, it will be placed on this anchor
         /// </summary>
         public Transform HeddokoModelHiddenAnchor;
 
-        public GameObject HeddokoModel;
+       // public GameObject HeddokoModel;
         public GameObject BetaHighLimbsGeo;
         public GameObject BetaHighJointsGeo;
         public GameObject BetaHighTorsoGeo;
         public Button CancelButton;
         public Button TrainButton;
+        public Button BackButton;
         public Material TransparentMaterial;
         public Material TrasparentJointsMaterial;
         private PlayerStreamManager mPlayerStreamManager;
+        public Model2D3DSwitch ModelSwitcher;
+
 
         public PlayerStreamManager PlayerStreamManager
         {
@@ -57,15 +62,18 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Show()
         {
-            HeddokoModel.transform.position = HeddokoModelEnabledAnchor.position;
-          //  HeddokoModel.transform.rotation = HeddokoModelEnabledAnchor.rotation;
+            ModelSwitcher.TransformInview3DLocation = HeddokoModel3DEnabledAnchor;
+            ModelSwitcher.TransformInview2DLocation = HeddokoModel2DEnabledAnchor;
+            //HeddokoModel.transform.position = HeddokoModel3DEnabledAnchor.position;
+            //  HeddokoModel.transform.rotation = HeddokoModelEnabledAnchor.rotation;
             gameObject.SetActive(true);
-            HeddokoModel.SetActive(true); 
-          
-          //  BetaHighLimbsGeo.GetComponent<Renderer>().material = TransparentMaterial;
-        //    BetaHighTorsoGeo.GetComponent<Renderer>().material = TransparentMaterial;
-           // BetaHighJointsGeo.GetComponent<Renderer>().material = TrasparentJointsMaterial;
-            PlayerStreamManager.Play();
+        
+            //  BetaHighLimbsGeo.GetComponent<Renderer>().material = TransparentMaterial;
+            //    BetaHighTorsoGeo.GetComponent<Renderer>().material = TransparentMaterial;
+            // BetaHighJointsGeo.GetComponent<Renderer>().material = TrasparentJointsMaterial;
+            ModelSwitcher.Show();
+            PlayerStreamManager.PlayType(false);
+            
 
         }
         /// <summary>
@@ -74,11 +82,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public void Hide()
         {
             gameObject.SetActive(false);
-            HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
+            //HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
            // HeddokoModel.transform.rotation = HeddokoModelHiddenAnchor.rotation;
-            HeddokoModel.SetActive(false); 
+          //  HeddokoModel.SetActive(false); 
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetInitialFrame();
+            ModelSwitcher.Hide();
         }
     }
 }

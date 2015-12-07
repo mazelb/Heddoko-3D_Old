@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
     public class ActivitesContextViewLearn: MonoBehaviour, IActivitiesContextViewSubcomponent
     {
         public Button SquatButton;
+        public Button BikeButton;
         public Button Backbutton;
         /// <summary>
         /// Enables and displays the main Activities  learning  view

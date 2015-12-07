@@ -47,7 +47,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         /// Listens to events where squats need to be counted
         /// </summary>
         /// <param name="vFlag"></param>
-        private void StartCountingSquats(bool vFlag)
+        public void StartCountingSquats(bool vFlag)
         {
             mStartCountingSquats = vFlag;
         }

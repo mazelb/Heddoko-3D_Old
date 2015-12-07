@@ -170,6 +170,7 @@ namespace Assets.Scripts.Communication
                             string command = vPacket.Command;
  
                             PacketCommandRouter.Instance.Process(command, vPacket); 
+                            mNetworkStream.Flush();
                         }
                         mSocketReady = false;
                     }

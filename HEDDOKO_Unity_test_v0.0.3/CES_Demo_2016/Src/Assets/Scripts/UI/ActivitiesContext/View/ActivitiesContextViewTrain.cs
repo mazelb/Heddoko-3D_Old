@@ -9,6 +9,7 @@
 
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,15 +23,15 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// When the model needs to be shown, it will be placed on this anchor
         /// </summary>
-        public Transform HeddokoModelEnabledAnchor;
-
+        public Transform Heddoko3DModelEnabledAnchor;
+        public Transform Heddoko2DModelEnabledAnchor;
         /// <summary>
         /// When the model needs to be hidden, it will be placed on this anchor
         /// </summary>
         public Transform HeddokoModelHiddenAnchor;
 
         public Button BackButton;
-        public GameObject HeddokoModel; 
+       // public GameObject HeddokoModel; 
         public GameObject BetaHighLimbsGeo;
         public GameObject BetaHighJointsGeo;
         public GameObject BetaHighTorsoGeo;
@@ -39,6 +40,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Text NumberSquatsOfText;
         private PlayerStreamManager mPlayerStreamManager;
         private bool mIsActive;
+        public Model2D3DSwitch ModelSwitcher;
+
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -55,14 +58,16 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Show()
         {
-            HeddokoModel.transform.position = HeddokoModelEnabledAnchor.position;
+           // HeddokoModel.transform.position = HeddokoModelEnabledAnchor.position;
          //   HeddokoModel.transform.rotation = HeddokoModelEnabledAnchor.rotation; 
-            HeddokoModel.SetActive(true);
+            //HeddokoModel.SetActive(true);
             gameObject.SetActive(true);
             BetaHighLimbsGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
             BetaHighTorsoGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
             BetaHighJointsGeo.GetComponent<Renderer>().material = RegularJointstTrainingMaterial;
-
+            ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
+            ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
+            ModelSwitcher.Show();
             mIsActive = true;
 
         }
@@ -71,8 +76,11 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Hide()
         {
-            HeddokoModel.SetActive(false);
-            HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
+
+            ModelSwitcher.Hide();
+
+            //  HeddokoModel.SetActive(false);
+            //  HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetInitialFrame(); 
             gameObject.SetActive(false);
@@ -87,6 +95,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 {
                     PlayerStreamManager.ResetInitialFrame();
                     PlayerStreamManager.CurrentBodyInPlay.MBodyFrameThread.CreateNewFile = true;
+                    Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
+                    if (vCurrentBody != null)
+                    {
+                        RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
+                         vRightLegAnalysis.NumberofRightSquats = 0;
+                    }
                 }
             }
             if (mIsActive)

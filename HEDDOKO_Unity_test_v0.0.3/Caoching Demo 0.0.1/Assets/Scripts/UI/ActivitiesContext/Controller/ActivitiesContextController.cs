@@ -20,6 +20,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
     * @brief ActivitiesContextController: the controller for the activities context view
     * @note Note something of interest 
     */
+
     public class ActivitiesContextController : MonoBehaviour
     {
         //current view state 
@@ -28,20 +29,43 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public MainMenuController MainMenuController;
         public PlayerStreamManager PlayerStreamManager;
 
+        public string SquatRecordingSubPath;
+        public string BikeRecordingSubPath;
+        private string ActivityTypeSubPath;
+
+        public bool UsingSquats;
+
         /// <summary>
         /// On Awake set up the buttons
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
+
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SwitchToLearnByRecordingState);
+            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(() =>
+            {
+                ActivityTypeSubPath = SquatRecordingSubPath;
+                UsingSquats = true;
+            });
+
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchToLearnByRecordingState);
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
+            {
+                ActivityTypeSubPath = BikeRecordingSubPath;
+                UsingSquats = false;
+            });
+
+
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
+            ActivitesContextView.LearnFromRecordingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearnFromRecordingView.TrainButton.onClick.AddListener(SwitchtoTrainingViewState);
             ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearnByRecordingState);
             //LearningView
         }
+
         /// <summary>
         /// changes states to Learn
         /// </summary>
@@ -59,33 +83,33 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             switch (CurrentState)
             {
                 case (ActivitiesContextViewState.Idle):
+                {
+                    if (vNewState == ActivitiesContextViewState.Main)
                     {
-                        if (vNewState == ActivitiesContextViewState.Main)
-                        {
-                            CurrentState = ActivitiesContextViewState.Main;
-                            ActivitesContextView.Show();
-                            ActivitesContextView.SwitchToMainView(); 
-                        }
+                        CurrentState = ActivitiesContextViewState.Main;
+                        ActivitesContextView.Show();
+                        ActivitesContextView.SwitchToMainView();
                     }
+                }
                     break;
                 case (ActivitiesContextViewState.Main):
+                {
+                    if (vNewState == ActivitiesContextViewState.Idle)
                     {
-                        if (vNewState == ActivitiesContextViewState.Idle)
-                        {
-                            CurrentState = ActivitiesContextViewState.Idle;
-                            ActivitesContextView.SwitchToIdleView();
-                            ActivitesContextView.Hide();
-                            MainMenuController.SwitchToMainMenu();
-                            break;
-                        }
-                        if (vNewState == ActivitiesContextViewState.Learn)
-                        {
-                            CurrentState = ActivitiesContextViewState.Learn; 
-                            ActivitesContextView.HideMainView();
-                            ActivitesContextView.SwitchToLearningView();
-                            break;
-                        }
+                        CurrentState = ActivitiesContextViewState.Idle;
+                        ActivitesContextView.SwitchToIdleView();
+                        ActivitesContextView.Hide();
+                        MainMenuController.SwitchToMainMenu();
+                        break;
                     }
+                    if (vNewState == ActivitiesContextViewState.Learn)
+                    {
+                        CurrentState = ActivitiesContextViewState.Learn;
+                        ActivitesContextView.HideMainView();
+                        ActivitesContextView.SwitchToLearningView();
+                        break;
+                    }
+                }
                     break;
                 case (ActivitiesContextViewState.Learn):
                 {
@@ -96,36 +120,36 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
                         ActivitesContextView.SwitchToLearnByRecordingView();
                         break;
                     }
-                        if (vNewState == ActivitiesContextViewState.Main)
-                        {
-                            CurrentState = ActivitiesContextViewState.Main;
-                            ActivitesContextView.HideLearningView();
-                            ActivitesContextView.Show();
-                            ActivitesContextView.SwitchToMainView();
-                        }
-                        break;
+                    if (vNewState == ActivitiesContextViewState.Main)
+                    {
+                        CurrentState = ActivitiesContextViewState.Main;
+                        ActivitesContextView.HideLearningView();
+                        ActivitesContextView.Show();
+                        ActivitesContextView.SwitchToMainView();
+                    }
+                    break;
                 }
 
                 case (ActivitiesContextViewState.LearnByRecording):
+                {
+                    if (vNewState == ActivitiesContextViewState.Learn)
                     {
-                        if (vNewState == ActivitiesContextViewState.Learn)
-                        {
-                            CurrentState = ActivitiesContextViewState.Learn;
-                            ActivitesContextView.HideLearnByRecordingView();
-                            ActivitesContextView.SwitchToLearningView();
-                            break;
-                        }
-                        if (vNewState == ActivitiesContextViewState.Train)
-                        {
-                            CurrentState = ActivitiesContextViewState.Train;
-                            ActivitesContextView.HideLearnByRecordingView();
-                            ActivitesContextView.SwitchToTrainingView();
-                            PlayerStreamManager.SetBodytoStreamFromBrainpack();
-                            break;
-                        }
-
+                        CurrentState = ActivitiesContextViewState.Learn;
+                        ActivitesContextView.HideLearnByRecordingView();
+                        ActivitesContextView.SwitchToLearningView();
                         break;
                     }
+                    if (vNewState == ActivitiesContextViewState.Train)
+                    {
+                        CurrentState = ActivitiesContextViewState.Train;
+                        ActivitesContextView.HideLearnByRecordingView();
+                        ActivitesContextView.SwitchToTrainingView();
+                        PlayerStreamManager.SetBodytoStreamFromBrainpack();
+                        break;
+                    }
+
+                    break;
+                }
 
                 case (ActivitiesContextViewState.Train):
                 {
@@ -140,7 +164,11 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
                 }
             }
         }
-        /// <summary>
+
+      
+    
+
+    /// <summary>
         /// Switch to learning view state
         /// </summary>
         public void SwitchToLearningViewState()
@@ -187,5 +215,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             LearnByRecording,
             Train
         }
+
+    
     }
 }

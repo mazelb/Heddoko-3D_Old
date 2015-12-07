@@ -8,7 +8,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Assets.Scripts.Frames_Pipeline;
+using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
@@ -33,6 +35,15 @@ public class BodyFrameThread : ThreadedJob
     private bool mPauseWorker;
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
+    
+    //====================================================FOR WRITING RAW FRAMES TO DISK ================================//
+    /// <summary>
+    /// For writing raw frames to disk
+    /// </summary>
+    public bool CreateNewFile = true;
+
+    public StreamWriter mStreamWriter;
+    //====================================================END OF WRITING RAW FRAMES TO DISK ================================//
 
     public bool ContinueWorking
     {
@@ -300,20 +311,20 @@ public class BodyFrameThread : ThreadedJob
             }
             string vUnwrappedString = "";
             try
-            {
-                bool vAllClear = false;
-
+            { 
+              bool vAllClear = false; 
                 //first unwrap the string and break it down 
                 vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
-
+                
                 //todo place a check here for valid data
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
+                WriteToDiskSubTask(vUnwrappedString);
+                //this data is invalid
                 if (vExploded.Length < 12)
                 {
-                    string s = " debug break;";
+                    continue;
                 }
-
+              
                 //the first value is a timestamp in int
                 int vTimeStamp = Convert.ToInt32(vExploded[0]);
                 
@@ -361,6 +372,59 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
+    private void WriteToDiskSubTask(string vPacket)
+    { 
+        if (CreateNewFile)
+        {
+            CloseFile();
+
+            //Check if folder exists
+           
+            string vSubPath = Directory.GetCurrentDirectory() + "/RawRecordings"; // your code goes here
+            bool vPathExists = System.IO.Directory.Exists(vSubPath);
+            if (!vPathExists)
+            {
+               Directory.CreateDirectory(vSubPath);
+            }
+            System.Random vRandom = new System.Random();
+            //get a random value to append to the file name
+            int vNext = vRandom.Next(0, 65556);
+            //file name
+            string vFileName = vSubPath+ "/Raw_" + DateTime.Now.ToString(@"MM-dd-yyyy_h-mm-tt")+ vNext + ".csv";
+            mStreamWriter = new StreamWriter(vFileName); 
+          
+            CreateNewFile = false;
+        }
+        try
+        {
+            if (vPacket.Length < 4)
+            {
+                return;
+            }
+            mStreamWriter.WriteLine(vPacket);
+        }
+        catch (Exception e)
+        {
+            CloseFile();
+        }
+    }
+    /// <summary>
+    /// Close the file
+    /// </summary>
+    private void CloseFile()
+    {
+        try
+        {
+            mStreamWriter.Flush();
+            mStreamWriter.Close();
+        }
+        catch(Exception)
+        {
+            
+        }
+   
+    }
+
     /**
     * DataStreamTask()
     * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
@@ -378,6 +442,7 @@ public class BodyFrameThread : ThreadedJob
     public void StopThread()
     {
         ContinueWorking = false;
+        CloseFile();
     }
 
     /**

@@ -22,9 +22,13 @@ namespace Assets.Scripts.UI.MainMenu
     {
         public Body CurrentBodyInPlay { get; set; }
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
-        private bool mPlayButtonPushed; 
+      //  private bool mPlayButtonPushed; 
         public float PauseThreadTimer = 1f;
         private float mInternalTimer = 1f;
+
+        public string SquatRecordingUUID;
+        public string BikeRecordingUUID;
+
 
         // pause thread routine started
         private bool mResetRoutineStarted = false;
@@ -91,14 +95,37 @@ namespace Assets.Scripts.UI.MainMenu
         */
         public void Play()
         {
-            if (!mPlayButtonPushed)
-            {
+           
                 if (CurrentBodyInPlay != null)
                 {
-                    mPlayButtonPushed = true; 
+                   // mPlayButtonPushed = true; 
                     ChangeState(BodyPlaybackState.PlayingRecording); 
                 }
-            }
+           
+        }
+
+        /// <summary>
+        /// Play a squat or bike
+        /// </summary>
+        /// <param name="vPlaySquat"></param>
+        public void PlayType(bool vPlaySquat)
+        {
+           // if (!mPlayButtonPushed)
+       //     {
+                if (CurrentBodyInPlay != null)
+                {
+                    if (vPlaySquat)
+                    {
+                        mBodyRecordingUUID = SquatRecordingUUID;
+                    }
+                    else
+                    {
+                        mBodyRecordingUUID = BikeRecordingUUID;
+                    }
+               //     mPlayButtonPushed = true;
+                    ChangeState(BodyPlaybackState.PlayingRecording);
+                }
+           // }
         }
         /**
        * ResetInitialFrame 
@@ -106,7 +133,7 @@ namespace Assets.Scripts.UI.MainMenu
        */
         public void ResetInitialFrame()
         {
-            if (CurrentBodyInPlay != null)
+            if (CurrentBodyInPlay != null && CurrentBodyInPlay.InitialBodyFrame != null)
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
             } 
@@ -142,7 +169,7 @@ namespace Assets.Scripts.UI.MainMenu
                         {
                             CurrentBodyInPlay.StopThread();
                             if (!string.IsNullOrEmpty(mBodyRecordingUUID))
-                            {
+                            { 
                                 CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
                             }
                             mCurrentState = vNewstate;
@@ -216,7 +243,7 @@ namespace Assets.Scripts.UI.MainMenu
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             mBodyRecordingUUID = vRec.BodyRecordingGuid;
             CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
-            mPlayButtonPushed = false;
+            //mPlayButtonPushed = false;
             ChangeState(BodyPlaybackState.Waiting);
         }
 
@@ -247,6 +274,15 @@ namespace Assets.Scripts.UI.MainMenu
             // ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
+ 
+        public void StartCountingSquatsOn()
+        {
+            if(CurrentBodyInPlay != null)
+            {
+                
+            }
+        }
+ 
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state
         /// </summary>

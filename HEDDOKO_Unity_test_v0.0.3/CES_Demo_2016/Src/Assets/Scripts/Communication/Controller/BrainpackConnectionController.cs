@@ -130,9 +130,7 @@ namespace Assets.Scripts.Communication.Controller
         /// Request to connect to brainpack
         /// </summary>
         public void ConnectToBrainpack()
-        {
- 
-           // BrainpackComPort = TODOREMOVETHIS.text;
+        { 
  
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
             ChangeCurrentState(BrainpackConnectionState.Connecting);

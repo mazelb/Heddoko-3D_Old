@@ -6,7 +6,8 @@
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
  
-using Assets.Scripts.UI.MainMenu.View; 
+using Assets.Scripts.UI.MainMenu.View;
+using Assets.Scripts.UI.RecordingLoading.View;
 using UnityEngine; 
 
 namespace Assets.Scripts.UI.MainMenu.Controller
@@ -36,9 +37,13 @@ namespace Assets.Scripts.UI.MainMenu.Controller
             MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
 
             MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
-            
-            MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(()=> ChangeState(MainMenuState.MainMenu));
-            MainMenuView.RecordingsSelectionButton.onClick.AddListener(()=>ChangeState(MainMenuState.RecordingsSelection));
+
+            if (MainMenuView.RecordingSelectionView != null)
+            {
+                MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
+                MainMenuView.RecordingsSelectionButton.onClick.AddListener(() => ChangeState(MainMenuState.RecordingsSelection));
+            }
+           
         }
 
         /// <summary>
