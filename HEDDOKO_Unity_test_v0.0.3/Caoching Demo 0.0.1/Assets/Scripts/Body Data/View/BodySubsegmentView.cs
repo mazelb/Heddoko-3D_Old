@@ -64,6 +64,7 @@ namespace Assets.Scripts.Body_Data.view
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 vObjTransform.rotation = vNewOrientation;
+                //vObjTransform.localRotation = vNewOrientation;
             }
 
             //Apply 2D transformation

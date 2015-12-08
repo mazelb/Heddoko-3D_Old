@@ -48,10 +48,18 @@ public class BodySubSegment
     public void UpdateInverseQuaternion(Vector3 vInitRawEuler)
     {
         AssociatedView.ResetOrientation();
+        //Debug.Log(vInitRawEuler);
         Quaternion vQuaternionFactor = Quaternion.Euler(mRotationFactor);
-        NodQuaternionOrientation vRawOrientation = MatrixTools.eulerToQuaternion(vInitRawEuler.x, vInitRawEuler.y, vInitRawEuler.z);
-        Quaternion vConvertedQuaternion = new Quaternion(vRawOrientation.x, vRawOrientation.y, vRawOrientation.z, vRawOrientation.w);
-        mInitialInverseOrientation = Quaternion.Inverse(vConvertedQuaternion * Quaternion.Inverse(vQuaternionFactor));
+
+        //IMUQuaternionOrientation vRawOrientation = MatrixTools.eulerToQuaternion(vInitRawEuler.x, vInitRawEuler.y, vInitRawEuler.z);
+        //Quaternion vConvertedQuaternion = new Quaternion(vRawOrientation.x, vRawOrientation.y, vRawOrientation.z, vRawOrientation.w);
+        //mInitialInverseOrientation = Quaternion.Inverse(vConvertedQuaternion);// * Quaternion.Inverse(vQuaternionFactor));
+
+        IMUQuaternionOrientation vIMUSubsegmentQuaternion = MatrixTools.MatToQuat(OrientationMatrix);
+        Quaternion vNewInitialOrientation = new Quaternion(vIMUSubsegmentQuaternion.x, vIMUSubsegmentQuaternion.y, vIMUSubsegmentQuaternion.z, vIMUSubsegmentQuaternion.w);
+        mInitialInverseOrientation = Quaternion.Inverse(vNewInitialOrientation * Quaternion.Inverse(vQuaternionFactor));
+
+        //Debug.Log(mInitialInverseOrientation);
     }
 
     /**
@@ -65,8 +73,8 @@ public class BodySubSegment
         OrientationMatrix = vaOrientationMatrix;
 
         //Convert to a something that unity can understand
-        NodQuaternionOrientation vNodSubsegmentQuaternion = MatrixTools.MatToQuat(OrientationMatrix);
-        Quaternion vSubsegmentQuat = new Quaternion(vNodSubsegmentQuaternion.x, vNodSubsegmentQuaternion.y, vNodSubsegmentQuaternion.z, vNodSubsegmentQuaternion.w);
+        IMUQuaternionOrientation vIMUSubsegmentQuaternion = MatrixTools.MatToQuat(OrientationMatrix);
+        Quaternion vSubsegmentQuat = new Quaternion(vIMUSubsegmentQuaternion.x, vIMUSubsegmentQuaternion.y, vIMUSubsegmentQuaternion.z, vIMUSubsegmentQuaternion.w);
         Quaternion vNewOrientation = mInitialInverseOrientation * vSubsegmentQuat * Quaternion.Inverse(vQuaternionFactor);
 
         AssociatedView.UpdateOrientation(vNewOrientation);
