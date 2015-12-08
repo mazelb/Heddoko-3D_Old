@@ -71,6 +71,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             mIsActive = true;
 
         }
+
         /// <summary>
         /// Hides the view
         /// </summary>

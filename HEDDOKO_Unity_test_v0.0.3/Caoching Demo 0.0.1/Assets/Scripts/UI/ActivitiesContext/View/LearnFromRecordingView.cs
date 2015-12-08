@@ -7,6 +7,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
@@ -41,6 +42,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Material TrasparentJointsMaterial;
         private PlayerStreamManager mPlayerStreamManager;
         public Model2D3DSwitch ModelSwitcher;
+        public ActivitiesContextController ActivitiesContextController;
 
 
         public PlayerStreamManager PlayerStreamManager
@@ -72,7 +74,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             //    BetaHighTorsoGeo.GetComponent<Renderer>().material = TransparentMaterial;
             // BetaHighJointsGeo.GetComponent<Renderer>().material = TrasparentJointsMaterial;
             ModelSwitcher.Show();
-            PlayerStreamManager.PlayType(false);
+            PlayerStreamManager.PlaySquats(ActivitiesContextController.UsingSquats);
             
 
         }

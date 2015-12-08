@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Assets.Scripts.UI.ActivitiesContext.View;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.MainMenu.Controller;
+using Assets.Scripts.UI.MainScene.Model;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,21 +43,22 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         {
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
-
-            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SwitchToLearnByRecordingState);
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(() =>
             {
                 ActivityTypeSubPath = SquatRecordingSubPath;
+                BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
                 UsingSquats = true;
             });
+            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SwitchToLearnByRecordingState);
 
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchToLearnByRecordingState);
             ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
             {
                 ActivityTypeSubPath = BikeRecordingSubPath;
+                BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
                 UsingSquats = false;
             });
-
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchToLearnByRecordingState);
+           
 
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);

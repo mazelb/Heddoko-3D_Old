@@ -8,7 +8,9 @@
 */
 
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
+using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.Metrics;
 using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,7 +39,11 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public GameObject BetaHighTorsoGeo;
         public Material RegularTrainingMaterial;
         public Material RegularJointstTrainingMaterial;
-        public Text NumberSquatsOfText;
+     //   public Text NumberSquatsOfText;
+        public SquatMetricsView SquatsMetricsView;
+        public BikingMetricsView BikingMetricsView;
+        public ActivitiesContextController ActivitiesContextController;
+
         private PlayerStreamManager mPlayerStreamManager;
         private bool mIsActive;
         public Model2D3DSwitch ModelSwitcher;
@@ -68,7 +74,19 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
             ModelSwitcher.Show();
-            mIsActive = true;
+            //check if using squats or bike
+            if (ActivitiesContextController.UsingSquats)
+            {
+                BikingMetricsView.Hide();
+                SquatsMetricsView.Show();
+            }
+            else
+            {
+                SquatsMetricsView.Hide();
+                BikingMetricsView.Show(); 
+            }
+             
+
 
         }
         /// <summary>
@@ -76,7 +94,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Hide()
         {
-
+            SquatsMetricsView.Hide();
+            BikingMetricsView.Hide();
             ModelSwitcher.Hide();
 
             //  HeddokoModel.SetActive(false);
@@ -100,10 +119,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                     {
                         RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
                          vRightLegAnalysis.NumberofRightSquats = 0;
+                        BikingMetricsView.ResetValues();
                     }
+                
                 }
             }
-            if (mIsActive)
+           /* if (mIsActive)
             {
                 Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
                 if (vCurrentBody != null)
@@ -112,7 +133,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                     vRightLegAnalysis.StartCountingSquats(true);
                     NumberSquatsOfText.text = "number of squats = " + vRightLegAnalysis.NumberofRightSquats;
                 }
-            }
+            }*/
             else
             {
                 Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;

@@ -6,7 +6,9 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
- 
+
+using Assets.Scripts.UI.ActivitiesContext.View;
+using Assets.Scripts.UI.Metrics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +21,8 @@ namespace Assets.Scripts.UI.RecordingLoading
     {
         public GameObject Model3D;
         public GameObject Model2D;
-        
+        public AngleInfoMetrics AngleInfo;
+        public ActivitiesContextViewTrain TrainingView;
         /// <summary>
         /// Location placement
         /// </summary>
@@ -32,6 +35,7 @@ namespace Assets.Scripts.UI.RecordingLoading
         public Button RotateCameraLeft;
         public Button RotateCameraRight;
 
+        
         /// <summary>
         /// Flag to check if only using 2D model
         /// </summary>
@@ -67,6 +71,8 @@ namespace Assets.Scripts.UI.RecordingLoading
         {
             Bring3DModelIntoView();
             SetButtonInteraction();
+            AngleInfo.Hide();
+          
         }
 
         /// <summary>
@@ -76,6 +82,11 @@ namespace Assets.Scripts.UI.RecordingLoading
         {
             Bring2DModelIntoView();
             SetButtonInteraction();
+            if (TrainingView.isActiveAndEnabled)
+            {
+                AngleInfo.Show();
+            }
+
         }
 
         /// <summary>
@@ -100,6 +111,10 @@ namespace Assets.Scripts.UI.RecordingLoading
             {
                 Model2D.transform.position = TransformInview2DLocation.position;
                 Model3D.transform.position = TransformOutOfViewLocation.position;
+                if (TrainingView.isActiveAndEnabled)
+                {
+                    AngleInfo.Show();
+                }
             }
             else
             {

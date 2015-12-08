@@ -40,7 +40,8 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         // This variable stores the time of current frame. It is used for angular velocity and acceleration extraction
  
         public float NumberofRightSquats { get;   set; }
-        public float mAngleSumRight = 0;
+        public float AngleSumRight { get; private set; }
+
         private bool mStartCountingSquats = true;
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             // In the second step, the sign of these angles will be determined and the angles will be updated
 
 
-            //=====================================calculate the Knee Flection angle  =====================================/
+            //=====================================calculate the Knee Flexion angle  =====================================/
 
             //===================================== step1 =====================================//
             Vector3 vAxis1 = new Vector3(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
@@ -85,16 +86,16 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             {
                 if (Math.Abs(vAngleKneeFlexionNew) < 15)
                 {
-                    mAngleSumRight = 0;
+                    AngleSumRight = 0;
                 }
                 else
                 {
-                    mAngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
+                    AngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
                 }
 
-                if (Math.Abs(mAngleSumRight) > 140)
+                if (Math.Abs(AngleSumRight) > 140)
                 {
-                    mAngleSumRight = 0;
+                    AngleSumRight = 0;
                     NumberofRightSquats++;
                 }
             }

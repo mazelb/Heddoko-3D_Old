@@ -1,15 +1,12 @@
-﻿
-/** 
+﻿/** 
 * @file SuitSocketClientSettings.cs
 * @brief Contains the SuitSocketClientSettings class
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts.Communication

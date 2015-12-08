@@ -373,7 +373,7 @@ public class BodySegment
 
         //Update Leg height 
         mRightLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
-        Debug.Log("Right Leg Squatts: " + vRightLegAnalysis.NumberofRightSquats);
+      //  Debug.Log("Right Leg Squatts: " + vRightLegAnalysis.NumberofRightSquats);
     }
 
     /**

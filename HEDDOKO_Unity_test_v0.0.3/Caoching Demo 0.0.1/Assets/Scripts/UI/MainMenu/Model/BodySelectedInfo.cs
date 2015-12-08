@@ -119,7 +119,7 @@ namespace Assets.Scripts.UI.MainScene.Model
         }
          
         /// <summary>
-        /// Updates the number of recordings 
+        /// Updates the current recording
         /// </summary>
         public void UpdateSelectedRecording(int vRecordingIndex)
         {
@@ -148,24 +148,28 @@ namespace Assets.Scripts.UI.MainScene.Model
                 BodyRecordingsMgr.Instance.ReadRecordingFile(mSelectedRecordingPath);
                 //the latest item to be placed in the list is now the current body frame recording
                 BodyFramesRecording vCurrBFR = BodyRecordingsMgr.Instance.Recordings[BodyRecordingsMgr.Instance.Recordings.Count - 1];
-                mBodyRecordingMap.Add(mSelectedRecordingPath,vCurrBFR);
-                
+                mBodyRecordingMap.Add(mSelectedRecordingPath,vCurrBFR); 
             }
         }
 
+        /// <summary>
+        /// Uodates the selected recording based on the subpath passed in
+        /// </summary>
+        /// <param name="vSubPath"></param>
         public void UpdateSelectedRecording(string vSubPath)
         {
             //get the index of the passed in activityTypeSubPath
             string[] vPaths =  BodyRecordingsMgr.Instance.FilePaths;
+            int vIndex=-1;
             for (int i = 0; i < vPaths.Length; i++)
             {
                 if (vPaths[i].Contains(vSubPath))
                 {
-                    mSelectedRecordingPath = vPaths[i];
+                    vIndex = i;
                     break;
                 }
             }
-           
+            UpdateSelectedRecording(vIndex);
 
         }
     }

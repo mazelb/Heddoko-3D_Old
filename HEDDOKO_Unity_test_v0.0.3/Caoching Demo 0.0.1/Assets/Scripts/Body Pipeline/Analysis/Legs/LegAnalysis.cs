@@ -16,8 +16,8 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
     /// </summary>
    public abstract class LegAnalysis : SegmentAnalysis
     {
-        internal float[,] HipOrientation { get; set; }
-        internal float[,] KneeOrientation { get; set; }
+        public float[,] HipOrientation { get; set; }
+        public float[,] KneeOrientation { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
         public float[,] TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
     }

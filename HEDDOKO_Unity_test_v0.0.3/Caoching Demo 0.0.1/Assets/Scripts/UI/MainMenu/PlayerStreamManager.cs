@@ -108,7 +108,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// Play a squat or bike
         /// </summary>
         /// <param name="vPlaySquat"></param>
-        public void PlayType(bool vPlaySquat)
+        public void PlaySquats(bool vPlaySquat)
         {
            // if (!mPlayButtonPushed)
        //     {
@@ -127,6 +127,9 @@ namespace Assets.Scripts.UI.MainMenu
                 }
            // }
         }
+
+        
+
         /**
        * ResetInitialFrame 
        * @brief will set the Initial Frame
