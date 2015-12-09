@@ -117,9 +117,11 @@ namespace BrainpackService.brainpack_serial_connect
                             if (!mMessageSent)
                             {
                                 string line = mSerialport.ReadLine();
-                                if (line.Length < 100)
+                                //
+                                if (line.Length != 176)
                                 {
-                                    BrainpackEventLogManager.InvokeEventLogMessage("Is less than 100 chars");
+                                    BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
+                                    continue;
                                 }
                                 OutboundBuffer.Enqueue(line);
 
@@ -139,6 +141,7 @@ namespace BrainpackService.brainpack_serial_connect
                             try
                             {
                                 var vResult = QuestionBrainpack(); //ask the brainpack if it's still alive
+
                                 if (!vResult)
                                 {
 
@@ -195,7 +198,8 @@ namespace BrainpackService.brainpack_serial_connect
             mMessageSent = true;
             try
             {
-                SendCommandToBrainpack("?");
+                //SendCommandToBrainpack("?");
+                SendCommandToBrainpack("GetState");
                 lock (mSerialPortLock)
                 {
                     if (mSerialport.IsOpen)
@@ -241,21 +245,22 @@ namespace BrainpackService.brainpack_serial_connect
             {
                 if (mSerialport != null)
                 {
+                    return mSerialport.IsOpen;
                     bool vResult = true;
                     if (!mSerialport.IsOpen)
                     {
                         return false;
                     }
                     //try to send a message to the serial port
-                    vResult = QuestionBrainpack();
+                    /*vResult = QuestionBrainpack();
                     if (!vResult)
                     {
                         lock (mSerialPortLock)
                         {
                             mSerialport.Close();
                         }
-                    }
-                    return vResult;
+                    }*/
+                   // return vResult;
                 }
                 return false;
             }

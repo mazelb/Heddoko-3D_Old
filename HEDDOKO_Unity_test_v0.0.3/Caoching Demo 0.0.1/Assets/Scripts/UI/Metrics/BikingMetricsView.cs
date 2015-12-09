@@ -37,7 +37,7 @@ namespace Assets.Scripts.UI.Metrics
         [SerializeField]
         private float mAngleKneeFlexionPrev;
         [SerializeField]
-        private float mInitialFlexion;
+        private float mInitialFlexion=70f;
 
         public Text RPMeter;
         public Text InformationPanel;
@@ -105,7 +105,7 @@ namespace Assets.Scripts.UI.Metrics
                         mRightLegAnalysis =
                        vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                            RightLegAnalysis;
-                        mInitialFlexion = mRightLegAnalysis.AngleKneeFlexion;
+                        mInitialFlexion = 70f;// mRightLegAnalysis.AngleKneeFlexion;
                         mInitialTime = 0f;
                         mTimeAccumulator = 0f;
                         mMostRecentXFrames = new List<float>(NumberOfFrameToCount);

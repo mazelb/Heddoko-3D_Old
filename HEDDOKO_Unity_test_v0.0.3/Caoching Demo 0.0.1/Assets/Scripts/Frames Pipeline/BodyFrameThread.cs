@@ -309,7 +309,9 @@ public class BodyFrameThread : ThreadedJob
             {
                 continue;
             }
+
             string vUnwrappedString = "";
+
             try
             { 
               bool vAllClear = false; 
@@ -320,7 +322,7 @@ public class BodyFrameThread : ThreadedJob
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 WriteToDiskSubTask(vUnwrappedString);
                 //this data is invalid
-                if (vExploded.Length < 12)
+                if (vExploded.Length != 12)
                 {
                     continue;
                 }
@@ -380,14 +382,16 @@ public class BodyFrameThread : ThreadedJob
 
             //Check if folder exists
            
-            string vSubPath = Directory.GetCurrentDirectory() + "/RawRecordings"; // your code goes here
-            bool vPathExists = System.IO.Directory.Exists(vSubPath);
+            string vSubPath = Directory.GetCurrentDirectory() + "/RawRecordings";
+            bool vPathExists = Directory.Exists(vSubPath);
             if (!vPathExists)
             {
                Directory.CreateDirectory(vSubPath);
             }
+
             System.Random vRandom = new System.Random();
             //get a random value to append to the file name
+
             int vNext = vRandom.Next(0, 65556);
             //file name
             string vFileName = vSubPath+ "/Raw_" + DateTime.Now.ToString(@"MM-dd-yyyy_h-mm-tt")+ vNext + ".csv";

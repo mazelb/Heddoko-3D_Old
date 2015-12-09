@@ -24,7 +24,8 @@ namespace Assets.Scripts.UI.Metrics
         public Text NumberSquatsOfText;
         public Text GoHigherLowerText;
         private PlayerStreamManager mPlayerStreamManager;
-
+        public float UpperRangeOfSquatMotion = 110f;
+        public float LowerRangeOfSquatMotion = 90f;
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -35,7 +36,7 @@ namespace Assets.Scripts.UI.Metrics
                 }
                 return mPlayerStreamManager;
             }
-        } 
+        }
 
         void Update()
         {
@@ -50,15 +51,32 @@ namespace Assets.Scripts.UI.Metrics
                     vRightLegAnalysis.StartCountingSquats(true);
                     NumberSquatsOfText.text = "Total number = " + vRightLegAnalysis.NumberofRightSquats;
                     float vAngleSum = vRightLegAnalysis.AngleSumRight;
-                    if (vAngleSum >= 15 && vAngleSum <= 70)
+
+                    //are we still counting?
+                    if (vAngleSum > 0.1f && vAngleSum <= 170)
                     {
-                        GoHigherLowerText.text = "go lower";
+                        if (vRightLegAnalysis.AngleKneeFlexion < LowerRangeOfSquatMotion)
+                        {
+                            GoHigherLowerText.text = "Increase depth";
+                        }
+                        if (vRightLegAnalysis.AngleKneeFlexion >= LowerRangeOfSquatMotion &&
+                            vRightLegAnalysis.AngleKneeFlexion < UpperRangeOfSquatMotion)
+                        {
+                            GoHigherLowerText.text = " Good! ";
+                        }
+                        else if(vRightLegAnalysis.AngleKneeFlexion >= UpperRangeOfSquatMotion)
+                        {
+                            GoHigherLowerText.text = "Decrease depth";
+                        }
+                        //GoHigherLowerText.text = "go lower";
+                        
                     }
-                    else if (vAngleSum > 70 && vAngleSum <= 140)
+                    //check if the sum is less than 170 degree, 
+                    /*else if (vAngleSum > 70 && vAngleSum < 170)
                     {
-                        GoHigherLowerText.text = "go higher"; 
-                    }
-            }
+                        GoHigherLowerText.text = "go higher";
+                    }*/
+                }
             }
         }
 
@@ -68,7 +86,7 @@ namespace Assets.Scripts.UI.Metrics
         public void Show()
         {
             mIsActive = true;
-         gameObject.SetActive(true);   
+            gameObject.SetActive(true);
         }
 
         /// <summary>
