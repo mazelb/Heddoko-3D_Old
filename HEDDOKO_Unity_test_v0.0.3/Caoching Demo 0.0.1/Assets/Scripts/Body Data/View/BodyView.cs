@@ -5,8 +5,7 @@
 * @date October 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
-
-using Assets.Scripts.Body_Pipeline.Tracking;
+ 
 using UnityEngine;
 using System.Collections.Generic;
 using System.Net;
@@ -87,6 +86,15 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mAssociatedBody != null)
             {
+                AssociatedBody.UpdateBody(mAssociatedBody.CurrentBodyFrame);
+                Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody);
+
+                if (vDic != null)
+                {
+                    Body.ApplyTracking(AssociatedBody, vDic);
+                    //todo: extract this from the view and place it in its own module
+                }
+
                 AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
             }
         }

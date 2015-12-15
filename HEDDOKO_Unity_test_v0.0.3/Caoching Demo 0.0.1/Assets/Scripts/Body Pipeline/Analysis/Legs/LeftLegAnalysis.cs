@@ -17,7 +17,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
     {
         public float AngleKneeFlexion { get; private set; }
         private float mAngularAccelerationKneeFlexion;
-        private float mAngularVelocityKneeFlexion;
+        public float mAngularVelocityKneeFlexion;
 
         public float AngleKneeRotation { get; private set; }
         private float mAngularAccelerationKneeRotation;
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         private float mAngularAccelerationLeftHipAbduction;
         private float mAngularVelocityLeftHipAbduction;
         private float mAngularAccelerationLeftHipRotation;
-        private float mAngularVelocityLeftHipRotation;
+        public float mAngularVelocityLeftHipRotation;
 
         /// <summary>
         /// Extract angles from orientations

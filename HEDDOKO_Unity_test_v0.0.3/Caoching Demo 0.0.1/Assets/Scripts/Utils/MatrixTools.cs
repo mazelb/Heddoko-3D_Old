@@ -13,7 +13,7 @@ namespace Assets.Scripts.Utils
 {
     /**
     * MatrixTools class 
-    * @brief MatrixTools, provides functions and methods to convert, calculate and execute on float[,] data types and NodQuaternion orientations)
+    * @brief MatrixTools, provides functions and methods to convert, calculate and execute on float[,] data types and IMUQuaternion orientations)
     */
     public static class MatrixTools
     {
@@ -21,12 +21,12 @@ namespace Assets.Scripts.Utils
         //* MatToQuat
         //* @It converts a 3*3 orientation Matrix to a Quaternion
         //* @param float m[][3] is the original 3*3 matrix
-        //* @return NodQuaternionOrientation, the orientation in quaternion
+        //* @return IMUQuaternionOrientation, the orientation in quaternion
         //* reference: @http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche52.html
         */
-        public static NodQuaternionOrientation MatToQuat(float[,] m)
+        public static IMUQuaternionOrientation MatToQuat(float[,] m)
         {
-            NodQuaternionOrientation q;
+            IMUQuaternionOrientation q;
             q.w = (m[0, 0] + m[1, 1] + m[2, 2] + 1.0f) / 4.0f;
             q.x = (m[0, 0] - m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
             q.y = (-m[0, 0] + m[1, 1] - m[2, 2] + 1.0f) / 4.0f;
@@ -108,7 +108,7 @@ namespace Assets.Scripts.Utils
         /// <param name="roll">Roll.</param>
         /// <param name="yaw">Yaw.</param>
 
-        public static NodQuaternionOrientation eulerToQuaternion(float pitch, float roll, float yaw)
+        public static IMUQuaternionOrientation eulerToQuaternion(float pitch, float roll, float yaw)
         {
             float sinHalfYaw = Mathf.Sin(yaw / 2.0f);
             float cosHalfYaw = Mathf.Cos(yaw / 2.0f);
@@ -117,7 +117,7 @@ namespace Assets.Scripts.Utils
             float sinHalfRoll = Mathf.Sin(roll / 2.0f);
             float cosHalfRoll = Mathf.Cos(roll / 2.0f);
 
-            NodQuaternionOrientation result;
+            IMUQuaternionOrientation result;
             result.x = -cosHalfRoll * sinHalfPitch * sinHalfYaw
                 + cosHalfPitch * cosHalfYaw * sinHalfRoll;
             result.y = cosHalfRoll * cosHalfYaw * sinHalfPitch
@@ -214,17 +214,17 @@ namespace Assets.Scripts.Utils
     }
 
     /**
-   * NodQuaternionOrientation struct 
+   * IMUQuaternionOrientation struct 
    * @brief A quaternion structure that is needed to render orientation data 
    */
-    public struct NodQuaternionOrientation
+    public struct IMUQuaternionOrientation
     {
         public float x;
         public float y;
         public float z;
         public float w;
 
-        public NodQuaternionOrientation(float _x, float _y, float _z, float _w)
+        public IMUQuaternionOrientation(float _x, float _y, float _z, float _w)
         {
             x = _x;
             y = _y;

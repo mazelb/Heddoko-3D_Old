@@ -151,7 +151,8 @@ namespace BrainpackService.BrainpackServer
                 int vBytesSent = vHandler.EndSend(vAr);
 
 
-                vHandler.Shutdown(SocketShutdown.Both);
+                // vHandler.Shutdown(SocketShutdown.Both);
+                vHandler.Shutdown(SocketShutdown.Send);
                 vHandler.Close();
                 //  CloseConnectionToSocket(vHandler); 
             }

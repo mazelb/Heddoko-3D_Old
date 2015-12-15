@@ -84,7 +84,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 
             if ( mStartCountingSquats)
             {
-                if (Math.Abs(vAngleKneeFlexionNew) < 15)
+                if (Math.Abs(vAngleKneeFlexionNew) < 15) //todo: need to set a variable for standing position. As it is, we need to check what the value is inside here. 
                 {
                     AngleSumRight = 0;
                 }

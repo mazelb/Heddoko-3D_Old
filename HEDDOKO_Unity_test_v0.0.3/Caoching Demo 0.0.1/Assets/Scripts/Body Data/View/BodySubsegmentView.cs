@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.UI._2DSkeleton;
 using UnityEngine;
 namespace Assets.Scripts.Body_Data.view
 {
@@ -22,7 +23,9 @@ namespace Assets.Scripts.Body_Data.view
         public List<Transform> SubSegmentTransforms = new List<Transform>();
         
         //Sprite Transform2D
-        public Transform SpriteTransform;
+         private ISpriteMover mSpriteMover;
+
+      //  public Transform SpriteTransform;
         //This flag turned on, mean that the assigned Transform is a 3D model, else use a 2D sprite
         private bool mUsing3DModel = true;
         /**
@@ -42,18 +45,19 @@ namespace Assets.Scripts.Body_Data.view
 
                 SubSegmentTransforms.Add(vTransform);
             }
-            try
+          try
             {
                 GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
                 if (v2DGameObject != null)
                 {
-                    SpriteTransform = v2DGameObject.transform;
-                }
+                   // SpriteTransform = v2DGameObject.transform;
+                    mSpriteMover = v2DGameObject.GetComponent<ISpriteMover>();
+                } 
             }
             catch (UnityException exception)
             {
                  //exception is thrown if the tag ins't found in the tag manager.
-            }
+            } 
             //Find the 2D representation of the object in the scene 
           
 
@@ -64,18 +68,24 @@ namespace Assets.Scripts.Body_Data.view
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 vObjTransform.rotation = vNewOrientation;
+                //vObjTransform.localRotation = vNewOrientation;
             }
 
             //Apply 2D transformation
-            if (SpriteTransform != null)
+           /* if (SpriteTransform != null)
             {
                 //convert to Euler
                 Vector3 vEuler = vNewOrientation.eulerAngles;
-                vEuler.z = vEuler.x;
-                vEuler.x = 0;
+                vEuler.z = vEuler.vLeftLegHipMulti;
+                vEuler.vLeftLegHipMulti = 0;
                 vEuler.y = 0;
                 SpriteTransform.rotation = Quaternion.Euler(vEuler);
-            }
+            }*/  
+          if (mSpriteMover != null)
+            {
+                mSpriteMover.ApplyTransformations();
+
+            } 
         }
 
 
@@ -89,11 +99,15 @@ namespace Assets.Scripts.Body_Data.view
             }
 
             //Apply 2D translations
-            if (SpriteTransform != null)
+        /* if (SpriteTransform != null)
             { 
                 Vector3 v3 = SpriteTransform.localPosition;
                 v3.y = vNewDisplacement;
                 SpriteTransform.localPosition = v3;
+            } */
+            if (mSpriteMover != null)
+            {
+                mSpriteMover.ApplyTranslations(vNewDisplacement);
             }
         }
 
@@ -104,13 +118,19 @@ namespace Assets.Scripts.Body_Data.view
                 vObjTransform.rotation = Quaternion.identity;
             }
 
-            //Apply to 2D model
-            if (SpriteTransform != null)
+           //Apply to 2D model
+/*            if (SpriteTransform != null)
             {
                 SpriteTransform.rotation = Quaternion.identity;
+            }*/ 
+        if (mSpriteMover != null)
+            {
+                mSpriteMover.ResetOrientations();
             } 
-
-            Camera.main.Render();
+            if (Camera.main != null)
+            {
+                Camera.main.Render();
+            }
         }
 
         /**

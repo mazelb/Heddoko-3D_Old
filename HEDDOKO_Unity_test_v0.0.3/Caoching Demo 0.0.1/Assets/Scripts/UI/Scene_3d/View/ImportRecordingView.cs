@@ -1,4 +1,11 @@
-﻿using Assets.Scripts.UI.MainScene.Model;
+﻿/**  
+* @file ImportRecordingView.cs 
+* @brief Contains the ImportRecordingView class 
+* @author Mohammed Haider(mohamed@heddoko.com) 
+* @date December 2015
+* Copyright Heddoko(TM) 2015, all rights reserved 
+*/
+using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;

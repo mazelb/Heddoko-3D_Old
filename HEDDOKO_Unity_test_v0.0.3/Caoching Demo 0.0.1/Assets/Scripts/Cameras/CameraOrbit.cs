@@ -24,7 +24,8 @@ public class CameraOrbit : MonoBehaviour {
         var angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
-        z = distance;
+        //z = distance;
+        z = Vector3.Distance(transform.position, target.position);
 
         // Make the rigid body not change rotation
         if (GetComponent< Rigidbody > ())
@@ -48,7 +49,7 @@ public class CameraOrbit : MonoBehaviour {
             }
             
             y = ClampAngle((float)y, yMinLimit, yMaxLimit);
-
+          
             var rotation = Quaternion.Euler((float)y, (float)x, 0);
             Vector3 vec = new Vector3(0.0f, 0.0f, (float)-z);
             var position = rotation * vec + target.position;

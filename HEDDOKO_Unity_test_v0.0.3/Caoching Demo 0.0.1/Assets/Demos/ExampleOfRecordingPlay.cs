@@ -63,7 +63,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     }
 
     /**
-    * ResetInitialFrame 
+    * ResetOrientations 
     * @brief will set the Initial Frame
     */
     public void ResetInitialFrame()

@@ -20,8 +20,8 @@ namespace Assets.Demos
         void Awake()
         {
         
-            BodySelectedInfo.Instance.UpdateNumberOfRecordings();
-            BodySelectedInfo.Instance.UpdateSelectedRecording(RecordingNumber);
+             BodySelectedInfo.Instance.UpdateNumberOfRecordings();
+         //   BodySelectedInfo.Instance.UpdateSelectedRecording(RecordingNumber); 
         }
 
     }

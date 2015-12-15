@@ -80,7 +80,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void ShowActivitiesContextView()
         {
             ActivitiesContext.SwitchtoMainActivityView();
-            TrainingAndLearningCam.gameObject.SetActive(true);
+           // TrainingAndLearningCam.gameObject.SetActive(true);
             RecordingSelectionCam.gameObject.SetActive(false);
         }
 

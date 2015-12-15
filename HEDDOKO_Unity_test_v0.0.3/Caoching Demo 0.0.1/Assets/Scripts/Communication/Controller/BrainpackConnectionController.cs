@@ -350,7 +350,11 @@ namespace Assets.Scripts.Communication.Controller
             if (SocketClientErrorTrigger.Triggered)
             {
                 SocketClientErrorTrigger.Reset();
-                View.SetWarningBoxMessage((string)SocketClientErrorTrigger.Args);
+                if (View != null)
+                {
+                    View.SetWarningBoxMessage((string)SocketClientErrorTrigger.Args);
+                }
+               
                 ChangeCurrentState(BrainpackConnectionState.Failure); 
             }
 

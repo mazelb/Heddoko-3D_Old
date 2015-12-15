@@ -34,6 +34,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public string BikeRecordingSubPath;
         private string ActivityTypeSubPath;
 
+
         public bool UsingSquats;
 
         /// <summary>

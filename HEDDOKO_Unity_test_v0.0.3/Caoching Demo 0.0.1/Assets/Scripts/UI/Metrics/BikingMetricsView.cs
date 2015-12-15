@@ -8,10 +8,13 @@
 */
 
 using System;
+using System.Collections;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.MainMenu;
 using UnityEngine;
 using System.Collections.Generic;
+using Assets.Scripts.Utils;
+using UnityEditor.iOS.Xcode;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Metrics
@@ -24,6 +27,8 @@ namespace Assets.Scripts.UI.Metrics
         public int NumberOfFrameToCount = 5;
         [SerializeField]
         private int mCurrentCountOfFrames = 0;
+
+        private float mAvg;
         [SerializeField]
         private bool mIsActive;
         [SerializeField]
@@ -37,7 +42,12 @@ namespace Assets.Scripts.UI.Metrics
         [SerializeField]
         private float mAngleKneeFlexionPrev;
         [SerializeField]
-        private float mInitialFlexion=70f;
+        private float mInitialFlexion = 70f;
+   
+
+        public float LerpSpeed = 1;
+        private bool mContinueAnimation;
+        public float MaxKneeFlexVel = 30000f;
 
         public Text RPMeter;
         public Text InformationPanel;
@@ -49,8 +59,10 @@ namespace Assets.Scripts.UI.Metrics
         private int mRevolution;
 
         private RightLegAnalysis mRightLegAnalysis;
-
+        private AverageKneeFlexVelocity KneeFlexVelocityAvg;
         private PlayerStreamManager mPlayerStreamManager;
+
+        public Image VelocityPowerbar;
 
         public PlayerStreamManager PlayerStreamManager
         {
@@ -71,7 +83,7 @@ namespace Assets.Scripts.UI.Metrics
         {
             gameObject.SetActive(true);
             mIsActive = true;
-      
+
             ResetValues();
         }
 
@@ -82,7 +94,7 @@ namespace Assets.Scripts.UI.Metrics
         {
             gameObject.SetActive(false);
             mIsActive = false;
-           ResetValues();
+            ResetValues();
         }
 
         private void LateUpdate()
@@ -102,21 +114,34 @@ namespace Assets.Scripts.UI.Metrics
                 {
                     if (mRightLegAnalysis == null)
                     {
-                        mRightLegAnalysis =
-                       vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
-                           RightLegAnalysis;
-                        mInitialFlexion = 70f;// mRightLegAnalysis.AngleKneeFlexion;
-                        mInitialTime = 0f;
-                        mTimeAccumulator = 0f;
-                        mMostRecentXFrames = new List<float>(NumberOfFrameToCount);
-                        mOldFrames = new List<float>(NumberOfFrameToCount);
+                      Initialize(vCurrentBody);
                     }
-
+                   // UpdatePowerBar();
                     if (mAngleKneeFlexionPrev <= 0)
                     {
                         return;
                     }
-                    Vector3 vAxis1 = new Vector3(mRightLegAnalysis.HipOrientation[0, 1], mRightLegAnalysis.HipOrientation[1, 1], mRightLegAnalysis.HipOrientation[2, 1]);
+                    if (mCurrentCountOfFrames < NumberOfFrameToCount)
+                    {
+                        mAvg += Mathf.Abs(mRightLegAnalysis.mAngularVelocityKneeFlexion);
+                    }
+                    else if (mCurrentCountOfFrames == NumberOfFrameToCount)
+                    {
+                        mAvg /= NumberOfFrameToCount;
+                        mCurrentCountOfFrames = 0;
+                        StopAllCoroutines();
+                        mContinueAnimation = false;
+                        StartCoroutine(StartFillAnimation(mAvg));
+                        mAvg =0;
+                    }
+                    mCurrentCountOfFrames ++;
+                    // float vAvg = KneeFlexVelocityAvg.CompareAverageKneeFlexionSpeed();
+                    /*  if (vAvg >= 0)
+                     {*/
+
+
+                    //   }
+                    /* Vector3 vAxis1 = new Vector3(mRightLegAnalysis.HipOrientation[0, 1], mRightLegAnalysis.HipOrientation[1, 1], mRightLegAnalysis.HipOrientation[2, 1]);
                     Vector3 vAxis2 = new Vector3(mRightLegAnalysis.KneeOrientation[0, 1], mRightLegAnalysis.KneeOrientation[1, 1], mRightLegAnalysis.KneeOrientation[2, 1]);
                     float vAngleKneeFlexionNew = Vector3.Angle(vAxis1, vAxis2);
                     if (mAngleKneeFlexionPrev <= mInitialFlexion && mInitialFlexion <= vAngleKneeFlexionNew)
@@ -134,12 +159,39 @@ namespace Assets.Scripts.UI.Metrics
                         string vOutput = string.Format("{0:N2}", vTruncatedVal);
                         RPMeter.text = vOutput + "rpm";
                     }
-                    mTimeAccumulator += Time.deltaTime;
-                    UpdateKneeFlexionAverages();
+                    mTimeAccumulator += Time.deltaTime;*/
+                    // UpdateKneeFlexionAverages();
                 }
             }
         }
 
+        /// <summary>
+        /// Initialize the biking metric variables
+        /// </summary>
+        /// <param name="vBody"></param>
+        private void Initialize(Body vBody)
+        {
+            mRightLegAnalysis =
+                      vBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
+                          RightLegAnalysis;
+            mInitialFlexion = 70f;// mRightLegAnalysis.AngleKneeFlexion;
+            mInitialTime = 0f;
+            mTimeAccumulator = 0f;
+            mMostRecentXFrames = new List<float>(NumberOfFrameToCount);
+            mOldFrames = new List<float>(NumberOfFrameToCount);
+            KneeFlexVelocityAvg = new AverageKneeFlexVelocity(vBody);
+        }
+
+        private void UpdatePowerBar()
+        {
+            float vAbsVelocityVal = Mathf.Abs(mRightLegAnalysis.mAngularVelocityKneeFlexion);
+            float vPercent = HeddokoMathTools.Map(mRightLegAnalysis.mAngularVelocityKneeFlexion, 0f, MaxKneeFlexVel, 0.108f, 1f);
+            Debug.Log(vPercent);
+            VelocityPowerbar.fillAmount = vPercent;
+        }
+        /// <summary>
+        /// Reset the biking metrics variables
+        /// </summary>
         public void ResetValues()
         {
             mRevolution = 0;
@@ -150,6 +202,7 @@ namespace Assets.Scripts.UI.Metrics
             RevsPerMinute = 0;
             mPreviousMeanVel = 0;
             mMostUpToDateMeanVel = 0;
+
         }
 
         private void UpdateKneeFlexionAverages()
@@ -165,20 +218,21 @@ namespace Assets.Scripts.UI.Metrics
                 return;
             }
 
-            float vMostUpToDateVelSum=0f;
+            float vMostUpToDateVelSum = 0f;
             float vOldVelSum = 0f;
 
             foreach (float val in mMostRecentXFrames)
             {
                 vMostUpToDateVelSum += Mathf.Abs(val);
             }
-           
+
             mMostUpToDateMeanVel = vMostUpToDateVelSum / NumberOfFrameToCount;
 
             foreach (float val in mOldFrames)
             {
                 vOldVelSum += Mathf.Abs(val);
             }
+
             mPreviousMeanVel = vOldVelSum / NumberOfFrameToCount;
 
             if (mMostUpToDateMeanVel < mPreviousMeanVel)
@@ -204,5 +258,36 @@ namespace Assets.Scripts.UI.Metrics
             mOldFrames.Add(vToGoOldFrame);
 
         }
+
+        private IEnumerator StartFillAnimation(float vNewVal)
+        {
+            mContinueAnimation = true;
+            float vInitialVal = HeddokoMathTools.Map(VelocityPowerbar.fillAmount, 0.108f, 1f , 0f, MaxKneeFlexVel ); 
+            float vDistanceInit = Mathf.Abs(vNewVal - vInitialVal);
+            float vTimeStarted = Time.time;
+
+            while (true)
+            {
+                if (!mContinueAnimation)
+                {
+                    break;
+                }
+                float vTimeTaken = Time.time - vTimeStarted;
+                float vPercentage = LerpSpeed*vTimeTaken/vTimeStarted;// LerpSpeed * (HeddokoMathTools.Map(VelocityPowerbar.fillAmount, 0.108f, 1f, 0f, MaxKneeFlexVel) / vDistanceInit);
+                float vPreMappedFillVal = Mathf.Lerp(vInitialVal, vNewVal, vPercentage);
+           
+                if (vPercentage > 1)
+                {
+                    VelocityPowerbar.fillAmount = HeddokoMathTools.Map(vNewVal, 0f, MaxKneeFlexVel, 0.108f, 1f); 
+                    break;
+                }
+                float vMappedFilledVal = HeddokoMathTools.Map(vPreMappedFillVal, 0f, MaxKneeFlexVel, 0.108f, 1f);
+                VelocityPowerbar.fillAmount = vMappedFilledVal;
+
+                yield return null;
+            }
+        }
+
     }
 }
+

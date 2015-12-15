@@ -249,7 +249,7 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -434,7 +434,7 @@ public class BodySegment
         ///////////////////////////////////////
         /////////// Fusion  ///////////////////
         /////////////////////////////////////// 
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -616,7 +616,7 @@ public class BodySegment
         //vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm];
         //vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm];
 
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {
@@ -815,7 +815,7 @@ public class BodySegment
 
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
         /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
-        bool fusion = true;
+        bool fusion = false;
 
         if (fusion)
         {

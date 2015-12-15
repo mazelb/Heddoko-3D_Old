@@ -9,6 +9,7 @@
 
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,12 @@ namespace Assets.Scripts.UI.Metrics
         private PlayerStreamManager mPlayerStreamManager;
         public float UpperRangeOfSquatMotion = 110f;
         public float LowerRangeOfSquatMotion = 90f;
+        public float LargestAngleSum = 170f;
+        [SerializeField]
+        private float mMaxKneeFlexion = 150f;
+        public SquatColoredFeedback SquatColoredFeedback;
+        public SquatCounter SquatCounter;
+        private int mPreviousSquatValue = 0;
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -49,28 +56,41 @@ namespace Assets.Scripts.UI.Metrics
                         vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                             RightLegAnalysis;
                     vRightLegAnalysis.StartCountingSquats(true);
-                    NumberSquatsOfText.text = "Total number = " + vRightLegAnalysis.NumberofRightSquats;
+                    //NumberSquatsOfText.text = "Total number = " + vRightLegAnalysis.NumberofRightSquats;
                     float vAngleSum = vRightLegAnalysis.AngleSumRight;
 
                     //are we still counting?
-                    if (vAngleSum > 0.1f && vAngleSum <= 170)
+                    /*   if (vAngleSum > 0.1f && vAngleSum <= LargestAngleSum)
+                       {*/
+                    float vPositionOfSquat = vRightLegAnalysis.AngleKneeFlexion / mMaxKneeFlexion;
+                    if (vPositionOfSquat > 1)
                     {
-                        if (vRightLegAnalysis.AngleKneeFlexion < LowerRangeOfSquatMotion)
-                        {
-                            GoHigherLowerText.text = "Increase depth";
-                        }
-                        if (vRightLegAnalysis.AngleKneeFlexion >= LowerRangeOfSquatMotion &&
-                            vRightLegAnalysis.AngleKneeFlexion < UpperRangeOfSquatMotion)
-                        {
-                            GoHigherLowerText.text = " Good! ";
-                        }
-                        else if(vRightLegAnalysis.AngleKneeFlexion >= UpperRangeOfSquatMotion)
-                        {
-                            GoHigherLowerText.text = "Decrease depth";
-                        }
-                        //GoHigherLowerText.text = "go lower";
-                        
+                        SquatColoredFeedback.SetScrollValue(1);
                     }
+                    else
+                    {
+                        SquatColoredFeedback.SetScrollValue(vPositionOfSquat);
+                    }
+
+                    UpdateSquatsCount((int) vRightLegAnalysis.NumberofRightSquats);
+                    /*
+
+                                            if (vRightLegAnalysis.AngleKneeFlexion < LowerRangeOfSquatMotion)
+                                            { 
+                                               // GoHigherLowerText.text = "Increase depth";
+                                            }
+                                            if (vRightLegAnalysis.AngleKneeFlexion >= LowerRangeOfSquatMotion &&
+                                                vRightLegAnalysis.AngleKneeFlexion < UpperRangeOfSquatMotion)
+                                            {
+                                                //GoHigherLowerText.text = " Good! ";
+                                            }
+                                            else if(vRightLegAnalysis.AngleKneeFlexion >= UpperRangeOfSquatMotion)
+                                            {
+                                              //  GoHigherLowerText.text = "Decrease depth";
+                                            }
+                                            //GoHigherLowerText.text = "go lower";*/
+
+                    // }
                     //check if the sum is less than 170 degree, 
                     /*else if (vAngleSum > 70 && vAngleSum < 170)
                     {
@@ -86,6 +106,13 @@ namespace Assets.Scripts.UI.Metrics
         public void Show()
         {
             mIsActive = true;
+
+            // float vPerfectSquatNormalVal = UpperRangeOfSquatMotion + LowerRangeOfSquatMotion;
+            //   vPerfectSquatNormalVal /= 2f;
+            //  HeddokoMathTools.Map(vPerfectSquatNormalVal, 0, LargestAngleSum, 0, 1);
+            SquatCounter.gameObject.SetActive(true);
+            SquatColoredFeedback.gameObject.SetActive(true);
+            SquatColoredFeedback.SetGradient(15f / mMaxKneeFlexion, LowerRangeOfSquatMotion / mMaxKneeFlexion, UpperRangeOfSquatMotion / mMaxKneeFlexion);
             gameObject.SetActive(true);
         }
 
@@ -94,8 +121,16 @@ namespace Assets.Scripts.UI.Metrics
         /// </summary>
         public void Hide()
         {
+            SquatCounter.gameObject.SetActive(false);
+            SquatColoredFeedback.gameObject.SetActive(false);
             mIsActive = false;
             gameObject.SetActive(false);
+        }
+
+        private void UpdateSquatsCount(int vNewVal)
+        {
+            SquatCounter.SetSquatNumber(vNewVal);
+        
         }
     }
 }

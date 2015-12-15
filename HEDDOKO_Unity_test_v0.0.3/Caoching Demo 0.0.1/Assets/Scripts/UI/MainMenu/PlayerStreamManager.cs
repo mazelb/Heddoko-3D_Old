@@ -22,7 +22,8 @@ namespace Assets.Scripts.UI.MainMenu
     {
         public Body CurrentBodyInPlay { get; set; }
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
-      //  private bool mPlayButtonPushed; 
+        
+        //  private bool mPlayButtonPushed; 
         public float PauseThreadTimer = 1f;
         private float mInternalTimer = 1f;
 
@@ -95,13 +96,11 @@ namespace Assets.Scripts.UI.MainMenu
         */
         public void Play()
         {
-           
-                if (CurrentBodyInPlay != null)
-                {
-                   // mPlayButtonPushed = true; 
-                    ChangeState(BodyPlaybackState.PlayingRecording); 
-                }
-           
+            if (CurrentBodyInPlay != null)
+            {
+                // mPlayButtonPushed = true; 
+                ChangeState(BodyPlaybackState.PlayingRecording); 
+            }
         }
 
         /// <summary>
@@ -131,7 +130,7 @@ namespace Assets.Scripts.UI.MainMenu
         
 
         /**
-       * ResetInitialFrame 
+       * ResetOrientations 
        * @brief will set the Initial Frame
        */
         public void ResetInitialFrame()

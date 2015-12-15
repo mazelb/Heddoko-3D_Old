@@ -105,7 +105,7 @@ namespace Assets.Demos
         }
 
         /**
-        * ResetInitialFrame 
+        * ResetOrientations 
         * @brief will set the Initial Frame
         */
         public void ResetInitialFrame()

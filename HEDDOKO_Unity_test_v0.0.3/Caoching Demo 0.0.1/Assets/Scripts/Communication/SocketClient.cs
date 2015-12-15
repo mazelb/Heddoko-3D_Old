@@ -27,6 +27,7 @@ namespace Assets.Scripts.Communication
         private TcpClient mSocket;
         NetworkStream mNetworkStream;
         StreamWriter mStreamWriter;
+        private StreamWriter mLogWriter;
         StreamReader mStreamReader;
         private bool mSocketReady { get; set; }
         private bool mSocketOpen = false;
@@ -63,14 +64,16 @@ namespace Assets.Scripts.Communication
             catch (IOException e)
             {
                 string vMessage =
+                     "\r\n Message sent:"  + "vMsg" +
                     "A connection to the Heddoko service failed. Please ensure that the service is operational and try again." +
-                    "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
-                    "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
-                    "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                    "\r\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                    "\r\n  ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                    "\r\n  ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
                     "---End of GetBaseException stacktrace---" +
-                    "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
-                    "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                    "\r\n  ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                    "\r\n  ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
                     "---End of InnerException StackTrace---";
+                WriteToLogFile(vMessage);
                 HeddokoPacket vPacket = new HeddokoPacket(HeddokoCommands.ClientError, vMessage);
                 PacketCommandRouter.Instance.Process(this, vPacket);
             }
@@ -84,15 +87,19 @@ namespace Assets.Scripts.Communication
             catch (Exception e)
             {
                 string vMessage =
+                    "\r\n Message sent:" + "vMsg" +
                        "A connection to the Heddoko service failed. Please ensure that the service is operational and try again." +
-                       "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
-                       "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
-                       "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                       "\r\n  ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                       "\r\n  ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                       "\r\n  ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
                        "---End of GetBaseException stacktrace---" +
-                       "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
-                       "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                       "\r\n  ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                       "\r\n  ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
                        "---End of InnerException StackTrace---";
-                UnityEngine.Debug.Log(vMessage);
+                Debug.Log(vMessage);
+                mSocketReady = false;
+                WriteToLogFile(vMessage);
+        
             }
         }
 
@@ -137,6 +144,7 @@ namespace Assets.Scripts.Communication
                                          "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
                                          "---End of InnerException StackTrace---";
                                 UnityEngine.Debug.Log(vMessage);*/
+                                mSocketReady = false;
             }
         }
 
@@ -157,19 +165,19 @@ namespace Assets.Scripts.Communication
             string debugcommand = "";
             while (true)
             {
-                
+                string result = "";
                 try
                 {
                     if (mNetworkStream.DataAvailable)
                     {
-                        string result = mStreamReader.ReadLine(); 
+                          result = mStreamReader.ReadLine();
                         if (!string.IsNullOrEmpty(result) && result.Contains("<EOL>"))
-                        { 
+                        {
                             byte[] vConverted = PacketSetting.Encoding.GetBytes(result);
                             HeddokoPacket vPacket = new HeddokoPacket(vConverted, 4);
                             string command = vPacket.Command;
- 
-                            PacketCommandRouter.Instance.Process(command, vPacket); 
+
+                            PacketCommandRouter.Instance.Process(command, vPacket);
                             mNetworkStream.Flush();
                         }
                         mSocketReady = false;
@@ -182,16 +190,19 @@ namespace Assets.Scripts.Communication
                 }
                 catch (Exception e)
                 {
-                    string vMessage ="Internal failure with  "+
-                       "  command" + debugcommand + ". Reset client times: "+ resetClientSocket+  " at Current time "+ DateTime.Now + 
-                       "\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
-                       "\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
-                       "\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
+                    string vMessage ="Internal failure with  " +
+                       "  command" + debugcommand + ". Reset client times: " + resetClientSocket + " at Current time " + DateTime.Now +
+                       "\r\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
+                       "\r\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
+                       "\r\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
                        "---End of GetBaseException stacktrace---" +
-                       "\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
-                       "\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
-                       "---End of InnerException StackTrace---";
+                       "\r\n ----Beginning of InnerException" + e.InnerException + "---End of InnerException---" +
+                       "\r\n ----Beginning of InnerException StackTrace" + e.InnerException.StackTrace +
+                       "---End of InnerException StackTrace---"
+                    + "\r\n Message received: " + result;
+                    WriteToLogFile(vMessage);
                     UnityEngine.Debug.Log(vMessage);
+                    mSocketReady = false;
                 }
 
             }
@@ -199,13 +210,59 @@ namespace Assets.Scripts.Communication
         }
 
         /// <summary>
-        /// Closes the socket and releases the current resources
+        /// Writes to a log file 
         /// </summary>
-        /**
-       * ReadServerSocket( )
-       * @brief Closes the socket and releases the current resources
-       *  
-       */
+        /// <param name="vPacket"></param>
+        private void WriteToLogFile(string vPacket)
+        { 
+            //Check if folder exists
+
+            string vSubPath = Directory.GetCurrentDirectory() + "/Logs";
+            bool vPathExists = Directory.Exists(vSubPath);
+            if (!vPathExists)
+            {
+                Directory.CreateDirectory(vSubPath);
+            }
+
+            string vLogMessage = "\r\n<Date = " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt") + "\\Date>";
+            vLogMessage += "\r\n <Log>" + vPacket + "\r\n<\\Log>";
+
+            //file name
+            string vPath = vSubPath + "/RawLog_" + DateTime.Now.ToString( @"MM-dd-yyyy") + ".txt";
+         
+            //check if file exists
+            bool mFileExists = File.Exists(vPath);
+            if (!mFileExists)
+            {
+                using (StreamWriter sw = File.CreateText(vPath))
+                {
+                    sw.Write(vLogMessage);
+                }
+
+            }
+            else
+            {
+                //check the file size first, if its over 250 mb, then don't write.
+                FileInfo vFileInfo = new FileInfo(vPath);
+                if (vFileInfo.Length > 250000000)
+                {
+                    return;
+                }
+                using (StreamWriter sw = File.AppendText(vPath))
+                {
+                    sw.Write(vLogMessage);
+                }
+            }
+
+        }
+ 
+        private void WriteToLog(string vLog)
+        {
+
+        }
+        /// <summary>
+        /// Closes the socket and releases the current resources
+        /// </summary> 
         public void CloseSocket()
         {
             if (!mSocketReady)
