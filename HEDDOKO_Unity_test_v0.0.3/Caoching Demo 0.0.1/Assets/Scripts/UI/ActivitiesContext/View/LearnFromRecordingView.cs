@@ -84,9 +84,13 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 BikesOrthoCam.gameObject.SetActive(true);
                 SquatMetricsTest.SetActive(false);
             }
+            
             PlayerStreamManager.PlaySquats(ActivitiesContextController.UsingSquats);
-           
-           
+            for (int i = 0; i < 10; i++)
+            {
+                PlayerStreamManager.ResetInitialFrame();
+            }
+
         }
 
         /// <summary>

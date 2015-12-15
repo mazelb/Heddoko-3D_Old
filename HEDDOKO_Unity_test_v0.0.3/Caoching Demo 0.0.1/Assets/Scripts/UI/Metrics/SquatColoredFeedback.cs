@@ -5,8 +5,7 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
-
-using Assets.Scripts.Utils.UI;
+ 
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,6 +57,7 @@ namespace Assets.Scripts.UI.Metrics
             return;
             //Disable UIGradients
             // WhiteToRedSubGradient.GetComponent<UIGradient>().enabled = false;
+/*
             RedToOrangeSubGradient.GetComponent<UIGradient>().enabled = false;
             OrangeToYellowSubGradient.GetComponent<UIGradient>().enabled = false;
             YellowToGreenSubGradient.GetComponent<UIGradient>().enabled = false;
@@ -65,6 +65,7 @@ namespace Assets.Scripts.UI.Metrics
             GreenToYellowSubGradient.GetComponent<UIGradient>().enabled = false;
             YellowToOrangeSubGradient.GetComponent<UIGradient>().enabled = false;
             OrangeToRedSubGradient.GetComponent<UIGradient>().enabled = false;
+*/
 
      
 
@@ -177,19 +178,19 @@ namespace Assets.Scripts.UI.Metrics
             //------------------End set positions -----------------------------//
             //enable UIGradients
          //   WhiteToRedSubGradient.GetComponent<UIGradient>().enabled = true;
-            RedToOrangeSubGradient.GetComponent<UIGradient>().enabled = true;
+           /* RedToOrangeSubGradient.GetComponent<UIGradient>().enabled = true;
             OrangeToYellowSubGradient.GetComponent<UIGradient>().enabled = true;
             YellowToGreenSubGradient.GetComponent<UIGradient>().enabled = true;
             GreenSubGradient.GetComponent<UIGradient>().enabled = true;
             GreenToYellowSubGradient.GetComponent<UIGradient>().enabled = true;
             YellowToOrangeSubGradient.GetComponent<UIGradient>().enabled = true;
             OrangeToRedSubGradient.GetComponent<UIGradient>().enabled = true;
-
+*/
         }
         public void SetGradientVersion2(float vStandingPrc, float vSquatAreaStartPrc, float vSquatAreaEndPrc)//,float vBottomGradPrc )
         {
             return;
-            //Disable UIGradients
+      /*      //Disable UIGradients
             WhiteToRedSubGradient.GetComponent<UIGradient>().enabled = false;
             RedToOrangeSubGradient.GetComponent<UIGradient>().enabled = false;
             OrangeToYellowSubGradient.GetComponent<UIGradient>().enabled = false;
@@ -197,7 +198,7 @@ namespace Assets.Scripts.UI.Metrics
             GreenSubGradient.GetComponent<UIGradient>().enabled = false;
             GreenToYellowSubGradient.GetComponent<UIGradient>().enabled = false;
             YellowToOrangeSubGradient.GetComponent<UIGradient>().enabled = false;
-            OrangeToRedSubGradient.GetComponent<UIGradient>().enabled = false;
+            OrangeToRedSubGradient.GetComponent<UIGradient>().enabled = false;*/
 
             //----------------------Set positions --------------------------//
 
@@ -316,6 +317,7 @@ namespace Assets.Scripts.UI.Metrics
             //------------------End set positions -----------------------------//
             //enable UIGradients
             //   WhiteToRedSubGradient.GetComponent<UIGradient>().enabled = true;
+/*
             RedToOrangeSubGradient.GetComponent<UIGradient>().enabled = true;
             OrangeToYellowSubGradient.GetComponent<UIGradient>().enabled = true;
             YellowToGreenSubGradient.GetComponent<UIGradient>().enabled = true;
@@ -323,6 +325,7 @@ namespace Assets.Scripts.UI.Metrics
             GreenToYellowSubGradient.GetComponent<UIGradient>().enabled = true;
             YellowToOrangeSubGradient.GetComponent<UIGradient>().enabled = true;
             OrangeToRedSubGradient.GetComponent<UIGradient>().enabled = true;
+*/
 
         }
         /// <summary>
