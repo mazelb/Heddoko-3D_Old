@@ -9,7 +9,10 @@ public class BodyStructureMap
 {
     #region Singleton definition
     private static readonly BodyStructureMap instance = new BodyStructureMap();
-    private bool isInitialized; //has the bodystructuremap been initiated?
+    
+    //has the bodystructuremap been initiated?
+    private bool isInitialized; 
+    
     // Explicit static constructor to tell C# compiler
     // not to mark type as beforefieldinit
     static BodyStructureMap()
@@ -37,6 +40,13 @@ public class BodyStructureMap
         }
     }
     #endregion
+
+    public struct TrackingStructure
+    {
+        public float[,] InitGlobalMatrix;
+        public float[,] CurrentLocalMatrix;
+        public float[,] OrientationMatrix;
+    };
 
     //Body Types
     public enum BodyTypes
@@ -283,6 +293,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_RightArm:
                     {
                         List<SensorPositions> vRightArmSensorPos = new List<SensorPositions>();
+                        vRightArmSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vRightArmSensorPos.Add(SensorPositions.SP_RightUpperArm);
                         vRightArmSensorPos.Add(SensorPositions.SP_RightForeArm);
                         vRightArmSensorPos.Add(SensorPositions.SP_RightElbow);
@@ -292,6 +303,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_LeftArm:
                     {
                         List<SensorPositions> vLeftArmSensorPos = new List<SensorPositions>();
+                        vLeftArmSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftUpperArm);
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftForeArm);
                         vLeftArmSensorPos.Add(SensorPositions.SP_LeftElbow);
@@ -301,6 +313,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_RightLeg:
                     {
                         List<SensorPositions> vRightLegSensorPos = new List<SensorPositions>();
+                        vRightLegSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vRightLegSensorPos.Add(SensorPositions.SP_RightThigh);
                         vRightLegSensorPos.Add(SensorPositions.SP_RightCalf);
                         vRightLegSensorPos.Add(SensorPositions.SP_RightKnee);
@@ -310,6 +323,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_LeftLeg:
                     {
                         List<SensorPositions> vLeftLegSensorPos = new List<SensorPositions>();
+                        vLeftLegSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftThigh);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftCalf);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftKnee);

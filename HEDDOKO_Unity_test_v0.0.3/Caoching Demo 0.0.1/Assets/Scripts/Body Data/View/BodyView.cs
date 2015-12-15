@@ -5,7 +5,7 @@
 * @date October 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
- 
+
 using UnityEngine;
 using System.Collections.Generic;
 using System.Net;
@@ -13,10 +13,9 @@ using Assets.Scripts.Utils.UnityUtilities;
 
 namespace Assets.Scripts.Body_Data.view
 {
-    /**
-    * BodyView class 
-    * @brief Contains the view for a body and allows the body to fetch data from a pipeline fed buffer on a frame by frame basis
-    */
+    /// <summary>
+    /// BodyView class: Contains the view for a body and allows the body to fetch data from a pipeline fed buffer on a frame by frame basis
+    /// </summary>
     public class BodyView : MonoBehaviour
     {
 
@@ -24,19 +23,14 @@ namespace Assets.Scripts.Body_Data.view
         private BodyFrameBuffer mBuffer;
         [SerializeField]
         private Body mAssociatedBody;
-        private BodyFrame mCurreBodyFrame;
         [SerializeField]
         private bool mIsPaused;
         [SerializeField]
         private bool mStartUpdating;
-        OutterThreadToUnityTrigger InitialFrameSetTrigger = new OutterThreadToUnityTrigger();
 
-        /**
-        * AssociatedBody
-        * @param Internally set the Body associated to this view
-        * @brief Class property that returns the Body associated with this view
-        * @return returns the property's value
-        */
+        /// <summary>
+        /// Internally set the Body associated to this view. Class property that returns the Body associated with this view.
+        /// </summary>
         public Body AssociatedBody
         {
             get
@@ -49,12 +43,10 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
-        /**
-        * StartUpdating
-        * @param bool: sets the property 
-        * @brief StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body 
-        * @return returns the property's value
-        */
+        /// <summary>
+        /// StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body
+        /// </summary>
+        /// <returns>boolean if started updating.</returns>
         public bool StartUpdating
         {
             get { return mStartUpdating; }
@@ -67,12 +59,12 @@ namespace Assets.Scripts.Body_Data.view
                 mStartUpdating = value;
             }
         }
-        /**
-        * Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
-        * @param bool: Body vAssociatedBody: the associated body for this view, BodyFrameBuffer vBuffer: the buffer to pull bodyframe data  from
-        * @brief StartUpdating allows the  needed to start pulling data from the buffer in order to update the associated body 
-        * @return returns the property's value
-        */
+
+        /// <summary>
+        /// Initialize the view with the frame buffer
+        /// </summary>
+        /// <param name="vAssociatedBody">the body associated to the view</param>
+        /// <param name="vBuffer">the frame buffer to update from</param>
         public void Init(Body vAssociatedBody, BodyFrameBuffer vBuffer)
         {
             this.mBuffer = vBuffer;
@@ -82,32 +74,43 @@ namespace Assets.Scripts.Body_Data.view
         /// <summary>
         /// Reset the initial frame
         /// </summary>
-        public void ResetInitialFrame()
+        /// <param name="vBodyFrame">the body frame to reset to</param>
+        public void ResetInitialFrame(BodyFrame vBodyFrame = null)
         {
             if (mAssociatedBody != null)
             {
-                AssociatedBody.UpdateBody(mAssociatedBody.CurrentBodyFrame);
-                Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody);
+                BodyFrame vTempBodyFrame = null; 
 
-                if (vDic != null)
+                if (vBodyFrame == null)
                 {
-                    Body.ApplyTracking(AssociatedBody, vDic);
-                    //todo: extract this from the view and place it in its own module
+                    vTempBodyFrame = mAssociatedBody.CurrentBodyFrame;
+                }
+                else
+                {
+                    vTempBodyFrame  = vBodyFrame;
                 }
 
-                AssociatedBody.SetInitialFrame(mAssociatedBody.CurrentBodyFrame);
+                AssociatedBody.SetInitialFrame(vTempBodyFrame);
+                UpdateViewTracking(vTempBodyFrame);
             }
         }
 
         /// <summary>
-        /// Will be called on by an external thread in the case that the initial frame needs to be set 
+        /// Update view tracking
         /// </summary>
-        /// <param name="vInitialBodyframe">The initial bodyframe</param>
-        internal void SetInitialBodyFrame(BodyFrame vInitialBodyframe)
+        /// <param name="vBodyFrame">the body frame to update to</param>
+        public void UpdateViewTracking(BodyFrame vBodyFrame)
         {
-            InitialFrameSetTrigger.Triggered = true;
-            InitialFrameSetTrigger.Args = vInitialBodyframe;
+            AssociatedBody.UpdateBody(vBodyFrame);
+            Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vDic = Body.GetTracking(AssociatedBody);
+
+            if (vDic != null)
+            {
+                Body.ApplyTracking(AssociatedBody, vDic);
+                //todo: extract this from the view and place it in its own module
+            }
         }
+
 
         /// <summary>
         /// pause the current frame
@@ -121,10 +124,9 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
-        /**
-        * OnDisable()
-        * @brief Automatically called by Unity when the app is exited. Cleans up tasks and unhooks event listeners  
-        */
+        /// <summary>
+        /// Automatically called by Unity when the app is exited. Cleans up tasks and unhooks event listeners
+        /// </summary>
         void OnApplicationQuit()
         {
             if (AssociatedBody != null)
@@ -134,10 +136,9 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
-        /**
-        * Update()
-        * @brief Automatically called by Unity and if conditions are set, will update the associated body with body frame data fetched from mBuffer.
-        */
+        /// <summary>
+        /// Automatically called by Unity and if conditions are set, will update the associated body with body frame data fetched from mBuffer.
+        /// </summary>
         private void Update()
         {
             if (StartUpdating)
@@ -146,38 +147,24 @@ namespace Assets.Scripts.Body_Data.view
                 {
                     return;
                 }
-                if (InitialFrameSetTrigger.Triggered)
-                {
-                    InitialFrameSetTrigger.Reset();
-                    BodyFrame vInitBodyFrame = (BodyFrame) InitialFrameSetTrigger.Args;
-                    AssociatedBody.SetInitialFrame(vInitBodyFrame);
-                }
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
                     BodyFrame vBodyFrame = mBuffer.Dequeue();
 
                     if (AssociatedBody.InitialBodyFrame == null)
                     {
-                        AssociatedBody.SetInitialFrame(vBodyFrame);
+                        //AssociatedBody.SetInitialFrame(vBodyFrame);
+                        ResetInitialFrame(vBodyFrame);
                     }
 
-                    AssociatedBody.UpdateBody(vBodyFrame);
-                    Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(AssociatedBody); 
-                   
-                    if (vDic != null)
-                    {
-                        Body.ApplyTracking(AssociatedBody, vDic);
-                        //todo: extract this from the view and place it in its own module
-                    } 
+                    UpdateViewTracking(vBodyFrame);
                 }
             }
         }
 
-        /**
-        * Awake()
-        * @brief Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
-        * and set the body view to this.
-        */
+        /// <summary>
+        /// Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
+        /// </summary
         private void Awake()
         {
             if (name != "body view guid: e75115c356218d84fa35dbd8a3159284")

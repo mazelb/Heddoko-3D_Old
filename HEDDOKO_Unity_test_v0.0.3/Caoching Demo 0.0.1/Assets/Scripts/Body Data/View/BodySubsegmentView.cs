@@ -21,7 +21,10 @@ namespace Assets.Scripts.Body_Data.view
         //the transforms required to transform
         public BodySubSegment AssociatedSubSegment;
         public List<Transform> SubSegmentTransforms = new List<Transform>();
-        
+
+        //Initial subsegment position 
+        private Vector3 mInitialPosition = Vector3.zero;
+
         //Sprite Transform2D
          private ISpriteMover mSpriteMover;
 
@@ -39,13 +42,17 @@ namespace Assets.Scripts.Body_Data.view
         {
             //find the object in the scene with the tag
             GameObject[] vGameObjects = GameObject.FindGameObjectsWithTag(gameObject.name);
+
+            //Initialize the view of each subsegments related object
             foreach (GameObject vObj in vGameObjects)
             {
                 Transform vTransform = vObj.transform;
-
                 SubSegmentTransforms.Add(vTransform);
+
+                //Todo: add proper setting for the initial position 
+                mInitialPosition = vTransform.localPosition;
             }
-          try
+            try
             {
                 GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
                 if (v2DGameObject != null)
@@ -67,8 +74,8 @@ namespace Assets.Scripts.Body_Data.view
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                vObjTransform.rotation = vNewOrientation;
-                //vObjTransform.localRotation = vNewOrientation;
+                //vObjTransform.rotation = vNewOrientation;
+                vObjTransform.localRotation = vNewOrientation;
             }
 
             //Apply 2D transformation
@@ -94,7 +101,7 @@ namespace Assets.Scripts.Body_Data.view
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 Vector3 v3 = vObjTransform.localPosition;
-                v3.y = vNewDisplacement;
+                v3.y = vNewDisplacement + 0.15f;
                 vObjTransform.localPosition = v3;
             }
 
@@ -115,7 +122,8 @@ namespace Assets.Scripts.Body_Data.view
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                vObjTransform.rotation = Quaternion.identity;
+                vObjTransform.localRotation = Quaternion.identity;
+                //vObjTransform.rotation = Quaternion.identity;
             }
 
            //Apply to 2D model
