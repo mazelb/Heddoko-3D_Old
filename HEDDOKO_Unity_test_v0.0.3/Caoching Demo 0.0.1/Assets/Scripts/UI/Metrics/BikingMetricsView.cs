@@ -188,7 +188,7 @@ namespace Assets.Scripts.UI.Metrics
             VelocityPowerbar.fillAmount = vPercent;
         }
         /// <summary>
-        /// Reset the biking metrics variables
+        /// ResetValues the biking metrics variables
         /// </summary>
         public void ResetValues()
         {

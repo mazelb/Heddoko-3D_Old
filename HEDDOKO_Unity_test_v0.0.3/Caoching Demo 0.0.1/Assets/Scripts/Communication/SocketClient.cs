@@ -191,7 +191,7 @@ namespace Assets.Scripts.Communication
                 catch (Exception e)
                 {
                     string vMessage ="Internal failure with  " +
-                       "  command" + debugcommand + ". Reset client times: " + resetClientSocket + " at Current time " + DateTime.Now +
+                       "  command" + debugcommand + ". ResetValues client times: " + resetClientSocket + " at Current time " + DateTime.Now +
                        "\r\n ---Beginning of Stacktrace---" + e.StackTrace + "---End of Stacktrace---" +
                        "\r\n ---Beginning of BaseException---" + e.GetBaseException() + "---End of GetBaseException---" +
                        "\r\n ---Beginning of BaseException Stack trace " + e.GetBaseException().StackTrace +
