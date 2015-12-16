@@ -42,8 +42,9 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public ActivitiesContextController ActivitiesContextController;
  
 
-        public GameObject SquatMetricsTest;
-
+        public GameObject SquatsMetrics;
+        public GameObject BikingMetrics;
+        public GameObject DualPurposeMetrics;
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -71,25 +72,26 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             //    BetaHighTorsoGeo.GetComponent<Renderer>().material = TransparentMaterial;
             // BetaHighJointsGeo.GetComponent<Renderer>().material = TrasparentJointsMaterial;
             ModelSwitcher.Show();
+            DualPurposeMetrics.SetActive(true);
             if (ActivitiesContextController.UsingSquats)
             {
                 TrainingAndLearningCam.gameObject.SetActive(true);
                 BikesOrthoCam.gameObject.SetActive(false);
-                 SquatMetricsTest.SetActive(true);
+                 SquatsMetrics.SetActive(true);
+                BikingMetrics.SetActive(false);
 
             }
             else
             {
                 TrainingAndLearningCam.gameObject.SetActive(false);
                 BikesOrthoCam.gameObject.SetActive(true);
-                SquatMetricsTest.SetActive(false);
+                SquatsMetrics.SetActive(false);
+                SquatsMetrics.SetActive(false);
+                BikingMetrics.SetActive(true);
             }
-            
+            PlayerStreamManager.ResetPlayer();
             PlayerStreamManager.PlaySquats(ActivitiesContextController.UsingSquats);
-            for (int i = 0; i < 10; i++)
-            {
-                PlayerStreamManager.ResetInitialFrame();
-            }
+ 
 
         }
 
@@ -100,10 +102,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         {
             gameObject.SetActive(false); 
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetInitialFrame();
+            PlayerStreamManager.ResetPlayer();
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false);
-            SquatMetricsTest.SetActive(false);
+            SquatsMetrics.SetActive(false);
+            BikingMetrics.SetActive(false);
+            DualPurposeMetrics.SetActive(false);
             BikesOrthoCam.gameObject.SetActive(false);
         }
     }

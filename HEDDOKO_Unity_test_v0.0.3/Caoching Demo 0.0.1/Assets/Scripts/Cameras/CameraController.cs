@@ -8,8 +8,11 @@
 */
 
 using System.Collections;
+using Assets.Scripts.UI.RecordingLoading;
+using Assets.Scripts.UI._2DSkeleton;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Cameras
 {
@@ -30,6 +33,9 @@ namespace Assets.Scripts.Cameras
         private Vector3 mOriginalPos;
         private Quaternion mOriginalRotation;
         private bool mIn2DMode = false;
+        public Button LeftButton;
+        public Button RightButton;
+        public LegMoveSwitcher LegSwitcher;
         void Awake()
         {
             mCurrentCam = GetComponent<Camera>();
@@ -38,6 +44,11 @@ namespace Assets.Scripts.Cameras
             mAutoCamMover.Cam = mCurrentCam;
             mOriginalPos = transform.position;
             mOriginalRotation = transform.rotation;
+            if (LeftButton != null && RightButton != null)
+            {
+                LeftButton.onClick.AddListener(SwitchToLeftSide);
+                RightButton.onClick.AddListener(SwitchToRightSide);
+            }
         }
         
         void Update()
@@ -134,6 +145,45 @@ namespace Assets.Scripts.Cameras
             mIn2DMode = true;
             Reset();
         }
+
+        /// <summary>
+        /// Switches to the left view of the body, depending on whether in 2d mode or 3d
+        /// </summary>
+        private void SwitchToLeftSide()
+        {
+            if (mIn2DMode)
+            {
+                if (LegSwitcher != null)
+                {
+                    LegSwitcher.TurnOnSprite(0);
+                }
+            }
+            else
+            {
+                mAutoCamMover.MoveToPos(3);
+                mAutoCamMover.enabled = true;
+            }
+          
+        }
+
+        /// <summary>
+        /// Switches to the right  view of the body, depending on whether in 2d mode or 3d
+        /// </summary>
+        private void SwitchToRightSide() {
+            if (mIn2DMode)
+            {
+                if (LegSwitcher != null)
+                {
+                    LegSwitcher.TurnOnSprite(1);
+                }
+            }
+            else
+            {
+                mAutoCamMover.MoveToPos(1);
+                mAutoCamMover.enabled = true;
+            }
+        }
+
         /// <summary>
         /// Enables camera orbit and move to camera scripts
         /// </summary>

@@ -9,6 +9,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Net;
+using Assets.Scripts.Body_Pipeline.Analysis.Legs;
+using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.Utils.DebugContext;
 using Assets.Scripts.Utils.UnityUtilities;
 
 namespace Assets.Scripts.Body_Data.view
@@ -146,6 +150,7 @@ namespace Assets.Scripts.Body_Data.view
                 {
                     return;
                 }
+
                 if (InitialFrameSetTrigger.Triggered)
                 {
                     InitialFrameSetTrigger.Reset();
@@ -170,6 +175,19 @@ namespace Assets.Scripts.Body_Data.view
                         //todo: extract this from the view and place it in its own module
                     } 
                 }
+
+               // InputHandler();
+            }
+        }
+
+        /// <summary>
+        /// Handles inputs related to the body view
+        /// </summary>
+        private void InputHandler()
+        {
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
+            { 
+                ResetInitialFrame();
             }
         }
 

@@ -8,8 +8,11 @@
 */
 
 using Assets.Demos;
+using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.MainScene.Model; 
+using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +42,10 @@ namespace Assets.Scripts.UI.MainMenu
 
         private bool mCanUseBrainpack = false;
 
-
+        public Button[] TPoseButtons;
+        public BikingMetricsView BikeMetrics;
+        public SquatMetricsView SquatMetrics;
+        public DualPurposeMetricsView DualPurposeMetrics;
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
@@ -67,6 +73,10 @@ namespace Assets.Scripts.UI.MainMenu
 
                 //get the first body
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0];
+            }
+            for (int i = 0; i < TPoseButtons.Length; i++)
+            {
+                TPoseButtons[i].onClick.AddListener(ResetPlayer);
             }
         }
 
@@ -320,6 +330,43 @@ namespace Assets.Scripts.UI.MainMenu
         public void Stop()
         {
             CurrentBodyInPlay.StopThread();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
+            {
+                ResetPlayer();
+            }
+        }
+
+
+        /// <summary>
+        /// Resets the body and the metrics associated with body.
+        /// </summary>
+        public void ResetPlayer()
+        {
+           ResetInitialFrame();
+            if (CurrentBodyInPlay != null)
+            {
+                RightLegAnalysis vRightLegAnalysis =
+                      CurrentBodyInPlay.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
+                          RightLegAnalysis;
+                vRightLegAnalysis.NumberofRightSquats = 0;
+            }
+            //to do reset metrics.
+            if (BikeMetrics != null)
+            {
+                BikeMetrics.ResetValues();
+            }
+            if (SquatMetrics != null)
+            {
+                SquatMetrics.ResetValues();
+            }
+            if (DualPurposeMetrics != null)
+            {
+                DualPurposeMetrics.ResetValues();
+            }
         }
     }
 }

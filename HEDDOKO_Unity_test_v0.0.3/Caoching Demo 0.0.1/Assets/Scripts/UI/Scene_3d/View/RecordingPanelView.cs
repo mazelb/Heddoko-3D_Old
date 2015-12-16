@@ -84,10 +84,11 @@ namespace Assets.Scripts.UI.Scene_3d.View
                         vNewAvRecButton.transform.SetParent(vContentPanel, false);
                     }
                 }
+
                 //check if the panel isn't completely filled, disable the down arrow button if that is the case.
                 //get the height of the content panel
 
-                if (vFirstInsertedButton != null)
+               /* if (vFirstInsertedButton != null)
                 {
                     float vContentPanelHeight = vContentPanel.GetComponent<RectTransform>().rect.height;
                     float vButtonHeight = vFirstInsertedButton.GetComponent<RectTransform>().rect.height;
@@ -96,15 +97,15 @@ namespace Assets.Scripts.UI.Scene_3d.View
                         DownArrow.gameObject.SetActive(false);
                         mBottomButDisabled = true;
                     }
-                }
+                }*/
 
 
-                if (vFirstInsertedButton == null)
+          /*      if (vFirstInsertedButton == null)
                 {
                     UpArrow.gameObject.SetActive(false);
                     DownArrow.gameObject.SetActive(false);
                     mBottomButDisabled = true;
-                }
+                }*/
 
                 mImportCompleted = true;
             }

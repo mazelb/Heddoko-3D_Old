@@ -42,11 +42,14 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Material RegularTrainingMaterial;
         public Material RegularJointstTrainingMaterial;
      //   public Text NumberSquatsOfText;
-        public SquatMetricsView SquatsMetricsView;
-        public BikingMetricsView BikingMetricsView;
+ 
         public ActivitiesContextController ActivitiesContextController;
 
-        public GameObject SquatMetricsTest;
+
+        public GameObject SquatsMetrics;
+        public GameObject BikingMetrics;
+        public GameObject DualPurposeMetrics;
+
 
         private PlayerStreamManager mPlayerStreamManager;
         private bool mIsActive;
@@ -79,32 +82,32 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
             ModelSwitcher.Show();
+            DualPurposeMetrics.SetActive(true);
+
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
             {
                 BikesOrthoCam.gameObject.SetActive(false);
                 TrainingAndLearningCam.gameObject.SetActive(true);
-                BikingMetricsView.Hide();
-                SquatsMetricsView.Show();
+                SquatsMetrics.SetActive(true);
+                BikingMetrics.SetActive(false); 
             }
             else
             {
                 BikesOrthoCam.gameObject.SetActive(true);
                 TrainingAndLearningCam.gameObject.SetActive(false);
-                SquatsMetricsView.Hide();
-                BikingMetricsView.Show(); 
+                SquatsMetrics.SetActive(false);
+                BikingMetrics.SetActive(true);
             }
 
-          
-         
         }
         /// <summary>
         /// Hides the view
         /// </summary>
         public void Hide()
         {
-            SquatsMetricsView.Hide();
-            BikingMetricsView.Hide();
+            SquatsMetrics.SetActive(false);
+            BikingMetrics.SetActive(false);
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false);
             BikesOrthoCam.gameObject.SetActive(false);
@@ -112,50 +115,10 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             //  HeddokoModel.SetActive(false);
             //  HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetInitialFrame(); 
+            PlayerStreamManager.ResetPlayer();
             gameObject.SetActive(false);
             mIsActive = false;
  
-        }
-
-        void Update()
-        {
-            if (gameObject.activeInHierarchy)
-            {
-                if (Input.GetKeyDown(KeyCode.F1))
-                {
-                    PlayerStreamManager.ResetInitialFrame();
-                    PlayerStreamManager.CurrentBodyInPlay.MBodyFrameThread.CreateNewFile = true;
-                    Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
-                    if (vCurrentBody != null)
-                    {
-                        RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
-                         vRightLegAnalysis.NumberofRightSquats = 0;
-                        BikingMetricsView.ResetValues();
-                    }
-                
-                }
-            }
-           /* if (mIsActive)
-            {
-                Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
-                if (vCurrentBody != null)
-                {
-                    RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
-                    vRightLegAnalysis.StartCountingSquats(true);
-                    NumberSquatsOfText.text = "number of squats = " + vRightLegAnalysis.NumberofRightSquats;
-                }
-            }*/
-            else
-            {
-                Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
-                if (vCurrentBody != null)
-                {
-                    RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as RightLegAnalysis;
-                    vRightLegAnalysis.StartCountingSquats(false);
-                
-                }
-            }
         }
     }
 }

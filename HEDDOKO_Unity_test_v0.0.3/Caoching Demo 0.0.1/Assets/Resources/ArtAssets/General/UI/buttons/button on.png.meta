@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: 1f180c8537144b64f9cc0d95bf65d7db
-timeCreated: 1448132617
+guid: cde73bafb103940428eca212b5294b86
+timeCreated: 1450218035
 licenseType: Pro
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: button on_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +39,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +50,17 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: button on_0
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 1049
+        width: 310
+        height: 137
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 8, y: 8, z: 8, w: 8}
   spritePackingTag: 
   userData: 
   assetBundleName: 

@@ -20,19 +20,18 @@ namespace Assets.Scripts.UI.Metrics
     /// </summary>
     public class SquatMetricsView : MonoBehaviour
     {
-        [SerializeField]
-        private bool mIsActive;
-        public Text NumberSquatsOfText;
-        public Text GoHigherLowerText;
+    
         private PlayerStreamManager mPlayerStreamManager;
         public float UpperRangeOfSquatMotion = 110f;
         public float LowerRangeOfSquatMotion = 90f;
         public float LargestAngleSum = 170f;
         [SerializeField]
         private float mMaxKneeFlexion = 150f;
-        public SquatColoredFeedback SquatColoredFeedback;
-        public SquatCounter SquatCounter;
+      //  public SquatColoredFeedback SquatColoredFeedback;
+       // public SquatCounter SquatCounter;
         private int mPreviousSquatValue = 0;
+        public Text NumberOfSquats;
+        public Image VisualSquatFeedback;
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -46,9 +45,7 @@ namespace Assets.Scripts.UI.Metrics
         }
 
         void Update()
-        {
-            if (mIsActive)
-            {
+        { 
                 Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
                 if (vCurrentBody != null)
                 {
@@ -65,11 +62,13 @@ namespace Assets.Scripts.UI.Metrics
                     float vPositionOfSquat = vRightLegAnalysis.AngleKneeFlexion / mMaxKneeFlexion;
                     if (vPositionOfSquat > 1)
                     {
-                        SquatColoredFeedback.SetScrollValue(1);
+                        VisualSquatFeedback.fillAmount = 1;
+                        // SquatColoredFeedback.SetScrollValue(1);
                     }
                     else
                     {
-                        SquatColoredFeedback.SetScrollValue(vPositionOfSquat);
+                        VisualSquatFeedback.fillAmount = vPositionOfSquat;
+                        //SquatColoredFeedback.SetScrollValue(vPositionOfSquat);
                     }
 
                     UpdateSquatsCount((int) vRightLegAnalysis.NumberofRightSquats);
@@ -97,7 +96,7 @@ namespace Assets.Scripts.UI.Metrics
                         GoHigherLowerText.text = "go higher";
                     }*/
                 }
-            }
+             
         }
 
         /// <summary>
@@ -105,14 +104,13 @@ namespace Assets.Scripts.UI.Metrics
         /// </summary>
         public void Show()
         {
-            mIsActive = true;
-
+          
             // float vPerfectSquatNormalVal = UpperRangeOfSquatMotion + LowerRangeOfSquatMotion;
             //   vPerfectSquatNormalVal /= 2f;
-            //  HeddokoMathTools.Map(vPerfectSquatNormalVal, 0, LargestAngleSum, 0, 1);
+           /* //  HeddokoMathTools.Map(vPerfectSquatNormalVal, 0, LargestAngleSum, 0, 1);
             SquatCounter.gameObject.SetActive(true);
             SquatColoredFeedback.gameObject.SetActive(true);
-            SquatColoredFeedback.SetGradient(15f / mMaxKneeFlexion, LowerRangeOfSquatMotion / mMaxKneeFlexion, UpperRangeOfSquatMotion / mMaxKneeFlexion);
+            SquatColoredFeedback.SetGradient(15f / mMaxKneeFlexion, LowerRangeOfSquatMotion / mMaxKneeFlexion, UpperRangeOfSquatMotion / mMaxKneeFlexion);*/
             gameObject.SetActive(true);
         }
 
@@ -121,16 +119,25 @@ namespace Assets.Scripts.UI.Metrics
         /// </summary>
         public void Hide()
         {
-            SquatCounter.gameObject.SetActive(false);
-            SquatColoredFeedback.gameObject.SetActive(false);
-            mIsActive = false;
+           /* SquatCounter.gameObject.SetActive(false);
+            SquatColoredFeedback.gameObject.SetActive(false);*/
+ 
             gameObject.SetActive(false);
         }
 
         private void UpdateSquatsCount(int vNewVal)
         {
-            SquatCounter.SetSquatNumber(vNewVal);
-        
+            //SquatCounter.SetSquatNumber(vNewVal);
+            NumberOfSquats.text = ""+vNewVal;
+        }
+
+        /// <summary>
+        /// Rests the values
+        /// </summary>
+        public void ResetValues()
+        {
+            NumberOfSquats.text = 0+"";
+            VisualSquatFeedback.fillAmount = 0;
         }
     }
 }

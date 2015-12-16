@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: 1f180c8537144b64f9cc0d95bf65d7db
-timeCreated: 1448132617
+guid: 2f8d8766a4a1bf0408f5022f38fa15d7
+timeCreated: 1450212742
 licenseType: Pro
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: gradient bars_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +39,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +50,17 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: gradient bars_0
+      rect:
+        serializedVersion: 2
+        x: 1548
+        y: 425
+        width: 325
+        height: 1425
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
   assetBundleName: 

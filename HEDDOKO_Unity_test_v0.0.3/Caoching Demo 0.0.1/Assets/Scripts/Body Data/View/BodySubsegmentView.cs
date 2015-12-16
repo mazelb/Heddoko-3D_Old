@@ -58,7 +58,7 @@ namespace Assets.Scripts.Body_Data.view
             {
                  //exception is thrown if the tag ins't found in the tag manager.
             } 
-            //Find the 2D representation of the object in the scene 
+ 
           
 
         }
@@ -71,17 +71,8 @@ namespace Assets.Scripts.Body_Data.view
                 //vObjTransform.localRotation = vNewOrientation;
             }
 
-            //Apply 2D transformation
-           /* if (SpriteTransform != null)
-            {
-                //convert to Euler
-                Vector3 vEuler = vNewOrientation.eulerAngles;
-                vEuler.z = vEuler.vLeftLegHipMulti;
-                vEuler.vLeftLegHipMulti = 0;
-                vEuler.y = 0;
-                SpriteTransform.rotation = Quaternion.Euler(vEuler);
-            }*/  
-          if (mSpriteMover != null)
+            //apply 2d transformation
+            if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTransformations();
 
@@ -96,15 +87,9 @@ namespace Assets.Scripts.Body_Data.view
                 Vector3 v3 = vObjTransform.localPosition;
                 v3.y = vNewDisplacement;
                 vObjTransform.localPosition = v3;
-            }
+            } 
 
-            //Apply 2D translations
-        /* if (SpriteTransform != null)
-            { 
-                Vector3 v3 = SpriteTransform.localPosition;
-                v3.y = vNewDisplacement;
-                SpriteTransform.localPosition = v3;
-            } */
+            //apply 2d transformation
             if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTranslations(vNewDisplacement);
@@ -119,10 +104,7 @@ namespace Assets.Scripts.Body_Data.view
             }
 
            //Apply to 2D model
-/*            if (SpriteTransform != null)
-            {
-                SpriteTransform.rotation = Quaternion.identity;
-            }*/ 
+  
         if (mSpriteMover != null)
             {
                 mSpriteMover.ResetOrientations();

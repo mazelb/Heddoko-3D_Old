@@ -14,7 +14,7 @@ namespace Assets.Scripts.UI._2DSkeleton
     public interface ISpriteMover
     {
         /// <summary>
-        /// Reset the orientation to the default
+        /// ResetValues the orientation to the default
         /// </summary>
         void ResetOrientations();
 

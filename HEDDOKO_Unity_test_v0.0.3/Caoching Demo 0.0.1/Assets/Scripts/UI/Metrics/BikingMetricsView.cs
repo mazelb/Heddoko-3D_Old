@@ -13,8 +13,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.MainMenu;
 using UnityEngine;
 using System.Collections.Generic;
-using Assets.Scripts.Utils;
-using UnityEditor.iOS.Xcode;
+using Assets.Scripts.Utils; 
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Metrics
@@ -31,8 +30,8 @@ namespace Assets.Scripts.UI.Metrics
         private float mAvg;
         [SerializeField]
         private bool mIsActive;
-        [SerializeField]
-        private float mAngleSumRight;
+
+        public float mInitialFlexion = 70;
         [SerializeField]
         private float mPreviousMeanVel = 0;
         [SerializeField]
@@ -41,16 +40,15 @@ namespace Assets.Scripts.UI.Metrics
         private List<float> mOldFrames;
         [SerializeField]
         private float mAngleKneeFlexionPrev;
-        [SerializeField]
-        private float mInitialFlexion = 70f;
+ 
    
 
-        public float LerpSpeed = 1;
+        public float LerpSpeed = 50;
         private bool mContinueAnimation;
-        public float MaxKneeFlexVel = 30000f;
+        public float MaxKneeFlexVel = 999;
 
-        public Text RPMeter;
-        public Text InformationPanel;
+        public Text VelocityText;
+       // public Text InformationPanel;
         public float RevsPerMinute;
         private float mInitialTime;
         [SerializeField]
@@ -157,7 +155,7 @@ namespace Assets.Scripts.UI.Metrics
                         }
                         double vTruncatedVal = Math.Truncate(RevsPerMinute * 100) / 100;
                         string vOutput = string.Format("{0:N2}", vTruncatedVal);
-                        RPMeter.text = vOutput + "rpm";
+                        VelocityText.text = vOutput + "rpm";
                     }
                     mTimeAccumulator += Time.deltaTime;*/
                     // UpdateKneeFlexionAverages();
@@ -235,7 +233,7 @@ namespace Assets.Scripts.UI.Metrics
 
             mPreviousMeanVel = vOldVelSum / NumberOfFrameToCount;
 
-            if (mMostUpToDateMeanVel < mPreviousMeanVel)
+          /*  if (mMostUpToDateMeanVel < mPreviousMeanVel)
             {
                 InformationPanel.text = "You're going faster";
             }
@@ -244,6 +242,7 @@ namespace Assets.Scripts.UI.Metrics
             {
                 InformationPanel.text = "You're going slower";
             }
+*/
 
             //pop the first element from mOldFrames and mMostRecentXFrames
             float vToGoOldFrame = mMostRecentXFrames[0];
@@ -278,11 +277,13 @@ namespace Assets.Scripts.UI.Metrics
            
                 if (vPercentage > 1)
                 {
-                    VelocityPowerbar.fillAmount = HeddokoMathTools.Map(vNewVal, 0f, MaxKneeFlexVel, 0.108f, 1f); 
+                    VelocityPowerbar.fillAmount = HeddokoMathTools.Map(vNewVal, 0f, MaxKneeFlexVel, 0.108f, 1f);
+                    VelocityText.text = (int) vNewVal+"";
                     break;
                 }
                 float vMappedFilledVal = HeddokoMathTools.Map(vPreMappedFillVal, 0f, MaxKneeFlexVel, 0.108f, 1f);
                 VelocityPowerbar.fillAmount = vMappedFilledVal;
+                VelocityText.text = (int)vNewVal + "";
 
                 yield return null;
             }
