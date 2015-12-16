@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.RecordingLoading
     {
         public GameObject Model3D;
         public GameObject Model2D;
-        public AngleInfoMetrics AngleInfo;
+    //    public AngleInfoMetrics AngleInfo;
         public ActivitiesContextViewTrain TrainingView;
         /// <summary>
         /// Location placement
@@ -100,11 +100,11 @@ namespace Assets.Scripts.UI.RecordingLoading
             }
 
             SetButtonInteraction();
-
+/*
             if (AngleInfo != null)
             {
                 AngleInfo.Hide();
-            }
+            }*/
 
         }
 
@@ -123,10 +123,10 @@ namespace Assets.Scripts.UI.RecordingLoading
             }
             CameraController.gameObject.SetActive(true);
 
-            if (AngleInfo != null)
+       /*     if (AngleInfo != null)
             {
                 AngleInfo.Show();
-            }
+            }*/
         }
 
         /// <summary>
@@ -151,10 +151,10 @@ namespace Assets.Scripts.UI.RecordingLoading
             {
                 Model2D.transform.position = TransformInview2DLocation.position;
                 Model3D.transform.position = TransformOutOfViewLocation.position;
-                if (TrainingView != null && TrainingView.isActiveAndEnabled)
+          /*      if (TrainingView != null && TrainingView.isActiveAndEnabled)
                 {
                     AngleInfo.Show();
-                }
+                }*/
             }
             else
             {

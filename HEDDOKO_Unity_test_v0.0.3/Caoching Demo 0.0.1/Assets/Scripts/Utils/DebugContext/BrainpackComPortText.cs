@@ -6,6 +6,8 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Communication.Controller;
 using UnityEngine;
@@ -16,19 +18,13 @@ namespace Assets.Scripts.Utils.DebugContext
     /// <summary>
     /// Sets the comPort of the BrainpackConnectionController, used for debbuging.
     /// </summary>
-   public class BrainpackComPortText : MonoBehaviour
+    public class BrainpackComPortText : MonoBehaviour
     {
         public UnityEngine.UI.Text Text;
         public UnityEngine.UI.InputField ComInputField;
         public UnityEngine.UI.Button PairButton;
         //Matches strings that begin with COM and proceeded by at least 1 number
         string mStringRgx = @"^(?i)com(?-i)\d+";
-
-        void Awake()
-        {
-            Text.text = BrainpackConnectionController.Instance.BrainpackComPort;
-            ComInputField.onValueChange.AddListener(SetBPControllerPort);
-        }
 
         /// <summary>
         /// Sets the brainpack Controller's comport 
@@ -53,8 +49,10 @@ namespace Assets.Scripts.Utils.DebugContext
             {
                 PairButton.interactable = false;
             }
-           
+
         }
 
+    
+   
     }
 }

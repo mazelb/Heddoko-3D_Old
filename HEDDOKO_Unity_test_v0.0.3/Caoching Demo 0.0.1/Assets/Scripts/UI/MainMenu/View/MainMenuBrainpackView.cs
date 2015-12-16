@@ -9,6 +9,7 @@
 
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Interfaces;
+using Assets.Scripts.Utils.DebugContext;
 using Assets.Scripts.Utils.UnityUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Button BackButton;
         
         public FadeInFadeOutEffect FadeInFadeOutEffect;
-
+        public GameObject BrainpackComPortInput;
         /// <summary>
         /// RectTransform associated with this view
         /// </summary>
@@ -149,5 +150,13 @@ namespace Assets.Scripts.UI.MainMenu.View
             gameObject.SetActive(false);
         }
 
+        private void Update()
+        {
+            if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.C)) ||
+                (Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.C)))
+            {
+                BrainpackComPortInput.SetActive(!BrainpackComPortInput.activeInHierarchy);
+            }
+        }
     }
 }
