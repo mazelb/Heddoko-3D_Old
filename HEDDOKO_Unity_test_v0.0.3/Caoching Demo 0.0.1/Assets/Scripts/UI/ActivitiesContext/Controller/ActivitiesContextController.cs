@@ -44,21 +44,11 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         {
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
-            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(() =>
-            {
-                ActivityTypeSubPath = SquatRecordingSubPath;
-                BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
-                UsingSquats = true;
-            });
-            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SwitchToLearnByRecordingState);
+            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
+        
 
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
-            {
-                ActivityTypeSubPath = BikeRecordingSubPath;
-                BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
-                UsingSquats = false;
-            });
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchToLearnByRecordingState);
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(BikingHookFunction);
+ 
            
 
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
@@ -68,6 +58,27 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearnByRecordingState);
             //LearningView
         }
+
+        /// <summary>
+        /// hooks this function into the learning squat button
+        /// </summary>
+        private void SquatHookFunction()
+        {
+
+            ActivityTypeSubPath = SquatRecordingSubPath;
+            BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
+            UsingSquats = true;
+            SwitchToLearnByRecordingState();
+        }
+
+        private void BikingHookFunction()
+        {
+            ActivityTypeSubPath = BikeRecordingSubPath;
+            BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
+            UsingSquats = false;
+            SwitchToLearnByRecordingState();
+        }
+
 
         /// <summary>
         /// changes states to Learn

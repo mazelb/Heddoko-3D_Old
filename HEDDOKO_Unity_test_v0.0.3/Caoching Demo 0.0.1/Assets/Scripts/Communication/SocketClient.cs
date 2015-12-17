@@ -32,6 +32,7 @@ namespace Assets.Scripts.Communication
         private bool mSocketReady { get; set; }
         private bool mSocketOpen = false;
         private bool mIsWorking = false;
+        private object mSocketLock = new object();
         private Thread mWorkerThread;
         private ISocketClientSetting mClientSocketSettings;
         public ISocketClientSetting ClientSocketSettings
@@ -171,6 +172,7 @@ namespace Assets.Scripts.Communication
                     if (mNetworkStream.DataAvailable)
                     {
                           result = mStreamReader.ReadLine();
+                        
                         if (!string.IsNullOrEmpty(result) && result.Contains("<EOL>"))
                         {
                             byte[] vConverted = PacketSetting.Encoding.GetBytes(result);

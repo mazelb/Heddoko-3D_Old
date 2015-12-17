@@ -5,7 +5,7 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
- 
+
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
@@ -19,12 +19,15 @@ namespace Assets.Scripts.UI._2DSkeleton
     /// </summary>
     public class LegSpriteMover : MonoBehaviour, ISpriteMover
     {
-        public float vLeftLegHipMulti = 1;
-        public float vLeftLegKneeMultiplier = 1;
-        public float vRightKneeMultiplier = -1;
+        public float LeftLegHipMulti = 1;
+        public float LeftLegKneeMultiplier = 1;
+        public float RightKneeMultiplier = 1;
+        public float RightHipMulti;
+
+
         public float KneeAngleShowOffset;
-        public float HipAdd;
-        public float KneeAdd;
+        public float HipsAngleShowOffset;
+
         public bool IsRightLeg = true;
         public Transform HipMotor;
         public Transform KneeJoint;
@@ -70,10 +73,10 @@ namespace Assets.Scripts.UI._2DSkeleton
                 RightLegAnalysis vRightLegAnalysis =
                       vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                           RightLegAnalysis;
-                vHipAngle = -1 * vRightLegAnalysis.AngleRightHipFlexion + HipAdd;
-                vKneeAngle = vRightKneeMultiplier * vRightLegAnalysis.AngleKneeFlexion + KneeAdd;
+                vHipAngle = RightHipMulti * vRightLegAnalysis.AngleRightHipFlexion;
+                vKneeAngle = RightKneeMultiplier * vRightLegAnalysis.AngleKneeFlexion;
                 vHipMotorRot.z = vHipAngle;
-                vKneeJointRot.z = vKneeAngle; 
+                vKneeJointRot.z = vKneeAngle;
 
             }
             else
@@ -81,8 +84,8 @@ namespace Assets.Scripts.UI._2DSkeleton
                 LeftLegAnalysis vLeftLegAnalysis =
                      vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
                          LeftLegAnalysis;
-                vHipAngle = vLeftLegHipMulti * vLeftLegAnalysis.AngleLeftHipFlexion + HipAdd;
-                vKneeAngle = vLeftLegKneeMultiplier * vLeftLegAnalysis.AngleKneeFlexion + KneeAdd;
+                vHipAngle = LeftLegHipMulti * vLeftLegAnalysis.AngleLeftHipFlexion;
+                vKneeAngle = LeftLegKneeMultiplier * vLeftLegAnalysis.AngleKneeFlexion;
                 vHipMotorRot.z = vHipAngle;
                 vKneeJointRot.z = vKneeAngle;
             }
@@ -99,12 +102,12 @@ namespace Assets.Scripts.UI._2DSkeleton
                 if (ShadedAngleAreaHip != null)
                 {
                     ShadedAngleAreaHip.ShowAngle = ShowHipAngles;
-                    ShadedAngleAreaHip.SetFill(vHipAngle);
+                    ShadedAngleAreaHip.SetFill(HipsAngleShowOffset - vHipAngle);
                 }
                 if (ShadedAngleAreaKnee != null)
                 {
                     ShadedAngleAreaKnee.ShowAngle = ShowKneeAngles;
-                    ShadedAngleAreaKnee.SetFill((KneeAngleShowOffset - vKneeAngle));
+                    ShadedAngleAreaKnee.SetFill(KneeAngleShowOffset - vKneeAngle);
 
                 }
             }

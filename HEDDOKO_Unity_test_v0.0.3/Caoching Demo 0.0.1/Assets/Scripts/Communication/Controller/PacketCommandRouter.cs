@@ -27,20 +27,35 @@ namespace Assets.Scripts.Communication
     {
         private static PacketCommandRouter sInstance;
 
-        private SocketClient mSocketClient;
+       // private SocketClient mSocketClient;
 
-        public SocketClient ClientSocket
+ //       public SocketClient ClientSocket
+ //       {
+   //         get
+    //        {
+  //              if (mSocketClient == null)
+  //              {
+ //                   mSocketClient = new SocketClient();
+ //                   mSocketClient.Initialize(new SuitSocketClientSettings());
+ //                   mSocketClient.StartWorking();
+ //               }
+    //            return mSocketClient;
+   //         }
+     //   }
+        private SynchronousClient mSocketClient;
+
+        public SynchronousClient ClientSocket
         {
             get
-            {
+         {
                 if (mSocketClient == null)
-                {
-                    mSocketClient = new SocketClient();
-                    mSocketClient.Initialize(new SuitSocketClientSettings());
-                    mSocketClient.StartWorking();
-                }
+                 {
+                        mSocketClient = new SynchronousClient();
+                 //    mSocketClient.Initialize(new SuitSocketClientSettings());
+                     //  mSocketClient.StartWorking();
+                   }
                 return mSocketClient;
-            }
+          }
         }
 
         public static PacketCommandRouter Instance
@@ -133,7 +148,8 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.SendMessage(vOutBound);
+            //ClientSocket.SendMessage(vOutBound);
+            ClientSocket.Requests.Enqueue(vOutBound);
         }
 
         /// <summary>
@@ -178,8 +194,8 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.SendMessage(vPayload);
-
+            // AsynchronousClient.SendMessage(vPayload);
+            ClientSocket.Requests.Enqueue(vPayload);
         }
         /// <summary>
         /// A error produced by the socket client and informs the BrainpackConnectionController
@@ -215,7 +231,8 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.SendMessage(vPayload);
+            //   ClientSocket.SendMessage(vPayload);
+            ClientSocket.Requests.Enqueue(vPayload);
             // mClientSocket.WriteToServer(vPayload);
         }
 
@@ -268,6 +285,7 @@ namespace Assets.Scripts.Communication
         private void Stop(object vSender, object vArgs)
         {
             ClientSocket.Stop();
+            
         }
 
     }

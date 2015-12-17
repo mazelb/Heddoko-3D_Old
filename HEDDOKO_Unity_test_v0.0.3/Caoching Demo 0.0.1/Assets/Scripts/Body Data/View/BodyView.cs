@@ -172,7 +172,7 @@ namespace Assets.Scripts.Body_Data.view
                 GameObject vGo = GameObject.FindGameObjectWithTag("debug");
                 if (vGo)
                 {
-                    Application.targetFrameRate = 10;
+               
                     Debugger vDebugger = vGo.GetComponent<Debugger>();
                     vDebugger.View = this;
                 }

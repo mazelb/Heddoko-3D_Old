@@ -25,11 +25,14 @@ namespace Assets.Scripts.UI.MainMenu
     {
         public Body CurrentBodyInPlay { get; set; }
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
-        
+
         //  private bool mPlayButtonPushed; 
         public float PauseThreadTimer = 1f;
         private float mInternalTimer = 1f;
-
+        public float OriginalSpineHeight = 0.09226318f;
+        public float SpineYOffset = 2.13f;
+        public Transform Spine;
+        public bool UseLocalPos;
         public string SquatRecordingUUID;
         public string BikeRecordingUUID;
 
@@ -51,13 +54,13 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         void Awake()
         {
-           // mPlayButtonOriginalIcon = PlayButton.image.sprite;
+            // mPlayButtonOriginalIcon = PlayButton.image.sprite;
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)
             {
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID); 
+                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
             }
 
             if (CurrentBodyInPlay == null)
@@ -109,7 +112,7 @@ namespace Assets.Scripts.UI.MainMenu
             if (CurrentBodyInPlay != null)
             {
                 // mPlayButtonPushed = true; 
-                ChangeState(BodyPlaybackState.PlayingRecording); 
+                ChangeState(BodyPlaybackState.PlayingRecording);
             }
         }
 
@@ -119,25 +122,63 @@ namespace Assets.Scripts.UI.MainMenu
         /// <param name="vPlaySquat"></param>
         public void PlaySquats(bool vPlaySquat)
         {
-           // if (!mPlayButtonPushed)
-       //     {
-                if (CurrentBodyInPlay != null)
+            // if (!mPlayButtonPushed)
+            //     {
+            if (CurrentBodyInPlay != null)
+            {
+                Vector3 vPos = Vector3.zero;
+                if (vPlaySquat)
                 {
-                    if (vPlaySquat)
+                    mBodyRecordingUUID = SquatRecordingUUID;
+                    if (Spine)
                     {
-                        mBodyRecordingUUID = SquatRecordingUUID;
+                        if (UseLocalPos)
+                        {
+                            vPos = Spine.localPosition;
+                            vPos.y = OriginalSpineHeight;
+                            Spine.localPosition = vPos;
+                        }
+                        else
+                        {
+                            vPos = Spine.position;
+                            vPos.y = OriginalSpineHeight;
+                            Spine.position = vPos;
+                        }
+                      
+                    }
+                }
+                else
+                {
+                    mBodyRecordingUUID = BikeRecordingUUID;
+                    if (UseLocalPos)
+                    {
+                        vPos = Spine.localPosition;
+                        vPos.y = SpineYOffset;
+                        Spine.localPosition = vPos;
                     }
                     else
                     {
-                        mBodyRecordingUUID = BikeRecordingUUID;
+                        vPos = Spine.position;
+                        vPos.y = SpineYOffset;
+                        Spine.position = vPos;
                     }
-               //     mPlayButtonPushed = true;
-                    ChangeState(BodyPlaybackState.PlayingRecording);
+                   
+                    
                 }
-           // }
+
+                BodySegment vSegment = CurrentBodyInPlay.BodySegments.Find(
+                       x => x.SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso);
+                if (vSegment != null)
+                {
+                    vSegment.IsTrackingHeight = vPlaySquat;
+                }
+                //     mPlayButtonPushed = true;
+                ChangeState(BodyPlaybackState.PlayingRecording);
+            }
+            // }
         }
 
-        
+
 
         /**
        * ResetOrientations 
@@ -148,7 +189,7 @@ namespace Assets.Scripts.UI.MainMenu
             if (CurrentBodyInPlay != null && CurrentBodyInPlay.InitialBodyFrame != null)
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
-            } 
+            }
         }
 
         /// <summary>
@@ -181,7 +222,7 @@ namespace Assets.Scripts.UI.MainMenu
                         {
                             CurrentBodyInPlay.StopThread();
                             if (!string.IsNullOrEmpty(mBodyRecordingUUID))
-                            { 
+                            {
                                 CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
                             }
                             mCurrentState = vNewstate;
@@ -247,7 +288,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// Listens to when a recording has been selected. sets the current state of the class accordingly
         /// </summary>
         private void ListenToBodyRecordingsChange()
-        { 
+        {
             if (CurrentBodyInPlay != null)
             {
                 CurrentBodyInPlay.StopThread();
@@ -264,12 +305,12 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         private void OnBrainpackConnectSuccessListener()
         {
-         /*   FadeInFadeOutEffect vFadeInFadeOutEffect = PlayButton.gameObject.AddComponent<FadeInFadeOutEffect>();
-            vFadeInFadeOutEffect.FadeEffectTime = 2.5f;
-            vFadeInFadeOutEffect.MaxAlpha = 255f;
-            vFadeInFadeOutEffect.MinAlpha = 20;
-            todo: keep this here in case we add a bluetooth animation
- */ 
+            /*   FadeInFadeOutEffect vFadeInFadeOutEffect = PlayButton.gameObject.AddComponent<FadeInFadeOutEffect>();
+               vFadeInFadeOutEffect.FadeEffectTime = 2.5f;
+               vFadeInFadeOutEffect.MaxAlpha = 255f;
+               vFadeInFadeOutEffect.MinAlpha = 20;
+               todo: keep this here in case we add a bluetooth animation
+    */
             //first check if there is a current body
             if (CurrentBodyInPlay == null)
             {
@@ -286,15 +327,15 @@ namespace Assets.Scripts.UI.MainMenu
             // ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
- 
+
         public void StartCountingSquatsOn()
         {
-            if(CurrentBodyInPlay != null)
+            if (CurrentBodyInPlay != null)
             {
-                
+
             }
         }
- 
+
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state
         /// </summary>
@@ -346,7 +387,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         public void ResetPlayer()
         {
-           ResetInitialFrame();
+            ResetInitialFrame();
             if (CurrentBodyInPlay != null)
             {
                 RightLegAnalysis vRightLegAnalysis =
