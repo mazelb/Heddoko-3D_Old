@@ -19,6 +19,7 @@ namespace Assets.Scripts.UI.Metrics
     /// </summary>
     public class DualPurposeMetricsView : MonoBehaviour
     {
+        
         //
         public float MaxHipFlexion = 175f;
         public float MaxKneeFlexion = 175f;
@@ -27,25 +28,44 @@ namespace Assets.Scripts.UI.Metrics
         public Text HipAngleText;
         public Text KneeFlexAngleText;
         public PlayerStreamManager PlayerStreamManager;
-        public float HipFlexmultiplier=1;
-        public float KneeFlexMultiplier=1;
+   
+        public bool DisplayRightLegAnalysis { get; set; }
         void Update()
         {
             Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
             if (vCurrentBody != null)
             {
-                if (vCurrentBody.AnalysisSegments.ContainsKey(BodyStructureMap.SegmentTypes.SegmentType_RightLeg))
+                if (DisplayRightLegAnalysis)
                 {
-                    RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
-                                RightLegAnalysis;
-                    if (vRightLegAnalysis != null)
+                    if (vCurrentBody.AnalysisSegments.ContainsKey(BodyStructureMap.SegmentTypes.SegmentType_RightLeg))
                     {
-                        HipFlexFill.fillAmount = vRightLegAnalysis.AngleRightHipFlexion * HipFlexmultiplier / MaxHipFlexion;
-                        HipAngleText.text = (int)vRightLegAnalysis.AngleRightHipFlexion*HipFlexmultiplier + "°";
-                        KneeFlexFill.fillAmount = vRightLegAnalysis.AngleKneeFlexion* KneeFlexMultiplier / MaxKneeFlexion;
-                        KneeFlexAngleText.text = (int) vRightLegAnalysis.AngleKneeFlexion * KneeFlexMultiplier + "°";
+                        RightLegAnalysis vRightLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
+                                    RightLegAnalysis;
+                        if (vRightLegAnalysis != null)
+                        {
+                            HipFlexFill.fillAmount = Mathf.Abs(vRightLegAnalysis.AngleRightHipFlexion) / MaxHipFlexion;
+                            HipAngleText.text = (int)Mathf.Abs(vRightLegAnalysis.AngleRightHipFlexion)+ "°";
+                            KneeFlexFill.fillAmount = Mathf.Abs(vRightLegAnalysis.AngleKneeFlexion ) / MaxKneeFlexion;
+                            KneeFlexAngleText.text = (int)Mathf.Abs(vRightLegAnalysis.AngleKneeFlexion)  + "°";
+                        }
                     }
                 }
+                else
+                {
+                    if (vCurrentBody.AnalysisSegments.ContainsKey(BodyStructureMap.SegmentTypes.SegmentType_LeftLeg))
+                    {
+                        LeftLegAnalysis vLeftLegAnalysis = vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
+                                    LeftLegAnalysis;
+                        if (vLeftLegAnalysis != null)
+                        {
+                            HipFlexFill.fillAmount = Mathf.Abs(vLeftLegAnalysis.AngleLeftHipFlexion )  / MaxHipFlexion;
+                            HipAngleText.text = (int)Mathf.Abs(vLeftLegAnalysis.AngleLeftHipFlexion)  + "°";
+                            KneeFlexFill.fillAmount = Mathf.Abs(vLeftLegAnalysis.AngleKneeFlexion)  / MaxKneeFlexion;
+                            KneeFlexAngleText.text = (int)Mathf.Abs(vLeftLegAnalysis.AngleKneeFlexion)  + "°";
+                        }
+                    }
+                }
+               
             }
         }
 

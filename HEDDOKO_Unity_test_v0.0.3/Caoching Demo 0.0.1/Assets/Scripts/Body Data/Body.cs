@@ -385,7 +385,7 @@ public class Body
             if (vKeyList[i] == BodyStructureMap.SensorPositions.SP_RightUpperArm)
             {
                 //Debug.Log("Current euler" + vCurrentRawEuler * 180/Mathf.PI);
-                Debug.Log("euler y" + vCurrentRawEuler.y * 180 / Mathf.PI);
+             //   Debug.Log("euler y" + vCurrentRawEuler.y * 180 / Mathf.PI);
             }
 
             float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);

@@ -107,14 +107,17 @@ namespace Assets.Scripts.Communication
                 catch (ArgumentNullException ane)
                 {
                     Debug.Log("ArgumentNullException  " +ane.ToString());
+         SocketClient.WriteToLogFile("ArgumentNullException  " + ane.ToString());
                 }
                 catch (SocketException se)
                 {
                     Debug.Log("SocketException  "+ se.ToString());
+                    SocketClient.WriteToLogFile("ArgumentNullException  " + se.ToString());
                 }
                 catch (Exception e)
                 {
                     Debug.Log("Unexpected exception " +e.ToString());
+                    SocketClient.WriteToLogFile("ArgumentNullException  " + e.ToString());
                 }
 
             }
@@ -129,6 +132,7 @@ namespace Assets.Scripts.Communication
         {
             mIsworking = false;
         }
+
  
     }
 }

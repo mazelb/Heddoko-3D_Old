@@ -84,19 +84,23 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 
             if ( mStartCountingSquats)
             {
-                if (Math.Abs(vAngleKneeFlexionNew) < 15) //todo: need to set a variable for standing position. As it is, we need to check what the value is inside here. 
+                //todo: need to set a variable for standing position. As it is, we need to check what the value is inside here. 
+                if (Math.Abs(vAngleKneeFlexionNew) < 15) 
                 {
                     AngleSumRight = 0;
                 }
                 else
                 {
                     AngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
+                    Debug.Log(AngleSumRight+ " in second cond");
                 }
 
                 if (Math.Abs(AngleSumRight) > 140)
                 {
+                    Debug.Log(AngleSumRight + " in third cond");
                     AngleSumRight = 0;
                     NumberofRightSquats++;
+                  
                 }
             }
 

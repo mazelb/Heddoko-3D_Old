@@ -7,10 +7,9 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using Assets.Scripts.Body_Pipeline.Analysis.Legs;
+using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
-using Assets.Scripts.UI.MainMenu;
-using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.UI.MainMenu; 
 using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,14 +32,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Transform HeddokoModelHiddenAnchor;
 
         public Button BackButton;
-        public Camera TrainingAndLearningCam;
-        public Camera BikesOrthoCam;
-       // public GameObject HeddokoModel; 
-      //  public GameObject BetaHighLimbsGeo;
-      //  public GameObject BetaHighJointsGeo;
-     //   public GameObject BetaHighTorsoGeo;
-        public Material RegularTrainingMaterial;
-        public Material RegularJointstTrainingMaterial;
+        public Camera TrainingAndLearningCam;  
      //   public Text NumberSquatsOfText;
  
         public ActivitiesContextController ActivitiesContextController;
@@ -83,21 +75,23 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
             ModelSwitcher.Show();
             DualPurposeMetrics.SetActive(true);
-
+            TrainingAndLearningCam.gameObject.SetActive(true);
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
             {
-                BikesOrthoCam.gameObject.SetActive(false);
-                TrainingAndLearningCam.gameObject.SetActive(true);
+                //BikesOrthoCam.gameObject.SetActive(false);
+                //TrainingAndLearningCam.gameObject.SetActive(true);
                 SquatsMetrics.SetActive(true);
-                BikingMetrics.SetActive(false); 
+                BikingMetrics.SetActive(false);
+               
             }
             else
             {
-                BikesOrthoCam.gameObject.SetActive(true);
-                TrainingAndLearningCam.gameObject.SetActive(false);
+              //  BikesOrthoCam.gameObject.SetActive(true);
+              //  TrainingAndLearningCam.gameObject.SetActive(false);
                 SquatsMetrics.SetActive(false);
                 BikingMetrics.SetActive(true);
+               
             }
 
         }
@@ -110,7 +104,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             BikingMetrics.SetActive(false);
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false);
-            BikesOrthoCam.gameObject.SetActive(false);
+ 
+            //BikesOrthoCam.gameObject.SetActive(false);
 
             //  HeddokoModel.SetActive(false);
             //  HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;

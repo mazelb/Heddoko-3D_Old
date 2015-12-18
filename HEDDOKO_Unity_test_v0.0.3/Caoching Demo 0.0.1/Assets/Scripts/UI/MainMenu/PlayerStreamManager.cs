@@ -117,17 +117,17 @@ namespace Assets.Scripts.UI.MainMenu
         }
 
         /// <summary>
-        /// Play a squat or bike
+        /// Sets/unsets the torso from the hips
         /// </summary>
-        /// <param name="vPlaySquat"></param>
-        public void PlaySquats(bool vPlaySquat)
+        /// <param name="vFlag"></param>
+        public void StickTorsoToHips(bool vFlag)
         {
             // if (!mPlayButtonPushed)
             //     {
             if (CurrentBodyInPlay != null)
             {
                 Vector3 vPos = Vector3.zero;
-                if (vPlaySquat)
+                if (vFlag)
                 {
                     mBodyRecordingUUID = SquatRecordingUUID;
                     if (Spine)
@@ -170,7 +170,7 @@ namespace Assets.Scripts.UI.MainMenu
                        x => x.SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso);
                 if (vSegment != null)
                 {
-                    vSegment.IsTrackingHeight = vPlaySquat;
+                    vSegment.IsTrackingHeight = vFlag;
                 }
                 //     mPlayButtonPushed = true;
                 ChangeState(BodyPlaybackState.PlayingRecording);

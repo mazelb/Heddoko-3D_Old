@@ -45,6 +45,7 @@ namespace Assets.Scripts.UI.Metrics
         public ActivitiesContextController ActivitiesContextController;
         void Update()
         {
+            
            
          /*   if (vCurrentBody != null)
             {

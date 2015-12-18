@@ -269,7 +269,7 @@ public class BodySegment
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
         vRightLegAnalysis.HipOrientation = vHipOrientation;
         vRightLegAnalysis.KneeOrientation = vKneeOrientation;
-        vRightLegAnalysis.AngleExtraction();
+      vRightLegAnalysis.AngleExtraction();
 
         //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);

@@ -8,7 +8,7 @@
 
 
 using Assets.Scripts.Cameras;
-using Assets.Scripts.UI.ActivitiesContext.View;
+using Assets.Scripts.UI.ActivitiesContext.View; 
 using Assets.Scripts.UI.Metrics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,12 +33,12 @@ namespace Assets.Scripts.UI.RecordingLoading
 
         public Button Button2DSwitch;
         public Button Button3DSwitch;
-        public Button RotateCameraLeft;
-        public Button RotateCameraRight;
 
 
+        public CurrentViewBox InformationBox;
         public CameraController CameraController;
-        public CameraController OrthoCamController;
+
+      //  public CameraController OrthoCamController;
         /// <summary>
         /// Flag to check if only using 2D model
         /// </summary>
@@ -74,6 +74,7 @@ namespace Assets.Scripts.UI.RecordingLoading
         private void SwitchTo3DModelView()
         {
             Bring3DModelIntoView();
+            CameraController.PrepFor3DView(); 
             if (TrainingView != null)
             {
                
@@ -81,22 +82,21 @@ namespace Assets.Scripts.UI.RecordingLoading
                     if (TrainingView.ActivitiesContextController.UsingSquats)
                     {
                         CameraController.gameObject.SetActive(true);
-                        OrthoCamController.gameObject.SetActive(false);
-                        CameraController.PrepFor3DView();
+                        CameraController.SetCamFov(2.26f,Vector3.zero); 
+                       
                     }
                     else
                     {
-                        OrthoCamController.gameObject.SetActive(true);
-                        CameraController.gameObject.SetActive(false);
-                        //OrthoCamController.PrepFor3DView();
+                    //  OrthoCamController.gameObject.SetActive(true);
+                    CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f-1, 0f)); 
                     }
                  
             }
 
             else
             {
-                CameraController.gameObject.SetActive(true);
-                CameraController.PrepFor3DView();
+                CameraController.SetCamFov(1.33f, new Vector3(0,0, 0f));
+
             }
 
             SetButtonInteraction();
@@ -116,17 +116,17 @@ namespace Assets.Scripts.UI.RecordingLoading
             Bring2DModelIntoView();
             SetButtonInteraction();
             CameraController.PrepFor2DView();
-
-            if (OrthoCamController != null)
+ 
+            if (TrainingView != null)
             {
-                OrthoCamController.gameObject.SetActive(false);
+                CameraController.SetCamFov(5.9f,Vector3.zero);
+
             }
-            CameraController.gameObject.SetActive(true);
-
-       /*     if (AngleInfo != null)
+            else
             {
-                AngleInfo.Show();
-            }*/
+                CameraController.SetCamFov(3.57f, Vector3.zero);
+            }
+ 
         }
 
         /// <summary>
@@ -151,10 +151,17 @@ namespace Assets.Scripts.UI.RecordingLoading
             {
                 Model2D.transform.position = TransformInview2DLocation.position;
                 Model3D.transform.position = TransformOutOfViewLocation.position;
-          /*      if (TrainingView != null && TrainingView.isActiveAndEnabled)
+                if (TrainingView != null)
                 {
-                    AngleInfo.Show();
-                }*/
+                 //   CameraController.enabled = true;
+                    CameraController.SetCamFov(5.9f,Vector3.zero);
+                    //CameraController.enabled = false;
+                }
+                else
+                {
+                    CameraController.SetCamFov(3.57f, Vector3.zero);
+                }
+ 
             }
             else
             {
@@ -162,6 +169,30 @@ namespace Assets.Scripts.UI.RecordingLoading
                 Model2D.transform.position = TransformOutOfViewLocation.position;
                 Button2DSwitch.interactable = !mUsing2DModel;
                 Button3DSwitch.interactable = mUsing2DModel;
+               // CameraController.enabled = true;
+
+                if (TrainingView != null)
+                {
+                    if (TrainingView.ActivitiesContextController.UsingSquats)
+                    {
+                        
+                        CameraController.SetCamFov(2.26f,Vector3.zero);
+                      
+                         
+                    }
+                    else
+                    { 
+                        CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f - 1, 0f)); 
+                         
+                    }
+
+                }
+                else
+                {
+                    CameraController.SetCamFov(1.33f, new Vector3(0,0,0));
+                }
+               
+
             }
         }
 

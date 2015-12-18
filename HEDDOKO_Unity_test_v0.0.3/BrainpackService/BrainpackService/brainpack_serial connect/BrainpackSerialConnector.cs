@@ -17,6 +17,7 @@ namespace BrainpackService.brainpack_serial_connect
         //public FileStream dataFile;
         //public DataTable analysisData;
         private string mPortName;
+        private string mNextLine;
         private static BrainpackSerialConnector sInstance;
         private object mSerialPortLock = new object();
         bool mMessageSent = false;
@@ -120,17 +121,19 @@ namespace BrainpackService.brainpack_serial_connect
                                 //
                                 if (line.Length != 176)
                                 {
+                                    mNextLine = "";
                                     BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
                                     continue;
                                 }
-                                OutboundBuffer.Enqueue(line);
-
+                                //OutboundBuffer.Enqueue(line);
+                                mNextLine = line;
                             }
 
                         }
                         catch (IOException vIoException)
                         {
                             BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
+                            mNextLine = "";
                         }
                         catch (NullReferenceException vNullReferenceException)
                         {
@@ -144,17 +147,19 @@ namespace BrainpackService.brainpack_serial_connect
 
                                 if (!vResult)
                                 {
-
+                                    mNextLine = "";
                                     mSerialport.Close();
                                 }
                             }
                             catch (IOException vIoException)
                             {
                                 BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
+                                mNextLine = "";
                             }
                             catch (InvalidOperationException vInvalidOperationException)
                             {
                                 BrainpackEventLogManager.InvokeEventLogError(vInvalidOperationException + "\r\n" + vInvalidOperationException.StackTrace);
+                                mNextLine = "";
                             }
                         }
                     }
@@ -225,6 +230,7 @@ namespace BrainpackService.brainpack_serial_connect
         /// </summary>
         public void Stop()
         {
+            mNextLine = "";
             mIsWorking = false;
             OutboundBuffer.Clear();
             if (IsConnected)
@@ -268,14 +274,15 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-            if (OutboundBuffer.Count == 0)
-            {
-                return "";
-            }
-            else
-            {
-                return OutboundBuffer.Dequeue();
-            }
+            return mNextLine;
+            /*   if (OutboundBuffer.Count == 0)
+               {
+                   return "";
+               }
+               else
+               {
+                   return OutboundBuffer.Dequeue();
+               }*/
         }
     }
 }

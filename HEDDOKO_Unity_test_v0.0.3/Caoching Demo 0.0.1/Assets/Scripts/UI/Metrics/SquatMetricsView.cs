@@ -54,12 +54,12 @@ namespace Assets.Scripts.UI.Metrics
                             RightLegAnalysis;
                     vRightLegAnalysis.StartCountingSquats(true);
                     //NumberSquatsOfText.text = "Total number = " + vRightLegAnalysis.NumberofRightSquats;
-                    float vAngleSum = vRightLegAnalysis.AngleSumRight;
+                    float vAngleKneeflex = Mathf.Abs(vRightLegAnalysis.AngleKneeFlexion);
 
                     //are we still counting?
                     /*   if (vAngleSum > 0.1f && vAngleSum <= LargestAngleSum)
                        {*/
-                    float vPositionOfSquat = vRightLegAnalysis.AngleKneeFlexion / mMaxKneeFlexion;
+                    float vPositionOfSquat = vAngleKneeflex / mMaxKneeFlexion;
                     if (vPositionOfSquat > 1)
                     {
                         VisualSquatFeedback.fillAmount = 1;
@@ -70,8 +70,8 @@ namespace Assets.Scripts.UI.Metrics
                         VisualSquatFeedback.fillAmount = vPositionOfSquat;
                         //SquatColoredFeedback.SetScrollValue(vPositionOfSquat);
                     }
-
-                    UpdateSquatsCount((int) vRightLegAnalysis.NumberofRightSquats);
+                    int vCurrentSquats = Mathf.FloorToInt(vRightLegAnalysis.NumberofRightSquats/2);
+                   UpdateSquatsCount(vCurrentSquats);
                     /*
 
                                             if (vRightLegAnalysis.AngleKneeFlexion < LowerRangeOfSquatMotion)
@@ -130,7 +130,7 @@ namespace Assets.Scripts.UI.Metrics
             //SquatCounter.SetSquatNumber(vNewVal);
             NumberOfSquats.text = ""+vNewVal;
         }
-
+ 
         /// <summary>
         /// Rests the values
         /// </summary>

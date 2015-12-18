@@ -21,7 +21,7 @@ namespace Assets.Scripts.Communication
     * @brief SocketClient class: a socket connection to the windows Brainpack service
  
     */
-    //TODO: need to check for forcible connection closes
+    // 
     public class SocketClient
     {
         private TcpClient mSocket;
@@ -215,7 +215,7 @@ namespace Assets.Scripts.Communication
         /// Writes to a log file 
         /// </summary>
         /// <param name="vPacket"></param>
-        private void WriteToLogFile(string vPacket)
+        public static void WriteToLogFile(string vPacket)
         { 
             //Check if folder exists
 

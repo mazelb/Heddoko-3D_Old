@@ -75,6 +75,8 @@ namespace Assets.Scripts.UI._2DSkeleton
                           RightLegAnalysis;
                 vHipAngle = RightHipMulti * vRightLegAnalysis.AngleRightHipFlexion;
                 vKneeAngle = RightKneeMultiplier * vRightLegAnalysis.AngleKneeFlexion;
+                vKneeAngle = Mathf.Abs(vKneeAngle);
+                vHipAngle = Mathf.Abs(vHipAngle);
                 vHipMotorRot.z = vHipAngle;
                 vKneeJointRot.z = vKneeAngle;
 
@@ -85,7 +87,9 @@ namespace Assets.Scripts.UI._2DSkeleton
                      vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
                          LeftLegAnalysis;
                 vHipAngle = LeftLegHipMulti * vLeftLegAnalysis.AngleLeftHipFlexion;
+                vHipAngle = Mathf.Abs(vHipAngle);
                 vKneeAngle = LeftLegKneeMultiplier * vLeftLegAnalysis.AngleKneeFlexion;
+                vKneeAngle = Mathf.Abs(vKneeAngle);
                 vHipMotorRot.z = vHipAngle;
                 vKneeJointRot.z = vKneeAngle;
             }
@@ -151,6 +155,18 @@ namespace Assets.Scripts.UI._2DSkeleton
             ShadedAngleAreaHip.gameObject.SetActive(vFlag);
         }
 
+        void Update()
+        {
+            if (Debug.isDebugBuild && IsRightLeg)
+            {
+                if (Input.GetKeyDown(KeyCode.F2))
+                {
+                    Debug.Log(AngleInfoMetrics.gameObject.activeInHierarchy);
+                    AngleInfoMetrics.gameObject.SetActive(!AngleInfoMetrics.gameObject.activeInHierarchy);
+                }
+            }
+
+        }
 
     }
 }

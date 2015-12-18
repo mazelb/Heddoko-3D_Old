@@ -7,7 +7,7 @@
 */
 
 
- 
+using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Scene_3d.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         // back button, return to main menu
         public Button BackButton;
         public RecordingPanelView RecordingPanelView;
-
+        public PlayerStreamManager PlayerManager;
         public Camera LoadRecordingsCamera;
         public Camera TrainAndLearningCamera;
 
@@ -47,6 +47,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             ModelSwitcher.Show();   
           LoadRecordingsCamera.gameObject.SetActive(true);
           TrainAndLearningCamera.gameObject.SetActive(false);
+            PlayerManager.StickTorsoToHips(true);
     }
 
         /// <summary>

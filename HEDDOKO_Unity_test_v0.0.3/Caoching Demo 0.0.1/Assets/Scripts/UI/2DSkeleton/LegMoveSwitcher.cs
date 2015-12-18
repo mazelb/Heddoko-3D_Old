@@ -21,6 +21,7 @@ namespace Assets.Scripts.UI._2DSkeleton
         public LegSpriteMover[] SpritesGo;
         [SerializeField]
         private int mCurrentSpriteIndex = 0;
+        public int CurrentSpriteIndex { get { return mCurrentSpriteIndex;} }
 
 
         //disable all sprites except for the first one
