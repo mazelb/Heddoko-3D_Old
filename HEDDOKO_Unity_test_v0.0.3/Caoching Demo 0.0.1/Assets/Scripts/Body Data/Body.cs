@@ -14,7 +14,7 @@ using System.Linq;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
-using Assets.Scripts.Body_Pipeline.Analysis.Torso;
+using Assets.Scripts.Body_Pipeline.Analysis.Torso; 
 using Assets.Scripts.Communication.Controller;
 
 /**
@@ -46,7 +46,7 @@ public class Body
 
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
 
-    public Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
+    public Dictionary<BodyStructureMap.SegmentTypes,SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
 
     //view associated with this model
     private BodyView mView;
@@ -141,7 +141,7 @@ public class Body
         List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
         TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
         vTorsoSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_Torso;
-
+       
         foreach (BodyStructureMap.SegmentTypes type in vSegmentList)
         {
             BodySegment vSegment = new BodySegment();
@@ -151,7 +151,7 @@ public class Body
             BodySegments.Add(vSegment);
 
             vSegment.AssociatedView.transform.parent = View.transform;
-
+            
             //Todo: this can can be abstracted and mapped nicely. 
             if (type == BodyStructureMap.SegmentTypes.SegmentType_Torso)
             {
@@ -217,13 +217,13 @@ public class Body
         InitialBodyFrame = vInitialFrame;
         UpdateInitialFrameData();
     }
-
+    
     /// <summary>
     /// Updates the initial frame sensors data in all segments
     /// </summary>
     public void UpdateInitialFrameData(BodyFrame vInitialFrame = null)
     {
-        if (vInitialFrame != null)
+        if(vInitialFrame != null)
         {
             SetInitialFrame(vInitialFrame);
         }
@@ -233,8 +233,8 @@ public class Body
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
         }
     }
-
-
+    
+        
     /**
     * PlayRecording(string vRecUUID)
     * @param vRecUUID, the recording UUID
@@ -244,7 +244,7 @@ public class Body
     {
         //Stops the current thread from running.
         StopThread();
-
+        
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
         BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
@@ -254,10 +254,10 @@ public class Body
             BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
             SetInitialFrame(frame);
-            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
+            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(); 
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-
+     
             View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
             View.StartUpdating = true;
@@ -280,10 +280,10 @@ public class Body
         //1c.   in case of failure, a message must be brought into the view. and immediately pause the connection.  
         // ===================== End of "How this functions works" ========================================================//
         //stop the current thread and get ready for a new connection. 
-        StopThread();
-
+        StopThread(); 
+        
         BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
-        mBodyFrameThread = new BodyFrameThread(vBuffer1, BodyFrameThread.SourceDataType.BrainFrame);
+        mBodyFrameThread = new BodyFrameThread(vBuffer1 , BodyFrameThread.SourceDataType.BrainFrame);
         mBodyFrameThread.Start();
         View.StartUpdating = true;
 
@@ -325,7 +325,7 @@ public class Body
 
     public void UnhookBrainpackListeners()
     {
-        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
+        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener; 
         BrainpackConnectionController.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
     }
 
@@ -344,7 +344,7 @@ public class Body
             //of the current body segment, get the appropriate subsegments
             List<BodyStructureMap.SensorPositions> vSensPosList =
                 BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
-
+            
             //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
             //to the segment
             Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(2);
@@ -369,7 +369,7 @@ public class Body
     */
     public static Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> GetTracking(Body vBody)
     {
-        Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vDic = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(9);
+        Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vDic = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(9); 
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
 
         for (int i = 0; i < vKeyList.Count; i++)
@@ -385,7 +385,7 @@ public class Body
             if (vKeyList[i] == BodyStructureMap.SensorPositions.SP_RightUpperArm)
             {
                 //Debug.Log("Current euler" + vCurrentRawEuler * 180/Mathf.PI);
-             //   Debug.Log("euler y" + vCurrentRawEuler.y * 180 / Mathf.PI);
+                Debug.Log("euler y" + vCurrentRawEuler.y * 180 / Mathf.PI);
             }
 
             float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);
@@ -438,7 +438,7 @@ public class Body
         {
             mBodyFrameThread.StopThread();
         }
-
+     
     }
 
     /// <summary>

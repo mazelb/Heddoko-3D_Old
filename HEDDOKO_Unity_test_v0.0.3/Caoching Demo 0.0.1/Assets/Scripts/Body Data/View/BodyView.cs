@@ -79,7 +79,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mAssociatedBody != null)
             {
-                BodyFrame vTempBodyFrame = null;
+                BodyFrame vTempBodyFrame = null; 
 
                 if (vBodyFrame == null)
                 {
@@ -87,7 +87,7 @@ namespace Assets.Scripts.Body_Data.view
                 }
                 else
                 {
-                    vTempBodyFrame = vBodyFrame;
+                    vTempBodyFrame  = vBodyFrame;
                 }
 
                 AssociatedBody.SetInitialFrame(vTempBodyFrame);
@@ -172,7 +172,7 @@ namespace Assets.Scripts.Body_Data.view
                 GameObject vGo = GameObject.FindGameObjectWithTag("debug");
                 if (vGo)
                 {
-               
+                    Application.targetFrameRate = 10;
                     Debugger vDebugger = vGo.GetComponent<Debugger>();
                     vDebugger.View = this;
                 }

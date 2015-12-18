@@ -30,7 +30,7 @@ public class BodySegment
     public Dictionary<int, BodySubSegment> BodySubSegmentsDictionary = new Dictionary<int, BodySubSegment>();
 
     public Body ParentBody;
-
+    
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
     public bool IsTrackingHeight = true;
@@ -50,7 +50,7 @@ public class BodySegment
     private static float mInitTibiaHeight = 0.39f;
     private static float mHipHeight = 0.95f;
     private static float mRightLegHeight = 0.95f;
-    private static float mLeftLegHeight = 0.95f;
+    private static float mLeftLegHeight = 0.95f; 
 
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
@@ -66,7 +66,7 @@ public class BodySegment
         {
             //find a suitable sensor to update
             SensorTuple vSensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == vSensorPosKey);
-
+            
             //get the relevant data from vFrame 
             if (vFrame.FrameData.ContainsKey(vSensorPosKey))
             {
@@ -131,7 +131,7 @@ public class BodySegment
 
         float[,] vTrackedTorsoOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].OrientationMatrix);
         float[,] vTrackedSpineOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine].OrientationMatrix);
-
+        
         float[,] vaFinalTorsoOrientation = new float[3, 3];
         float[,] vTorsoTemp1 = new float[3, 3];
         float[,] vTempOrientation = new float[3, 3];
@@ -155,7 +155,7 @@ public class BodySegment
         //vLSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
 
         //Update vertical position
-        if (IsTrackingHeight)
+        if(IsTrackingHeight)
         {
             UpdateHipHeight(vLSSubsegment);
         }
@@ -222,7 +222,7 @@ public class BodySegment
         vHipB2T = MatrixTools.MatrixTranspose(vHipB2);
         vKneeB3D = MatrixTools.MultiplyMatrix(vHipB2T, vKneeB2);
         vKneeB3DT = MatrixTools.MatrixTranspose(vKneeB3D);
-        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].InitGlobalMatrix),
+        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].InitGlobalMatrix);
         vKneeB3IDT = MatrixTools.MatrixTranspose(vKneeB3ID);
         vKneeB4 = MatrixTools.MultiplyMatrix(vKneeB3IDT, MatrixTools.MultiplyMatrix(vKneeB3ID, vKneeB3D));
@@ -269,7 +269,7 @@ public class BodySegment
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
         vRightLegAnalysis.HipOrientation = vHipOrientation;
         vRightLegAnalysis.KneeOrientation = vKneeOrientation;
-      vRightLegAnalysis.AngleExtraction();
+        vRightLegAnalysis.AngleExtraction();
 
         //Update the segment's and segment's view orientations
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
@@ -326,7 +326,7 @@ public class BodySegment
         vKneeB3D = MatrixTools.MultiplyMatrix(vHipB2T, vKneeB2);
         vKneeB3DT = MatrixTools.MatrixTranspose(vKneeB3D);
 
-        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].InitGlobalMatrix),
+        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].InitGlobalMatrix);
         vKneeB3IDT = MatrixTools.MatrixTranspose(vKneeB3ID);
 
@@ -444,7 +444,7 @@ public class BodySegment
         vTorsoB2T = MatrixTools.MatrixTranspose(vTorsoB2);
         vUpArB3D = MatrixTools.MultiplyMatrix(vTorsoB2T, vUpArB2);
         vUpArB3DT = MatrixTools.MatrixTranspose(vUpArB3D);
-        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix),
+        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitGlobalMatrix);
         vUpArB3IDT = MatrixTools.MatrixTranspose(vUpArB3ID);
         vUpArB2 = MatrixTools.MultiplyMatrix(vUpArB3IDT, MatrixTools.MultiplyMatrix(vUpArB3ID, vUpArB3D));
@@ -453,7 +453,7 @@ public class BodySegment
         vUpArB2T = MatrixTools.MatrixTranspose(vUpArB2);
         vLoArB3D = MatrixTools.MultiplyMatrix(vUpArB2T, vLoArB2);
         vLoArB3DT = MatrixTools.MatrixTranspose(vLoArB3D);
-        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitGlobalMatrix),
+        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm].InitGlobalMatrix);
         vLoArB3IDT = MatrixTools.MatrixTranspose(vLoArB3ID);
 
@@ -554,7 +554,7 @@ public class BodySegment
         vTorsoB2T = MatrixTools.MatrixTranspose(vTorsoB2);
         vUpArB3D = MatrixTools.MultiplyMatrix(vTorsoB2T, vUpArB2);
         vUpArB3DT = MatrixTools.MatrixTranspose(vUpArB3D);
-        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix),
+        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitGlobalMatrix);
         vUpArB3IDT = MatrixTools.MatrixTranspose(vUpArB3ID);
         vUpArB2 = MatrixTools.MultiplyMatrix(vUpArB3IDT, MatrixTools.MultiplyMatrix(vUpArB3ID, vUpArB3D));
@@ -563,7 +563,7 @@ public class BodySegment
         vLoArB3D = MatrixTools.MultiplyMatrix(vUpArB2T, vLoArB2);
         vLoArB3DT = MatrixTools.MatrixTranspose(vLoArB3D);
 
-        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitGlobalMatrix),
+        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitGlobalMatrix), 
                                                     vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm].InitGlobalMatrix);
         vLoArB3IDT = MatrixTools.MatrixTranspose(vLoArB3ID);
 
@@ -606,7 +606,7 @@ public class BodySegment
         vCurrentArOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
         vUpArOrientation = MatrixTools.MultiplyMatrix(vUpArB6, vCurrentArOrientation);
 
-        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis)mCurrentAnalysisSegment;
+        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis) mCurrentAnalysisSegment;
         vLeftArmAnalysis.LoArOrientation = vLoArOrientation;
         vLeftArmAnalysis.UpArOrientation = vUpArOrientation;
         vLeftArmAnalysis.AngleExtraction();

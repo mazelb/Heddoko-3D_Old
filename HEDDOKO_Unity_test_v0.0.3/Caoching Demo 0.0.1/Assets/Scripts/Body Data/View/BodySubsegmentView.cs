@@ -26,9 +26,9 @@ namespace Assets.Scripts.Body_Data.view
         private Vector3 mInitialPosition = Vector3.zero;
 
         //Sprite Transform2D
-        private ISpriteMover mSpriteMover;
+         private ISpriteMover mSpriteMover;
 
-        //  public Transform SpriteTransform;
+      //  public Transform SpriteTransform;
         //This flag turned on, mean that the assigned Transform is a 3D model, else use a 2D sprite
         private bool mUsing3DModel = true;
         /**
@@ -57,16 +57,16 @@ namespace Assets.Scripts.Body_Data.view
                 GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
                 if (v2DGameObject != null)
                 {
-                    // SpriteTransform = v2DGameObject.transform;
+                   // SpriteTransform = v2DGameObject.transform;
                     mSpriteMover = v2DGameObject.GetComponent<ISpriteMover>();
-                }
+                } 
             }
             catch (UnityException exception)
             {
-                //exception is thrown if the tag ins't found in the tag manager.
-            }
+                 //exception is thrown if the tag ins't found in the tag manager.
+            } 
             //Find the 2D representation of the object in the scene 
-
+          
 
         }
 
@@ -79,20 +79,20 @@ namespace Assets.Scripts.Body_Data.view
             }
 
             //Apply 2D transformation
-            /* if (SpriteTransform != null)
-             {
-                 //convert to Euler
-                 Vector3 vEuler = vNewOrientation.eulerAngles;
-                 vEuler.z = vEuler.vLeftLegHipMulti;
-                 vEuler.vLeftLegHipMulti = 0;
-                 vEuler.y = 0;
-                 SpriteTransform.rotation = Quaternion.Euler(vEuler);
-             }*/
-            if (mSpriteMover != null)
+           /* if (SpriteTransform != null)
+            {
+                //convert to Euler
+                Vector3 vEuler = vNewOrientation.eulerAngles;
+                vEuler.z = vEuler.vLeftLegHipMulti;
+                vEuler.vLeftLegHipMulti = 0;
+                vEuler.y = 0;
+                SpriteTransform.rotation = Quaternion.Euler(vEuler);
+            }*/  
+          if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTransformations();
 
-            }
+            } 
         }
 
 
@@ -106,12 +106,12 @@ namespace Assets.Scripts.Body_Data.view
             }
 
             //Apply 2D translations
-            /* if (SpriteTransform != null)
-                { 
-                    Vector3 v3 = SpriteTransform.localPosition;
-                    v3.y = vNewDisplacement;
-                    SpriteTransform.localPosition = v3;
-                } */
+        /* if (SpriteTransform != null)
+            { 
+                Vector3 v3 = SpriteTransform.localPosition;
+                v3.y = vNewDisplacement;
+                SpriteTransform.localPosition = v3;
+            } */
             if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTranslations(vNewDisplacement);
@@ -126,15 +126,15 @@ namespace Assets.Scripts.Body_Data.view
                 //vObjTransform.rotation = Quaternion.identity;
             }
 
-            //Apply to 2D model
-            /*            if (SpriteTransform != null)
-                        {
-                            SpriteTransform.rotation = Quaternion.identity;
-                        }*/
-            if (mSpriteMover != null)
+           //Apply to 2D model
+/*            if (SpriteTransform != null)
+            {
+                SpriteTransform.rotation = Quaternion.identity;
+            }*/ 
+        if (mSpriteMover != null)
             {
                 mSpriteMover.ResetOrientations();
-            }
+            } 
             if (Camera.main != null)
             {
                 Camera.main.Render();
@@ -154,7 +154,7 @@ namespace Assets.Scripts.Body_Data.view
             }
             catch (Exception)
             {
-
+                
             }
         }
 

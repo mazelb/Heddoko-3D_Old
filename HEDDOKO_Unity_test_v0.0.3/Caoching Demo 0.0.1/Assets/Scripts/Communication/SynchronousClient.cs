@@ -9,9 +9,10 @@
 
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq; 
 using HeddokoLib.networking;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Scripts.Communication
 {
@@ -23,6 +24,9 @@ namespace Assets.Scripts.Communication
 
     // State object for receiving data from remote device.
  
+        /// <summary>
+        /// Synchrounous socket client 
+        /// </summary>
 
     public class SynchronousClient
     { 
@@ -68,7 +72,7 @@ namespace Assets.Scripts.Communication
         /// </summary>
         /// <param name="vMsg"></param>
         private static void StartClientAndSendData(string vMsg)
-        {
+        { 
             byte[] bytes = new byte[1024];
             mReceivedMessage = false;
             // Connect to a remote device.
@@ -125,7 +129,7 @@ namespace Assets.Scripts.Communication
             {
                 Debug.Log(e.ToString());
             }
-            mReceivedMessage = true;
+            mReceivedMessage = true; 
         }
         private bool mIsworking;
         public void Stop()

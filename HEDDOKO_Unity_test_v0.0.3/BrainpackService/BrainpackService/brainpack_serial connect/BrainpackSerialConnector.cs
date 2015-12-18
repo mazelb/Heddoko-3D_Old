@@ -23,7 +23,7 @@ namespace BrainpackService.brainpack_serial_connect
         bool mMessageSent = false;
         SerialPort mSerialport { get; set; } = new SerialPort();
 
-        CircularQueue<string> OutboundBuffer { get; set; } = new CircularQueue<string>(2048, true);
+        CircularQueue<string> OutboundBuffer { get; set; } = new CircularQueue<string>(10, true);
 
         public static BrainpackSerialConnector Instance
         {
@@ -125,7 +125,7 @@ namespace BrainpackService.brainpack_serial_connect
                                     BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
                                     continue;
                                 }
-                                //OutboundBuffer.Enqueue(line);
+                                OutboundBuffer.Enqueue(line);
                                 mNextLine = line;
                             }
 
@@ -274,15 +274,15 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-            return mNextLine;
-            /*   if (OutboundBuffer.Count == 0)
+            //return mNextLine;
+               if (OutboundBuffer.Count == 0)
                {
                    return "";
                }
                else
                {
                    return OutboundBuffer.Dequeue();
-               }*/
+               } 
         }
     }
 }
