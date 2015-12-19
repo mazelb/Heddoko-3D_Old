@@ -274,15 +274,15 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-            //return mNextLine;
-               if (OutboundBuffer.Count == 0)
+            return mNextLine;
+/*               if (OutboundBuffer.Count == 0)
                {
                    return "";
                }
                else
                {
                    return OutboundBuffer.Dequeue();
-               } 
+               } */
         }
     }
 }
