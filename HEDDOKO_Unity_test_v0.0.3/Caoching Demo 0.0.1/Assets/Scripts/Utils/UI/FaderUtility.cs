@@ -39,8 +39,7 @@ namespace Assets.Scripts.Utils
         public static IEnumerator FadeImage(Image vTargetImage, float vDuration, float vTargetOpacity)
         {
             if (vTargetImage == null)
-            {
-                Debug.Log("target image is null");
+            { 
                 yield break;
             }
             float alpha = vTargetImage.color.a;
@@ -71,7 +70,6 @@ namespace Assets.Scripts.Utils
         {
             if (vMaskableGraphicObject == null)
             {
-                Debug.Log("target vMaskableGraphicObject is null");
                 yield break;
             }
             float alpha = vMaskableGraphicObject.color.a;
@@ -104,7 +102,6 @@ namespace Assets.Scripts.Utils
         {
             if (vTargetText == null)
             {
-                Debug.Log("target text is null");
                 yield break;
             }
             float alpha = vTargetText.color.a;
@@ -135,7 +132,6 @@ namespace Assets.Scripts.Utils
              
             if (vTargetText == null)
             {
-                Debug.Log("target text is null");
                 yield break;
             }
             float alpha = vTargetText.color.a;

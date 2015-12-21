@@ -214,25 +214,11 @@ namespace Assets.Scripts.UI.Metrics
         /// </summary>
         /// <param name="vBody"></param>
         private void Initialize(Body vBody)
-        {
-          /*  mRightLegAnalysis =
-                      vBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
-                          RightLegAnalysis;
-            mInitialFlexion = 70f;// mRightLegAnalysis.AngleKneeFlexion;
-            mInitialTime = 0f;
-            mTimeAccumulator = 0f;
-            mMostRecentXFrames = new List<float>(NumberOfFrameToCount);
-            mOldFrames = new List<float>(NumberOfFrameToCount);
-            KneeFlexVelocityAvg = new AverageKneeFlexVelocity(vBody);*/
+        { 
+
         }
-/*
-        private void UpdatePowerBar()
-        {
-            float vAbsVelocityVal = Mathf.Abs(mRightLegAnalysis.mAngularVelocityKneeFlexion);
-            float vPercent = HeddokoMathTools.Map(mRightLegAnalysis.mAngularVelocityKneeFlexion, 0f, MaxKneeFlexVel, 0.108f, 1f);
-            Debug.Log(vPercent);
-            VelocityPowerbar.fillAmount = vPercent;
-        }*/
+
+
         /// <summary>
         /// ResetValues the biking metrics variables
         /// </summary>

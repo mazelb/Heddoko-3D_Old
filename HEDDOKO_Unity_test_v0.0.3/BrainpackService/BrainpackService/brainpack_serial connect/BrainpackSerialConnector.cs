@@ -133,7 +133,7 @@ namespace BrainpackService.brainpack_serial_connect
                                         mNextLine = "";
                                     }
                                     BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
-                                    continue;
+                                   // continue;
                                 }
                                 OutboundBuffer.Enqueue(line);
                                 lock (mLineLock)
@@ -156,7 +156,7 @@ namespace BrainpackService.brainpack_serial_connect
                         }
                         catch (TimeoutException vTimeout)
                         {
-                            try
+                           /* try
                             {
                                 var vResult = QuestionBrainpack(); //ask the brainpack if it's still alive
 
@@ -188,7 +188,7 @@ namespace BrainpackService.brainpack_serial_connect
                                     mNextLine = "";
 
                                 }
-                            }
+                            }*/
                         }
                     }
                 }

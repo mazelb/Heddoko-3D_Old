@@ -91,13 +91,11 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
                 }
                 else
                 {
-                    AngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
-                    Debug.Log(AngleSumRight+ " in second cond");
+                    AngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime); 
                 }
 
                 if (Math.Abs(AngleSumRight) > 140)
-                {
-                    Debug.Log(AngleSumRight + " in third cond");
+                { 
                     AngleSumRight = 0;
                     NumberofRightSquats++;
                   
@@ -117,8 +115,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             vAxis2.Set(KneeOrientation[0, 2], KneeOrientation[1, 2], KneeOrientation[2, 2]);
             Vector3 vAxis3 = new Vector3(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
 
-            float vAngleKneeRotationNew = Vector3.Angle(vAxis1, vAxis2);
-            //	Debug.Log ("Knee Flection Angles" + vAngleKneeRotationNew);
+            float vAngleKneeRotationNew = Vector3.Angle(vAxis1, vAxis2); 
             float vAngularVelocityKneeRotationNew = (vAngleKneeRotationNew - Mathf.Abs(AngleKneeRotation)) / vDeltaTime;
 
             /// step2 ///

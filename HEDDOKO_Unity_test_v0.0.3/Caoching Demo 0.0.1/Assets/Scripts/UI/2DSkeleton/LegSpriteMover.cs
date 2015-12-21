@@ -161,7 +161,6 @@ namespace Assets.Scripts.UI._2DSkeleton
             {
                 if (Input.GetKeyDown(KeyCode.F2))
                 {
-                    Debug.Log(AngleInfoMetrics.gameObject.activeInHierarchy);
                     AngleInfoMetrics.gameObject.SetActive(!AngleInfoMetrics.gameObject.activeInHierarchy);
                 }
             }

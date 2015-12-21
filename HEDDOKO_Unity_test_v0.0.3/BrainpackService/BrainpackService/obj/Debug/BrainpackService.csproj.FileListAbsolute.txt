@@ -59,3 +59,4 @@ E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\o
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csproj.GenerateResource.Cache
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.exe
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.pdb
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csprojFakesResolveAssemblyReference.cache

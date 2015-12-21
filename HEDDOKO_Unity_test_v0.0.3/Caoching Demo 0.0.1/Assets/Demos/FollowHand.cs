@@ -18,8 +18,7 @@ public class FollowHand : MonoBehaviour {
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.name == "CubeLeft" || col.gameObject.name == "CubeRight")
-        {
-            Debug.Log("Collision Detected");
+        { 
             particles.Play();
         }
     }
@@ -27,8 +26,7 @@ public class FollowHand : MonoBehaviour {
     void OnCollisionExit(Collision col)
     {
         if (col.gameObject.name == "CubeLeft" || col.gameObject.name == "CubeRight")
-        {
-            Debug.Log("Collision Exited");
+        { 
             particles.Stop();
         }
     }

@@ -128,7 +128,6 @@ namespace Assets.Scripts.Cameras
             {
                 if (mIn2DMode)
                 {
-                    Debug.Log(LegSwitcher.CurrentSpriteIndex);
                     CurrentViewBox.UpdateText(true, LegSwitcher.CurrentSpriteIndex);
                 }
                 else

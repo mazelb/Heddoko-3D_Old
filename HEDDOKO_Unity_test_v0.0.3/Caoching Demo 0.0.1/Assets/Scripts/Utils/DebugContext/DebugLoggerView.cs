@@ -34,7 +34,7 @@ namespace Assets.Scripts.Utils.DebugContext
                 Body vCurrentBody = StreamManager.CurrentBodyInPlay;
                 if (vCurrentBody != null)
                 {
-                    vCurrentBody.View.IsDebugging = mIsDebugging;
+                   // vCurrentBody.View.IsDebugging = mIsDebugging;
                     vCurrentBody.MBodyFrameThread.IsDebugging = mIsDebugging;
                 }
                

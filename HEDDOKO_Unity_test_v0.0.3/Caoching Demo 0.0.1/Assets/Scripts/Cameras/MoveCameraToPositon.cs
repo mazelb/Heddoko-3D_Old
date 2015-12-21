@@ -57,27 +57,7 @@ namespace Assets.Scripts.Cameras
             Vector3 vPos = transform.position;
             if (CamPositions.Length > 0)
             {
-                //get the angle first
-               /* float vAngle = Vector3.Angle(transform.position, CamPositions[mCurrentPos].position);
-                Debug.Log(vAngle);
-                float vStartTime = Time.time;
-                while (true)
-                {
-                   /* //get the current distance between angles
-                    float vAngleDist = Mathf.Abs(vAngle - Vector3.Angle(transform.position, CamPositions[mCurrentPos].position));
-
-                    float vPercentcompleted =  (Time.time - vStartTime)/Duration;
-                    //float vPercentcompleted = 0;
-
-                    float vRotateAroundAngle = Mathf.Lerp(0f, vAngle, vPercentcompleted);
-                    transform.RotateAround( Target.position,Vector3.up, vRotateAroundAngle);
-                    transform.LookAt(Target.position);
-                    if (vPercentcompleted >= 1f)
-                    {
-                        break;
-                    }
-                    yield return null;#1#
-                }*/
+               
                for (float i = 0; i < 1.0f; i += Time.deltaTime / Duration)
                 {
 

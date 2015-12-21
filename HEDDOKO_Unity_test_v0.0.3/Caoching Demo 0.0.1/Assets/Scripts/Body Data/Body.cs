@@ -201,6 +201,7 @@ public class Body
     public void UpdateBody(BodyFrame vFrame)
     {
         CurrentBodyFrame = vFrame;
+        //Tracking();
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateSensorsData(vFrame);
@@ -215,26 +216,12 @@ public class Body
     public void SetInitialFrame(BodyFrame vInitialFrame)
     {
         InitialBodyFrame = vInitialFrame;
-        UpdateInitialFrameData();
-    }
-    
-    /// <summary>
-    /// Updates the initial frame sensors data in all segments
-    /// </summary>
-    public void UpdateInitialFrameData(BodyFrame vInitialFrame = null)
-    {
-        if(vInitialFrame != null)
-        {
-            SetInitialFrame(vInitialFrame);
-        }
-
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
         }
     }
-    
-        
+
     /**
     * PlayRecording(string vRecUUID)
     * @param vRecUUID, the recording UUID
@@ -323,6 +310,7 @@ public class Body
         UnhookBrainpackListeners();
     }
 
+
     public void UnhookBrainpackListeners()
     {
         BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener; 
@@ -333,33 +321,63 @@ public class Body
     /// Applies tracking on the requested body. 
     /// </summary>
     /// <param name="vBody">Body vBody: The body to apply tracking to. </param> 
-    /// <param name="vDic">Dictionary vDic: The tracking matrices to be applied. </param> 
-    public static void ApplyTracking(Body vBody, Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vDic)
+    public static void ApplyTracking(Body vBody)
     {
-        //get the list of segments of the speicfied vBody
+        //get a collection of transformation matrices
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = GetTracking(vBody);
+
+        //get the list of segments of the specified vBody
         List<BodySegment> vListBodySegments = vBody.BodySegments;
 
-      
-        for(int i  = 0 ; i < vListBodySegments.Count; i++)
+        foreach (BodySegment vBodySegment in vListBodySegments)
         {
-            BodySegment vBodySegment = vListBodySegments[i];
             //of the current body segment, get the appropriate subsegments
             List<BodyStructureMap.SensorPositions> vSensPosList =
                 BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
             
             //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
             //to the segment
-            Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(2);
-            for (int j = 0; j < vSensPosList.Count; j++)
+            Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(2);
+
+            foreach (BodyStructureMap.SensorPositions vSenPos in vSensPosList)
             {
-                BodyStructureMap.SensorPositions vSenPos = vSensPosList[j];
                 if (vDic.ContainsKey(vSenPos))
                 {
-                    BodyStructureMap.TrackingStructure vTrackedMatrices = vDic[vSenPos];
-                    vFilteredDictionary.Add(vSenPos, vTrackedMatrices);
+                    float[,] vTrackedMatrix = vDic[vSenPos];
+                    vFilteredDictionary.Add(vSenPos, vTrackedMatrix);
                 }
             }
- 
+            vBodySegment.UpdateSegment(vFilteredDictionary);
+        }
+    }
+
+    /**
+    * ApplyTracking(Body vBody)
+    * @param Body vBody: The body to apply tracking to. 
+    * @brief  Applies tracking on the requested body. 
+    */
+    public static void ApplyTracking(Body vBody, Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic)
+    {
+        //get the list of segments of the speicfied vBody
+        List<BodySegment> vListBodySegments = vBody.BodySegments;
+        foreach (BodySegment vBodySegment in vListBodySegments)
+        {
+            //of the current body segment, get the appropriate subsegments
+            List<BodyStructureMap.SensorPositions> vSensPosList =
+                BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
+            
+            //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
+            //to the segment
+            Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(2);
+
+            foreach (BodyStructureMap.SensorPositions vSenPos in vSensPosList)
+            {
+                if (vDic.ContainsKey(vSenPos))
+                {
+                    float[,] vTrackedMatrix = vDic[vSenPos];
+                    vFilteredDictionary.Add(vSenPos, vTrackedMatrix);
+                }
+            }
             vBodySegment.UpdateSegment(vFilteredDictionary);
         }
     }
@@ -369,39 +387,43 @@ public class Body
     * @brief  Play a recording from the given recording UUID. 
     * @return Returns a dictionary and their respective   transformation matrix
     */
-    public static Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> GetTracking(Body vBody)
+    public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetTracking(Body vBody)
     {
-        Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vDic = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(9); 
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9); 
         List<BodyStructureMap.SensorPositions> vKeyList = new List<BodyStructureMap.SensorPositions>(vBody.CurrentBodyFrame.FrameData.Keys);
-
         for (int i = 0; i < vKeyList.Count; i++)
         {
             BodyStructureMap.SensorPositions vKey = vKeyList[i];
-
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
+             
+            if (vKey == BodyStructureMap.SensorPositions.SP_LowerSpine)
+            {
+                vInitialRawEuler = vBody.InitialBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
+                vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[BodyStructureMap.SensorPositions.SP_UpperSpine];
+            }
+
 
             Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.x, vInitialRawEuler.y, vInitialRawEuler.z);
             Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.x, vCurrentRawEuler.y, vCurrentRawEuler.z);
 
-            if (vKeyList[i] == BodyStructureMap.SensorPositions.SP_RightUpperArm)
-            {
-                //Debug.Log("Current euler" + vCurrentRawEuler * 180/Mathf.PI);
-                Debug.Log("euler y" + vCurrentRawEuler.y * 180 / Mathf.PI);
-            }
-
             float[,] vInitGlobalMatrix = MatrixTools.RotationGlobal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);
             float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrRawEuler.z, vCurrRawEuler.x, vCurrRawEuler.y);
-            float[,] vOrientationMatrix = MatrixTools.MultiplyMatrix(vInitGlobalMatrix, vCurrentLocalMatrix);
-
-            BodyStructureMap.TrackingStructure vStruct = new BodyStructureMap.TrackingStructure();
-            vStruct.InitGlobalMatrix = vInitGlobalMatrix;
-            vStruct.CurrentLocalMatrix = vCurrentLocalMatrix;
-            vStruct.OrientationMatrix = vOrientationMatrix;
-
-            vDic.Add(vKey, vStruct);
+            float[,] vOrientationMatrix = MatrixTools.multi(vInitGlobalMatrix, vCurrentLocalMatrix);
+            vDic.Add(vKey, vOrientationMatrix);
         }
+        return vDic;
+    }
 
+    /**
+    * GetFusion(Body vBody)
+    * @brief  Apply adjustments to the 9 joints in order to increase precision and reliabilitie of the transforms.  
+    * @return Returns a dictionary and their respective   transformation matrix
+    */
+    public static Dictionary<BodyStructureMap.SensorPositions, float[,]> GetFusion(Body vBody)
+    {
+
+        Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = new Dictionary<BodyStructureMap.SensorPositions, float[,]>(9);
         return vDic;
     }
 
@@ -452,5 +474,14 @@ public class Body
         {
             mBodyFrameThread.PauseWorker();
         }
+    }
+
+    /// <summary>
+    /// Will be called on by an external thread in the case that the initial frame needs to be set 
+    /// </summary>
+    /// <param name="vProcessedBodyFrame">The processed body frame to be set as the initial bodyframe</param>
+    public void SafelySetInitialBodyFrame(BodyFrame vProcessedBodyFrame)
+    {
+        View.SetInitialBodyFrame(vProcessedBodyFrame);
     }
 }

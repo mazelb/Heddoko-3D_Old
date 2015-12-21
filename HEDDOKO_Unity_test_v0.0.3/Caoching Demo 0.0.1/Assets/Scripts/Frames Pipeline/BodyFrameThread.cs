@@ -224,8 +224,7 @@ public class BodyFrameThread : ThreadedJob
                     //ContinueWorking = false;
                     string vMessage = e.GetBaseException().Message;
                     vMessage += "\n" + e.Message;
-                    vMessage += "\n" + e.StackTrace;
-                    UnityEngine.Debug.Log(vMessage);
+                    vMessage += "\n" + e.StackTrace; 
                     break;
                 }
 
@@ -282,7 +281,6 @@ public class BodyFrameThread : ThreadedJob
                     string vMessage = e.GetBaseException().Message;
                     vMessage += "\n" + e.Message;
                     vMessage += "\n" + e.StackTrace;
-                    UnityEngine.Debug.Log(vMessage);
                     break;
                 }
 

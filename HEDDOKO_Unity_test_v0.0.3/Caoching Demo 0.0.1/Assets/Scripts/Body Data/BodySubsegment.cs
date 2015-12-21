@@ -17,8 +17,9 @@ using Assets.Scripts.Utils;
 [Serializable]
 public class BodySubSegment
 {
-    //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
     public BodyStructureMap.SubSegmentTypes subsegmentType;
+    //TODO: Sub Segment Orientation inverseInitRotation 
+    //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
     private Quaternion mSubsegmentOrientation;
     public float[,] OrientationMatrix = MatrixTools.Identity3X3Matrix();
     [SerializeField]
@@ -26,7 +27,7 @@ public class BodySubSegment
     private SubSegmentOrientationType mSubsegmentOrientationType;
     public BodySubsegmentView AssociatedView;
     [SerializeField]
-    private Vector3 mRotationFactor = new Vector3(0, 0, 0);
+    private Vector3 mRotationFactor = new Vector3(0, -90, 0);
 
     /**
     * SubSegmentOrientationType enum
@@ -38,16 +39,7 @@ public class BodySubSegment
         NonFused = 1,
         MappedTransformation
     }
-
-    /// <summary>
-    /// Resets the orientations of the associated view
-    /// </summary>
-    public void ResetViewOrientation()
-    {
-        AssociatedView.ResetOrientation();
-    }
-
-
+   
     /**
     * UpdateInverseQuaternion(Vector3 vInitRawEuler)
     * @param   Vector3 vInitRawEuler:The raw euler orientation that will be used to set the inverse initial quaternion
@@ -55,8 +47,19 @@ public class BodySubSegment
     */
     public void UpdateInverseQuaternion(Vector3 vInitRawEuler)
     {
-        //update the view
-        ResetViewOrientation();
+        AssociatedView.ResetOrientation();
+        //Debug.Log(vInitRawEuler);
+        Quaternion vQuaternionFactor = Quaternion.Euler(mRotationFactor);
+
+        //IMUQuaternionOrientation vRawOrientation = MatrixTools.eulerToQuaternion(vInitRawEuler.x, vInitRawEuler.y, vInitRawEuler.z);
+        //Quaternion vConvertedQuaternion = new Quaternion(vRawOrientation.x, vRawOrientation.y, vRawOrientation.z, vRawOrientation.w);
+        //mInitialInverseOrientation = Quaternion.Inverse(vConvertedQuaternion);// * Quaternion.Inverse(vQuaternionFactor));
+
+        IMUQuaternionOrientation vIMUSubsegmentQuaternion = MatrixTools.MatToQuat(OrientationMatrix);
+        Quaternion vNewInitialOrientation = new Quaternion(vIMUSubsegmentQuaternion.x, vIMUSubsegmentQuaternion.y, vIMUSubsegmentQuaternion.z, vIMUSubsegmentQuaternion.w);
+        mInitialInverseOrientation = Quaternion.Inverse(vNewInitialOrientation * Quaternion.Inverse(vQuaternionFactor));
+
+        //Debug.Log(mInitialInverseOrientation);
     }
 
     /**
@@ -72,9 +75,8 @@ public class BodySubSegment
         //Convert to a something that unity can understand
         IMUQuaternionOrientation vIMUSubsegmentQuaternion = MatrixTools.MatToQuat(OrientationMatrix);
         Quaternion vSubsegmentQuat = new Quaternion(vIMUSubsegmentQuaternion.x, vIMUSubsegmentQuaternion.y, vIMUSubsegmentQuaternion.z, vIMUSubsegmentQuaternion.w);
-        Quaternion vNewOrientation = vSubsegmentQuat;
+        Quaternion vNewOrientation = mInitialInverseOrientation * vSubsegmentQuat * Quaternion.Inverse(vQuaternionFactor);
 
-        //update the view
         AssociatedView.UpdateOrientation(vNewOrientation);
     }
 
@@ -85,7 +87,6 @@ public class BodySubSegment
     */
     public void UpdateSubsegmentPosition(float vNewDisplacement)
     {
-        //update the view
         AssociatedView.UpdatePosition(vNewDisplacement);
     }
 

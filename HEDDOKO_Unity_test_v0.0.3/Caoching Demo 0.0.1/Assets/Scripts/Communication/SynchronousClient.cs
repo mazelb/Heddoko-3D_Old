@@ -118,24 +118,20 @@ namespace Assets.Scripts.Communication
                 catch (ArgumentNullException ane)
                 {
                      vMsg =  "ArgumentNullException  " +ane;
-                    Debug.Log(vMsg); 
                 }
                 catch (SocketException se)
                 {
                     vMsg = "SocketException  " + se;
-                    Debug.Log(vMsg); 
                 }
                 catch (Exception e)
                 {
                     vMsg = "Unexpected exception " + e;
-                    Debug.Log(vMsg); 
                 }
 
             }
             catch (Exception e)
             {
                 vMsg = "Unexpected exception " + e;
-                Debug.Log(vMsg);
             }
             mReceivedMessage = true;
             vStopwatch.Stop();

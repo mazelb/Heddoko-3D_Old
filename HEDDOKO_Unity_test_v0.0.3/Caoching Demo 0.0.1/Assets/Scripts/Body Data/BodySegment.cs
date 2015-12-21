@@ -30,27 +30,17 @@ public class BodySegment
     public Dictionary<int, BodySubSegment> BodySubSegmentsDictionary = new Dictionary<int, BodySubSegment>();
 
     public Body ParentBody;
-
+    
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
-    public bool IsTrackingHeight = true;
 
-    //Sensor data tuples
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
-
-    //Associated view for the segment
     public BodySegmentView AssociatedView;
-
-    //Analysis pipeline of the segment data
     public SegmentAnalysis mCurrentAnalysisSegment;
 
     //TODO: extract this where appropriate
-    //Detection of vertical Hip position
-    private static float mInitThighHeight = 0.42f;
-    private static float mInitTibiaHeight = 0.39f;
-    private static float mHipHeight = 0.95f;
-    private static float mRightLegHeight = 0.95f;
-    private static float mLeftLegHeight = 0.95f;
+    private static float mRightLegHeight = 1.0f;
+    private static float mLeftLegHeight = 1.0f; 
 
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
@@ -62,12 +52,11 @@ public class BodySegment
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
 
         //get subframes of data relevant to this body segment 
-        for (int i = 0; i < vSensorPos.Count; i++)
+        foreach (BodyStructureMap.SensorPositions vSensorPosKey in vSensorPos)
         {
-            BodyStructureMap.SensorPositions vSensorPosKey = vSensorPos[i];
             //find a suitable sensor to update
             SensorTuple vSensTuple = SensorsTuple.First(a => a.CurrentSensor.SensorPosition == vSensorPosKey);
-
+            
             //get the relevant data from vFrame 
             if (vFrame.FrameData.ContainsKey(vSensorPosKey))
             {
@@ -75,7 +64,6 @@ public class BodySegment
                 vSensTuple.CurrentSensor.SensorData.PositionalData = vFrameData;
             }
         }
-
     }
 
     /**
@@ -83,7 +71,7 @@ public class BodySegment
     * @param UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary): A filtered list of transformation matrices. 
     * @brief  Depending on the segment type, apply transformation matrices 
     */
-    internal void UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
+    internal void UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
     {
         MapSubSegments(vFilteredDictionary);
     }
@@ -96,27 +84,47 @@ public class BodySegment
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
-
-        for (int i = 0; i < vSensorPos.Count; i++)
+        foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
         {
-            BodyStructureMap.SensorPositions vPos = vSensorPos[i];
             //find a suitable sensor to update
             SensorTuple vSensTuple = SensorsTuple.First(a => a.InitSensor.SensorPosition == vPos);
 
             //get the relevant data from vFrame 
             if (vFrame.FrameData.ContainsKey(vPos))
             {
-                vSensTuple.InitSensor.SensorData.PositionalData = vFrame.FrameData[vPos];
+                Vector3 vRawEuler = Vector3.zero; //vFrame.FrameData[vPos];
+                vSensTuple.InitSensor.SensorData.PositionalData = Vector3.zero; //vRawEuler;
                 int vKey = (int)vSensTuple.InitSensor.SensorPosition;
-
                 if (vSensTuple.InitSensor.SensorType == BodyStructureMap.SensorTypes.ST_Biomech)
                 {
                     //get the subsegment and update its  inverse initial orientation 
                     if (BodySubSegmentsDictionary.ContainsKey(vKey))
                     {
-                        if (vKey != (int)BodyStructureMap.SensorPositions.SP_LowerSpine)
+                        //update these subsegments only with their parent's initial position
+                        if (vKey == (int)BodyStructureMap.SensorPositions.SP_LowerSpine)
                         {
-                            BodySubSegmentsDictionary[vKey].ResetViewOrientation();
+                            BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
+                            BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_UpperSpine].UpdateInverseQuaternion(vRawEuler);
+                        }
+                        if (vKey == (int)BodyStructureMap.SensorPositions.SP_RightUpperArm)
+                        {
+                            BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
+                            BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_RightForeArm].UpdateInverseQuaternion(vRawEuler);
+                        }
+                        if (vKey == (int)BodyStructureMap.SensorPositions.SP_LeftUpperArm)
+                        {
+                            BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
+                            BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_LeftForeArm].UpdateInverseQuaternion(vRawEuler);
+                        }
+                        if (vKey == (int)BodyStructureMap.SensorPositions.SP_RightCalf)
+                        {
+                            BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
+                            BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_RightThigh].UpdateInverseQuaternion(vRawEuler);
+                        }
+                        if (vKey == (int)BodyStructureMap.SensorPositions.SP_LeftCalf)
+                        {
+                            BodySubSegmentsDictionary[vKey].UpdateInverseQuaternion(vRawEuler);
+                            BodySubSegmentsDictionary[(int)BodyStructureMap.SensorPositions.SP_LeftThigh].UpdateInverseQuaternion(vRawEuler);
                         }
                     }
                 }
@@ -124,66 +132,61 @@ public class BodySegment
         }
     }
 
-    /// <summary>
-    /// MapTorsoSegment: Performs mapping on the torso subsegment from the available sensor data.
-    /// </summary>
-    /// <param name="vTransformatricies">transformation matrices mapped to sensor positions.</param>
-    internal void MapTorsoSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
+    /**
+    * MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
+    * @brief  Performs mapping on the torso subsegment from the available sensor data
+    * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
+    */
+    internal void MapTorsoSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     {
         BodySubSegment vUSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
         BodySubSegment vLSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
-        float[,] vTrackedTorsoOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].OrientationMatrix);
-        float[,] vTrackedSpineOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine].OrientationMatrix);
+        float[,] vTrackedTorsoOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine]);
+        float[,] vTrackedSpineOrientation = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LowerSpine]);
 
-        float[,] vaFinalTorsoOrientation = new float[3, 3];
-        float[,] vTorsoTemp1 = new float[3, 3];
-        float[,] vTempOrientation = new float[3, 3];
+        /*
+        float[,] vaTorsoOrientation = new float[3, 3];
+        float[,] vaSpineOrientation = new float[3, 3];
 
-        //Map the sensors orientation to the body T-POSE orientation
-        Vector3 u = new Vector3(0, 1, 0);
-        vTempOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vTorsoTemp1 = MatrixTools.MultiplyMatrix(vTempOrientation, vTrackedTorsoOrientation);
+        float[,] TorsoB3 = new float[3, 3];
+        float[,] TorsoB4 = new float[3, 3];
+
+        float[,] vCurrentTorsoOrientation = new float[3, 3];
+
+        Vector3 u = new Vector3(vTrackedTorsoOrientation[0, 1], vTrackedTorsoOrientation[1, 1], vTrackedTorsoOrientation[2, 1]);
+        vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
+        //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        TorsoB3 = MatrixTools.multi(vCurrentTorsoOrientation, vTrackedTorsoOrientation);
 
         u.Set(0, 1, 0);
-        vTempOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vaFinalTorsoOrientation = MatrixTools.MultiplyMatrix(vTorsoTemp1, vTempOrientation);
+        //vCurrentTorsoOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vCurrentTorsoOrientation = MatrixTools.RVector(u, 0f);
+        vaTorsoOrientation = MatrixTools.multi(vCurrentTorsoOrientation, TorsoB3);//*/
 
         //Update the analysis inputs
         TorsoAnalysis vTorsoAnalysis = (TorsoAnalysis)mCurrentAnalysisSegment;
-        vTorsoAnalysis.TorsoOrientation = vaFinalTorsoOrientation;
+        vTorsoAnalysis.TorsoOrientation = vTrackedTorsoOrientation;
         vTorsoAnalysis.AngleExtraction();
 
         //Update the segment's and segment's view orientations
-        vUSSubsegment.UpdateSubsegmentOrientation(vaFinalTorsoOrientation);
-        //vLSSubsegment.UpdateSubsegmentOrientation(vaTorsoOrientation);
+        vUSSubsegment.UpdateSubsegmentOrientation(vTrackedTorsoOrientation);
+        //vLSSubsegment.UpdateSubsegmentOrientation(vaSpineOrientation);
 
-        //Update vertical position
-        if (IsTrackingHeight)
-        {
-            UpdateHipHeight(vLSSubsegment);
-        }
-    }
-
-    /// <summary>
-    /// Updates the vertical position of the Hips. TODO: move this to appropriate place
-    /// </summary>
-    internal void UpdateHipHeight(BodySubSegment vSegment)
-    {
         //Update body height
-        float vHipHeight;
+        float vLegMovement;
+        float vFootHeight = 0.0f;
 
         if (mRightLegHeight > mLeftLegHeight)
         {
-            vHipHeight = mRightLegHeight;
+            vLegMovement = mRightLegHeight;
         }
         else
         {
-            vHipHeight = mLeftLegHeight;
+            vLegMovement = mLeftLegHeight;
         }
-
-        vSegment.UpdateSubsegmentPosition(Mathf.Lerp(mHipHeight, vHipHeight, Time.time));
-        mHipHeight = vHipHeight;
+        //Debug.Log("LegHeights: " + mRightLegHeight + " , " + mLeftLegHeight);
+        vLSSubsegment.UpdateSubsegmentPosition(vLegMovement + vFootHeight);
     }
 
     /**
@@ -191,7 +194,7 @@ public class BodySegment
     * @brief  Performs mapping on the left leg subsegment from the available sensor data
     * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
     */
-    internal void MapRightLegSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
+    internal void MapRightLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     {
         //UL : Upper Leg
         //LL : Lower Leg
@@ -200,74 +203,163 @@ public class BodySegment
 
         float[,] vHipOrientation = new float[3, 3];
         float[,] vKneeOrientation = new float[3, 3];
-        float[,] vCurrentOrientation = new float[3, 3];
+
+        float[,] vCompensationRotationKnee = new float[3, 3];
+        float[,] vCompensationRotationHip = new float[3, 3];
+        float[,] vCurrentKneeOrientation = new float[3, 3];
+
+        float vOrientationError = 0;
+        float vCompensationAngle = 0;
 
         //Intermediate arrays until achieve final orientation for hip and knee, they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
+        float[,] vHipOrientationMatrix = new float[3, 3];
         float[,] vHipB2 = new float[3, 3];
-        float[,] vHipB2T = new float[3, 3];
+        float[,] vHipB3 = new float[3, 3];
+        float[,] vHipB4 = new float[3, 3];
         float[,] vHipB5 = new float[3, 3];
         float[,] vHipB6 = new float[3, 3];
         float[,] vHipB7 = new float[3, 3];
+        float[,] HipB22 = new float[3, 3];
 
+        float[,] vKneeOrientationMatrix = new float[3, 3];
         float[,] vKneeB2 = new float[3, 3];
-        float[,] vKneeB3D = new float[3, 3];
-        float[,] vKneeB3ID = new float[3, 3];
-        float[,] vKneeB3DT = new float[3, 3];
-        float[,] vKneeB3IDT = new float[3, 3];
+        float[,] vKneeB3 = new float[3, 3];
         float[,] vKneeB4 = new float[3, 3];
         float[,] vKneeB5 = new float[3, 3];
         float[,] vKneeB6 = new float[3, 3];
         float[,] vKneeB7 = new float[3, 3];
+        float[,] KneeB22 = new float[3, 3];
 
         /////////// Initial Frame Adjustments /////////////////// 
-        vHipB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].OrientationMatrix);
-        vKneeB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].OrientationMatrix);
+        //vHipOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh];
+        //vKneeOrientationMatrix = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf];
 
-        vHipB2T = MatrixTools.MatrixTranspose(vHipB2);
-        vKneeB3D = MatrixTools.MultiplyMatrix(vHipB2T, vKneeB2);
-        vKneeB3DT = MatrixTools.MatrixTranspose(vKneeB3D);
-        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].InitGlobalMatrix);
-        vKneeB3IDT = MatrixTools.MatrixTranspose(vKneeB3ID);
-        vKneeB4 = MatrixTools.MultiplyMatrix(vKneeB3IDT, MatrixTools.MultiplyMatrix(vKneeB3ID, vKneeB3D));
+        //vHipB2 = vHipOrientationMatrix;
+        //vKneeB2 = vKneeOrientationMatrix;
+
+        HipB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh]);
+        KneeB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf]);
+
+        vHipOrientationMatrix = HipB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh];
+        vKneeOrientationMatrix = KneeB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf];
+
+        vHipB2 = HipB22;// vHipOrientationMatrix;
+        vKneeB2 = KneeB22;// vKneeOrientationMatrix;
+
+        ///////////////////////////////////////
+        /////////// Fusion  ///////////////////
+        /////////////////////////////////////// 
+        bool fusion = false;
+
+        if (fusion)
+        {
+            ///////////// Pitch Compensation StepForward ///////////////////
+            Vector3 pitchHip = new Vector3(vHipB2[0, 2], vHipB2[1, 2], vHipB2[2, 2]);
+            Vector3 pitchKnee = new Vector3(vKneeB2[0, 2], vKneeB2[1, 2], vKneeB2[2, 2]);
+            Vector3 NcrossHipKnee = new Vector3(0, 0, 0);
+
+            // rotation axis for pitch compensation
+            NcrossHipKnee = Vector3.Cross(pitchHip, pitchKnee).normalized;
+            vOrientationError = vHipB2[0, 2] * vKneeB2[0, 2] + vHipB2[1, 2] * vKneeB2[1, 2] + vHipB2[2, 2] * vKneeB2[2, 2];
+
+            // Finding Pitch compensation Angle
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+            // Building Pitch compensation rotation matrices
+            vCompensationRotationHip = MatrixTools.RVector(NcrossHipKnee, -0.5f * vCompensationAngle);
+            vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKnee, +0.5f * vCompensationAngle);
+
+            // Applying Pitch Compensation 
+            vKneeB3 = MatrixTools.multi(vCompensationRotationHip, vKneeB2);
+            vHipB3 = MatrixTools.multi(vCompensationRotationKnee, vHipB2);
+
+            // this step applies the knee 180 constraint and can be used also for fusion of knee stretch sensors and nods in future
+            ///////////// Knee 180 degree Constraint ///////////////////
+
+            Vector3 RollHip = new Vector3(vHipB3[0, 0], vHipB3[1, 0], vHipB3[2, 0]);
+            Vector3 YawKnee = new Vector3(vKneeB3[0, 1], vKneeB3[1, 1], vKneeB3[2, 1]);
+            Vector3 YawHip = new Vector3(vHipB3[0, 1], vHipB3[1, 1], vHipB3[2, 1]);
+
+            Vector3 NcrossHipKneeRoll = Vector3.Cross(YawHip, YawKnee).normalized;
+
+            if (Vector3.Dot(RollHip, YawKnee) > 0) /// this case when not obey 180 degree constraint
+            {
+                vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
+
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationHip = MatrixTools.RVector(NcrossHipKneeRoll, -0.5f * vCompensationAngle);
+                vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKneeRoll, +0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vKneeB4 = MatrixTools.multi(vCompensationRotationKnee, vKneeB3);
+                vHipB4 = MatrixTools.multi(vCompensationRotationHip, vHipB3);
+            }
+            else  /// this case when obey 180 degree constraint just to improve knee angle estimation
+            {
+                vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
+
+                // Finding Pitch compensation Angle
+                // stretch sensor should be added
+                vCompensationAngle = 0;
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationHip = MatrixTools.RVector(NcrossHipKneeRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKneeRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vKneeB4 = MatrixTools.multi(vCompensationRotationKnee, vKneeB3);
+                vHipB4 = MatrixTools.multi(vCompensationRotationHip, vHipB3);
+            }
+        }//*/
+        else
+        {
+            vKneeB4 = vKneeB2;
+            vHipB4 = vHipB2;
+        }
 
         /// /////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
 
         ////////////////// setting Hip to Final Body orientation ///////////////////////////////
 
-        Vector3 u = new Vector3(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vHipB5 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vHipB2);
+        Vector3 u = new Vector3(vHipB4[0, 1], vHipB4[1, 1], vHipB4[2, 1]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
+        vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipB4);
 
-        u.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI);
-        vHipB6 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vHipB5);
+        u.Set(vHipB5[0, 2], vHipB5[1, 2], vHipB5[2, 2]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vHipB6 = MatrixTools.multi(vCurrentKneeOrientation, vHipB5);
+
+        u.Set(0, 0, 1);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vHipB7 = MatrixTools.multi(vCurrentKneeOrientation, vHipB6);
 
         u.Set(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vHipB7 = MatrixTools.MultiplyMatrix(vHipB6, vCurrentOrientation);
-
-        u.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI);
-        vHipOrientation = MatrixTools.MultiplyMatrix(vHipB7, vCurrentOrientation);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
+        vHipOrientation = MatrixTools.multi(vCurrentKneeOrientation, vHipB7);
 
         ////////////////// setting Knee to Final Body orientation ///////////////////////////////
 
-        Vector3 u2 = new Vector3(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vKneeB5 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vKneeB4);
+        Vector3 u2 = new Vector3(vKneeB4[0, 1], vKneeB4[1, 1], vKneeB4[2, 1]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vKneeB5 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB4);
 
-        u2.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI);
-        vKneeB6 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vKneeB5);
+        u2.Set(vKneeB5[0, 2], vKneeB5[1, 2], vKneeB5[2, 2]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vKneeB6 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB5);
+
+        u2.Set(0, 0, 1);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vKneeB7 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB6);
 
         u2.Set(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vKneeB7 = MatrixTools.MultiplyMatrix(vKneeB6, vCurrentOrientation);
-
-        u2.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI);
-        vKneeOrientation = MatrixTools.MultiplyMatrix(vKneeB7, vCurrentOrientation);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
         //Update the analysis inputs
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
@@ -279,14 +371,9 @@ public class BodySegment
         vULSubsegment.UpdateSubsegmentOrientation(vHipOrientation);
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
 
-        //Update Leg height
-        Vector3 vThighVec = new Vector3(vHipOrientation[0, 1], vHipOrientation[1, 1], vHipOrientation[2, 1]);
-        vThighVec.Normalize();
-        Vector3 vTibiaVec = new Vector3(vKneeOrientation[0, 1], vKneeOrientation[1, 1], vKneeOrientation[2, 1]);
-        vTibiaVec.Normalize();
-        float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        mRightLegHeight = vThighHeight + vTibiaHeight;
+        //Update Leg height 
+        mRightLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
+      //  Debug.Log("Right Leg Squatts: " + vRightLegAnalysis.NumberofRightSquats);
     }
 
     /**
@@ -294,47 +381,129 @@ public class BodySegment
     * @brief  Performs mapping on the left leg subsegment from the available sensor data
     * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
     */
-    internal void MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
+    internal void MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     {
         //UL: upper leg
         //LL: lower leg 
+
         BodySubSegment vULSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftThigh];
         BodySubSegment vLLSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftCalf];
 
         float[,] vHipOrientation = new float[3, 3];
         float[,] vKneeOrientation = new float[3, 3];
-        float[,] vCurrentOrientation = new float[3, 3];
+
+        float[,] vCompensationRotationKnee = new float[3, 3];
+        float[,] vCompensationRotationHip = new float[3, 3];
+        float[,] vCurrentKneeOrientation = new float[3, 3];
+
+        float vOrientationError = 0;
+        float vCompensationAngle = 0;
 
         //Intermediate arrays until achieve final orientation for hip and knee, they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
+
+        float[,] vHipOrientationMatrix = new float[3, 3];
         float[,] vHipB2 = new float[3, 3];
-        float[,] vHipB2T = new float[3, 3];
+        float[,] vHipB3 = new float[3, 3];
+        float[,] vHipB4 = new float[3, 3];
         float[,] vHipB5 = new float[3, 3];
         float[,] vHipB6 = new float[3, 3];
         float[,] vHipB7 = new float[3, 3];
+        float[,] HipB21 = new float[3, 3];
+        float[,] HipB22 = new float[3, 3];
 
+        float[,] vKneeOrientationMatrix = new float[3, 3];
         float[,] vKneeB2 = new float[3, 3];
-        float[,] vKneeB3D = new float[3, 3];
-        float[,] vKneeB3ID = new float[3, 3];
-        float[,] vKneeB3DT = new float[3, 3];
-        float[,] vKneeB3IDT = new float[3, 3];
+        float[,] vKneeB3 = new float[3, 3];
         float[,] vKneeB4 = new float[3, 3];
         float[,] vKneeB5 = new float[3, 3];
         float[,] vKneeB6 = new float[3, 3];
         float[,] vKneeB7 = new float[3, 3];
+        float[,] KneeB21 = new float[3, 3];
+        float[,] KneeB22 = new float[3, 3];
 
         /////////// Initial Frame Adjustments /////////////////// 
-        vHipB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].OrientationMatrix);
-        vKneeB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].OrientationMatrix);
+        HipB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh]);
+        KneeB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf]);
 
-        vHipB2T = MatrixTools.MatrixTranspose(vHipB2);
-        vKneeB3D = MatrixTools.MultiplyMatrix(vHipB2T, vKneeB2);
-        vKneeB3DT = MatrixTools.MatrixTranspose(vKneeB3D);
+        //vHipOrientationMatrix = HipB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh];
+        //vKneeOrientationMatrix = KneeB22;// vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf];
 
-        vKneeB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].InitGlobalMatrix);
-        vKneeB3IDT = MatrixTools.MatrixTranspose(vKneeB3ID);
+        vHipB2 = HipB22;// vHipOrientationMatrix;
+        vKneeB2 = KneeB22;// vKneeOrientationMatrix;
 
-        vKneeB4 = MatrixTools.MultiplyMatrix(vKneeB3IDT, MatrixTools.MultiplyMatrix(vKneeB3ID, vKneeB3D));
+        ///////////////////////////////////////
+        /////////// Fusion  ///////////////////
+        /////////////////////////////////////// 
+        bool fusion = false;
+
+        if (fusion)
+        {
+            ///////////// Pitch Compensation StepForward ///////////////////
+            Vector3 pitchHip = new Vector3(vHipB2[0, 2], vHipB2[1, 2], vHipB2[2, 2]);
+            Vector3 pitchKnee = new Vector3(vKneeB2[0, 2], vKneeB2[1, 2], vKneeB2[2, 2]);
+            Vector3 NcrossHipKnee = new Vector3(0, 0, 0);
+
+
+            // rotation axis for pitch compensation
+            NcrossHipKnee = Vector3.Cross(pitchHip, pitchKnee).normalized;
+            vOrientationError = vHipB2[0, 2] * vKneeB2[0, 2] + vHipB2[1, 2] * vKneeB2[1, 2] + vHipB2[2, 2] * vKneeB2[2, 2];
+
+            // Finding Pitch compensation Angle
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+            // Building Pitch compensation rotation matrices
+            vCompensationRotationHip = MatrixTools.RVector(NcrossHipKnee, -0.5f * vCompensationAngle);
+            vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKnee, +0.5f * vCompensationAngle);
+
+            // Applying Pitch Compensation 
+            vKneeB3 = MatrixTools.multi(vCompensationRotationHip, vKneeB2);
+            vHipB3 = MatrixTools.multi(vCompensationRotationKnee, vHipB2);
+
+            // this step applies the knee 180 constraint and can be used also for fusion of knee stretch sensors and nods in future
+            ///////////// Knee 180 degree Constraint ///////////////////
+
+            Vector3 RollHip = new Vector3(vHipB3[0, 0], vHipB3[1, 0], vHipB3[2, 0]);
+            Vector3 YawKnee = new Vector3(vKneeB3[0, 1], vKneeB3[1, 1], vKneeB3[2, 1]);
+            Vector3 YawHip = new Vector3(vHipB3[0, 1], vHipB3[1, 1], vHipB3[2, 1]);
+
+            Vector3 NcrossHipKneeRoll = Vector3.Cross(YawHip, YawKnee).normalized;
+
+            if (Vector3.Dot(RollHip, YawKnee) > 0) /// this case when not obey 180 degree constraint
+            {
+                vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
+
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationHip = MatrixTools.RVector(NcrossHipKneeRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKneeRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vKneeB4 = MatrixTools.multi(vCompensationRotationKnee, vKneeB3);
+                vHipB4 = MatrixTools.multi(vCompensationRotationHip, vHipB3);
+            }
+            else  /// this case when obey 180 degree constraint just to improve knee angle estimation
+            {
+                vOrientationError = vHipB3[0, 1] * vKneeB3[0, 1] + vHipB3[1, 1] * vKneeB3[1, 1] + vHipB3[2, 1] * vKneeB3[2, 1];
+
+                // Finding Pitch compensation Angle
+                // stretch sensor should be added
+                vCompensationAngle = 0;
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationHip = MatrixTools.RVector(NcrossHipKneeRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationKnee = MatrixTools.RVector(NcrossHipKneeRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vKneeB4 = MatrixTools.multi(vCompensationRotationKnee, vKneeB3);
+                vHipB4 = MatrixTools.multi(vCompensationRotationHip, vHipB3);
+            }
+        }
+        else
+        {
+            vKneeB4 = vKneeB2;
+            vHipB4 = vHipB2;
+        }
 
         ///////////////////////////////////////
         /////////// Mapping ///////////////////
@@ -342,39 +511,43 @@ public class BodySegment
 
         ////////////////// setting Hip to Final Body orientation ///////////////////////////////
 
-        Vector3 u = new Vector3(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vHipB5 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vHipB2);
+        Vector3 u = new Vector3(vHipB4[0, 1], vHipB4[1, 1], vHipB4[2, 1]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0);
+        vHipB5 = MatrixTools.multi(vCurrentKneeOrientation, vHipB4);
 
-        u.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI);
-        vHipB6 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vHipB5);
+        u.Set(vHipB5[0, 2], vHipB5[1, 2], vHipB5[2, 2]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vHipB6 = MatrixTools.multi(vCurrentKneeOrientation, vHipB5);
+
+        u.Set(0, 0, 1);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vHipB7 = MatrixTools.multi(vCurrentKneeOrientation, vHipB6);
 
         u.Set(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vHipB7 = MatrixTools.MultiplyMatrix(vHipB6, vCurrentOrientation);
-
-        u.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI);
-        vHipOrientation = MatrixTools.MultiplyMatrix(vHipB7, vCurrentOrientation);
+        vCurrentKneeOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u, 0f);
+        vHipOrientation = MatrixTools.multi(vCurrentKneeOrientation, vHipB7);
 
         ////////////////// setting Knee to Final Body orientation ///////////////////////////////
 
-        Vector3 u2 = new Vector3(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vKneeB5 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vKneeB4);
+        Vector3 u2 = new Vector3(vKneeB4[0, 1], vKneeB4[1, 1], vKneeB4[2, 1]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0);
+        vKneeB5 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB4);
 
-        u2.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI);
-        vKneeB6 = MatrixTools.MultiplyMatrix(vCurrentOrientation, vKneeB5);
+        u2.Set(vKneeB5[0, 2], vKneeB5[1, 2], vKneeB5[2, 2]);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vKneeB6 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB5);
+
+        u2.Set(0, 0, 1);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vKneeB7 = MatrixTools.multi(vCurrentKneeOrientation, vKneeB6);
 
         u2.Set(0, 1, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vKneeB7 = MatrixTools.MultiplyMatrix(vKneeB6, vCurrentOrientation);
-
-        u2.Set(1, 0, 0);
-        vCurrentOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI);
-        vKneeOrientation = MatrixTools.MultiplyMatrix(vKneeB7, vCurrentOrientation);
+        vCurrentKneeOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        //vCurrentKneeOrientation = MatrixTools.RVector(u2, 0f);
+        vKneeOrientation = MatrixTools.multi(vCurrentKneeOrientation, vKneeB7);
 
         //Update the analysis inputs
         LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
@@ -387,13 +560,8 @@ public class BodySegment
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeOrientation);
 
         //Update leg height 
-        Vector3 vThighVec = new Vector3(vHipOrientation[0, 1], vHipOrientation[1, 1], vHipOrientation[2, 1]);
-        vThighVec.Normalize();
-        Vector3 vTibiaVec = new Vector3(vKneeOrientation[0, 1], vKneeOrientation[1, 1], vKneeOrientation[2, 1]);
-        vTibiaVec.Normalize();
-        float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        mLeftLegHeight = vThighHeight + vTibiaHeight;
+        mLeftLegHeight = vKneeOrientation[1, 1] * 0.5f + vHipOrientation[1, 1] * 0.5f;
+        //Debug.Log("mLeftLegHeight: " + mLeftLegHeight);
     }
 
     /**
@@ -401,9 +569,9 @@ public class BodySegment
     * @brief  Updates the right arm subsegment from the available sensor data
     * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
     */
-    internal void MapRightArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
+    internal void MapRightArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     {
-        //current Upperarm (shoulder) and lower arm (Elbow) joints orientation, 
+        // current Upperarm (shoulder) and lower arm (Elbow) joints orientation, 
         //UpAr stands for upper arm and LoAr stands for Lower arm (forearm) in this code
         float[,] vUpArOrientation = new float[3, 3];
         float[,] vLoArOrientation = new float[3, 3];
@@ -411,99 +579,178 @@ public class BodySegment
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightUpperArm];
         BodySubSegment vLASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightForeArm];
 
-        float[,] vTorsoB2 = new float[3, 3];
-        float[,] vTorsoB2T = new float[3, 3];
-
         float[,] vUpArB2 = new float[3, 3];
-        float[,] vUpArB2T = new float[3, 3];
-        float[,] vUpArB3D = new float[3, 3];
-        float[,] vUpArB3ID = new float[3, 3];
-        float[,] vUpArB3DT = new float[3, 3];
-        float[,] vUpArB3IDT = new float[3, 3];
+        float[,] vUpArB3 = new float[3, 3];
         float[,] vUpArB4 = new float[3, 3];
         float[,] vUpArB5 = new float[3, 3];
-        float[,] vUpArB7 = new float[3, 3];
+        float[,] vUpArB6 = new float[3, 3];
+        float[,] vUpArB21 = new float[3, 3];
+        float[,] vUpArB22 = new float[3, 3];
 
         float[,] vLoArB2 = new float[3, 3];
-        float[,] vLoArB3D = new float[3, 3];
-        float[,] vLoArB3ID = new float[3, 3];
-        float[,] vLoArB3DT = new float[3, 3];
-        float[,] vLoArB3IDT = new float[3, 3];
+        float[,] vLoArB3 = new float[3, 3];
         float[,] vLoArB4 = new float[3, 3];
         float[,] vLoArB5 = new float[3, 3];
         float[,] vLoArB6 = new float[3, 3];
-        float[,] vLoArB8 = new float[3, 3];
+        float[,] vLoArB7 = new float[3, 3];
+        float[,] vLoArB21 = new float[3, 3];
+        float[,] vLoArB22 = new float[3, 3];
 
-        float[,] vCurrentArOrientation = new float[3, 3];
+        float[,] vCompensationRotationLoAr = new float[3, 3];
+        float[,] vCompensationRotationUpAr = new float[3, 3];
+        float[,] vCurrentLoArOrientation = new float[3, 3];
 
-        vUpArB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].OrientationMatrix);
-        vLoArB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm].OrientationMatrix);
-        vTorsoB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].OrientationMatrix);
+        float vOrientationError = 0;
+        float vCompensationAngle = 0;
 
-        //vUpArB2 = GravityRefArm(UpArB22, vNodInitAcc0);
-        //vLoArB2 = GravityRefArm(LoArB22, vNodInitAcc1);
+        //Get the orientation matricies
+        //UpArB21 = multi(UpArFi, UpArB1);
+        //LoArB21 = multi(LoArFi, LoArB1);
 
-        //Upper arm transforms
+        vUpArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm]);
+        vLoArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm]);
 
-        vTorsoB2T = MatrixTools.MatrixTranspose(vTorsoB2);
-        vUpArB3D = MatrixTools.MultiplyMatrix(vTorsoB2T, vUpArB2);
-        vUpArB3DT = MatrixTools.MatrixTranspose(vUpArB3D);
-        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitGlobalMatrix);
-        vUpArB3IDT = MatrixTools.MatrixTranspose(vUpArB3ID);
-        vUpArB2 = MatrixTools.MultiplyMatrix(vUpArB3IDT, MatrixTools.MultiplyMatrix(vUpArB3ID, vUpArB3D));
+        vUpArB2 = vUpArB22;// GravityRefArm(UpArB22, vNodInitAcc0);
+        vLoArB2 = vLoArB22;// GravityRefArm(LoArB22, vNodInitAcc1);
 
-        //lower arm transforms
-        vUpArB2T = MatrixTools.MatrixTranspose(vUpArB2);
-        vLoArB3D = MatrixTools.MultiplyMatrix(vUpArB2T, vLoArB2);
-        vLoArB3DT = MatrixTools.MatrixTranspose(vLoArB3D);
-        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm].InitGlobalMatrix);
-        vLoArB3IDT = MatrixTools.MatrixTranspose(vLoArB3ID);
+        //vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm];
+        //vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightForeArm];
 
-        vLoArB4 = MatrixTools.MultiplyMatrix(vLoArB3IDT, MatrixTools.MultiplyMatrix(vLoArB3ID, vLoArB3D));
+        bool fusion = false;
+
+        if (fusion)
+        {
+            ///////////// Yaw Compensation StepForward ///////////////////constraint
+
+            // finding compensated yaw axis of lower arm in one plane with upper arm
+            float temp1, temp2, temp3, temp4;
+            temp1 = vLoArB2[0, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[0, 2];
+            //Debug.Log("temp1 " + temp1);
+            temp2 = vLoArB2[1, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[1, 2];
+            //Debug.Log("temp2 " + temp2);
+            temp3 = vLoArB2[2, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[2, 2];
+            //Debug.Log("temp3 " + temp3);
+            temp4 = (float)Math.Sqrt((float)(temp1 * temp1 + temp2 * temp2 + temp3 * temp3));
+            //Debug.Log("temp4 " + temp4);
+            Vector3 yawLoAr = new Vector3(temp1 / temp4, temp2 / temp4, temp3 / temp4);
+            //Debug.Log("yawLoAr " + yawLoAr);
+
+            // Finding yaw compensation Angle
+            vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
+            //Debug.Log("vOrientationError " + vOrientationError);
+
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+                      
+            //Debug.Log("CompensationAngle "+ vCompensationAngle);
+            
+            //CompensationAngle = 0;
+            
+            // Finding yaw compensation axis
+            Vector3 yawLoAr2 = new Vector3(vLoArB2[0, 1], vLoArB2[1, 1], vLoArB2[2, 1]);
+
+            Vector3 NcrossUpArLoAr = new Vector3(0, 0, 0);
+            NcrossUpArLoAr = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
+
+            vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoAr, vCompensationAngle);
+            vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoAr, -vCompensationAngle);
+
+            // Applying yaw Compensation 
+            vLoArB3 = MatrixTools.multi(vCompensationRotationUpAr, vLoArB2);
+
+            // to remove the constraint un comment this line
+            //		LoArB3=LoArB2;
+
+            // this step applies the elbow 180 constraint and can be used also for fusion of elbow stretch sensors and nods in future
+            ///////////// Elbow 180 degree Constraint ///////////////////
+
+            Vector3 RollUpAr = new Vector3(vUpArB2[0, 0], vUpArB2[1, 0], vUpArB2[2, 0]);
+            yawLoAr = new Vector3(vLoArB3[0, 1], vLoArB3[1, 1], vLoArB3[2, 1]);
+            yawLoAr2 = new Vector3(vUpArB2[0, 1], vUpArB2[1, 1], vUpArB2[2, 1]);
+
+            Vector3 NcrossUpArLoArRoll = new Vector3(0, 0, 0);
+            NcrossUpArLoArRoll = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
+
+            if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
+            {
+                vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
+
+                //Finding yaw compensation Angle
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoArRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vLoArB4 = MatrixTools.multi(vCompensationRotationLoAr, vLoArB3);
+                vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
+
+            }
+            else //*/ /// this case when obey 180 degree constraint just to improve LoAr angle estimation
+            {
+                vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
+                vCompensationAngle = 0;
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoArRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vLoArB4 = MatrixTools.multi(vCompensationRotationLoAr, vLoArB3);
+                vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
+            }
+        }
+        else
+        {
+            vUpArB3 = vUpArB2;
+            vLoArB4 = vLoArB2;
+        }
 
         ////////////////// setting to Final Body orientation lower arm ///////////////////////////////
-        Vector3 u = new Vector3(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vLoArB5 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vLoArB4);
+        Vector3 u = new Vector3(vLoArB4[0, 1], vLoArB4[1, 1], vLoArB4[2, 1]);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vLoArB5 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB4);
 
-        u.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vLoArB6 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vLoArB5);
+        u.Set(vLoArB5[0, 0], vLoArB5[1, 0], vLoArB5[2, 0]);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vLoArB8 = MatrixTools.MultiplyMatrix(vLoArB6, vCurrentArOrientation);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, -(float)Math.PI / 2);
+        vLoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
-        u.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vLoArOrientation = MatrixTools.MultiplyMatrix(vLoArB8, vCurrentArOrientation);
+        u.Set(0, 0, 1);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vLoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
-        Vector3 u2 = new Vector3(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vUpArB4 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vUpArB2);
+        Vector3 u2 = new Vector3(vUpArB3[0, 1], vUpArB3[1, 1], vUpArB3[2, 1]);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vUpArB4 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB3);
 
-        u2.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vUpArB5 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vUpArB4);
+        u2.Set(vUpArB4[0, 0], vUpArB4[1, 0], vUpArB4[2, 0]);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
+        vUpArB5 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB4);
 
         u2.Set(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vUpArB7 = MatrixTools.MultiplyMatrix(vUpArB5, vCurrentArOrientation);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, -(float)Math.PI / 2);
+        vUpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
 
-        u2.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vUpArOrientation = MatrixTools.MultiplyMatrix(vUpArB7, vCurrentArOrientation);//*/
+        u2.Set(0, 0, 1);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
 
         RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
         vRightArmAnalysis.LoArOrientation = vLoArOrientation;
         vRightArmAnalysis.UpArOrientation = vUpArOrientation;
         vRightArmAnalysis.AngleExtraction();
-
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
+     
     }
 
     /**
@@ -511,110 +758,190 @@ public class BodySegment
     * @brief  Performs mapping on the left arm subsegment from the available sensor data
     * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor position
     */
-    internal void MapLeftArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
+    internal void MapLeftArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
     {
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftUpperArm];
         BodySubSegment vLASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftForeArm];
 
         //Intermediate arrays until achieve final orientation for shoulder and elbow
         //they are Tagged with F (forward rotation) and B (Backward rotation) and are numbered consecutively
-        //UpAr stands for upper arm sensor orientation and lower arm stands for lower arm (forearm) orientation
+        // UpAr stands for upper arm sensor orientation and lower arm stands for lower arm (forearm) orientation
         float[,] vUpArOrientation = new float[3, 3];
         float[,] vLoArOrientation = new float[3, 3];
 
-        float[,] vTorsoB2 = new float[3, 3];
-        float[,] vTorsoB2T = new float[3, 3];
 
         float[,] vUpArB2 = new float[3, 3];
-        float[,] vUpArB2T = new float[3, 3];
-        float[,] vUpArB3D = new float[3, 3];
-        float[,] vUpArB3ID = new float[3, 3];
-        float[,] vUpArB3DT = new float[3, 3];
-        float[,] vUpArB3IDT = new float[3, 3];
+        float[,] vUpArB3 = new float[3, 3];
         float[,] vUpArB4 = new float[3, 3];
         float[,] vUpArB5 = new float[3, 3];
         float[,] vUpArB6 = new float[3, 3];
+        float[,] vUpArB7 = new float[3, 3];
+        float[,] vUpArB21 = new float[3, 3];
+        float[,] vUpArB22 = new float[3, 3];
 
         float[,] vLoArB2 = new float[3, 3];
-        float[,] vLoArB3D = new float[3, 3];
-        float[,] vLoArB3ID = new float[3, 3];
-        float[,] vLoArB3DT = new float[3, 3];
-        float[,] vLoArB3IDT = new float[3, 3];
+        float[,] vLoArB3 = new float[3, 3];
         float[,] vLoArB4 = new float[3, 3];
         float[,] vLoArB5 = new float[3, 3];
         float[,] vLoArB6 = new float[3, 3];
         float[,] vLoArB7 = new float[3, 3];
+        float[,] vLoArB8 = new float[3, 3];
+        float[,] vLoArB21 = new float[3, 3];
+        float[,] vLoArB22 = new float[3, 3];
 
-        float[,] vCurrentArOrientation = new float[3, 3];
+        float[,] vCompensationRotationLoAr = new float[3, 3];
+        float[,] vCompensationRotationUpAr = new float[3, 3];
+        float[,] vCurrentLoArOrientation = new float[3, 3];
+
+        float vOrientationError = 0;
+        float vCompensationAngle = 0;
 
         /////////// Initial Frame Adjustments ///////////////////
-        vUpArB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].OrientationMatrix);
-        vLoArB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm].OrientationMatrix);
-        vTorsoB2 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].OrientationMatrix);
+        //No Gravity
+        //UpArB2 = TiltNod(UpArB21);
+        //LoArB2 = TiltNod(LoArB21);
 
-        //vUpArB2 = vUpArB22;// GravityRefArm(UpArB22, vNodInitAcc0);
-        //vLoArB2 = vLoArB22;// GravityRefArm(LoArB22, vNodInitAcc1);
+        //No tilt
+        //UpArB22 = UpArB21;
+        //LoArB22 = LoArB21;
+        vUpArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm]);
+        vLoArB22 = SensorsTiltCorrection(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm]);
 
-        vTorsoB2T = MatrixTools.MatrixTranspose(vTorsoB2);
-        vUpArB3D = MatrixTools.MultiplyMatrix(vTorsoB2T, vUpArB2);
-        vUpArB3DT = MatrixTools.MatrixTranspose(vUpArB3D);
-        vUpArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitGlobalMatrix);
-        vUpArB3IDT = MatrixTools.MatrixTranspose(vUpArB3ID);
-        vUpArB2 = MatrixTools.MultiplyMatrix(vUpArB3IDT, MatrixTools.MultiplyMatrix(vUpArB3ID, vUpArB3D));
+        vUpArB2 = vUpArB22;// GravityRefArm(UpArB22, vNodInitAcc0);
+        vLoArB2 = vLoArB22;// GravityRefArm(LoArB22, vNodInitAcc1);
 
-        vUpArB2T = MatrixTools.MatrixTranspose(vUpArB2);
-        vLoArB3D = MatrixTools.MultiplyMatrix(vUpArB2T, vLoArB2);
-        vLoArB3DT = MatrixTools.MatrixTranspose(vLoArB3D);
+        //vUpArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm];
+        //vLoArB2 = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm];
 
-        vLoArB3ID = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitGlobalMatrix),
-                                                    vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftForeArm].InitGlobalMatrix);
-        vLoArB3IDT = MatrixTools.MatrixTranspose(vLoArB3ID);
+        /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
+        /// /////////////////////////////////////////////////////  Fusion /////////////////////////////////////////////////////////////////////
+        bool fusion = false;
 
-        vLoArB4 = MatrixTools.MultiplyMatrix(vLoArB3IDT, MatrixTools.MultiplyMatrix(vLoArB3ID, vLoArB3D));
+        if (fusion)
+        {
+            // finding compensated yaw in one plane with upperarm
+            float temp1, temp2, temp3, temp4;
+            temp1 = vLoArB2[0, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[0, 2];
+            temp2 = vLoArB2[1, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[1, 2];
+            temp3 = vLoArB2[2, 1] - (vUpArB2[0, 2] * vLoArB2[0, 1] + vUpArB2[1, 2] * vLoArB2[1, 1] + vUpArB2[2, 2] * vLoArB2[2, 1]) * vUpArB2[2, 2];
+            temp4 = (float)Math.Sqrt((float)(temp1 * temp1 + temp2 * temp2 + temp3 * temp3));
+            Vector3 yawLoAr = new Vector3(temp1 / temp4, temp2 / temp4, temp3 / temp4);
+
+            // Finding yaw compensation Angle
+            vOrientationError = yawLoAr.x * vLoArB2[0, 1] + yawLoAr.y * vLoArB2[1, 1] + yawLoAr.z * vLoArB2[2, 1];
+            vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+            //Debug.Log("LEFT CompensationAngle " + vCompensationAngle);
+
+            // Finding yaw compensation axis
+            Vector3 yawLoAr2 = new Vector3(vLoArB2[0, 1], vLoArB2[1, 1], vLoArB2[2, 1]);
+
+            Vector3 NcrossUpArLoAr = new Vector3(0, 0, 0);
+            NcrossUpArLoAr = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
+
+            vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoAr, vCompensationAngle);
+            vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoAr, -vCompensationAngle);
+
+            // Applying yaw Compensation 
+            vLoArB3 = MatrixTools.multi(vCompensationRotationUpAr, vLoArB2);
+
+            //LoArB3=LoArB2;
+
+            // this step applies the elbow 180 constraint and can be used also for fusion of elbow stretch sensors and nods in future
+            ///////////// LoAr 180 degree Constraint ///////////////////
+            Vector3 RollUpAr = new Vector3(vUpArB2[0, 0], vUpArB2[1, 0], vUpArB2[2, 0]);
+
+            yawLoAr = new Vector3(vLoArB3[0, 1], vLoArB3[1, 1], vLoArB3[2, 1]);
+            yawLoAr2 = new Vector3(vUpArB2[0, 1], vUpArB2[1, 1], vUpArB2[2, 1]);
+
+            Vector3 NcrossUpArLoArRoll = new Vector3(0, 0, 0);
+            NcrossUpArLoArRoll = Vector3.Cross(yawLoAr2, yawLoAr).normalized;
+
+            if (Vector3.Dot(RollUpAr, yawLoAr) > 0) /// this case when not obey 180 degree constraint
+            {
+
+                vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
+
+                // Finding yaw compensation Angle
+                vCompensationAngle = (float)Math.Acos(vOrientationError > 1.00f ? 1f : vOrientationError);
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoArRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vLoArB4 = MatrixTools.multi(vCompensationRotationLoAr, vLoArB3);
+                vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
+
+            }
+            else//*/  /// this case when obey 180 degree constraint just to improve LoAr angle estimation
+            {
+                vOrientationError = vUpArB2[0, 1] * vLoArB3[0, 1] + vUpArB2[1, 1] * vLoArB3[1, 1] + vUpArB2[2, 1] * vLoArB3[2, 1];
+
+                // Finding yaw compensation Angle
+                vCompensationAngle = 0;
+
+                // Building yaw compensation rotation matrices
+                vCompensationRotationUpAr = MatrixTools.RVector(NcrossUpArLoArRoll, +0.5f * vCompensationAngle);
+                vCompensationRotationLoAr = MatrixTools.RVector(NcrossUpArLoArRoll, -0.5f * vCompensationAngle);
+
+                // Applying yaw Compensation 
+                vLoArB4 = MatrixTools.multi(vCompensationRotationLoAr, vLoArB3);
+                vUpArB3 = MatrixTools.multi(vCompensationRotationUpAr, vUpArB2);
+            }
+        }
+        else
+        {
+            vLoArB4 = vLoArB2;
+            vUpArB3 = vUpArB2;
+        }
 
         /////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
 
         ////////////////// setting to Final Body orientation lower arm///////////////////////////////
-        Vector3 u = new Vector3(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vLoArB5 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vLoArB4);
+        Vector3 u = new Vector3(vLoArB4[0, 0], vLoArB4[1, 0], vLoArB4[2, 0]);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        vLoArB5 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB4);
 
-        u.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vLoArB6 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vLoArB5);
+
+        u.Set(vLoArB5[0, 1], vLoArB5[1, 1], vLoArB5[2, 1]);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0f);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vLoArB6 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB5);
 
         u.Set(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, (float)Math.PI / 2);
-        vLoArB7 = MatrixTools.MultiplyMatrix(vLoArB6, vCurrentArOrientation);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI / 2);
+        vLoArB7 = MatrixTools.multi(vCurrentLoArOrientation, vLoArB6);
 
-        u.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u.normalized, -(float)Math.PI / 2);
-        vLoArOrientation = MatrixTools.MultiplyMatrix(vLoArB7, vCurrentArOrientation);
+        u.Set(0, 0, 1);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u, (float)Math.PI);
+        vLoArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vLoArB7);
 
         ////////////////// setting to Final Body orientation upper arm///////////////////////////////
-        Vector3 u2 = new Vector3(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vUpArB4 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vUpArB2);
+        Vector3 u2 = new Vector3(vUpArB3[0, 0], vUpArB3[1, 0], vUpArB3[2, 0]);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
+        vUpArB4 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB3);
 
-        u2.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vUpArB5 = MatrixTools.MultiplyMatrix(vCurrentArOrientation, vUpArB4);
+        u2.Set(vUpArB4[0, 1], vUpArB4[1, 1], vUpArB4[2, 1]);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vUpArB5 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB4);
 
         u2.Set(1, 0, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, (float)Math.PI / 2);
-        vUpArB6 = MatrixTools.MultiplyMatrix(vUpArB5, vCurrentArOrientation);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI / 2);
+        vUpArB6 = MatrixTools.multi(vCurrentLoArOrientation, vUpArB5);
 
-        u2.Set(0, 1, 0);
-        vCurrentArOrientation = MatrixTools.RVector(u2.normalized, -(float)Math.PI / 2);
-        vUpArOrientation = MatrixTools.MultiplyMatrix(vUpArB6, vCurrentArOrientation);
 
-        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis)mCurrentAnalysisSegment;
+        u2.Set(0, 0, 1);
+        //vCurrentLoArOrientation = MatrixTools.RVector(u2, 0);
+        vCurrentLoArOrientation = MatrixTools.RVector(u2, (float)Math.PI);
+        vUpArOrientation = MatrixTools.multi(vCurrentLoArOrientation, vUpArB6);
+
+        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis) mCurrentAnalysisSegment;
         vLeftArmAnalysis.LoArOrientation = vLoArOrientation;
         vLeftArmAnalysis.UpArOrientation = vUpArOrientation;
         vLeftArmAnalysis.AngleExtraction();
-
         vUASubsegment.UpdateSubsegmentOrientation(vUpArOrientation);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArOrientation);
     }
@@ -629,22 +956,21 @@ public class BodySegment
         float[,] B3 = new float[3, 3];
         float[,] B4 = new float[3, 3];
 
-        Vector3 u1 = new Vector3(1, 0, 0);// (B2[0, 0], B2[1, 0], B2[2, 0]);
+        Vector3 u1 = new Vector3(B2[0, 0], B2[1, 0], B2[2, 0]);
 
-        float vAngleNew = (float)Math.PI * (7.6f / 180f);
-        //float vAngleNew = (float)Math.PI * (0.0f / 180f);
+        float vAngleNew = -(float)Math.PI * (7.6f / 180f);
 
         float[,] CurrentCompensation = new float[3, 3];
-        CurrentCompensation = MatrixTools.RVector(u1.normalized, vAngleNew);
+        CurrentCompensation = MatrixTools.RVector(u1, vAngleNew);
 
-        B3 = MatrixTools.MultiplyMatrix(CurrentCompensation, B2);
+        B3 = MatrixTools.multi(CurrentCompensation, B2);
 
         Vector3 roll = new Vector3(1, 0, 0);
 
         float[,] Compensation = new float[3, 3];
-        Compensation = MatrixTools.RVector(roll.normalized, -vAngleNew);
+        Compensation = MatrixTools.RVector(roll, -vAngleNew);
 
-        B4 = MatrixTools.MultiplyMatrix(B3, Compensation);
+        B4 = MatrixTools.multi(Compensation, B3);
 
         return B4;
     }
@@ -665,10 +991,8 @@ public class BodySegment
         List<BodyStructureMap.SensorPositions> sensorPositions =
             BodyStructureMap.Instance.SegmentToSensorPosMap[vSegmentType];
 
-
-        for (int i = 0; i < sensorPositions.Count; i++)
+        foreach (var sensorPos in sensorPositions)
         {
-            var sensorPos = sensorPositions[i];
             Sensor newSensor = new Sensor();
             newSensor.SensorBodyId = BodyStructureMap.Instance.SensorPosToSensorIDMap[sensorPos];
             newSensor.SensorType = BodyStructureMap.Instance.SensorPosToSensorTypeMap[sensorPos];
@@ -679,9 +1003,8 @@ public class BodySegment
             SensorsTuple.Add(tuple);
         }
 
-        for (int i = 0; i < subsegmentTypes.Count; i++)
+        foreach (BodyStructureMap.SubSegmentTypes sstype in subsegmentTypes)
         {
-            BodyStructureMap.SubSegmentTypes sstype = subsegmentTypes[i];
             BodySubSegment subSegment = new BodySubSegment();
             subSegment.subsegmentType = sstype;
             subSegment.InitializeBodySubsegment(sstype);
@@ -696,7 +1019,7 @@ public class BodySegment
     * @brief Perform mapping on the current segments and its respective subsegments 
     * @param 
     */
-    private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
+    private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
     {
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
         {

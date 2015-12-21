@@ -25,16 +25,12 @@ public class TouchMove : MonoBehaviour {
 			// Cast a ray of distance 100, and check if this
 			// collider is hit.
 			if (GetComponent<Collider>().Raycast (ray, out hit, 100.0f)) {
-				// Log a debug message
-				Debug.Log("Moving the target");
+				// Log a debug message 
 				// Move the target forward
 				transform.Translate(Vector3.forward * vSpeed);       
 				// Rotate the target along the y-axis
 				transform.Rotate(Vector3.up * vRotationSpeed);
-			} else {
-				// Clear the debug message
-				Debug.Log("");
-			}
+			} 
 		}
 	}
 }

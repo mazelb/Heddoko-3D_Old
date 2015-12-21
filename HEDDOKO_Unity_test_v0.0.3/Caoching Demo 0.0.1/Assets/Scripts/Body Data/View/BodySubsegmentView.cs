@@ -21,10 +21,7 @@ namespace Assets.Scripts.Body_Data.view
         //the transforms required to transform
         public BodySubSegment AssociatedSubSegment;
         public List<Transform> SubSegmentTransforms = new List<Transform>();
-
-        //Initial subsegment position 
-        private Vector3 mInitialPosition = Vector3.zero;
-
+        
         //Sprite Transform2D
          private ISpriteMover mSpriteMover;
 
@@ -42,17 +39,13 @@ namespace Assets.Scripts.Body_Data.view
         {
             //find the object in the scene with the tag
             GameObject[] vGameObjects = GameObject.FindGameObjectsWithTag(gameObject.name);
-
-            //Initialize the view of each subsegments related object
             foreach (GameObject vObj in vGameObjects)
             {
                 Transform vTransform = vObj.transform;
-                SubSegmentTransforms.Add(vTransform);
 
-                //Todo: add proper setting for the initial position 
-                mInitialPosition = vTransform.localPosition;
+                SubSegmentTransforms.Add(vTransform);
             }
-            try
+          try
             {
                 GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
                 if (v2DGameObject != null)
@@ -65,7 +58,7 @@ namespace Assets.Scripts.Body_Data.view
             {
                  //exception is thrown if the tag ins't found in the tag manager.
             } 
-            //Find the 2D representation of the object in the scene 
+ 
           
 
         }
@@ -74,21 +67,12 @@ namespace Assets.Scripts.Body_Data.view
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                //vObjTransform.rotation = vNewOrientation;
-                vObjTransform.localRotation = vNewOrientation;
+                vObjTransform.rotation = vNewOrientation;
+                //vObjTransform.localRotation = vNewOrientation;
             }
 
-            //Apply 2D transformation
-           /* if (SpriteTransform != null)
-            {
-                //convert to Euler
-                Vector3 vEuler = vNewOrientation.eulerAngles;
-                vEuler.z = vEuler.vLeftLegHipMulti;
-                vEuler.vLeftLegHipMulti = 0;
-                vEuler.y = 0;
-                SpriteTransform.rotation = Quaternion.Euler(vEuler);
-            }*/  
-          if (mSpriteMover != null)
+            //apply 2d transformation
+            if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTransformations();
 
@@ -101,17 +85,11 @@ namespace Assets.Scripts.Body_Data.view
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
                 Vector3 v3 = vObjTransform.localPosition;
-                v3.y = vNewDisplacement + 0.15f;
-                vObjTransform.localPosition = v3;
-            }
-
-            //Apply 2D translations
-        /* if (SpriteTransform != null)
-            { 
-                Vector3 v3 = SpriteTransform.localPosition;
                 v3.y = vNewDisplacement;
-                SpriteTransform.localPosition = v3;
-            } */
+                vObjTransform.localPosition = v3;
+            } 
+
+            //apply 2d transformation
             if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTranslations(vNewDisplacement);
@@ -122,15 +100,11 @@ namespace Assets.Scripts.Body_Data.view
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                vObjTransform.localRotation = Quaternion.identity;
-                //vObjTransform.rotation = Quaternion.identity;
+                vObjTransform.rotation = Quaternion.identity;
             }
 
            //Apply to 2D model
-/*            if (SpriteTransform != null)
-            {
-                SpriteTransform.rotation = Quaternion.identity;
-            }*/ 
+  
         if (mSpriteMover != null)
             {
                 mSpriteMover.ResetOrientations();

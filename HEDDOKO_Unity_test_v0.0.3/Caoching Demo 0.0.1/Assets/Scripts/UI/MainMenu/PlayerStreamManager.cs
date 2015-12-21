@@ -170,7 +170,7 @@ namespace Assets.Scripts.UI.MainMenu
                        x => x.SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso);
                 if (vSegment != null)
                 {
-                   vSegment.IsTrackingHeight = vFlag;
+                   //vSegment.IsTrackingHeight = vFlag;
                 }
                 //     mPlayButtonPushed = true;
                 ChangeState(BodyPlaybackState.PlayingRecording);
