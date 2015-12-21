@@ -63,6 +63,15 @@ public class BodyFrame
         return vOutput;
     }
 
+    public string ToCSVString()
+    {
+        string vOutput =""+(long)Timestamp+",";
+        foreach (KeyValuePair<BodyStructureMap.SensorPositions, Vector3> vPair in FrameData)
+        {
+            vOutput += (int) vPair.Key + "," + vPair.Value.x + ";"+vPair.Value.y + ";"+vPair.Value.z + ",";
+        }
+        return vOutput;
+    }
     public BodyFrame()
     {
         
@@ -151,7 +160,7 @@ public class BodyFrame
         return vBodyFrame;
 
     }
-
+ 
     /// <summary>
     /// Converts a string received by the Brainpack server service into a bodyframe
     /// </summary>

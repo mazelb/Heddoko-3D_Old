@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using BrainpackService.bluetooth_connector.BrainpackInterfaces;
+using BrainpackService.bluetooth_connector.DebugContext;
 using BrainpackService.Tools_and_Utilities;
 using HeddokoLib.adt;
 
@@ -20,7 +22,9 @@ namespace BrainpackService.brainpack_serial_connect
         private string mNextLine;
         private static BrainpackSerialConnector sInstance;
         private object mSerialPortLock = new object();
+        private object mLineLock = new object();
         bool mMessageSent = false;
+        private DebugBodyFrameLogger mBodyFrameLogger = new DebugBodyFrameLogger("BPService");
         SerialPort mSerialport { get; set; } = new SerialPort();
 
         CircularQueue<string> OutboundBuffer { get; set; } = new CircularQueue<string>(10, true);
@@ -109,6 +113,9 @@ namespace BrainpackService.brainpack_serial_connect
 
             while (true)
             {
+                Stopwatch vStopwatch = new Stopwatch();
+                vStopwatch.Start();
+                
                 lock (mSerialPortLock)
                 {
                     if (mSerialport.IsOpen)
@@ -121,12 +128,20 @@ namespace BrainpackService.brainpack_serial_connect
                                 //
                                 if (line.Length != 176)
                                 {
-                                    mNextLine = "";
+                                    lock (mLineLock)
+                                    {
+                                        mNextLine = "";
+                                    }
                                     BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
                                     continue;
                                 }
                                 OutboundBuffer.Enqueue(line);
-                                mNextLine = line;
+                                lock (mLineLock)
+                                {
+                                    mNextLine = line;
+
+                                }
+                                
                             }
 
                         }
@@ -147,24 +162,39 @@ namespace BrainpackService.brainpack_serial_connect
 
                                 if (!vResult)
                                 {
-                                    mNextLine = "";
+                                    lock (mLineLock)
+                                    {
+                                        mNextLine = "";
+
+                                    }
+                                    
                                     mSerialport.Close();
                                 }
                             }
                             catch (IOException vIoException)
                             {
                                 BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
-                                mNextLine = "";
+                                lock (mLineLock)
+                                {
+                                    mNextLine = "";
+
+                                }
                             }
                             catch (InvalidOperationException vInvalidOperationException)
                             {
                                 BrainpackEventLogManager.InvokeEventLogError(vInvalidOperationException + "\r\n" + vInvalidOperationException.StackTrace);
-                                mNextLine = "";
+                                lock (mLineLock)
+                                {
+                                    mNextLine = "";
+
+                                }
                             }
                         }
                     }
                 }
-
+                vStopwatch.Stop();
+                
+                //mBodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds,mNextLine);
                 if (!mIsWorking)
                 {
                     Stop();
@@ -186,7 +216,10 @@ namespace BrainpackService.brainpack_serial_connect
             }
         }
 
-
+        private void WriteLine(string vLine)
+        {
+            
+        }
         public void Start()
         {
             if (!mIsWorking)
@@ -274,7 +307,13 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-            return mNextLine;
+            string vReturnMsg = "";
+            lock (mLineLock)
+            {
+                vReturnMsg =mNextLine ;
+
+            }
+            return vReturnMsg;
 /*               if (OutboundBuffer.Count == 0)
                {
                    return "";

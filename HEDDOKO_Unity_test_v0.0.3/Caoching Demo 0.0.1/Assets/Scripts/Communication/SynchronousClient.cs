@@ -10,7 +10,8 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq; 
+using System.Linq;
+//using Assets.Scripts.Utils.Debugging;
 using HeddokoLib.networking;
 using Debug = UnityEngine.Debug;
 
@@ -19,8 +20,7 @@ namespace Assets.Scripts.Communication
     using System;
     using System.Net;
     using System.Net.Sockets;
-    using System.Threading;
-    using System.Text;
+    using System.Threading; 
 
     // State object for receiving data from remote device.
  
@@ -41,6 +41,9 @@ namespace Assets.Scripts.Communication
 
         public Queue<string> Requests = new Queue<string>(300);
         private static bool mReceivedMessage =true;
+
+        public bool IsDebugging { get; set; }
+       //     private DebugBodyFrameLogger vBodyFrameLogger= new DebugBodyFrameLogger("ClientComm");
         private void ThreadWorker()
         {
             while (true)
@@ -71,10 +74,13 @@ namespace Assets.Scripts.Communication
         /// Starts a client socket and sends the message data. 
         /// </summary>
         /// <param name="vMsg"></param>
-        private static void StartClientAndSendData(string vMsg)
+        private void StartClientAndSendData(string vMsg)
         { 
             byte[] bytes = new byte[1024];
             mReceivedMessage = false;
+            string vLogmessage = "";
+            Stopwatch vStopwatch = new Stopwatch();
+            vStopwatch.Start();
             // Connect to a remote device.
             try
             {
@@ -106,30 +112,38 @@ namespace Assets.Scripts.Communication
                     // Release the socket.
                     vSender.Shutdown(SocketShutdown.Both);
                     vSender.Close();
-
+                 
+                        vMsg = PacketSetting.Encoding.GetString(bytes);
                 }
                 catch (ArgumentNullException ane)
                 {
-                    Debug.Log("ArgumentNullException  " +ane.ToString());
-         SocketClient.WriteToLogFile("ArgumentNullException  " + ane.ToString());
+                     vMsg =  "ArgumentNullException  " +ane;
+                    Debug.Log(vMsg); 
                 }
                 catch (SocketException se)
                 {
-                    Debug.Log("SocketException  "+ se.ToString());
-                    SocketClient.WriteToLogFile("ArgumentNullException  " + se.ToString());
+                    vMsg = "SocketException  " + se;
+                    Debug.Log(vMsg); 
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("Unexpected exception " +e.ToString());
-                    SocketClient.WriteToLogFile("ArgumentNullException  " + e.ToString());
+                    vMsg = "Unexpected exception " + e;
+                    Debug.Log(vMsg); 
                 }
 
             }
             catch (Exception e)
             {
-                Debug.Log(e.ToString());
+                vMsg = "Unexpected exception " + e;
+                Debug.Log(vMsg);
             }
-            mReceivedMessage = true; 
+            mReceivedMessage = true;
+            vStopwatch.Stop();
+            
+            if (IsDebugging)
+            {
+                //vBodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds,vMsg);
+            }
         }
         private bool mIsworking;
         public void Stop()

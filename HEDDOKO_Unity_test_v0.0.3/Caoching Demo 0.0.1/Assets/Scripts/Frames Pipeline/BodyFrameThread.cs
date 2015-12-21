@@ -8,9 +8,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Assets.Scripts.Frames_Pipeline;
 using Assets.Scripts.Utils;
+//using Assets.Scripts.Utils.Debugging;
 using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
@@ -44,6 +46,10 @@ public class BodyFrameThread : ThreadedJob
 
     public StreamWriter mStreamWriter;
     //====================================================END OF WRITING RAW FRAMES TO DISK ================================//
+
+    //For debug purposes
+    public bool IsDebugging { get; set; }
+    //DebugBodyFrameLogger RawframeConversion = new DebugBodyFrameLogger("BodyFrameThread");
 
     public bool ContinueWorking
     {
@@ -293,6 +299,9 @@ public class BodyFrameThread : ThreadedJob
     {
         while (true)
         {
+            string vLogMessage = "";
+            Stopwatch vStopwatch = new Stopwatch();
+            vStopwatch.Start();
             if (!ContinueWorking)
             {
                 //finished working
@@ -318,6 +327,8 @@ public class BodyFrameThread : ThreadedJob
                 //first unwrap the string and break it down 
                 vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
                 
+                //Debug here
+
                 //todo place a check here for valid data
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 WriteToDiskSubTask(vUnwrappedString);
@@ -356,21 +367,29 @@ public class BodyFrameThread : ThreadedJob
                     }
                 }
                 BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
+                vBodyFrame.Timestamp = vTimeStamp;
                 BodyFrameBuffer.Enqueue(vBodyFrame);
+                vLogMessage += vUnwrappedString;
+
             }
             catch (IndexOutOfRangeException)
             {
-                string vExcMsg = "IndexOutOfRangeException in BodyFrameThread. Contents of vUnwrappedString are " +
+                vLogMessage = "IndexOutOfRangeException in BodyFrameThread. Contents of vUnwrappedString are " +
                                  vUnwrappedString;
             }
             catch (Exception e)
             {
-                string vExcMsg = e.Message + "\n" + e.GetBaseException() + "\n" + e.StackTrace;
-                UnityEngine.Debug.Log(vExcMsg);
-                continue;
+                vLogMessage = e.Message + "\n" + e.GetBaseException() + "\n" + e.StackTrace; 
+               
             }
-
-
+          
+            vStopwatch.Stop();
+            if (IsDebugging)
+            {
+                double vTotalMs = vStopwatch.Elapsed.TotalMilliseconds;
+                //RawframeConversion.WriteLog(vTotalMs, vLogMessage);
+            }
+        
         }
     }
 

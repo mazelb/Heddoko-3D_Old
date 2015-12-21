@@ -339,8 +339,10 @@ public class Body
         //get the list of segments of the speicfied vBody
         List<BodySegment> vListBodySegments = vBody.BodySegments;
 
-        foreach (BodySegment vBodySegment in vListBodySegments)
+      
+        for(int i  = 0 ; i < vListBodySegments.Count; i++)
         {
+            BodySegment vBodySegment = vListBodySegments[i];
             //of the current body segment, get the appropriate subsegments
             List<BodyStructureMap.SensorPositions> vSensPosList =
                 BodyStructureMap.Instance.SegmentToSensorPosMap[vBodySegment.SegmentType];
@@ -348,16 +350,16 @@ public class Body
             //create a Dictionary of BodyStructureMap.SensorPositions, float[,] , which will be passed
             //to the segment
             Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary = new Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure>(2);
-
-            foreach (BodyStructureMap.SensorPositions vSenPos in vSensPosList)
+            for (int j = 0; j < vSensPosList.Count; j++)
             {
+                BodyStructureMap.SensorPositions vSenPos = vSensPosList[j];
                 if (vDic.ContainsKey(vSenPos))
                 {
                     BodyStructureMap.TrackingStructure vTrackedMatrices = vDic[vSenPos];
                     vFilteredDictionary.Add(vSenPos, vTrackedMatrices);
                 }
             }
-
+ 
             vBodySegment.UpdateSegment(vFilteredDictionary);
         }
     }

@@ -8,7 +8,9 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
+//using Assets.Scripts.Utils.Debugging;
 using Assets.Scripts.Utils.UnityUtilities;
 
 namespace Assets.Scripts.Body_Data.view
@@ -27,6 +29,10 @@ namespace Assets.Scripts.Body_Data.view
         private bool mIsPaused;
         [SerializeField]
         private bool mStartUpdating;
+
+        //For debug purposes
+        public bool IsDebugging { get; set; }
+   //     private DebugBodyFrameLogger BodyFrameLogger = new DebugBodyFrameLogger("BodyFrameRendering");
 
         /// <summary>
         /// Internally set the Body associated to this view. Class property that returns the Body associated with this view.
@@ -143,6 +149,9 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (StartUpdating)
             {
+                Stopwatch vStopwatch = new Stopwatch();
+                vStopwatch.Start();
+                string vLogMessage = "";
                 if (mIsPaused)
                 {
                     return;
@@ -156,16 +165,19 @@ namespace Assets.Scripts.Body_Data.view
                         //AssociatedBody.SetInitialFrame(vBodyFrame);
                         ResetInitialFrame(vBodyFrame);
                     }
-
+                   
                     UpdateViewTracking(vBodyFrame);
+                    vStopwatch.Stop();
+                    if (IsDebugging)
+                    {
+                       // string vMessage = vBodyFrame.ToCSVString();
+                        //BodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds, vMessage);
+                    }
                 }
             }
         }
-
-        /// <summary>
-        /// Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
-        /// </summary
-        private void Awake()
+ 
+       /* private void Awake()
         {
             if (name != "body view guid: e75115c356218d84fa35dbd8a3159284")
             {
@@ -177,6 +189,6 @@ namespace Assets.Scripts.Body_Data.view
                     vDebugger.View = this;
                 }
             }
-        }
+        }*/
     }
 }

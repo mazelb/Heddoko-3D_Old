@@ -122,7 +122,7 @@ namespace BrainpackService.bluetooth_connector
             }
             catch (Exception e)
             {
-             BrainpackEventLogManager.InvokeEventLogMessage(e.ToString());    
+             BrainpackEventLogManager.InvokeEventLogError(e.ToString());    
             }
             
             //start the network stream
