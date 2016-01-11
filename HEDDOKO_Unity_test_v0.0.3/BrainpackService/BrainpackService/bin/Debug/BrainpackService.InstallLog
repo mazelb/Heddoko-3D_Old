@@ -2567,3 +2567,11 @@ Affected parameters are:
    logfile = E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
    assemblypath = E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
 Restoring event log to previous state for source BrainpackService.
+Uninstalling assembly 'E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.InstallLog
+   assemblypath = E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+Removing EventLog source BrainpackService.
+Service BrainpackService is being removed from the system...
+Service BrainpackService was successfully removed from the system.
