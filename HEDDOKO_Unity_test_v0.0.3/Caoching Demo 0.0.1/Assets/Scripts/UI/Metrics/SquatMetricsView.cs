@@ -70,7 +70,7 @@ namespace Assets.Scripts.UI.Metrics
                         VisualSquatFeedback.fillAmount = vPositionOfSquat;
                         //SquatColoredFeedback.SetScrollValue(vPositionOfSquat);
                     }
-                    int vCurrentSquats = Mathf.FloorToInt(vRightLegAnalysis.NumberofRightSquats/2);
+                    int vCurrentSquats = Mathf.FloorToInt(vRightLegAnalysis.NumberofRightSquats);
                    UpdateSquatsCount(vCurrentSquats);
                     /*
 

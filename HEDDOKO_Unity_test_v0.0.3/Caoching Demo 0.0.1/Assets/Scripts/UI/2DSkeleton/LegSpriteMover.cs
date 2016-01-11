@@ -38,7 +38,7 @@ namespace Assets.Scripts.UI._2DSkeleton
         public bool ShowKneeAngles = true;
         public bool ShowHipAngles = true;
         public ActivitiesContextController ActivityContextController;
-        public AngleInfoMetrics AngleInfoMetrics;
+   //     public AngleInfoMetrics AngleInfoMetrics;
         public Renderer[] Renderers;
 
         public PlayerStreamManager PlayerStreamManager
@@ -121,13 +121,13 @@ namespace Assets.Scripts.UI._2DSkeleton
                 ShadedAngleAreaHip.ShowAngle = false;
             }
 
-            if (AngleInfoMetrics)
+     /*       if (AngleInfoMetrics)
             {
                 if (Renderers[0].enabled)
                 {
                     AngleInfoMetrics.UpdateInfoPanel(IsRightLeg);
                 }
-            }
+            }*/
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Assets.Scripts.UI._2DSkeleton
             ShadedAngleAreaHip.gameObject.SetActive(vFlag);
         }
 
-        void Update()
+       /* void Update()
         {
             if (Debug.isDebugBuild && IsRightLeg)
             {
@@ -165,7 +165,7 @@ namespace Assets.Scripts.UI._2DSkeleton
                 }
             }
 
-        }
+        }*/
 
     }
 }

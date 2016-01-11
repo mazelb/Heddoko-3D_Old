@@ -14,7 +14,7 @@ namespace Assets.Scripts.Utils.DebugContext
     /// </summary>
   public  static class HeddokoDebugKeyMappings
   {
-        public static KeyCode ResetFrame = KeyCode.F1;
+        public static KeyCode ResetFrame = KeyCode.Home;
         
   }
 }

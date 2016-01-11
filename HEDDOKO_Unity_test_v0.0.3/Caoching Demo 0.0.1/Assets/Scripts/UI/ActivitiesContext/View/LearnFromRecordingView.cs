@@ -61,8 +61,10 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Show()
         {
+           
             ModelSwitcher.TransformInview3DLocation = HeddokoModel3DEnabledAnchor;
             ModelSwitcher.TransformInview2DLocation = HeddokoModel2DEnabledAnchor;
+
             //HeddokoModel.transform.position = HeddokoModel3DEnabledAnchor.position;
             //  HeddokoModel.transform.rotation = HeddokoModelEnabledAnchor.rotation;
             gameObject.SetActive(true);
@@ -92,7 +94,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             }
             PlayerStreamManager.ResetPlayer();
             PlayerStreamManager.StickTorsoToHips(ActivitiesContextController.UsingSquats);
- 
+            Application.targetFrameRate = 30;
+            QualitySettings.vSyncCount = 0;
 
         }
 
@@ -101,7 +104,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Hide()
         {
-        
+            Application.targetFrameRate = -1;
             gameObject.SetActive(false); 
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetPlayer();

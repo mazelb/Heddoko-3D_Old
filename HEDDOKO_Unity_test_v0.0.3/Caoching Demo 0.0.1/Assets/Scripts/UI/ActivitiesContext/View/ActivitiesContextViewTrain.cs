@@ -76,6 +76,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.Show();
             DualPurposeMetrics.SetActive(true);
             TrainingAndLearningCam.gameObject.SetActive(true);
+            PlayerStreamManager.ResetPlayer();
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
             {

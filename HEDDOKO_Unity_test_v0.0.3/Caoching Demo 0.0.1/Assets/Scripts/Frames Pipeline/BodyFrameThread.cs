@@ -42,9 +42,9 @@ public class BodyFrameThread : ThreadedJob
     /// <summary>
     /// For writing raw frames to disk
     /// </summary>
-    public bool CreateNewFile = true;
+   // public bool CreateNewFile = true;
 
-    public StreamWriter mStreamWriter;
+ //   public StreamWriter mStreamWriter;
     //====================================================END OF WRITING RAW FRAMES TO DISK ================================//
 
     //For debug purposes
@@ -329,7 +329,7 @@ public class BodyFrameThread : ThreadedJob
 
                 //todo place a check here for valid data
                 string[] vExploded = vUnwrappedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                WriteToDiskSubTask(vUnwrappedString);
+                //WriteToDiskSubTask(vUnwrappedString);
                 //this data is invalid
                 if (vExploded.Length != 12)
                 {
@@ -390,7 +390,7 @@ public class BodyFrameThread : ThreadedJob
         
         }
     }
-
+/*
     private void WriteToDiskSubTask(string vPacket)
     { 
         if (CreateNewFile)
@@ -412,9 +412,9 @@ public class BodyFrameThread : ThreadedJob
             int vNext = vRandom.Next(0, 65556);
             //file name
             string vFileName = vSubPath+ "/Raw_" + DateTime.Now.ToString(@"MM-dd-yyyy_h-mm-tt")+ vNext + ".csv";
-            mStreamWriter = new StreamWriter(vFileName); 
+            //mStreamWriter = new StreamWriter(vFileName); 
           
-            CreateNewFile = false;
+           // CreateNewFile = false;
         }
         try
         {
@@ -422,13 +422,13 @@ public class BodyFrameThread : ThreadedJob
             {
                 return;
             }
-            mStreamWriter.WriteLine(vPacket);
+           // mStreamWriter.WriteLine(vPacket);
         }
         catch (Exception e)
         {
             CloseFile();
         }
-    }
+    }*/
     /// <summary>
     /// Close the file
     /// </summary>
@@ -436,8 +436,8 @@ public class BodyFrameThread : ThreadedJob
     {
         try
         {
-            mStreamWriter.Flush();
-            mStreamWriter.Close();
+            //mStreamWriter.Flush();
+          //  mStreamWriter.Close();
         }
         catch(Exception)
         {
@@ -462,7 +462,8 @@ public class BodyFrameThread : ThreadedJob
     */
     public void StopThread()
     {
-        ContinueWorking = false;
+      
+        ContinueWorking = false; 
         CloseFile();
     }
 

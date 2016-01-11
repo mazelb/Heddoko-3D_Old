@@ -36,8 +36,7 @@ namespace Assets.Scripts.Utils.DebugContext
                 {
                    // vCurrentBody.View.IsDebugging = mIsDebugging;
                     vCurrentBody.MBodyFrameThread.IsDebugging = mIsDebugging;
-                }
-               
+                } 
             }
         }
     }

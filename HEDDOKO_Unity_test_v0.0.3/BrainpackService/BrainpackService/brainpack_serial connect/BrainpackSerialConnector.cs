@@ -307,21 +307,21 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-            string vReturnMsg = "";
+         /*   string vReturnMsg = "";
             lock (mLineLock)
             {
                 vReturnMsg =mNextLine ;
 
             }
-            return vReturnMsg;
-/*               if (OutboundBuffer.Count == 0)
+            return vReturnMsg;*/
+          if (OutboundBuffer.Count == 0)
                {
                    return "";
                }
                else
                {
                    return OutboundBuffer.Dequeue();
-               } */
+               }  
         }
     }
 }

@@ -7,6 +7,6 @@ public class ButtonFunctonality : MonoBehaviour {
 
 	public void ResetJoint()
     {
-        view.ResetInitialFrame();
+        view.ResetInitialFrame( );
     }
 }
