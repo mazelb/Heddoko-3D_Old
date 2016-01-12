@@ -17,10 +17,9 @@ using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 
-/**
-* BodySegment class 
-* @brief BodySegment class (represents one abstracted reprensentation of a body segment)
-*/
+/// <summary>
+/// BodySegment class: represents one abstracted reprensentation of a body segment.
+/// </summary>
 public class BodySegment
 {
     //Segment Type 
@@ -34,6 +33,7 @@ public class BodySegment
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
     public bool IsTrackingHeight = true;
+    public bool IsTrackingHipsY = true;
 
     //Sensor data tuples
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
@@ -76,21 +76,19 @@ public class BodySegment
         }
     }
 
-    /**
-    * UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
-    * @param UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary): A filtered list of transformation matrices. 
-    * @brief  Depending on the segment type, apply transformation matrices 
-    */
+    /// <summary>
+    /// UpdateSegment: Depending on the segment type, apply transformation matrices.
+    /// </summary>
+    /// <param name="vFilteredDictionary">Dictionnary of tracked segments and their transformations.</param>
     internal void UpdateSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
     {
         MapSubSegments(vFilteredDictionary);
     }
 
-    /**
-    * UpdateInitialSensorsData(BodyFrame vFrame)
-    * @param BodyFrame vFrame: the body frame whose subframes will updates to initial sensors
-    * @brief  The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information
-    */
+    /// <summary>
+    /// UpdateInitialSensorsData: The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information.
+    /// </summary>
+    /// <param name="vFrame">the body frame whose subframes will updates to initial sensors.</param>
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
@@ -129,28 +127,35 @@ public class BodySegment
         BodySubSegment vUSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
         BodySubSegment vLSSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
-        /// /////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
-        //TODO: keeping this ONLY for the analysis part... awaiting changing it
+        ////////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
+        Vector3 vTorsoInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitRawEuler * 180f / Mathf.PI;
+        Vector3 vTorsoCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].CurrRawEuler * 180f / Mathf.PI;
 
-        Vector3 vTorsoInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].InitRawEuler;
-        Vector3 vTorsoCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_UpperSpine].CurrRawEuler;
+        //Upper torso
+        Quaternion vTorsoInitQuat = Quaternion.Euler(0, -vTorsoInitialRawEuler.z, 0);
+        Quaternion vTorsoQuatY = Quaternion.Euler(0, -vTorsoCurrentRawEuler.z, 0);
+        vTorsoQuatY = Quaternion.Inverse(vTorsoInitQuat) * vTorsoQuatY;
 
-        Vector3 vTorsoInitRawEuler = new Vector3(vTorsoInitialRawEuler.x, vTorsoInitialRawEuler.y, vTorsoInitialRawEuler.z);
-        Vector3 vTorsoCurrRawEuler = new Vector3(vTorsoCurrentRawEuler.x, vTorsoCurrentRawEuler.y, vTorsoCurrentRawEuler.z);
+        vTorsoInitQuat = Quaternion.Euler(-vTorsoInitialRawEuler.x, 0, 0);
+        Quaternion vTorsoQuatX = Quaternion.Euler(-vTorsoCurrentRawEuler.x, 0, 0);
+        vTorsoQuatX = Quaternion.Inverse(vTorsoInitQuat) * vTorsoQuatX;
 
-        float[,] vTorsoInitGlobalMatrix = MatrixTools.RotationLocal(vTorsoInitRawEuler.z, vTorsoInitRawEuler.x, vTorsoInitRawEuler.y);
-        float[,] vTorsoCurrentLocalMatrix = MatrixTools.RotationLocal(vTorsoCurrRawEuler.z, vTorsoCurrRawEuler.x, vTorsoCurrRawEuler.y);
-        float[,] vTorsoOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vTorsoInitGlobalMatrix), vTorsoCurrentLocalMatrix);
-        
-        //Convert to something that unity can understand
-        IMUQuaternionOrientation vTorsoQuaternion = MatrixTools.MatToQuat(vTorsoOrientationMatrix);
-        Quaternion vTorsoQuat = new Quaternion(vTorsoQuaternion.x, vTorsoQuaternion.y, vTorsoQuaternion.z, vTorsoQuaternion.w);
-        Vector3 vTorsoEulers = vTorsoQuat.eulerAngles;
-        vTorsoQuat = Quaternion.Euler(0, 0, vTorsoEulers.x) * Quaternion.Euler(0, vTorsoEulers.y, 0) * Quaternion.Euler(-vTorsoEulers.z, 0, 0);
-        Quaternion vHipQuat = Quaternion.Euler(0, vTorsoEulers.y, 0);
-        
-        //vUSSubsegment.UpdateSubsegmentOrientation(vTorsoQuat, 0, true);
-        //vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
+        vTorsoInitQuat = Quaternion.Euler(0, 0, vTorsoInitialRawEuler.y);
+        Quaternion vTorsoQuatZ = Quaternion.Euler(0, 0, vTorsoCurrentRawEuler.y);
+        vTorsoQuatZ = Quaternion.Inverse(vTorsoInitQuat) * vTorsoQuatZ;
+
+        Quaternion vTorsoQuat = vTorsoQuatY * vTorsoQuatX * vTorsoQuatZ;
+        Quaternion vHipQuat = Quaternion.Euler(0, vTorsoQuat.eulerAngles.y, 0);
+
+        if (IsTrackingHipsY)
+        {
+            vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
+            vUSSubsegment.UpdateSubsegmentOrientation(Quaternion.Inverse(vHipQuat) * vTorsoQuat, 0, true);
+        }
+        else
+        {
+            vUSSubsegment.UpdateSubsegmentOrientation(vTorsoQuat, 0, true);
+        }
 
         //Update vertical position
         if (IsTrackingHeight)
@@ -180,141 +185,142 @@ public class BodySegment
         mHipHeight = vHipHeight;
     }
 
-    /**
-    * MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
-    * @brief  Performs mapping on the left leg subsegment from the available sensor data
-    * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
-    */
+    /// <summary>
+    /// MapRightLegSegment: Performs mapping on the right leg subsegment from the available sensor data.
+    /// </summary>
+    /// <param name="vTransformatricies">transformation matrices mapped to sensor positions.</param>
     internal void MapRightLegSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
     {
         BodySubSegment vULSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightThigh];
         BodySubSegment vLLSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightCalf];
+        BodySubSegment vHipsSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
         ////////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
-        Vector3 vHipInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].InitRawEuler;
-        Vector3 vHipCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].CurrRawEuler;
-        Vector3 vKneeInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].InitRawEuler;
-        Vector3 vKneeCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].CurrRawEuler;
+        Vector3 vHipInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].InitRawEuler * 180f / Mathf.PI;
+        Vector3 vHipCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightThigh].CurrRawEuler * 180f / Mathf.PI;
+        Vector3 vKneeInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].InitRawEuler * 180f / Mathf.PI;
+        Vector3 vKneeCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightCalf].CurrRawEuler * 180f / Mathf.PI;
 
-        Vector3 vHipInitRawEuler = new Vector3(vHipInitialRawEuler.x, vHipInitialRawEuler.y, vHipInitialRawEuler.z);
-        Vector3 vHipCurrRawEuler = new Vector3(vHipCurrentRawEuler.x, vHipCurrentRawEuler.y, vHipCurrentRawEuler.z);
+        //Upper Leg
+        Quaternion vHipInitQuat = Quaternion.Euler(0, -vHipInitialRawEuler.z, 0);
+        Quaternion vHipQuatY = Quaternion.Euler(0, -vHipCurrentRawEuler.z, 0);
+        vHipQuatY = Quaternion.Inverse(vHipInitQuat) * vHipQuatY;
 
-        Vector3 vKneeInitRawEuler = new Vector3(vKneeInitialRawEuler.x, vKneeInitialRawEuler.y, vKneeInitialRawEuler.z);
-        Vector3 vKneeCurrRawEuler = new Vector3(vKneeCurrentRawEuler.x, vKneeCurrentRawEuler.y, vKneeCurrentRawEuler.z);
+        vHipInitQuat = Quaternion.Euler(-vHipInitialRawEuler.x, 0, 0);
+        Quaternion vHipQuatX = Quaternion.Euler(-vHipCurrentRawEuler.x, 0, 0);
+        vHipQuatX = Quaternion.Inverse(vHipInitQuat) * vHipQuatX;
 
-        float[,] vHipInitGlobalMatrix = MatrixTools.RotationLocal(vHipInitRawEuler.z, vHipInitRawEuler.x, vHipInitRawEuler.y);
-        float[,] vHipCurrentLocalMatrix = MatrixTools.RotationLocal(vHipCurrRawEuler.z, vHipCurrRawEuler.x, vHipCurrRawEuler.y);
-        float[,] vHipOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vHipInitGlobalMatrix), vHipCurrentLocalMatrix);
+        vHipInitQuat = Quaternion.Euler(0, 0, vHipInitialRawEuler.y);
+        Quaternion vHipQuatZ = Quaternion.Euler(0, 0, vHipCurrentRawEuler.y);
+        vHipQuatZ = Quaternion.Inverse(vHipInitQuat) * vHipQuatZ;
 
-        float[,] vKneeInitGlobalMatrix = MatrixTools.RotationLocal(vKneeInitRawEuler.z, vKneeInitRawEuler.x, vKneeInitRawEuler.y);
-        float[,] vKneeCurrentLocalMatrix = MatrixTools.RotationLocal(vKneeCurrRawEuler.z, vKneeCurrRawEuler.x, vKneeCurrRawEuler.y);
-        float[,] vKneeOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vKneeInitGlobalMatrix), vKneeCurrentLocalMatrix);
- 
-        //Convert to something that unity can understand
-        IMUQuaternionOrientation vHipQuaternion = MatrixTools.MatToQuat(vHipOrientationMatrix);
-        Quaternion vHipQuat = new Quaternion(vHipQuaternion.x, vHipQuaternion.y, vHipQuaternion.z, vHipQuaternion.w);
-        Vector3 vHipEulers = vHipQuat.eulerAngles;
-        vHipQuat = Quaternion.Euler(0, 0, vHipEulers.x) * Quaternion.Euler(0, -vHipEulers.y, 0) * Quaternion.Euler(vHipEulers.z, 0, 0);
+        Quaternion vHipQuat = Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vHipQuatY * vHipQuatX * vHipQuatZ;
+        vULSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
 
-        IMUQuaternionOrientation vKneeQuaternion = MatrixTools.MatToQuat(vKneeOrientationMatrix);
-        Quaternion vKneeQuat = new Quaternion(vKneeQuaternion.x, vKneeQuaternion.y, vKneeQuaternion.z, vKneeQuaternion.w);
-        Vector3 vKneeEulers = vKneeQuat.eulerAngles;
-        vKneeQuat = Quaternion.Euler(0, 0, vKneeEulers.x) * Quaternion.Euler(0, -vHipEulers.y, 0) * Quaternion.Euler(vKneeEulers.z, 0, 0);
+        //Lower leg
+        Quaternion vKneeInitQuat = Quaternion.Euler(0, -vKneeInitialRawEuler.z, 0);
+        Quaternion vKneeQuatY = Quaternion.Euler(0, -vKneeCurrentRawEuler.z, 0);
+        vKneeQuatY = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatY;
 
-        //Update the segment's and segment's view orientations
-        vULSubsegment.UpdateSubsegmentOrientation(vHipQuat, 1);
-        vLLSubsegment.UpdateSubsegmentOrientation(vKneeQuat, 1);
+        vKneeInitQuat = Quaternion.Euler(-vKneeInitialRawEuler.x, 0, 0);
+        Quaternion vKneeQuatX = Quaternion.Euler(-vKneeCurrentRawEuler.x, 0, 0);
+        vKneeQuatX = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatX;
 
-        ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
-        //Update the analysis inputs
-        RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
-        vRightLegAnalysis.HipOrientation = vHipOrientationMatrix;
-        vRightLegAnalysis.KneeOrientation = vKneeOrientationMatrix;
-        vRightLegAnalysis.AngleExtraction();
+        vKneeInitQuat = Quaternion.Euler(0, 0, vKneeInitialRawEuler.y);
+        Quaternion vKneeQuatZ = Quaternion.Euler(0, 0, vKneeCurrentRawEuler.y);
+        vKneeQuatZ = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatZ;
 
-        //Update Leg height
-        Vector3 vThighVec = new Vector3(vHipOrientationMatrix[0, 1], vHipOrientationMatrix[1, 1], vHipOrientationMatrix[2, 1]);
-        vThighVec.Normalize();
-        Vector3 vTibiaVec = new Vector3(vKneeOrientationMatrix[0, 1], vKneeOrientationMatrix[1, 1], vKneeOrientationMatrix[2, 1]);
-        vTibiaVec.Normalize();
-        float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        mRightLegHeight = vThighHeight + vTibiaHeight;
+        Quaternion vKneeQuat = vKneeQuatY * vKneeQuatX * vKneeQuatZ;
+        vKneeQuat = Quaternion.Inverse(vHipQuat) * vKneeQuat;
+        vLLSubsegment.UpdateSubsegmentOrientation(vKneeQuat, 0, true);
+
+        //////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
+        ////Update the analysis inputs
+        //RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
+        //vRightLegAnalysis.HipOrientation = vHipOrientationMatrix;
+        //vRightLegAnalysis.KneeOrientation = vKneeOrientationMatrix;
+        //vRightLegAnalysis.AngleExtraction();//*/
+
+        ////Update Leg height
+        //Vector3 vThighVec = new Vector3(vHipOrientationMatrix[0, 1], vHipOrientationMatrix[1, 1], vHipOrientationMatrix[2, 1]);
+        //vThighVec.Normalize();
+        //Vector3 vTibiaVec = new Vector3(vKneeOrientationMatrix[0, 1], vKneeOrientationMatrix[1, 1], vKneeOrientationMatrix[2, 1]);
+        //vTibiaVec.Normalize();
+        //float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
+        //float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
+        //mRightLegHeight = vThighHeight + vTibiaHeight;//*/
     }
 
-    /**
-    * MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
-    * @brief  Performs mapping on the left leg subsegment from the available sensor data
-    * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
-    */
+    /// <summary>
+    /// MapLeftLegSegment: Performs mapping on the left leg subsegment from the available sensor data.
+    /// </summary>
+    /// <param name="vTransformatricies">transformation matrices mapped to sensor positions.</param>
     internal void MapLeftLegSegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
     {
         BodySubSegment vULSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftThigh];
         BodySubSegment vLLSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftCalf];
-
-        float[,] vHipOrientation = new float[3, 3];
-        float[,] vKneeOrientation = new float[3, 3];
+        BodySubSegment vHipsSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine];
 
         ////////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
-        Vector3 vHipInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].InitRawEuler;
-        Vector3 vHipCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].CurrRawEuler;
-        Vector3 vKneeInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].InitRawEuler;
-        Vector3 vKneeCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].CurrRawEuler;
+        Vector3 vHipInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].InitRawEuler * 180f / Mathf.PI;
+        Vector3 vHipCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].CurrRawEuler * 180f / Mathf.PI;
+        Vector3 vKneeInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].InitRawEuler * 180f / Mathf.PI;
+        Vector3 vKneeCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].CurrRawEuler * 180f / Mathf.PI;
 
-        Vector3 vHipInitRawEuler = new Vector3(vHipInitialRawEuler.x, vHipInitialRawEuler.y, vHipInitialRawEuler.z);
-        Vector3 vHipCurrRawEuler = new Vector3(vHipCurrentRawEuler.x, vHipCurrentRawEuler.y, vHipCurrentRawEuler.z);
+        //Upper Leg
+        Quaternion vHipInitQuat = Quaternion.Euler(0, -vHipInitialRawEuler.z, 0);
+        Quaternion vHipQuatY = Quaternion.Euler(0, -vHipCurrentRawEuler.z, 0);
+        vHipQuatY = Quaternion.Inverse(vHipInitQuat) * vHipQuatY;
 
-        Vector3 vKneeInitRawEuler = new Vector3(vKneeInitialRawEuler.x, vKneeInitialRawEuler.y, vKneeInitialRawEuler.z);
-        Vector3 vKneeCurrRawEuler = new Vector3(vKneeCurrentRawEuler.x, vKneeCurrentRawEuler.y, vKneeCurrentRawEuler.z);
+        vHipInitQuat = Quaternion.Euler(-vHipInitialRawEuler.x, 0, 0);
+        Quaternion vHipQuatX = Quaternion.Euler(-vHipCurrentRawEuler.x, 0, 0);
+        vHipQuatX = Quaternion.Inverse(vHipInitQuat) * vHipQuatX;
 
-        float[,] vHipInitGlobalMatrix = MatrixTools.RotationLocal(vHipInitRawEuler.z, vHipInitRawEuler.x, vHipInitRawEuler.y);
-        float[,] vHipCurrentLocalMatrix = MatrixTools.RotationLocal(vHipCurrRawEuler.z, vHipCurrRawEuler.x, vHipCurrRawEuler.y);
-        float[,] vHipOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vHipInitGlobalMatrix), vHipCurrentLocalMatrix);
+        vHipInitQuat = Quaternion.Euler(0, 0, vHipInitialRawEuler.y);
+        Quaternion vHipQuatZ = Quaternion.Euler(0, 0, vHipCurrentRawEuler.y);
+        vHipQuatZ = Quaternion.Inverse(vHipInitQuat) * vHipQuatZ;
 
-        float[,] vKneeInitGlobalMatrix = MatrixTools.RotationLocal(vKneeInitRawEuler.z, vKneeInitRawEuler.x, vKneeInitRawEuler.y);
-        float[,] vKneeCurrentLocalMatrix = MatrixTools.RotationLocal(vKneeCurrRawEuler.z, vKneeCurrRawEuler.x, vKneeCurrRawEuler.y);
-        float[,] vKneeOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vKneeInitGlobalMatrix), vKneeCurrentLocalMatrix);
+        Quaternion vHipQuat = Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vHipQuatY * vHipQuatX * vHipQuatZ;
+        vULSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
 
-        vHipOrientation = (vHipOrientationMatrix);
-        vKneeOrientation = (vKneeOrientationMatrix);//*/
+        //Lower leg
+        Quaternion vKneeInitQuat = Quaternion.Euler(0, -vKneeInitialRawEuler.z, 0);
+        Quaternion vKneeQuatY = Quaternion.Euler(0, -vKneeCurrentRawEuler.z, 0);
+        vKneeQuatY = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatY;
 
-        //Convert to something that unity can understand
-        IMUQuaternionOrientation vHipQuaternion = MatrixTools.MatToQuat(vHipOrientation);
-        Quaternion vHipQuat = new Quaternion(vHipQuaternion.x, vHipQuaternion.y, vHipQuaternion.z, vHipQuaternion.w);
-        Vector3 vHipEulers = vHipQuat.eulerAngles;
-        vHipQuat = Quaternion.Euler(vHipEulers.z, 0, 0) * Quaternion.Euler(0, -vHipEulers.y, 0) * Quaternion.Euler(0, 0, vHipEulers.x);
+        vKneeInitQuat = Quaternion.Euler(-vKneeInitialRawEuler.x, 0, 0);
+        Quaternion vKneeQuatX = Quaternion.Euler(-vKneeCurrentRawEuler.x, 0, 0);
+        vKneeQuatX = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatX;
 
-        IMUQuaternionOrientation vKneeQuaternion = MatrixTools.MatToQuat(vKneeOrientation);
-        Quaternion vKneeQuat = new Quaternion(vKneeQuaternion.x, vKneeQuaternion.y, vKneeQuaternion.z, vKneeQuaternion.w);
-        Vector3 vKneeEulers = vKneeQuat.eulerAngles;
-        vKneeQuat = Quaternion.Euler(vKneeEulers.z, 0, 0) * Quaternion.Euler(0, -vHipEulers.y, 0) * Quaternion.Euler(0, 0, vKneeEulers.x);
+        vKneeInitQuat = Quaternion.Euler(0, 0, vKneeInitialRawEuler.y);
+        Quaternion vKneeQuatZ = Quaternion.Euler(0, 0, vKneeCurrentRawEuler.y);
+        vKneeQuatZ = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatZ;
 
-        //Update the segment's and segment's view orientations
-        vULSubsegment.UpdateSubsegmentOrientation(vHipQuat, 1);
-        vLLSubsegment.UpdateSubsegmentOrientation(vKneeQuat, 1);
+        Quaternion vKneeQuat = vKneeQuatY * vKneeQuatX * vKneeQuatZ;
+        vKneeQuat = Quaternion.Inverse(vHipQuat) * vKneeQuat;
+        vLLSubsegment.UpdateSubsegmentOrientation(vKneeQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
-        //Update the analysis inputs
-        LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
-        vLeftLegAnalysis.HipOrientation = vHipOrientation;
-        vLeftLegAnalysis.KneeOrientation = vKneeOrientation;
-        vLeftLegAnalysis.AngleExtraction();
+        /*LeftLegAnalysis vLeftLegAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
+        LeftLegAnalysis.HipOrientation = vHipOrientation;
+        LeftLegAnalysis.KneeOrientation = vKneeOrientation;
+        LeftLegAnalysis.AngleExtraction();//*/
 
-        //Update leg height 
-        Vector3 vThighVec = new Vector3(vHipOrientation[0, 1], vHipOrientation[1, 1], vHipOrientation[2, 1]);
-        vThighVec.Normalize();
-        Vector3 vTibiaVec = new Vector3(vKneeOrientation[0, 1], vKneeOrientation[1, 1], vKneeOrientation[2, 1]);
-        vTibiaVec.Normalize();
-        float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        mLeftLegHeight = vThighHeight + vTibiaHeight;
+        ////Update leg height
+        ////TODO: this should be in the analysis section
+        //Vector3 vThighVec = new Vector3(vHipOrientation[0, 1], vHipOrientation[1, 1], vHipOrientation[2, 1]);
+        //vThighVec.Normalize();
+        //Vector3 vTibiaVec = new Vector3(vKneeOrientation[0, 1], vKneeOrientation[1, 1], vKneeOrientation[2, 1]);
+        //vTibiaVec.Normalize();
+        //float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
+        //float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
+        //mLeftLegHeight = vThighHeight + vTibiaHeight;//*/
     }
 
-    /**
-    * MapRightArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
-    * @brief  Updates the right arm subsegment from the available sensor data
-    * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor positions
-    */
+    /// <summary>
+    /// MapRightArmSubsegment: Updates the right arm subsegment from the available sensor data.
+    /// </summary>
+    /// <param name="vTransformatricies">transformation matrices mapped to sensor positions.</param>
     internal void MapRightArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
     {
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightUpperArm];
@@ -360,12 +366,6 @@ public class BodySegment
         vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuat;
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
 
-        //Vector3 vLoArmInitRawEuler = new Vector3(0, -vLoArmInitialRawEuler.z, 0);
-        //Vector3 vLoArmCurrRawEuler = new Vector3(0, -vLoArmCurrentRawEuler.z, 0);
-        //Quaternion vLoArmInitQuat = Quaternion.Euler(vLoArmInitRawEuler);
-        //Quaternion vLoArmQuat = Quaternion.Euler(vLoArmCurrRawEuler);
-        //vLoArmQuat = Quaternion.Inverse(Quaternion.Euler(0, vUpArmQuat.eulerAngles.y, 0)) * Quaternion.Inverse(vLoArmInitQuat) * vLoArmQuat;
-
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         /*RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
         vRightArmAnalysis.LoArOrientation = vLoArOrientation;
@@ -373,11 +373,10 @@ public class BodySegment
         vRightArmAnalysis.AngleExtraction();//*/
     }
 
-    /**
-    * MapLeftArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies)
-    * @brief  Performs mapping on the left arm subsegment from the available sensor data
-    * @param Dictionary<BodyStructureMap.SensorPositions, float[,]> vTransformatricies : transformation matrices mapped to sensor position
-    */
+    /// <summary>
+    /// MapLeftArmSubsegment: Updates the left arm subsegment from the available sensor data.
+    /// </summary>
+    /// <param name="vTransformatricies">transformation matrices mapped to sensor positions.</param>
     internal void MapLeftArmSubsegment(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vTransformatricies)
     {
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftUpperArm];
@@ -423,12 +422,6 @@ public class BodySegment
         vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuat;
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
 
-        //Vector3 vLoArmInitRawEuler = new Vector3(0, -vLoArmInitialRawEuler.z, 0);
-        //Vector3 vLoArmCurrRawEuler = new Vector3(0, -vLoArmCurrentRawEuler.z, 0);
-        //Quaternion vLoArmInitQuat = Quaternion.Euler(vLoArmInitRawEuler);
-        //Quaternion vLoArmQuat = Quaternion.Euler(vLoArmCurrRawEuler);
-        //vLoArmQuat = Quaternion.Inverse(Quaternion.Euler(0, vUpArmQuat.eulerAngles.y, 0)) * Quaternion.Inverse(vLoArmInitQuat) * vLoArmQuat;
-
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         /*RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
         vRightArmAnalysis.LoArOrientation = vLoArOrientation;
@@ -436,11 +429,9 @@ public class BodySegment
         vRightArmAnalysis.AngleExtraction();//*/
     }
 
-    /**
-    *  SensorsTiltCorrection()
-    * @param  
-    * @brief 
-    */
+    /// <summary>
+    /// SensorsTiltCorrection: Adjusts for possible 7.6 degrees tilt in sensors (as per manufacturing process). (DEPRECATED)
+    /// </summary>
     public float[,] SensorsTiltCorrection(float[,] B2)
     {
         float[,] B3 = new float[3, 3];
@@ -467,11 +458,10 @@ public class BodySegment
         return B4;
     }
 
-    /**
-    *  InitializeBodySegment(BodyStructureMap.SegmentTypes vSegmentType)
-    * @param  vSegmentType: the desired Segment Type
-    * @brief Initializes a new body structure's internal properties with the desired Segment Type
-    */
+    /// <summary>
+    /// InitializeBodySegment: Initializes a new body structure's internal properties with the desired Segment Type.
+    /// </summary>
+    /// <param name="vSegmentType">The segment type to initialize it to.</param>
     internal void InitializeBodySegment(BodyStructureMap.SegmentTypes vSegmentType)
     {
         GameObject go = new GameObject(EnumUtil.GetName(vSegmentType));
@@ -506,11 +496,10 @@ public class BodySegment
 
     }
 
-    /**
-    * private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, float[,]> vFilteredDictionary)
-    * @brief Perform mapping on the current segments and its respective subsegments 
-    * @param 
-    */
+    /// <summary>
+    /// MapSubSegments: Perform mapping on the current segments and its respective subsegments.
+    /// </summary>
+    /// <param name="vFilteredDictionary">Dictionnary of tracked segments and their transformations.</param>
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
     {
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
