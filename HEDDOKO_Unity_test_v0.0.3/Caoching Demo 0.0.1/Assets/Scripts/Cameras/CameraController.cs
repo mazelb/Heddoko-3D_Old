@@ -9,8 +9,8 @@
 
 
 using Assets.Scripts.UI.Metrics;
-using Assets.Scripts.UI._2DSkeleton; 
-using UnityEngine; 
+using Assets.Scripts.UI._2DSkeleton;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Cameras
@@ -21,17 +21,18 @@ namespace Assets.Scripts.Cameras
     [RequireComponent(typeof(MoveCameraToPositon))]
     public class CameraController : MonoBehaviour
     {
+
         public LayerMask ModelMask;
         private RaycastHit mHitInfo;
         public Camera CurrentCam;
-      //  private CameraOrbit mCameraOrbit;
+        //  private CameraOrbit mCameraOrbit;
         private bool mCommenceMove;
         public float ReturnSpeed = 10f;
-        public bool ReturnToPositionEnabled=true;
-      [  SerializeField]
+        public bool ReturnToPositionEnabled = true;
+        [SerializeField]
         private MoveCameraToPositon mAutoCamMover;
 
- 
+
 
         private Vector3 mOriginalPos;
         private Quaternion mOriginalRotation;
@@ -55,9 +56,6 @@ namespace Assets.Scripts.Cameras
         }
         void Awake()
         {
-             
-        
-         //   mCameraOrbit = GetComponent<CameraOrbit>();
             mAutoCamMover = GetComponent<MoveCameraToPositon>();
             mAutoCamMover.Cam = CurrentCam;
             mOriginalPos = transform.position;
@@ -68,9 +66,9 @@ namespace Assets.Scripts.Cameras
                 RightButton.onClick.AddListener(SwitchToRightSide);
             }
         }
-        
+
         void Update()
-        { 
+        {
 
             if (mIn2DMode)
             {
@@ -85,9 +83,9 @@ namespace Assets.Scripts.Cameras
                 }
                 else
                 {
-                    CurrentViewBox.UpdateText(false,  mAutoCamMover.CurrentPosition);
+                    CurrentViewBox.UpdateText(false, mAutoCamMover.CurrentPosition);
                 }
-                
+
             }
             InputHandler();
             CurrentCam.orthographicSize = mFoV;
@@ -134,16 +132,16 @@ namespace Assets.Scripts.Cameras
                     mAutoCamMover.MoveToPrevPos();
                 }
             }
-           
+
         }
 
         public float offset;
-       /// <summary>
-       /// sets the cameras view port and the position offset of the look at target
-       /// </summary>
-       /// <param name="mNewFov">new view port size</param>
-       /// <param name="vOffSet">offset </param>
-        public void SetCamFov(float mNewFov, Vector3 vOffSet )
+        /// <summary>
+        /// sets the cameras view port and the position offset of the look at target
+        /// </summary>
+        /// <param name="mNewFov">new view port size</param>
+        /// <param name="vOffSet">offset </param>
+        public void SetCamFov(float mNewFov, Vector3 vOffSet)
         {
             CurrentCam.orthographicSize = mNewFov;
             offset = vOffSet.y;
@@ -156,9 +154,9 @@ namespace Assets.Scripts.Cameras
         /// </summary>
         public void PrepFor2DView()
         {
-         
+
             mAutoCamMover.enabled = false;
-            mIn2DMode = true; 
+            mIn2DMode = true;
             Reset();
         }
 
@@ -175,28 +173,29 @@ namespace Assets.Scripts.Cameras
                 }
             }
             else
-            { 
+            {
                 mAutoCamMover.MoveToPrevPos();
                 mAutoCamMover.enabled = true;
             }
-          
+
         }
 
         /// <summary>
         /// Switches to the right  view of the body, depending on whether in 2d mode or 3d
         /// </summary>
-        private void SwitchToRightSide() {
+        private void SwitchToRightSide()
+        {
             if (mIn2DMode)
             {
                 if (LegSwitcher != null)
                 {
                     LegSwitcher.TurnOnSprite(1);
-                    
+
                 }
             }
             else
-            { 
-                mAutoCamMover.MovetoNextPos(); 
+            {
+                mAutoCamMover.MovetoNextPos();
                 mAutoCamMover.enabled = true;
             }
         }
@@ -205,19 +204,19 @@ namespace Assets.Scripts.Cameras
         /// Enables camera orbit and move to camera scripts
         /// </summary>
         public void PrepFor3DView()
-        { 
+        {
             mAutoCamMover.enabled = true;
-            mIn2DMode = false; 
+            mIn2DMode = false;
         }
         /// <summary>
         /// Resets the tranformation
         /// </summary>
-       public void Reset()
+        public void Reset()
         {
             transform.position = mOriginalPos;
             transform.rotation = mOriginalRotation;
         }
- 
+
 
     }
 }

@@ -366,6 +366,10 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 ResetPlayer();
             }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
+            {
+                ChangePauseState();
+            }
         }
 
 

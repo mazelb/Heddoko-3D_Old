@@ -14,12 +14,24 @@ namespace Assets.Scripts.Cameras
 
         public Transform Target;
         public Vector3 Offset;
+        public Vector3 TargetPos;
+        /// <summary>
+        /// Uses a vector3 position instead of a transform target
+        /// </summary>
+        public bool UsePosition;
 
         void Update()
         {
             if (Target)
             {
-                transform.LookAt(Target.position + Offset);
+                if (!UsePosition)
+                {
+                    transform.LookAt(Target.position + Offset);
+                }
+                else
+                {
+                    transform.LookAt(TargetPos);
+                }
             }
              
         }

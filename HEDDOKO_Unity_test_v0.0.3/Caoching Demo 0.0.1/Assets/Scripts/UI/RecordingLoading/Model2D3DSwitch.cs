@@ -95,10 +95,7 @@ namespace Assets.Scripts.UI.RecordingLoading
                 }
                 else
                 {
-                    //  OrthoCamController.gameObject.SetActive(true);
-
                     CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f - 1, 0f));
-
                 }
 
             }
@@ -106,7 +103,6 @@ namespace Assets.Scripts.UI.RecordingLoading
             else
             {
                 CameraController.SetCamFov(1.33f, new Vector3(0, 0, 0f));
-
             }
 
             SetButtonInteraction();

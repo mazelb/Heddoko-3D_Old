@@ -231,7 +231,7 @@ public class Body
     {
         //Stops the current thread from running.
         StopThread();
-        
+
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
         BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
@@ -240,11 +240,31 @@ public class Body
         {
             BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
+            //  this.InitialBodyFrame = frame;
             SetInitialFrame(frame);
-            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(); 
+            UpdateBody(frame);
+            Dictionary<BodyStructureMap.SensorPositions, float[,]> vDic = Body.GetTracking(this);
+
+
+            if (vDic != null)
+            {
+                Body.ApplyTracking(this, vDic);
+                //todo: extract this from the view and place it in its own module
+            }
+
+            SetInitialFrame(frame);
+            UpdateBody(frame);
+
+
+            if (vDic != null)
+            {
+                Body.ApplyTracking(this, vDic);
+                //todo: extract this from the view and place it in its own module
+            }
+            BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-     
+
             View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
             View.StartUpdating = true;
