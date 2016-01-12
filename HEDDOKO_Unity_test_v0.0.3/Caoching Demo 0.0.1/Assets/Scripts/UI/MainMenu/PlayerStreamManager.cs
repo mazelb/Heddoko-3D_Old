@@ -7,6 +7,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using System.Collections.Generic;
 using Assets.Demos;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
@@ -36,19 +37,18 @@ namespace Assets.Scripts.UI.MainMenu
         public string SquatRecordingUUID;
         public string BikeRecordingUUID;
 
-
         // pause thread routine started
         private bool mResetRoutineStarted = false;
 
         private string mBodyRecordingUUID;
         private bool mUsingBrainpack = false;
-
+        public bool SpineSplitDisabled = false;
         private bool mCanUseBrainpack = false;
 
         public Button[] TPoseButtons;
-        public BikingMetricsView BikeMetrics;
-        public SquatMetricsView SquatMetrics;
-        public DualPurposeMetricsView DualPurposeMetrics;
+
+        public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
+
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
@@ -122,8 +122,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// <param name="vFlag"></param>
         public void StickTorsoToHips(bool vFlag)
         {
-            // if (!mPlayButtonPushed)
-            //     {
+
             if (CurrentBodyInPlay != null)
             {
                 Vector3 vPos = Vector3.zero;
@@ -144,33 +143,36 @@ namespace Assets.Scripts.UI.MainMenu
                             vPos.y = OriginalSpineHeight;
                             Spine.position = vPos;
                         }
-                      
+
                     }
                 }
                 else
                 {
                     mBodyRecordingUUID = BikeRecordingUUID;
-                    if (UseLocalPos)
+                    if (!SpineSplitDisabled)
                     {
-                        vPos = Spine.localPosition;
-                        vPos.y = SpineYOffset;
-                        Spine.localPosition = vPos;
+                        if (UseLocalPos)
+                        {
+                            vPos = Spine.localPosition;
+                            vPos.y = SpineYOffset;
+                            Spine.localPosition = vPos;
+                        }
+                        else
+                        {
+                            vPos = Spine.position;
+                            vPos.y = SpineYOffset;
+                            Spine.position = vPos;
+                        }
                     }
-                    else
-                    {
-                        vPos = Spine.position;
-                        vPos.y = SpineYOffset;
-                        Spine.position = vPos;
-                    }
-                   
-                    
+
+
                 }
 
                 BodySegment vSegment = CurrentBodyInPlay.BodySegments.Find(
                        x => x.SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso);
                 if (vSegment != null)
                 {
-                   //vSegment.IsTrackingHeight = vFlag;
+                    //vSegment.IsTrackingHeight = vFlag;
                 }
                 //     mPlayButtonPushed = true;
                 ChangeState(BodyPlaybackState.PlayingRecording);
@@ -324,7 +326,6 @@ namespace Assets.Scripts.UI.MainMenu
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0]; //get the first body
             }
             mCanUseBrainpack = true;
-            // ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
 
@@ -342,20 +343,6 @@ namespace Assets.Scripts.UI.MainMenu
         private void OnBrainpackDisconnectListener()
         {
             mCanUseBrainpack = false;
-            //need to check if the brainpack is disconnected during the view. TODO : BIG TODO
-
-
-
-            //remove the halo effect 
-            /*    FadeInFadeOutEffect vFadeInFadeOutEffectToDestroy = PlayButton.GetComponent<FadeInFadeOutEffect>();
-            if (vFadeInFadeOutEffectToDestroy != null)
-            {
-                Destroy(vFadeInFadeOutEffectToDestroy);
-            }*/
-            //PlayButton.image.sprite = mPlayButtonOriginalIcon; //reset the play button back to its original sprite
-            //PlayButton.GetComponentInChildren<Text>().text = "Play";
-            //    PlayButton.interactable = true;
-            //   ChangeState(BodyPlaybackState.Waiting);
         }
 
         /// <summary>
@@ -395,19 +382,15 @@ namespace Assets.Scripts.UI.MainMenu
                           RightLegAnalysis;
                 vRightLegAnalysis.NumberofRightSquats = 0;
             }
-            //to do reset metrics.
-            if (BikeMetrics != null)
+
+            if (ResettableViews != null)
             {
-                BikeMetrics.ResetValues();
+                for (int i = 0; i < ResettableViews.Count; i++)
+                {
+                    ResettableViews[i].ResetValues();
+                }
             }
-            if (SquatMetrics != null)
-            {
-                SquatMetrics.ResetValues();
-            }
-            if (DualPurposeMetrics != null)
-            {
-                DualPurposeMetrics.ResetValues();
-            }
+
         }
     }
 }

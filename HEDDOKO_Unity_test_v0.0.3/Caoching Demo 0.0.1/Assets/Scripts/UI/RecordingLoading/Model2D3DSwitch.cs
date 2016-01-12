@@ -8,7 +8,8 @@
 
 
 using Assets.Scripts.Cameras;
-using Assets.Scripts.UI.ActivitiesContext.View; 
+using Assets.Scripts.UI.ActivitiesContext.View;
+using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Metrics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace Assets.Scripts.UI.RecordingLoading
     {
         public GameObject Model3D;
         public GameObject Model2D;
-    //    public AngleInfoMetrics AngleInfo;
+        //    public AngleInfoMetrics AngleInfo;
         public ActivitiesContextViewTrain TrainingView;
         /// <summary>
         /// Location placement
@@ -34,11 +35,11 @@ namespace Assets.Scripts.UI.RecordingLoading
         public Button Button2DSwitch;
         public Button Button3DSwitch;
 
-
+        public PlayerStreamManager PlayerStreamManager;
         public CurrentViewBox InformationBox;
         public CameraController CameraController;
 
-      //  public CameraController OrthoCamController;
+        //  public CameraController OrthoCamController;
         /// <summary>
         /// Flag to check if only using 2D model
         /// </summary>
@@ -46,11 +47,20 @@ namespace Assets.Scripts.UI.RecordingLoading
         [SerializeField]
         private bool mUsing2DModel = false;
 
+        public bool IsNFLDemo;
+
         /// <summary>
         /// On awake hook a listener to the button and set button interaction according to mUsing2DModelFlag
         /// </summary>
         void Awake()
         {
+            if (IsNFLDemo)
+            {
+                Button2DSwitch.gameObject.SetActive(false);
+                Button3DSwitch.gameObject.SetActive(false);
+                Model2D.SetActive(false);
+                return;
+            }
             if (OnlyUsing2D)
             {
                 //disable buttons
@@ -74,37 +84,33 @@ namespace Assets.Scripts.UI.RecordingLoading
         private void SwitchTo3DModelView()
         {
             Bring3DModelIntoView();
-            CameraController.PrepFor3DView(); 
+            CameraController.PrepFor3DView();
             if (TrainingView != null)
             {
-               
-                 
-                    if (TrainingView.ActivitiesContextController.UsingSquats)
-                    {
-                        CameraController.gameObject.SetActive(true);
-                        CameraController.SetCamFov(2.26f,Vector3.zero); 
-                       
-                    }
-                    else
-                    {
+                if (TrainingView.ActivitiesContextController.UsingSquats || PlayerStreamManager.SpineSplitDisabled)
+                {
+                    CameraController.gameObject.SetActive(true);
+                    CameraController.SetCamFov(2.26f, Vector3.zero);
+
+                }
+                else
+                {
                     //  OrthoCamController.gameObject.SetActive(true);
-                    CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f-1, 0f)); 
-                    }
-                 
+
+                    CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f - 1, 0f));
+
+                }
+
             }
 
             else
             {
-                CameraController.SetCamFov(1.33f, new Vector3(0,0, 0f));
+                CameraController.SetCamFov(1.33f, new Vector3(0, 0, 0f));
 
             }
 
             SetButtonInteraction();
-/*
-            if (AngleInfo != null)
-            {
-                AngleInfo.Hide();
-            }*/
+
 
         }
 
@@ -116,17 +122,17 @@ namespace Assets.Scripts.UI.RecordingLoading
             Bring2DModelIntoView();
             SetButtonInteraction();
             CameraController.PrepFor2DView();
- 
+
             if (TrainingView != null)
             {
-                CameraController.SetCamFov(5.9f,Vector3.zero);
+                CameraController.SetCamFov(5.9f, Vector3.zero);
 
             }
             else
             {
                 CameraController.SetCamFov(3.57f, Vector3.zero);
             }
- 
+
         }
 
         /// <summary>
@@ -153,45 +159,42 @@ namespace Assets.Scripts.UI.RecordingLoading
                 Model3D.transform.position = TransformOutOfViewLocation.position;
                 if (TrainingView != null)
                 {
-                 //   CameraController.enabled = true;
-                    CameraController.SetCamFov(5.9f,Vector3.zero);
-                    //CameraController.enabled = false;
+                    CameraController.SetCamFov(5.9f, Vector3.zero);
                 }
                 else
                 {
                     CameraController.SetCamFov(3.57f, Vector3.zero);
                 }
- 
             }
+
             else
             {
                 Model3D.transform.position = TransformInview3DLocation.position;
                 Model2D.transform.position = TransformOutOfViewLocation.position;
                 Button2DSwitch.interactable = !mUsing2DModel;
                 Button3DSwitch.interactable = mUsing2DModel;
-               // CameraController.enabled = true;
+                // CameraController.enabled = true;
 
                 if (TrainingView != null)
                 {
-                    if (TrainingView.ActivitiesContextController.UsingSquats)
+                    if (TrainingView.ActivitiesContextController.UsingSquats || PlayerStreamManager.SpineSplitDisabled)
                     {
-                        
-                        CameraController.SetCamFov(2.26f,Vector3.zero);
-                      
-                         
+
+                        CameraController.SetCamFov(2.26f, Vector3.zero);
+
+
                     }
                     else
-                    { 
-                        CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f - 1, 0f)); 
-                         
+                    {
+                        CameraController.SetCamFov(1.2f, new Vector3(0, 0.7f - 1, 0f));
                     }
 
                 }
                 else
                 {
-                    CameraController.SetCamFov(1.33f, new Vector3(0,0,0));
+                    CameraController.SetCamFov(1.33f, new Vector3(0, 0, 0));
                 }
-               
+
 
             }
         }

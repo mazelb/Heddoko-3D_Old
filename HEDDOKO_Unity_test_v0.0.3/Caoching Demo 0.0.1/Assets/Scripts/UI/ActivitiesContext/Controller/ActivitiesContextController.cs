@@ -35,7 +35,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         private string ActivityTypeSubPath;
 
 
-        public bool UsingSquats;
+        public bool UsingSquats { get; set; }
 
         /// <summary>
         /// On Awake set up the buttons
@@ -45,12 +45,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-        
-
             ActivitesContextView.LearningView.BikeButton.onClick.AddListener(BikingHookFunction);
  
-           
-
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearnFromRecordingView.BackButton.onClick.AddListener(SwitchToLearningViewState);

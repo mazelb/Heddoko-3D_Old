@@ -9,8 +9,7 @@
 
 
 using Assets.Scripts.UI.Metrics;
-using Assets.Scripts.UI._2DSkeleton;
-using Newtonsoft.Json.Converters;
+using Assets.Scripts.UI._2DSkeleton; 
 using UnityEngine; 
 using UnityEngine.UI;
 
@@ -71,53 +70,7 @@ namespace Assets.Scripts.Cameras
         }
         
         void Update()
-        {
-          /*  if (!mIn2DMode)
-            {
-                //left click
-                if (Input.GetMouseButton(0) && !mCommenceMove)
-                {
-                    //check if the mouse has landed on the model in view
-                    mHitInfo = new RaycastHit();
-
-                    //check if the mouse is right above the model
-                    if (Physics.Raycast(mCurrentCam.ScreenPointToRay(Input.mousePosition), 250f, ModelMask))
-                    {
-                        mCommenceMove = true;
-                    }
-                }
-                if (mCommenceMove)
-                {
-                    if (Input.GetMouseButton(0))
-                    {
-                     /*   if (mCameraOrbit != null)
-                        {
-                            mCameraOrbit.enabled = true;
-                        }#1#
-                        mAutoCamMover.enabled = false;
-                    }
-                    else
-                    {
-                       /* if (mCameraOrbit != null)
-                        {
-                            mCameraOrbit.enabled = false;
-                        }#1#
-                        mCommenceMove = false;
-                        if (ReturnToPositionEnabled)
-                        {
-                            if (!mAutoCamMover.enabled)
-                            {
-                                mAutoCamMover.enabled = true;
-                            }
-                        }
-
-                    }
-
-                }
-                 
-            }
-            else
-            {*/
+        { 
 
             if (mIn2DMode)
             {

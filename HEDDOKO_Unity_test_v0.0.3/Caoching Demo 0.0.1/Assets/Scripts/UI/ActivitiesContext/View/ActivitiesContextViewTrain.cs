@@ -9,7 +9,9 @@
 
 using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
-using Assets.Scripts.UI.MainMenu; 
+using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.UI.Metrics.View;
 using Assets.Scripts.UI.RecordingLoading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,14 +35,11 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
 
         public Button BackButton;
         public Camera TrainingAndLearningCam;  
-     //   public Text NumberSquatsOfText;
  
         public ActivitiesContextController ActivitiesContextController;
 
-
-        public GameObject SquatsMetrics;
-        public GameObject BikingMetrics;
-        public GameObject DualPurposeMetrics;
+        public SquatMetricsView SquatMetrics;
+        public NonSquatWrapperView NonSquatMetrics; 
 
 
         private PlayerStreamManager mPlayerStreamManager;
@@ -62,37 +61,24 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// Enables and shows the view
         /// </summary>
         public void Show()
-        {
-            
-           // HeddokoModel.transform.position = HeddokoModelEnabledAnchor.position;
-           //   HeddokoModel.transform.rotation = HeddokoModelEnabledAnchor.rotation; 
-           //HeddokoModel.SetActive(true);
-            gameObject.SetActive(true);
-    /*        BetaHighLimbsGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
-            BetaHighTorsoGeo.GetComponent<Renderer>().material = RegularTrainingMaterial;
-            BetaHighJointsGeo.GetComponent<Renderer>().material = RegularJointstTrainingMaterial;*/
+        { 
+            gameObject.SetActive(true); 
             ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
-            ModelSwitcher.Show();
-            DualPurposeMetrics.SetActive(true);
+            ModelSwitcher.Show(); 
             TrainingAndLearningCam.gameObject.SetActive(true);
             PlayerStreamManager.ResetPlayer();
+
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
             {
-                //BikesOrthoCam.gameObject.SetActive(false);
-                //TrainingAndLearningCam.gameObject.SetActive(true);
-                SquatsMetrics.SetActive(true);
-                BikingMetrics.SetActive(false);
-               
+                SquatMetrics.Show();
+                NonSquatMetrics.Hide();
             }
             else
             {
-              //  BikesOrthoCam.gameObject.SetActive(true);
-              //  TrainingAndLearningCam.gameObject.SetActive(false);
-                SquatsMetrics.SetActive(false);
-                BikingMetrics.SetActive(true);
-               
+                SquatMetrics.Hide();
+                NonSquatMetrics.Show();
             }
 
         }
@@ -101,15 +87,10 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void Hide()
         {
-            SquatsMetrics.SetActive(false);
-            BikingMetrics.SetActive(false);
+            SquatMetrics.Hide();
+            NonSquatMetrics.Hide();
             ModelSwitcher.Hide();
-            TrainingAndLearningCam.gameObject.SetActive(false);
- 
-            //BikesOrthoCam.gameObject.SetActive(false);
-
-            //  HeddokoModel.SetActive(false);
-            //  HeddokoModel.transform.position = HeddokoModelHiddenAnchor.position;
+            TrainingAndLearningCam.gameObject.SetActive(false); 
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetPlayer();
             gameObject.SetActive(false);
