@@ -117,7 +117,7 @@ namespace Assets.Scripts.UI.Metrics
                         vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                             RightLegAnalysis;
 
-                    double vTruncatedVal = Math.Truncate(vRightLegAnalysis.AngleRightHipFlexion * 100) / 100;
+                    double vTruncatedVal = Math.Truncate(vRightLegAnalysis.AngleHipFlexion * 100) / 100;
                     vText += "Right Hip Flexion/Extension: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";
 
                   /*  vTruncatedVal = Math.Truncate(vRightLegAnalysis.AngleRightHipAbduction * 100) / 100;
@@ -132,7 +132,7 @@ namespace Assets.Scripts.UI.Metrics
                    /* vTruncatedVal = Math.Truncate(vRightLegAnalysis.AngleKneeFlexion * 100) / 100;
                     vText += "Right Tibial Internal/External Rotation: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";*/
 
-                    vTruncatedVal = Math.Truncate(vRightLegAnalysis.mAngularVelocityKneeFlexion * 100) / 100;
+                    vTruncatedVal = Math.Truncate(vRightLegAnalysis.AngularVelocityKneeFlexion * 100) / 100;
                     vText += "Right Knee flexion Velocity: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";
                 }
                 
@@ -175,7 +175,7 @@ namespace Assets.Scripts.UI.Metrics
                  /*   vTruncatedVal = Math.Truncate(vLeftLegAnalysis.AngleKneeRotation * 100) / 100;
                     vText += "Left Tibial Internal/External Rotation: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";*/
 
-                    vTruncatedVal = Math.Truncate(vLeftLegAnalysis.mAngularVelocityKneeFlexion * 100) / 100;
+                    vTruncatedVal = Math.Truncate(vLeftLegAnalysis.AngularVelocityKneeFlexion * 100) / 100;
                     vText += "Left knee angular velocity: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";
                 }
 

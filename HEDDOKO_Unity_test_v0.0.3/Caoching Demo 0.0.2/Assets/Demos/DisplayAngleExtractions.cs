@@ -74,9 +74,9 @@ namespace Assets.Demos
                 vRightLegAnalysis =
                     CurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                         RightLegAnalysis;
-                vText += "Right Hip Flexion / Extension: " + vRightLegAnalysis.AngleRightHipFlexion + "\n";
-                vText += "Right Hip Abduction/Adduction: " + vRightLegAnalysis.AngleRightHipAbduction+ "\n";
-                vText += "Right Hip Internal/External Rotation: " + vRightLegAnalysis.AngleRightHipRotation+ "\n";
+                vText += "Right Hip Flexion / Extension: " + vRightLegAnalysis.AngleHipFlexion + "\n";
+                vText += "Right Hip Abduction/Adduction: " + vRightLegAnalysis.AngleHipAbduction+ "\n";
+                vText += "Right Hip Internal/External Rotation: " + vRightLegAnalysis.AngleHipRotation+ "\n";
                 vText += "Right Knee Flexion/Extension: " + vRightLegAnalysis.AngleKneeFlexion + "\n";
                 vText += "Right Tibial Internal/External Rotation: " + vRightLegAnalysis.AngleKneeRotation + "\n";
 
@@ -94,12 +94,11 @@ namespace Assets.Demos
                 vLeftLegAnalysis =
                     CurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
                         LeftLegAnalysis;
-                vText += "Left Hip Flexion / Extension: " + vLeftLegAnalysis.AngleLeftHipFlexion + "\n";
-                vText += "Left Hip Abduction/Adduction: " + vLeftLegAnalysis.AngleLeftHipAbduction + "\n";
-                vText += "Left Hip Internal/External Rotation: " + vLeftLegAnalysis.AngleLeftHipRotation + "\n";
+                vText += "Left Hip Flexion / Extension: " + vLeftLegAnalysis.AngleHipFlexion + "\n";
+                vText += "Left Hip Abduction/Adduction: " + vLeftLegAnalysis.AngleHipAbduction + "\n";
+                vText += "Left Hip Internal/External Rotation: " + vLeftLegAnalysis.AngleHipRotation + "\n";
                 vText += "Left Knee Flexion/Extension: " + vLeftLegAnalysis.AngleKneeFlexion + "\n";
                 vText += "Left Tibial Internal/External Rotation: " + vLeftLegAnalysis.AngleKneeRotation + "\n";
-
             }
         }
         private void ShowRightArmInfo()

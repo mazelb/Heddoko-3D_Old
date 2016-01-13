@@ -20,6 +20,7 @@ namespace Assets.Scripts.Body_Data.view
     {
         //the transforms required to transform
         public BodySubSegment AssociatedSubSegment;
+        public Transform SubsegmentTransform;
         public List<Transform> SubSegmentTransforms = new List<Transform>();
 
         //Initial subsegment position 
@@ -29,9 +30,9 @@ namespace Assets.Scripts.Body_Data.view
         //Sprite Transform2D
         private ISpriteMover mSpriteMover;
 
-        //  public Transform SpriteTransform;
         //This flag turned on, mean that the assigned Transform is a 3D model, else use a 2D sprite
         private bool mUsing3DModel = true;
+
         /**
         * View
         * @param 
@@ -49,7 +50,7 @@ namespace Assets.Scripts.Body_Data.view
             {
                 Transform vTransform = vObj.transform;
                 SubSegmentTransforms.Add(vTransform);
-
+                SubsegmentTransform = vTransform;
                 //Todo: add proper setting for the initial position 
                 mInitialPosition = vTransform.localPosition;
             }
@@ -67,8 +68,6 @@ namespace Assets.Scripts.Body_Data.view
                 //exception is thrown if the tag ins't found in the tag manager.
             }
             //Find the 2D representation of the object in the scene 
-
-
         }
 
         public void ApplyTransformations(Quaternion vNewOrientation, int vApplyLocal = 0, bool vResetRotation = false)

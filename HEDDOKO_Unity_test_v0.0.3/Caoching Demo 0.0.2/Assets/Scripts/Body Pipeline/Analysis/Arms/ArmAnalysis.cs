@@ -16,9 +16,9 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
     [Serializable]
     public abstract class ArmAnalysis: SegmentAnalysis
     {
-        public Quaternion UpArOrientation { get; set; }
-        public Quaternion LoArOrientation { get; set; }
+        public Transform UpArTransform { get; set; }
+        public Transform LoArTransform { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
-        public Quaternion TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
+        public Transform TorsoTransform { get { return TorsoAnalysisSegment.TorsoTransform; } }
     }
 }

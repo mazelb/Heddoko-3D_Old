@@ -46,9 +46,6 @@ public class BodyStructureMap
     {
         public Vector3 InitRawEuler;
         public Vector3 CurrRawEuler;
-        /*public float[,] InitGlobalMatrix;
-        public float[,] CurrentLocalMatrix;
-        public float[,] OrientationMatrix;//*/
     };
 
     //Body Types

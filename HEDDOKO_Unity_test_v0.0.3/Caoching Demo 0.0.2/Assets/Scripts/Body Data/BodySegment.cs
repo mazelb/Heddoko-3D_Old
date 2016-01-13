@@ -33,7 +33,7 @@ public class BodySegment
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
     public bool IsTrackingHeight = true;
-    public bool IsTrackingHipsY = true;
+    public bool IsTrackingHipsY = false;
     public bool IsUsingInterpolation = true;
     public float InterpolationSpeed = 0.3f;
 
@@ -48,12 +48,11 @@ public class BodySegment
 
     //TODO: extract this where appropriate
     //Detection of vertical Hip position
-    private static float mInitThighHeight = 0.42f;
-    private static float mInitTibiaHeight = 0.39f;
+    //private static float mInitThighHeight = 0.42f;
+    //private static float mInitTibiaHeight = 0.39f;
     private static float mHipHeight = 0.95f;
     private static float mRightLegHeight = 0.95f;
     private static float mLeftLegHeight = 0.95f;
-    private float mLastTimeCalled;
 
     /// <summary>
     /// The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the current sensor's information
@@ -111,7 +110,7 @@ public class BodySegment
                     //get the subsegment and update its  inverse initial orientation 
                     if (BodySubSegmentsDictionary.ContainsKey(vKey))
                     {
-                        if (vKey != (int)BodyStructureMap.SensorPositions.SP_LowerSpine)
+                        //if (vKey != (int)BodyStructureMap.SensorPositions.SP_LowerSpine)
                         {
                             BodySubSegmentsDictionary[vKey].ResetViewOrientation();
                         }
@@ -194,6 +193,12 @@ public class BodySegment
         }
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
+        //Update the analysis inputs
+        TorsoAnalysis vTorsoAnalysis = (TorsoAnalysis)mCurrentAnalysisSegment;
+        vTorsoAnalysis.TorsoTransform = vUSSubsegment.AssociatedView.SubsegmentTransform;
+        vTorsoAnalysis.HipGlobalTransform = vLSSubsegment.AssociatedView.SubsegmentTransform;
+        vTorsoAnalysis.AngleExtraction();
+
         //Update vertical position
         if (IsTrackingHeight)
         {
@@ -275,11 +280,10 @@ public class BodySegment
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         //Update the analysis inputs
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
-        vRightLegAnalysis.HipOrientation = vHipQuat;
-        vRightLegAnalysis.KneeOrientation = vKneeQuat;
+        vRightLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
+        vRightLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
         vRightLegAnalysis.AngleExtraction();
-        Debug.Log(vRightLegAnalysis.NumberofSquats);
-
+        
         ////Update Leg height
         //Vector3 vThighVec = new Vector3(vHipOrientationMatrix[0, 1], vHipOrientationMatrix[1, 1], vHipOrientationMatrix[2, 1]);
         //vThighVec.Normalize();
@@ -305,10 +309,6 @@ public class BodySegment
         Vector3 vHipCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftThigh].CurrRawEuler * 180f / Mathf.PI;
         Vector3 vKneeInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].InitRawEuler * 180f / Mathf.PI;
         Vector3 vKneeCurrentRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftCalf].CurrRawEuler * 180f / Mathf.PI;
-        //Vector3 vInitialDifference = vHipInitialRawEuler - vKneeInitialRawEuler;
-        //Debug.Log("Hip Init" + vHipInitialRawEuler);
-        //Debug.Log("Knee Init" + vKneeInitialRawEuler);
-        //Debug.Log(vInitialDifference);
 
         //Upper Leg
         Quaternion vHipInitQuat = Quaternion.Euler(0, -vHipInitialRawEuler.z, 0);
@@ -340,18 +340,15 @@ public class BodySegment
         //Lower leg
         Quaternion vKneeInitQuat = Quaternion.Euler(0, -vKneeInitialRawEuler.z, 0);
         Quaternion vKneeQuatY = Quaternion.Euler(0, -vKneeCurrentRawEuler.z, 0);
-        //Quaternion vDiffQuatY = Quaternion.Euler(0, -vInitialDifference.z, 0); 
-        vKneeQuatY = /*vDiffQuatY **/ Quaternion.Inverse(vKneeInitQuat) * vKneeQuatY;
+        vKneeQuatY = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatY;
 
         vKneeInitQuat = Quaternion.Euler(-vKneeInitialRawEuler.x, 0, 0);
         Quaternion vKneeQuatX = Quaternion.Euler(-vKneeCurrentRawEuler.x, 0, 0);
-        //Quaternion vDiffQuatX = Quaternion.Euler(-vInitialDifference.x, 0, 0);
-        vKneeQuatX = /*vDiffQuatX **/ Quaternion.Inverse(vKneeInitQuat) * vKneeQuatX;
+        vKneeQuatX = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatX;
 
         vKneeInitQuat = Quaternion.Euler(0, 0, vKneeInitialRawEuler.y);
         Quaternion vKneeQuatZ = Quaternion.Euler(0, 0, vKneeCurrentRawEuler.y);
-        //Quaternion vDiffQuatZ = Quaternion.Euler(0, 0, vInitialDifference.y);
-        vKneeQuatZ = /*vDiffQuatZ **/ Quaternion.Inverse(vKneeInitQuat) * vKneeQuatZ;
+        vKneeQuatZ = Quaternion.Inverse(vKneeInitQuat) * vKneeQuatZ;
 
         //Apply results
         Quaternion vKneeQuat = vKneeQuatY * vKneeQuatX * vKneeQuatZ;
@@ -368,10 +365,11 @@ public class BodySegment
         vLLSubsegment.UpdateSubsegmentOrientation(vKneeQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
-        /*LeftLegAnalysis vLeftLegAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
-        LeftLegAnalysis.HipOrientation = vHipOrientation;
-        LeftLegAnalysis.KneeOrientation = vKneeOrientation;
-        LeftLegAnalysis.AngleExtraction();//*/
+        //Update the analysis inputs
+        LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
+        vLeftLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
+        vLeftLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
+        vLeftLegAnalysis.AngleExtraction();
 
         ////Update leg height
         ////TODO: this should be in the analysis section

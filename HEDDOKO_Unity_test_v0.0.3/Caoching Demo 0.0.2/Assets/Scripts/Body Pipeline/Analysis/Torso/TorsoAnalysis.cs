@@ -15,45 +15,29 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
     public class TorsoAnalysis: SegmentAnalysis
     {
         //current torso orientation
-        private Quaternion mTorsoOrientation = Quaternion.identity;
+        public Transform TorsoTransform;
+        public Transform HipGlobalTransform;
+        public Transform HipTransform;
+        public Transform KneeTransform;
 
         //Angles extracted
-        [SerializeField]
-        private float mAngleTorsoFlexion;
-        [SerializeField]
-        private float mAngleTorsoLateral;
-        [SerializeField]
-        private float mAngleTorsoRotation;
+        public float AngleTorsoFlexion;
+        public float AngleTorsoLateral;
+        public float AngleTorsoRotation;
 
         //Accelerations and velocities
-        private float mAngularAccelerationTorsoFlection;
-        private float mAngularVelocityTorsoFlexion;
-        private float mAngularAccelerationTorsoLateral;
-        private float mAngularVelocityTorsoLateral;
-        private float mAngularAccelerationTorsoRotation;
-        private float mAngularVelocityTorsoRotation;
+        public float AngularAccelerationTorsoFlexion;
+        public float AngularVelocityTorsoFlexion;
+        public float AngularAccelerationTorsoLateral;
+        public float AngularVelocityTorsoLateral;
+        public float AngularAccelerationTorsoRotation;
+        public float AngularVelocityTorsoRotation;
 
         //Flips and turns detections
-        public float AngleIntegrationTurns { get; private set; }
-        public float AngleIntegrationFlips { get; private set; }
-        public int NumberOfTurns { get; private set; }
-        public  int NumberOfFlips { get; private set; }
-
-
-        /// <summary>
-        /// The main torso orientation. On set, all listeners will be notified of new orientation
-        /// </summary>
-        public Quaternion TorsoOrientation
-        {
-            get
-            {
-                return mTorsoOrientation;
-            }
-            set
-            {
-                mTorsoOrientation = value; 
-            }
-        }
+        public float AngleIntegrationTurns;
+        public float AngleIntegrationFlips;
+        public int NumberOfTurns;
+        public int NumberOfFlips;
 
         /// <summary>
         /// Extract angles of torso
@@ -67,28 +51,41 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             }
             mLastTimeCalled = Time.time;
 
+            //Get necessary Axis info
+            Vector3 vTorsoAxisUp, vTorsoAxisRight, vTorsoAxisForward;
+            Vector3 vHipAxisUp, vHipAxisRight, vHipAxisForward;
+
+            //Get the 3D axis and angles
+            vTorsoAxisUp = TorsoTransform.up;
+            vTorsoAxisRight = TorsoTransform.right;
+            vTorsoAxisForward = TorsoTransform.forward;
+
+            vHipAxisUp = HipGlobalTransform.up;
+            vHipAxisRight = HipGlobalTransform.right;
+            vHipAxisForward = HipGlobalTransform.forward;
+
             // calculate the Torso Flexion angle 
-            float vAngleTorsoFlexionNew = TorsoOrientation.eulerAngles.x;
-            float vAngularVelocityTorsoFlexionNew = (vAngleTorsoFlexionNew - Math.Abs(mAngleTorsoFlexion)) / vTimeDifference;
-            mAngularAccelerationTorsoFlection = (vAngularVelocityTorsoFlexionNew - mAngularVelocityTorsoFlexion) / vTimeDifference;
-            mAngularVelocityTorsoFlexion = vAngularVelocityTorsoFlexionNew;
-            mAngleTorsoFlexion = vAngleTorsoFlexionNew;
+            float vAngleTorsoFlexionNew = Vector3.Angle(HipGlobalTransform.up, Vector3.ProjectOnPlane(vTorsoAxisUp, HipGlobalTransform.right));
+            float vAngularVelocityTorsoFlexionNew = (vAngleTorsoFlexionNew - Math.Abs(AngleTorsoFlexion)) / vTimeDifference;
+            AngularAccelerationTorsoFlexion = (vAngularVelocityTorsoFlexionNew - AngularVelocityTorsoFlexion) / vTimeDifference;
+            AngularVelocityTorsoFlexion = vAngularVelocityTorsoFlexionNew;
+            AngleTorsoFlexion = vAngleTorsoFlexionNew;
 
             //  calculate the Torso lateral angle 
-            float vAngleTorsoLateralNew = TorsoOrientation.eulerAngles.z;
-            float vAngularVelocityTorsoLateralNew = (vAngleTorsoLateralNew - Math.Abs(mAngleTorsoLateral)) / vTimeDifference;
-            mAngularAccelerationTorsoLateral = (vAngularVelocityTorsoLateralNew - mAngularVelocityTorsoLateral) / vTimeDifference;
-            mAngularVelocityTorsoLateral = vAngularVelocityTorsoLateralNew;
-            mAngleTorsoLateral = vAngleTorsoLateralNew;
+            float vAngleTorsoLateralNew = Vector3.Angle(HipGlobalTransform.up, Vector3.ProjectOnPlane(vTorsoAxisUp, HipGlobalTransform.forward)); 
+            float vAngularVelocityTorsoLateralNew = (vAngleTorsoLateralNew - Math.Abs(AngleTorsoLateral)) / vTimeDifference;
+            AngularAccelerationTorsoLateral = (vAngularVelocityTorsoLateralNew - AngularVelocityTorsoLateral) / vTimeDifference;
+            AngularVelocityTorsoLateral = vAngularVelocityTorsoLateralNew;
+            AngleTorsoLateral = vAngleTorsoLateralNew;
 
             // calculate the Torso Rotational angle 
-            float vAngleTorsoRotationNew = TorsoOrientation.eulerAngles.y;
-            float vAngularVelocityTorsoRotationNew = (vAngleTorsoRotationNew - Mathf.Abs(mAngleTorsoRotation)) / vTimeDifference;
-            mAngularAccelerationTorsoRotation = (vAngularVelocityTorsoRotationNew - mAngularVelocityTorsoRotation) / vTimeDifference;
-            mAngularVelocityTorsoRotation = vAngularVelocityTorsoRotationNew;
-            mAngleTorsoRotation = vAngleTorsoRotationNew;
+            float vAngleTorsoRotationNew = Vector3.Angle(HipGlobalTransform.right, Vector3.ProjectOnPlane(vTorsoAxisRight, HipGlobalTransform.up));
+            float vAngularVelocityTorsoRotationNew = (vAngleTorsoRotationNew - Mathf.Abs(AngleTorsoRotation)) / vTimeDifference;
+            AngularAccelerationTorsoRotation = (vAngularVelocityTorsoRotationNew - AngularVelocityTorsoRotation) / vTimeDifference;
+            AngularVelocityTorsoRotation = vAngularVelocityTorsoRotationNew;
+            AngleTorsoRotation = vAngleTorsoRotationNew;
 
-            // Turn detection 
+            /*// Turn detection 
             if (Math.Abs(vAngleTorsoRotationNew) < 3)
             {
                 AngleIntegrationTurns = 0;
@@ -110,14 +107,44 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Torso
             }
             else
             {
-                AngleIntegrationFlips += (mAngularVelocityTorsoFlexion * vTimeDifference);
+                AngleIntegrationFlips += (AngularVelocityTorsoFlexion * vTimeDifference);
             }
 
             if (Math.Abs(AngleIntegrationFlips) > 330)
             { 
                 NumberOfFlips++;
                 AngleIntegrationFlips = 0; 
-            } 
+            }//*/ 
         }
+
+        /*float SignedAngle(Vector3 a, Vector3 b, Vector3 n)
+        {
+            // angle in [0,180]
+            float angle = Vector3.Angle(a,b);
+            float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+
+            // angle in [-179,180]
+            float signed_angle = angle * sign;
+
+            // angle in [0,360] (not used but included here for completeness)
+            float angle360 =  (signed_angle + 180) % 360;
+
+            return angle360;    
+        }//*/
+
+        /*Transform EstimateHipsOrientation()
+        {
+            // angle in [0,180]
+            float angle = Vector3.Angle(a,b);
+            float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+
+            // angle in [-179,180]
+            float signed_angle = angle * sign;
+
+            // angle in [0,360] (not used but included here for completeness)
+            float angle360 =  (signed_angle + 180) % 360;
+
+            return angle360;    
+        }//*/
     }
 }

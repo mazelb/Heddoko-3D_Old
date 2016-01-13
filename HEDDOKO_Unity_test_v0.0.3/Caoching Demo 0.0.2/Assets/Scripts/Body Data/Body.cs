@@ -51,6 +51,11 @@ public class Body
     private BodyFrameThread mBodyFrameThread = new BodyFrameThread();
 
     public Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis> AnalysisSegments = new Dictionary<BodyStructureMap.SegmentTypes, SegmentAnalysis>(5);
+    public LeftArmAnalysis LeftArmAnalysis;
+    public RightArmAnalysis RightArmAnalysis;
+    public LeftLegAnalysis LeftLegAnalysis;
+    public RightLegAnalysis RightLegAnalysis;
+    public TorsoAnalysis TorsoAnalysis;
 
     //view associated with this model
     private BodyView mView;
@@ -163,6 +168,7 @@ public class Body
             {
                 vSegment.mCurrentAnalysisSegment = vTorsoSegmentAnalysis;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_Torso, vTorsoSegmentAnalysis);
+                TorsoAnalysis = vTorsoSegmentAnalysis;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
             {
@@ -171,6 +177,7 @@ public class Body
                 vLeftArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftArmSegmentAnalysis;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftArm, vLeftArmSegmentAnalysis);
+                LeftArmAnalysis= vLeftArmSegmentAnalysis;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
             {
@@ -179,6 +186,7 @@ public class Body
                 vRightArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vRightArmSegmentAnalysis;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightArm, vRightArmSegmentAnalysis);
+                RightArmAnalysis = vRightArmSegmentAnalysis;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_LeftLeg)
             {
@@ -187,6 +195,7 @@ public class Body
                 vLeftLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftLeg, vLeftLegAnalysisSegment);
+                LeftLegAnalysis= vLeftLegAnalysisSegment;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
             {
@@ -195,6 +204,7 @@ public class Body
                 vRightLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vRightLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightLeg, vRightLegAnalysisSegment);
+                RightLegAnalysis= vRightLegAnalysisSegment;
             }
         }
     }

@@ -12,33 +12,37 @@ using UnityEngine;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
-   /// <summary>
-   /// Represents the anaylsis of the right leg segment
-   /// </summary>
-   public class RightLegAnalysis : LegAnalysis
+    /// <summary>
+    /// Represents the anaylsis of the right leg segment
+    /// </summary>
+    [Serializable]
+    public class RightLegAnalysis : LegAnalysis
     {
-        //Angles extracted
-        public float AngleKneeFlexion { get; private set; }
-        public float AngleKneeRotation { get; private set; }
-        public float AngleRightHipFlexion { get; private set; }
-        public float AngleRightHipAbduction { get; private set; }
-        public float AngleRightHipRotation { get; private set; }
+        //Knee Angles
+        public float AngleKneeFlexion;
+        public float AngleKneeRotation;
+
+        //Hip Angles
+        public bool UseGlobalReference = false;
+        public float AngleHipFlexion;
+        public float AngleHipAbduction;
+        public float AngleHipRotation;
 
         //Accelerations and velocities
-        public float mAngularVelocityKneeFlexion = 0;
-        public float mAngularAccelerationKneeFlexion = 0;
-        public float mAngularVelocityKneeRotation = 0;
-        public float mAngularAccelerationKneeRotation = 0;
-        public float mAngularVelocityHipFlexion = 0;
-        public float mAngularAccelerationHipFlexion = 0;
-        public float mAngularVelocityHipAbduction = 0;
-        public float mAngularAccelerationHipAbduction = 0;
-        public float mAngularVelocityHipRotation = 0;
-        public float mAngularAccelerationHipRotation = 0;
+        public float AngularVelocityKneeFlexion = 0;
+        public float AngularAccelerationKneeFlexion = 0;
+        public float AngularVelocityKneeRotation = 0;
+        public float AngularAccelerationKneeRotation = 0;
+        public float AngularVelocityHipFlexion = 0;
+        public float AngularAccelerationHipFlexion = 0;
+        public float AngularVelocityHipAbduction = 0;
+        public float AngularAccelerationHipAbduction = 0;
+        public float AngularVelocityHipRotation = 0;
+        public float AngularAccelerationHipRotation = 0;
 
         //Squats Analytics
-        public float NumberofSquats { get;   set; }
-        public float AngleSum { get; private set; }
+        public float NumberofSquats;
+        public float AngleSum;
         private bool mStartCountingSquats = true;
 
         /// <summary>
@@ -62,19 +66,34 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             }
             mLastTimeCalled = Time.time;
 
-            //calculate the Knee Flexion angle
-            float vAngleKneeFlexionNew = KneeOrientation.eulerAngles.x;
+            //Get necessary Axis info
+            Vector3 vTorsoAxisUp, vTorsoAxisRight, vTorsoAxisForward;
+            Vector3 vHipAxisUp, vHipAxisRight, vHipAxisForward;
+            Vector3 vKneeAxisUp, vKneeAxisRight, vKneeAxisForward;
 
-            if(vAngleKneeFlexionNew > 180 && vAngleKneeFlexionNew < 360)
-            {
-                vAngleKneeFlexionNew = Math.Abs(360 - vAngleKneeFlexionNew);
-            }
+            //Get the 3D axis and angles
+            vTorsoAxisUp = TorsoTransform.up;
+            vTorsoAxisRight = TorsoTransform.right;
+            vTorsoAxisForward = TorsoTransform.forward;
 
-            float vAngularVelocityKneeFlexionNew = (vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
+            vHipAxisUp = HipTransform.up;
+            vHipAxisRight = HipTransform.right;
+            vHipAxisForward = HipTransform.forward;
 
+            vKneeAxisUp = KneeTransform.up;
+            vKneeAxisRight = KneeTransform.right;
+            vKneeAxisForward = KneeTransform.forward;
+
+            //calculate the Knee Flexion angle (angles between axis projection in YZ plane)
+            float vAngleKneeFlexionNew = Vector3.Angle(Vector3.ProjectOnPlane(vHipAxisUp, vHipAxisRight), Vector3.ProjectOnPlane(vKneeAxisUp, vHipAxisRight));
+            float vAngularVelocityKneeFlexionNew = Mathf.Abs(vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
+            AngularAccelerationKneeFlexion = Mathf.Abs(vAngularVelocityKneeFlexionNew - AngularVelocityKneeFlexion) / vDeltaTime;
+            AngularVelocityKneeFlexion = vAngularVelocityKneeFlexionNew;
+
+            //Squatts counting
             if ( mStartCountingSquats)
             {
-                if (Math.Abs(vAngleKneeFlexionNew) > 25) 
+                if (Math.Abs(vAngleKneeFlexionNew) > 15) 
                 {
                     AngleSum += Math.Abs(vAngleKneeFlexionNew - AngleKneeFlexion);
                 }
@@ -90,67 +109,65 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
                 }
             }
 
-            mAngularAccelerationKneeFlexion = (vAngularVelocityKneeFlexionNew - mAngularVelocityKneeFlexion) / vDeltaTime;
-            mAngularVelocityKneeFlexion = vAngularVelocityKneeFlexionNew;
             AngleKneeFlexion = vAngleKneeFlexionNew;
 
-            //calculate the Knee Rotation angle
-            float vAngleKneeRotationNew = KneeOrientation.eulerAngles.y;
-            float vAngularVelocityKneeRotationNew = (vAngleKneeRotationNew - Mathf.Abs(AngleKneeRotation)) / vDeltaTime;
-            mAngularAccelerationKneeRotation = (vAngularVelocityKneeRotationNew - mAngularVelocityKneeRotation) / vDeltaTime;
-            mAngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
+            //calculate the Knee Rotation angle (angles between axis projection in XZ plane)
+            float vAngleKneeRotationNew = Vector3.Angle(Vector3.ProjectOnPlane(vHipAxisRight, vHipAxisUp), Vector3.ProjectOnPlane(vKneeAxisRight, vHipAxisUp));
+            float vAngularVelocityKneeRotationNew = Mathf.Abs(vAngleKneeRotationNew - Mathf.Abs(AngleKneeRotation)) / vDeltaTime;
+            AngularAccelerationKneeRotation = Mathf.Abs(vAngularVelocityKneeRotationNew - AngularVelocityKneeRotation) / vDeltaTime;
+            AngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
             AngleKneeRotation = vAngleKneeRotationNew;
 
-            /*//calculate the Hip Flexion angle
-            float vAngleHipFlexionNew = Quaternion.Angle(TorsoOrientation, HipOrientation);
-            float vAngularVelocityHipFlexionNew = (vAngleHipFlexionNew - Mathf.Abs(AngleRightHipFlexion)) / vDeltaTime;
-            mAngularAccelerationHipFlexion = (vAngularVelocityHipFlexionNew - mAngularVelocityHipFlexion) / vDeltaTime;
-            mAngularVelocityHipFlexion = vAngularVelocityHipFlexionNew;
-            AngleRightHipFlexion = vAngleHipFlexionNew;
+            //calculate the Hip Flexion angle (angles between axis projection in YZ plane)
+            float vAngleHipFlexionNew;
 
-            //calculate the Hip Abduction angle 
-            /// step1 ///
-            vAxis1.Set(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
-            vAxis2.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
-            vAxis3 = vAxis1 - (Vector3.Dot(vAxis1, vAxis2)) * vAxis2;
-            vAxis3.Normalize();
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis1.Set(TorsoOrientation[0, 2], TorsoOrientation[1, 2], TorsoOrientation[2, 2]);
-            float vAngleRightHipAbductionNew = Vector3.Angle(vAxis3, vAxis2);
-            float vAngularVelocityRightHipAbductionNew = (vAngleRightHipAbductionNew - Mathf.Abs(AngleRightHipAbduction)) / vDeltaTime;
-
-            /// step2 ///
-            if (Vector3.Dot(vAxis1, vAxis3) > 0)
+            if (UseGlobalReference)
             {
-                vAngleRightHipAbductionNew = -vAngleRightHipAbductionNew;
-                vAngularVelocityRightHipAbductionNew = -vAngularVelocityRightHipAbductionNew;
+                vAngleHipFlexionNew = Vector3.Angle(HipGlobalTransform.up, Vector3.ProjectOnPlane(vHipAxisUp, HipGlobalTransform.right));
             }
-            mAngularAccelerationRightHipAbduction = (vAngularVelocityRightHipAbductionNew - mAngularVelocityRightHipAbduction) / vDeltaTime;
-            mAngularVelocityRightHipAbduction = vAngularVelocityRightHipAbductionNew;
-            AngleRightHipAbduction = vAngleRightHipAbductionNew;
-
-            //////////////// calculate the Hip Rotation angle ////////////////////////////////////////
-
-            /// step1 ///
-            vAxis1.Set(HipOrientation[0, 2], HipOrientation[1, 2], HipOrientation[2, 2]);
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis3 = vAxis1 - (Vector3.Dot(vAxis1, vAxis2)) * vAxis2;
-            vAxis3.Normalize();
-            vAxis1.Set(TorsoOrientation[0, 2], TorsoOrientation[1, 2], TorsoOrientation[2, 2]);
-            vAxis2.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
-            float vAngleRightHipRotationNew = Vector3.Angle(vAxis3, vAxis1);
-            float vAngularVelocityRightHipRotationNew = (vAngleRightHipRotationNew - Mathf.Abs(AngleRightHipRotation)) / vDeltaTime;
-
-            /// step2 ///
-            if (Vector3.Dot(vAxis2, vAxis3) < 0)
+            else
             {
-                vAngleRightHipRotationNew = -vAngleRightHipRotationNew;
-                vAngularVelocityRightHipRotationNew = -vAngularVelocityRightHipRotationNew;
+                vAngleHipFlexionNew = Vector3.Angle(Vector3.ProjectOnPlane(vTorsoAxisUp, vTorsoAxisRight), Vector3.ProjectOnPlane(vHipAxisUp, vTorsoAxisRight));
             }
 
-            mAngularAccelerationRightHipRotation = (vAngularVelocityRightHipRotationNew - mAngularVelocityRightHipRotation) / vDeltaTime;
-            mAngularVelocityRightHipRotation = vAngularVelocityRightHipRotationNew;
-            AngleRightHipRotation = vAngleRightHipRotationNew;
+            float vAngularVelocityHipFlexionNew = Mathf.Abs(vAngleHipFlexionNew - Mathf.Abs(AngleHipFlexion)) / vDeltaTime;
+            AngularAccelerationHipFlexion = Mathf.Abs(vAngularVelocityHipFlexionNew - AngularVelocityHipFlexion) / vDeltaTime;
+            AngularVelocityHipFlexion = vAngularVelocityHipFlexionNew;
+            AngleHipFlexion = vAngleHipFlexionNew;
+
+            //calculate the Hip Abduction angle (angles between axis projection in XY plane)
+            float vAngleHipAbductionNew;
+
+            if (UseGlobalReference)
+            {
+                vAngleHipAbductionNew = Vector3.Angle(HipGlobalTransform.up, Vector3.ProjectOnPlane(vHipAxisUp, HipGlobalTransform.forward));
+            }
+            else
+            {
+                vAngleHipAbductionNew = Vector3.Angle(Vector3.ProjectOnPlane(vTorsoAxisUp, vTorsoAxisForward), Vector3.ProjectOnPlane(vHipAxisUp, vTorsoAxisForward));
+            }
+
+            float vAngularVelocityHipAbductionNew = Mathf.Abs(vAngleHipAbductionNew - Mathf.Abs(AngleHipAbduction)) / vDeltaTime;
+            AngularAccelerationHipAbduction = Mathf.Abs(vAngularVelocityHipAbductionNew - AngularVelocityHipAbduction) / vDeltaTime;
+            AngularVelocityHipAbduction = vAngularVelocityHipAbductionNew;
+            AngleHipAbduction = vAngleHipAbductionNew;
+
+            //calculate the Hip Rotation angle (angles between axis projection in XZ plane) 
+            float vAngleHipRotationNew;
+
+            if (UseGlobalReference)
+            {
+                vAngleHipRotationNew = Vector3.Angle(HipGlobalTransform.right, Vector3.ProjectOnPlane(vHipAxisRight, HipGlobalTransform.up));
+            }
+            else
+            {
+                vAngleHipRotationNew = Vector3.Angle(Vector3.ProjectOnPlane(vTorsoAxisRight, vTorsoAxisUp), Vector3.ProjectOnPlane(vHipAxisRight, vTorsoAxisUp));
+            }
+
+            float vAngularVelocityRHipRotationNew = Mathf.Abs(vAngleHipRotationNew - Mathf.Abs(AngleHipRotation)) / vDeltaTime;
+            AngularAccelerationHipRotation = Mathf.Abs(vAngularVelocityRHipRotationNew - AngularVelocityHipRotation) / vDeltaTime;
+            AngularVelocityHipRotation = vAngularVelocityRHipRotationNew;
+            AngleHipRotation = vAngleHipRotationNew;
             //*/
         }
     }
