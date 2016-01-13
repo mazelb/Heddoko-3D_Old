@@ -130,7 +130,8 @@ namespace Assets.Demos
                         LeftArmAnalysis;
 
                 vText += "Left Shoulder Flexion/Extension: " + vLeftArmAnalysis.AngleShoulderFlexion + "\n";
-                vText += "Left Shoulder Abduction/Adduction: " + vLeftArmAnalysis.AngleShoulderAbduction + "\n";
+                vText += "Left Shoulder Abduction/Adduction Vertical: " + vLeftArmAnalysis.AngleShoulderVertAbduction + "\n";
+                vText += "Left Shoulder Abduction/Adduction Horizontal: " + vLeftArmAnalysis.AngleShoulderHorAbduction + "\n";
                 vText += "Left Shoulder Internal/External Rotation: " + vLeftArmAnalysis.AngleShoulderRotation + "\n";
                 vText += "Left Elbow Flexion/Extension: " + vLeftArmAnalysis.AngleElbowFlexion + "\n";
                 vText += "Left Forearm Supination/Pronation: " + vLeftArmAnalysis.AngleElbowPronation + "\n";
