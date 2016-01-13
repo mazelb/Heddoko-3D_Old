@@ -110,11 +110,12 @@ namespace Assets.Demos
                     CurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightArm] as
                         RightArmAnalysis;
 
-                vText += "Right Shoulder Flexion/Extension: " + vRightArmAnalysis.mAngleRightShoulderFlexion + "\n";
-                vText += "Right Shoulder Abduction/Adduction: " + vRightArmAnalysis.mAngleRightShoulderAbduction + "\n";
-                vText += "Right Shoulder Internal/External Rotation: " + vRightArmAnalysis.mAngleRightShoulderRotation + "\n";
-                vText += "Right Elbow Flexion/Extension: " + vRightArmAnalysis.mAngleRightElbowFlexion + "\n";
-                vText += "Right Forearm Supination/Pronation: " + vRightArmAnalysis.mAngleRightElbowPronation + "\n";
+                vText += "Right Shoulder Flexion/Extension: " + vRightArmAnalysis.AngleShoulderFlexion + "\n";
+                vText += "Right Shoulder Abduction/Adduction Vertical: " + vRightArmAnalysis.AngleShoulderVertAbduction + "\n";
+                vText += "Right Shoulder Abduction/Adduction Horizontal: " + vRightArmAnalysis.AngleShoulderHorAbduction + "\n";
+                vText += "Right Shoulder Internal/External Rotation: " + vRightArmAnalysis.AngleShoulderRotation + "\n";
+                vText += "Right Elbow Flexion/Extension: " + vRightArmAnalysis.AngleElbowFlexion + "\n";
+                vText += "Right Forearm Supination/Pronation: " + vRightArmAnalysis.AngleElbowPronation + "\n";
 
             }
         }
@@ -128,11 +129,11 @@ namespace Assets.Demos
                     CurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftArm] as
                         LeftArmAnalysis;
 
-                vText += "Left Shoulder Flexion/Extension: " + vLeftArmAnalysis.mAngleLeftShoulderFlexion + "\n";
-                vText += "Left Shoulder Abduction/Adduction: " + vLeftArmAnalysis.mAngleLeftShoulderAbduction + "\n";
-                vText += "Left Shoulder Internal/External Rotation: " + vLeftArmAnalysis.mAngleLeftShoulderRotation + "\n";
-                vText += "Left Elbow Flexion/Extension: " + vLeftArmAnalysis.mAngleLeftElbowFlexion + "\n";
-                vText += "Left Forearm Supination/Pronation: " + vLeftArmAnalysis.mAngleLeftElbowPronation + "\n";
+                vText += "Left Shoulder Flexion/Extension: " + vLeftArmAnalysis.AngleShoulderFlexion + "\n";
+                vText += "Left Shoulder Abduction/Adduction: " + vLeftArmAnalysis.AngleShoulderAbduction + "\n";
+                vText += "Left Shoulder Internal/External Rotation: " + vLeftArmAnalysis.AngleShoulderRotation + "\n";
+                vText += "Left Elbow Flexion/Extension: " + vLeftArmAnalysis.AngleElbowFlexion + "\n";
+                vText += "Left Forearm Supination/Pronation: " + vLeftArmAnalysis.AngleElbowPronation + "\n";
             }
         }
 

@@ -17,144 +17,101 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
     [Serializable]
     public class RightArmAnalysis: ArmAnalysis
     {
-        // Right Arm Extracted Angles, Angular velocities  and Angular accelerations, The names are choosed based on the human body angles document
-        public float mAngleRightElbowFlexion = 0;
-        public float mAngularVelocityRightElbowFlexion = 0;
-        public float mAngularAccelerationRightElbowFlexion = 0;
+        //Elbow Angles
+        public float AngleElbowFlexion = 0;
+        public float AngleElbowPronation = 0;
 
-        public float mAngleRightElbowPronation = 0;
-        public float mAngularVelocityRightElbowPronation = 0;
-        public float mAngularAccelerationRightElbowPronation = 0;
+        //Upper Arm Angles
+        public float AngleShoulderFlexion = 0;
+        public float AngleShoulderVertAbduction = 0;
+        public float AngleShoulderHorAbduction = 0;
+        public float AngleShoulderRotation = 0;
 
-        public float mAngleRightShoulderFlexion = 0;
-        public float mAngularVelocityRightShoulderFlexion = 0;
-        public float mvAngularAccelerationRightShoulderFlexion = 0;
-
-
-        public float mAngleRightShoulderAbduction = 0;
-        public float mAngularVelocityRightShoulderAbduction = 0;
-        public float mAngularAccelerationRightShoulderAbduction = 0;
-
-        public float mAngleRightShoulderRotation = 0;
-        public float mAngularVelocityRightShoulderRotation = 0;
-        public float mAngularAccelerationRightShoulderRotation = 0;
+        //Velocities and Accelerations
+        public float AngularVelocityElbowFlexion = 0;
+        public float AngularAccelerationElbowFlexion = 0;
+        public float AngularVelocityPronation = 0;
+        public float AngularAccelerationElbowPronation = 0;
+        public float AngularVelocityShoulderFlexion = 0;
+        public float AngularAccelerationShoulderFlexion = 0;
+        public float AngularVelocityShoulderVertAbduction = 0;
+        public float AngularAccelerationShoulderVertAbduction = 0;
+        public float AngularVelocityShoulderHorAbduction = 0;
+        public float AngularAccelerationShoulderHorAbduction = 0;
+        public float AngularVelocityShoulderRotation = 0;
+        public float AngularAccelerationShoulderRotation = 0;
 
         /// <summary>
         /// Extract angles from orientations
         /// </summary>
         public override void AngleExtraction()
         {
-            /*float vDeltaTime = Time.time - mLastTimeCalled;
+            float vDeltaTime = Time.time - mLastTimeCalled;
             if (vDeltaTime == 0)
             {
                 return;
             }
             mLastTimeCalled = Time.time;
 
-            // ============================================== Angle extraction ==============================================// 
+            //Get necessary Axis info
+            Vector3 vTorsoAxisUp, vTorsoAxisRight, vTorsoAxisForward;
+            Vector3 vShoulderAxisUp, vShoulderAxisRight, vShoulderAxisForward;
+            Vector3 vElbowAxisUp, vElbowAxisRight, vElbowAxisForward;
 
-            // Axes 1 to 4 are intermediate variables used to calculate angles. 
-            // In the first step, with appropriate matrix calculations each angle and angular velocities are calculated
-            // In the second step, the sign of these angles will be determined and the angles will be updated
+            //Get the 3D axis and angles
+            vTorsoAxisUp = TorsoTransform.up;
+            vTorsoAxisRight = TorsoTransform.right;
+            vTorsoAxisForward = TorsoTransform.forward;
 
+            vShoulderAxisUp = UpArTransform.up;
+            vShoulderAxisRight = UpArTransform.right;
+            vShoulderAxisForward = UpArTransform.forward;
 
-            //////////////// calculate the Elbow Flection angle ////////////////////////////////////////
-            /// step 1///
-            Vector3 vAxis1 = new Vector3(UpArOrientation[0, 2], UpArOrientation[1, 2], UpArOrientation[2, 2]);
-            Vector3 vAxis2 = new Vector3(LoArOrientation[0, 2], LoArOrientation[1, 2], LoArOrientation[2, 2]);
-            float vAngleRightElbowFlexionNew = Vector3.Angle(vAxis1, vAxis2);
-            float vAngularVelocityRightElbowFlexionNew = (vAngleRightElbowFlexionNew - mAngleRightElbowFlexion) / vDeltaTime;
+            vElbowAxisUp = LoArTransform.up;
+            vElbowAxisRight = LoArTransform.right;
+            vElbowAxisForward = LoArTransform.forward;
 
-            /// step 2///
-            mAngularAccelerationRightElbowFlexion = (vAngularVelocityRightElbowFlexionNew - mAngularVelocityRightElbowFlexion) / vDeltaTime;
-            mAngularVelocityRightElbowFlexion = vAngularVelocityRightElbowFlexionNew;
-            mAngleRightElbowFlexion = vAngleRightElbowFlexionNew;
+            //calculate the Elbow Flexion angle
+            float vAngleElbowFlexionNew = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisRight, vShoulderAxisForward), Vector3.ProjectOnPlane(vElbowAxisRight, vShoulderAxisForward));
+            float vAngularVelocityElbowFlexionNew = (vAngleElbowFlexionNew - AngleElbowFlexion) / vDeltaTime;
+            AngularAccelerationElbowFlexion = (vAngularVelocityElbowFlexionNew - AngularVelocityElbowFlexion) / vDeltaTime;
+            AngularVelocityElbowFlexion = vAngularVelocityElbowFlexionNew;
+            AngleElbowFlexion = vAngleElbowFlexionNew;
 
-            //////////////// calculate the Elbow Pronation angle ////////////////////////////////////////
-            /// step 1///
-            vAxis1.Set(UpArOrientation[0, 1], UpArOrientation[1, 1], UpArOrientation[2, 1]);
-            vAxis2.Set(LoArOrientation[0, 1], LoArOrientation[1, 1], LoArOrientation[2, 1]);
-            Vector3 vAxis3 = new Vector3(UpArOrientation[0, 0], UpArOrientation[1, 0], UpArOrientation[2, 0]);
-            float vAngleRightElbowPronationNew = Vector3.Angle(vAxis1, vAxis2);
-            float vAngularVelocityRightElbowPronationNew = (vAngleRightElbowPronationNew - Mathf.Abs(mAngleRightElbowPronation)) / vDeltaTime;
+            //calculate the Elbow Pronation angle
+            float vAngleElbowPronationNew = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisUp, vShoulderAxisRight), Vector3.ProjectOnPlane(vElbowAxisUp, vShoulderAxisRight));
+            float vAngularVelocityElbowPronationNew = (vAngleElbowPronationNew - Mathf.Abs(AngleElbowPronation)) / vDeltaTime;
+            AngularAccelerationElbowPronation = (vAngularVelocityElbowPronationNew - AngularVelocityPronation) / vDeltaTime;
+            AngularVelocityPronation = vAngularVelocityElbowPronationNew;
+            AngleElbowPronation = vAngleElbowPronationNew;
 
-            /// step 2///
-            if (Vector3.Dot(vAxis2, vAxis3) < 0)
-            {
-                vAngleRightElbowPronationNew = -vAngleRightElbowPronationNew;
-                vAngularVelocityRightElbowPronationNew = -vAngularVelocityRightElbowPronationNew;
-            }
+            //calculate the Shoulder Flexion angle
+            float vAngleShoulderFlexionNew = Vector3.Angle(-vTorsoAxisUp, Vector3.ProjectOnPlane(vShoulderAxisRight, vTorsoAxisRight));
+            float vAngularVelocityShoulderFlexionNew = (vAngleShoulderFlexionNew - Mathf.Abs(AngleShoulderFlexion)) / vDeltaTime;
+            AngularAccelerationShoulderFlexion = (vAngularVelocityShoulderFlexionNew - AngularVelocityShoulderFlexion) / vDeltaTime;
+            AngularVelocityShoulderFlexion = vAngularVelocityShoulderFlexionNew;
+            AngleShoulderFlexion = vAngleShoulderFlexionNew;
 
-            mAngularAccelerationRightElbowPronation = (vAngularVelocityRightElbowPronationNew - mAngularVelocityRightElbowPronation) / vDeltaTime;
-            mAngularVelocityRightElbowPronation = vAngularVelocityRightElbowPronationNew;
-            mAngleRightElbowPronation = vAngleRightElbowPronationNew;
+            //calculate the Shoulder Abduction Vertical angle
+            float vAngleShoulderVertAbductionNew = Vector3.Angle(-vTorsoAxisUp, Vector3.ProjectOnPlane(vShoulderAxisRight, vTorsoAxisForward));
+            float vAngularVelocityShoulderVertAbductionNew = (vAngleShoulderVertAbductionNew - Mathf.Abs(AngleShoulderVertAbduction)) / vDeltaTime;
+            AngularAccelerationShoulderVertAbduction = (vAngularVelocityShoulderVertAbductionNew - AngularVelocityShoulderVertAbduction) / vDeltaTime;
+            AngularVelocityShoulderVertAbduction = vAngularVelocityShoulderVertAbductionNew;
+            AngleShoulderVertAbduction = vAngleShoulderVertAbductionNew;
 
-            //////////////// calculate the Shoulder Flection angle ////////////////////////////////////////
-            /// step 1///
-            vAxis1.Set(UpArOrientation[0, 2], UpArOrientation[1, 2], UpArOrientation[2, 2]);
-            vAxis2.Set(TorsoOrientation[0, 2], TorsoOrientation[1, 2], TorsoOrientation[2, 2]);
-            vAxis3 = vAxis1 - (Vector3.Dot(vAxis1, vAxis2)) * vAxis2;
-            vAxis3.Normalize();
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis1.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
-            float vAngleRightShoulderFlexionNew = 180 - Vector3.Angle(vAxis3, vAxis2);
-            float vAngularVelocityRightShoulderFlexionNew = (vAngleRightShoulderFlexionNew - Mathf.Abs(mAngleRightShoulderFlexion)) / vDeltaTime;
+            //calculate the Shoulder Abduction Horizontal angle
+            float vAngleShoulderHorAbductionNew = Vector3.Angle(vTorsoAxisForward, Vector3.ProjectOnPlane(vShoulderAxisRight, vTorsoAxisUp));
+            float vAngularVelocityShoulderHorAbductionNew = (vAngleShoulderHorAbductionNew - Mathf.Abs(AngleShoulderHorAbduction)) / vDeltaTime;
+            AngularAccelerationShoulderHorAbduction = (vAngularVelocityShoulderHorAbductionNew - AngularVelocityShoulderHorAbduction) / vDeltaTime;
+            AngularVelocityShoulderHorAbduction = vAngularVelocityShoulderHorAbductionNew;
+            AngleShoulderHorAbduction = vAngleShoulderHorAbductionNew;
 
-
-            /// step 2///
-            if (Vector3.Dot(vAxis1, vAxis3) > 0)
-            {
-                vAngleRightShoulderFlexionNew = -vAngleRightShoulderFlexionNew;
-                vAngularVelocityRightShoulderFlexionNew = -vAngularVelocityRightShoulderFlexionNew;
-            }
-
-            mvAngularAccelerationRightShoulderFlexion = (vAngularVelocityRightShoulderFlexionNew - mAngularVelocityRightShoulderFlexion) / vDeltaTime;
-            mAngularVelocityRightShoulderFlexion = vAngularVelocityRightShoulderFlexionNew;
-            mAngleRightShoulderFlexion = vAngleRightShoulderFlexionNew;
-
-            //////////////// calculate the Shoulder Abduction angle ////////////////////////////////////////
-            /// step 1///
-            vAxis1.Set(UpArOrientation[0, 2], UpArOrientation[1, 2], UpArOrientation[2, 2]);
-            vAxis2.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
-            vAxis3 = vAxis1 - (Vector3.Dot(vAxis1, vAxis2)) * vAxis2;
-            vAxis3.Normalize();
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis1.Set(TorsoOrientation[0, 2], TorsoOrientation[1, 2], TorsoOrientation[2, 2]);
-            float vAngleRightShoulderAbductionNew = Vector3.Angle(vAxis3, -vAxis2);
-            float vAngularVelocityRightShoulderAbductionNew = (vAngleRightShoulderAbductionNew - Mathf.Abs(mAngleRightShoulderAbduction)) / vDeltaTime;
-
-            /// step 2///
-            if (Vector3.Dot(vAxis1, vAxis3) < 0)
-            {
-                vAngleRightShoulderAbductionNew = -vAngleRightShoulderAbductionNew;
-                vAngularVelocityRightShoulderAbductionNew = -vAngularVelocityRightShoulderAbductionNew;
-            }
-
-            mAngularAccelerationRightShoulderAbduction = (vAngularVelocityRightShoulderAbductionNew - mAngularVelocityRightShoulderAbduction) / vDeltaTime;
-            mAngularVelocityRightShoulderAbduction = vAngularVelocityRightShoulderAbductionNew;
-            mAngleRightShoulderAbduction = vAngleRightShoulderAbductionNew;
-
-            //////////////// calculate the Shoulder Rotation angle ////////////////////////////////////////
-            /// step 1///
-            vAxis1.Set(UpArOrientation[0, 2], UpArOrientation[1, 2], UpArOrientation[2, 2]);
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis3 = Vector3.Cross(vAxis2, vAxis1);
-            vAxis3.Normalize();
-            vAxis2.Set(UpArOrientation[0, 0], UpArOrientation[1, 0], UpArOrientation[2, 0]);
-            vAxis1.Set(UpArOrientation[0, 1], UpArOrientation[1, 1], UpArOrientation[2, 1]);
-            float vAngleRightShoulderRotationNew = Vector3.Angle(vAxis3, vAxis2);
-            float vAngularVelocityRightShoulderRotationNew = (vAngleRightShoulderRotationNew - Mathf.Abs(mAngleRightShoulderRotation)) / vDeltaTime;
-
-            /// step 2///
-            if (Vector3.Dot(vAxis1, vAxis3) > 0)
-            {
-                vAngleRightShoulderRotationNew = -vAngleRightShoulderRotationNew;
-                vAngularVelocityRightShoulderRotationNew = -vAngularVelocityRightShoulderRotationNew;
-            }
-
-            mAngularAccelerationRightShoulderRotation = (vAngularVelocityRightShoulderRotationNew - mAngularVelocityRightShoulderRotation) / vDeltaTime;
-            mAngularVelocityRightShoulderRotation = vAngularVelocityRightShoulderRotationNew;
-            mAngleRightShoulderRotation = vAngleRightShoulderRotationNew; //*/
+            //calculate the Shoulder Rotation angle
+            float vAngleShoulderRotationNew = Vector3.Angle(vTorsoAxisForward, Vector3.ProjectOnPlane(vShoulderAxisRight, vTorsoAxisUp));
+            float vAngularVelocityShoulderRotationNew = (vAngleShoulderRotationNew - Mathf.Abs(AngleShoulderRotation)) / vDeltaTime;
+            AngularAccelerationShoulderRotation = (vAngularVelocityShoulderRotationNew - AngularVelocityShoulderRotation) / vDeltaTime;
+            AngularVelocityShoulderRotation = vAngularVelocityShoulderRotationNew;
+            AngleShoulderRotation = vAngleShoulderRotationNew; //*/
         }
     }
 }
