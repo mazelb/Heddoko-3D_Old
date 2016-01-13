@@ -8,17 +8,17 @@
 */
 
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
+using UnityEngine;
+using System;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 {
+    [Serializable]
     public abstract class ArmAnalysis: SegmentAnalysis
     {
-        internal float[,] UpArOrientation { get; set; }
-        internal float[,] LoArOrientation { get; set; }
-
+        public Quaternion UpArOrientation { get; set; }
+        public Quaternion LoArOrientation { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
-        public float[,] TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
-
-
+        public Quaternion TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
     }
 }

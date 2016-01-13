@@ -159,7 +159,7 @@ namespace Assets.Scripts.UI.Metrics
                     vLeftLegAnalysis =
                         vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
                             LeftLegAnalysis;
-                    double vTruncatedVal = Math.Truncate(vLeftLegAnalysis.AngleLeftHipFlexion * 100) / 100;
+                    double vTruncatedVal = Math.Truncate(vLeftLegAnalysis.AngleHipFlexion * 100) / 100;
                     vText = "Left Hip Flexion / Extension: " + string.Format("{0:N2}", vTruncatedVal) + "\n" + "\n";
 
                     //vTruncatedVal = Math.Truncate(vLeftLegAnalysis.AngleLeftHipAbduction * 100) / 100;

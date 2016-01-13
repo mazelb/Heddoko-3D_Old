@@ -7,13 +7,14 @@
 */
 
 using UnityEngine;
-
+using System;
 namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 {
     /**
     * LeftArmAnalysis class 
     * @brief LeftArmAnalysis class 
     */
+    [Serializable]
     internal class LeftArmAnalysis : ArmAnalysis
     {
         // Left Arm Extracted Angles, Angular velocities  and Angular accelerations, The names are chose based on the human body angles document
@@ -44,7 +45,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         public override void AngleExtraction()
         {
 
-            ///// calculate the time difference since last call
+            /*///// calculate the time difference since last call
             float vTimeDifference = Time.time - mLastTimeCalled;
             if (vTimeDifference == 0)
             {
@@ -168,7 +169,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 
             mAngularAccelerationLeftShoulderRotation = (vAngularVelocityLeftShoulderRotationNew - mAngularVelocityLeftShoulderRotation) / vTimeDifference;
             mAngularVelocityLeftShoulderRotation = vAngularVelocityLeftShoulderRotationNew;
-            mAngleLeftShoulderRotation = vAngleLeftShoulderRotationNew;
+            mAngleLeftShoulderRotation = vAngleLeftShoulderRotationNew;//*/
         }
     }
 }

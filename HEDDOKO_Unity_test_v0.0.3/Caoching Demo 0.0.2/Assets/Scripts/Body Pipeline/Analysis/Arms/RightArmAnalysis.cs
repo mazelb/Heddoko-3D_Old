@@ -7,13 +7,14 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 using UnityEngine;
-
+using System;
 namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 {
     /**
     * RightArmAnalysis class 
     * @brief RightArmAnalysis class 
     */
+    [Serializable]
     public class RightArmAnalysis: ArmAnalysis
     {
         // Right Arm Extracted Angles, Angular velocities  and Angular accelerations, The names are choosed based on the human body angles document
@@ -43,7 +44,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         /// </summary>
         public override void AngleExtraction()
         {
-            float vDeltaTime = Time.time - mLastTimeCalled;
+            /*float vDeltaTime = Time.time - mLastTimeCalled;
             if (vDeltaTime == 0)
             {
                 return;
@@ -153,7 +154,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 
             mAngularAccelerationRightShoulderRotation = (vAngularVelocityRightShoulderRotationNew - mAngularVelocityRightShoulderRotation) / vDeltaTime;
             mAngularVelocityRightShoulderRotation = vAngularVelocityRightShoulderRotationNew;
-            mAngleRightShoulderRotation = vAngleRightShoulderRotationNew; 
+            mAngleRightShoulderRotation = vAngleRightShoulderRotationNew; //*/
         }
     }
 }

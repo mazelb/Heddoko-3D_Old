@@ -58,8 +58,8 @@ namespace Assets.Scripts.UI.Metrics
                                     LeftLegAnalysis;
                         if (vLeftLegAnalysis != null)
                         {
-                            HipFlexFill.fillAmount = Mathf.Abs(vLeftLegAnalysis.AngleLeftHipFlexion )  / MaxHipFlexion;
-                            HipAngleText.text = (int)Mathf.Abs(vLeftLegAnalysis.AngleLeftHipFlexion)  + "°";
+                            HipFlexFill.fillAmount = Mathf.Abs(vLeftLegAnalysis.AngleHipFlexion )  / MaxHipFlexion;
+                            HipAngleText.text = (int)Mathf.Abs(vLeftLegAnalysis.AngleHipFlexion)  + "°";
                             KneeFlexFill.fillAmount = Mathf.Abs(vLeftLegAnalysis.AngleKneeFlexion)  / MaxKneeFlexion;
                             KneeFlexAngleText.text = (int)Mathf.Abs(vLeftLegAnalysis.AngleKneeFlexion)  + "°";
                         }

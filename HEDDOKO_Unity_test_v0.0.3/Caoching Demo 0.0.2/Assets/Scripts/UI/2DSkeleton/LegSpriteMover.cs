@@ -86,7 +86,7 @@ namespace Assets.Scripts.UI._2DSkeleton
                 LeftLegAnalysis vLeftLegAnalysis =
                      vCurrentBody.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_LeftLeg] as
                          LeftLegAnalysis;
-                vHipAngle = LeftLegHipMulti * vLeftLegAnalysis.AngleLeftHipFlexion;
+                vHipAngle = LeftLegHipMulti * vLeftLegAnalysis.AngleHipFlexion;
                 vHipAngle = Mathf.Abs(vHipAngle);
                 vKneeAngle = LeftLegKneeMultiplier * vLeftLegAnalysis.AngleKneeFlexion;
                 vKneeAngle = Mathf.Abs(vKneeAngle);

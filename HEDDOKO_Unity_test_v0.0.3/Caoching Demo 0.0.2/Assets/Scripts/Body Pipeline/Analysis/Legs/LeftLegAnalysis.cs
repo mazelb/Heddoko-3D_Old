@@ -7,40 +7,55 @@
 */
 
 using UnityEngine;
+using System;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
     /// <summary>
     /// Analysis to be performed on the left leg 
     /// </summary>
+    [Serializable]
     public class LeftLegAnalysis : LegAnalysis
     {
+        //Angles extracted
         public float AngleKneeFlexion { get; private set; }
-        private float mAngularAccelerationKneeFlexion;
-        public float mAngularVelocityKneeFlexion;
-
         public float AngleKneeRotation { get; private set; }
-        private float mAngularAccelerationKneeRotation;
+        public float AngleHipFlexion { get; private set; }
+        public float AngleHipAbduction { get; private set; }
+        public float AngleHipRotation { get; private set; }
 
-        public float AngleLeftHipRotation { get; private set; }
-        private float mAngularVelocityKneeRotation;
+        //Accelerations and velocities
+        public float mAngularVelocityKneeFlexion = 0;
+        public float mAngularAccelerationKneeFlexion = 0;
+        public float mAngularVelocityKneeRotation = 0;
+        public float mAngularAccelerationKneeRotation = 0;
+        public float mAngularVelocityHipFlexion = 0;
+        public float mAngularAccelerationHipFlexion = 0;
+        public float mAngularVelocityHipAbduction = 0;
+        public float mAngularAccelerationHipAbduction = 0;
+        public float mAngularVelocityHipRotation = 0;
+        public float mAngularAccelerationHipRotation = 0;
 
-        public float AngleLeftHipFlexion { get; private set; }
-        private float mAngularVelocityLeftHipFlexion;
-        private float mAngularAccelerationLeftHipFlexion;
+        //Squats Analytics
+        public float NumberofSquats { get; set; }
+        public float AngleSum { get; private set; }
+        private bool mStartCountingSquats = true;
 
-        public float AngleLeftHipAbduction { get; private set; }
-        private float mAngularAccelerationLeftHipAbduction;
-        private float mAngularVelocityLeftHipAbduction;
-        private float mAngularAccelerationLeftHipRotation;
-        public float mAngularVelocityLeftHipRotation;
+        /// <summary>
+        /// Listens to events where squats need to be counted
+        /// </summary>
+        /// <param name="vFlag"></param>
+        public void StartCountingSquats(bool vFlag)
+        {
+            mStartCountingSquats = vFlag;
+        }
 
         /// <summary>
         /// Extract angles from orientations
         /// </summary>
         public override void AngleExtraction()
         {
-            float vDeltaTime = Time.time - mLastTimeCalled;
+            /*float vDeltaTime = Time.time - mLastTimeCalled;
             if ( vDeltaTime == 0)
             {
                 return;
@@ -148,7 +163,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationLeftHipRotation = (vAngularVelocityLeftHipRotationNew - mAngularVelocityLeftHipRotation) / vDeltaTime;
             mAngularVelocityLeftHipRotation = vAngularVelocityLeftHipRotationNew;
             AngleLeftHipRotation = vAngleLeftHipRotationNew;
-             
+            //*/ 
         }
     }
 }

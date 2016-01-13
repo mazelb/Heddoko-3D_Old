@@ -8,17 +8,17 @@
 */
 
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
+using UnityEngine;
+using System;
 
 namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
 {
-    /// <summary>
-    /// Abstract class for Legs containing hip and knee orientation
-    /// </summary>
-   public abstract class LegAnalysis : SegmentAnalysis
+    [Serializable]
+    public abstract class LegAnalysis : SegmentAnalysis
     {
-        public float[,] HipOrientation { get; set; }
-        public float[,] KneeOrientation { get; set; }
+        public Quaternion HipOrientation { get; set; }
+        public Quaternion KneeOrientation { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
-        public float[,] TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
+        public Quaternion TorsoOrientation { get { return TorsoAnalysisSegment.TorsoOrientation; } }
     }
 }

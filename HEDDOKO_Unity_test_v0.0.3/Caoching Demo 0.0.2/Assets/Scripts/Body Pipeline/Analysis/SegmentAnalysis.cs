@@ -9,6 +9,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis
     /// <summary>
     /// Parent class to the specific abstracted segment type(leg or arm). 
     /// </summary>
+    [Serializable]
     public abstract class SegmentAnalysis
     {
         internal float DeltaTime;

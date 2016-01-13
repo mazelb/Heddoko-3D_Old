@@ -17,31 +17,28 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
    /// </summary>
    public class RightLegAnalysis : LegAnalysis
     {
+        //Angles extracted
         public float AngleKneeFlexion { get; private set; }
+        public float AngleKneeRotation { get; private set; }
+        public float AngleRightHipFlexion { get; private set; }
+        public float AngleRightHipAbduction { get; private set; }
+        public float AngleRightHipRotation { get; private set; }
+
+        //Accelerations and velocities
         public float mAngularVelocityKneeFlexion = 0;
         public float mAngularAccelerationKneeFlexion = 0;
-
-        public float AngleKneeRotation { get; private set; }
         public float mAngularVelocityKneeRotation = 0;
         public float mAngularAccelerationKneeRotation = 0;
+        public float mAngularVelocityHipFlexion = 0;
+        public float mAngularAccelerationHipFlexion = 0;
+        public float mAngularVelocityHipAbduction = 0;
+        public float mAngularAccelerationHipAbduction = 0;
+        public float mAngularVelocityHipRotation = 0;
+        public float mAngularAccelerationHipRotation = 0;
 
-        public float AngleRightHipFlexion { get; private set; }
-        public float mAngularVelocityRightHipFlexion = 0;
-        public float mAngularAccelerationRightHipFlexion = 0;
-
-        public float AngleRightHipAbduction { get; private set; }
-        public float mAngularVelocityRightHipAbduction = 0;
-        public float mAngularAccelerationRightHipAbduction = 0;
-
-        public float AngleRightHipRotation { get; private set; }
-        public float mAngularVelocityRightHipRotation = 0;
-        public float mAngularAccelerationRightHipRotation = 0;
-
-        // This variable stores the time of current frame. It is used for angular velocity and acceleration extraction
- 
-        public float NumberofRightSquats { get;   set; }
-        public float AngleSumRight { get; private set; }
-
+        //Squats Analytics
+        public float NumberofSquats { get;   set; }
+        public float AngleSum { get; private set; }
         private bool mStartCountingSquats = true;
 
         /// <summary>
@@ -65,95 +62,53 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             }
             mLastTimeCalled = Time.time;
 
+            //calculate the Knee Flexion angle
+            float vAngleKneeFlexionNew = KneeOrientation.eulerAngles.x;
 
-            //=====================================  Angle extraction =====================================//
+            if(vAngleKneeFlexionNew > 180 && vAngleKneeFlexionNew < 360)
+            {
+                vAngleKneeFlexionNew = Math.Abs(360 - vAngleKneeFlexionNew);
+            }
 
-
-            // Axes 1 to 4 are intermediate variables used to calculate angles. 
-            // In the first step, with appropriate matrix calculations each angle and angular velocities are calculated
-            // In the second step, the sign of these angles will be determined and the angles will be updated
-
-
-            //=====================================calculate the Knee Flexion angle  =====================================/
-
-            /// step1 ///
-            Vector3 vAxis1 = new Vector3(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
-            Vector3 vAxis2 = new Vector3(KneeOrientation[0, 1], KneeOrientation[1, 1], KneeOrientation[2, 1]);
-            float vAngleKneeFlexionNew = Vector3.Angle(vAxis1, vAxis2);
             float vAngularVelocityKneeFlexionNew = (vAngleKneeFlexionNew - AngleKneeFlexion) / vDeltaTime;
 
             if ( mStartCountingSquats)
             {
-                //todo: need to set a variable for standing position. As it is, we need to check what the value is inside here. 
-                if (Math.Abs(vAngleKneeFlexionNew) < 15) 
+                if (Math.Abs(vAngleKneeFlexionNew) > 25) 
                 {
-                    AngleSumRight = 0;
+                    AngleSum += Math.Abs(vAngleKneeFlexionNew - AngleKneeFlexion);
                 }
                 else
                 {
-                    AngleSumRight += (Math.Abs(vAngularVelocityKneeFlexionNew) * vDeltaTime);
+                    AngleSum = 0;
                 }
 
-                if (Math.Abs(AngleSumRight) > 140)
+                if (Math.Abs(AngleSum) > 140)
                 {
-                    AngleSumRight = 0;
-                    NumberofRightSquats++;
+                    AngleSum = 0;
+                    NumberofSquats++;
                 }
             }
 
-
-            /// step2 ///
             mAngularAccelerationKneeFlexion = (vAngularVelocityKneeFlexionNew - mAngularVelocityKneeFlexion) / vDeltaTime;
             mAngularVelocityKneeFlexion = vAngularVelocityKneeFlexionNew;
             AngleKneeFlexion = vAngleKneeFlexionNew;
 
-            //////////////// calculate the Knee Rotation angle ////////////////////////////////////////
-
-            /// step1 ///
-            vAxis1.Set(HipOrientation[0, 2], HipOrientation[1, 2], HipOrientation[2, 2]);
-            vAxis2.Set(KneeOrientation[0, 2], KneeOrientation[1, 2], KneeOrientation[2, 2]);
-            Vector3 vAxis3 = new Vector3(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
-
-            float vAngleKneeRotationNew = Vector3.Angle(vAxis1, vAxis2);
-            //	Debug.Log ("Knee Flection Angles" + vAngleKneeRotationNew);
+            //calculate the Knee Rotation angle
+            float vAngleKneeRotationNew = KneeOrientation.eulerAngles.y;
             float vAngularVelocityKneeRotationNew = (vAngleKneeRotationNew - Mathf.Abs(AngleKneeRotation)) / vDeltaTime;
-
-            /// step2 ///
-            if (Vector3.Dot(vAxis2, vAxis3) < 0)
-            {
-                vAngleKneeRotationNew = -vAngleKneeRotationNew;
-                vAngularVelocityKneeRotationNew = -vAngularVelocityKneeRotationNew;
-            }
-
             mAngularAccelerationKneeRotation = (vAngularVelocityKneeRotationNew - mAngularVelocityKneeRotation) / vDeltaTime;
             mAngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
             AngleKneeRotation = vAngleKneeRotationNew;
 
-            //////////////// calculate the Hip Flection angle ////////////////////////////////////////
+            /*//calculate the Hip Flexion angle
+            float vAngleHipFlexionNew = Quaternion.Angle(TorsoOrientation, HipOrientation);
+            float vAngularVelocityHipFlexionNew = (vAngleHipFlexionNew - Mathf.Abs(AngleRightHipFlexion)) / vDeltaTime;
+            mAngularAccelerationHipFlexion = (vAngularVelocityHipFlexionNew - mAngularVelocityHipFlexion) / vDeltaTime;
+            mAngularVelocityHipFlexion = vAngularVelocityHipFlexionNew;
+            AngleRightHipFlexion = vAngleHipFlexionNew;
 
-            /// step1 ///
-            vAxis1.Set(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
-            vAxis2.Set(TorsoOrientation[0, 2], TorsoOrientation[1, 2], TorsoOrientation[2, 2]);
-            vAxis3 = vAxis1 - (Vector3.Dot(vAxis1, vAxis2)) * vAxis2;
-            vAxis3.Normalize();
-            vAxis2.Set(TorsoOrientation[0, 1], TorsoOrientation[1, 1], TorsoOrientation[2, 1]);
-            vAxis1.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
-            float vAngleRightHipFlexionNew = Vector3.Angle(vAxis3, vAxis2);
-            float vAngularVelocityRightHipFlexionNew = (vAngleRightHipFlexionNew - Mathf.Abs(AngleRightHipFlexion)) / vDeltaTime;
-
-            /// step2 ///
-            if (Vector3.Dot(vAxis1, vAxis3) < 0)
-            {
-                vAngleRightHipFlexionNew = -vAngleRightHipFlexionNew;
-                vAngularVelocityRightHipFlexionNew = -vAngularVelocityRightHipFlexionNew;
-            }
-
-            mAngularAccelerationRightHipFlexion = (vAngularVelocityRightHipFlexionNew - mAngularVelocityRightHipFlexion) / vDeltaTime;
-            mAngularVelocityRightHipFlexion = vAngularVelocityRightHipFlexionNew;
-            AngleRightHipFlexion = vAngleRightHipFlexionNew;
-
-            //////////////// calculate the Hip Abduction angle ////////////////////////////////////////
-
+            //calculate the Hip Abduction angle 
             /// step1 ///
             vAxis1.Set(HipOrientation[0, 1], HipOrientation[1, 1], HipOrientation[2, 1]);
             vAxis2.Set(TorsoOrientation[0, 0], TorsoOrientation[1, 0], TorsoOrientation[2, 0]);
@@ -196,7 +151,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             mAngularAccelerationRightHipRotation = (vAngularVelocityRightHipRotationNew - mAngularVelocityRightHipRotation) / vDeltaTime;
             mAngularVelocityRightHipRotation = vAngularVelocityRightHipRotationNew;
             AngleRightHipRotation = vAngleRightHipRotationNew;
-             
+            //*/
         }
     }
 }
