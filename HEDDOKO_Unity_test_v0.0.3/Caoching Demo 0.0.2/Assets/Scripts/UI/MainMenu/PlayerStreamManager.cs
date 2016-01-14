@@ -393,7 +393,7 @@ namespace Assets.Scripts.UI.MainMenu
                 RightLegAnalysis vRightLegAnalysis =
                       CurrentBodyInPlay.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                           RightLegAnalysis;
-                vRightLegAnalysis.NumberofRightSquats = 0;
+                vRightLegAnalysis.NumberofSquats = 0;
             }
             //to do reset metrics.
             if (BikeMetrics != null)
