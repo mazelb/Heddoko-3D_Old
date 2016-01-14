@@ -45,6 +45,11 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
         public float AngleSum;
         private bool mStartCountingSquats = true;
 
+        //Detection of vertical Hip position
+        public float LegHeight;
+        private float mInitThighHeight = 0.42f;
+        private float mInitTibiaHeight = 0.39f;
+
         /// <summary>
         /// Listens to events where squats need to be counted
         /// </summary>
@@ -159,6 +164,11 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             AngularVelocityHipRotation = vAngularVelocityRHipRotationNew;
             AngleHipRotation = vAngleHipRotationNew;
             //*/
+
+            //Calculate Leg height 
+            float vThighHeight = mInitThighHeight * Mathf.Abs(Vector3.Dot(vHipAxisUp, Vector3.up));
+            float vTibiaHeight = mInitTibiaHeight * Mathf.Abs(Vector3.Dot(vKneeAxisUp, Vector3.up));
+            LegHeight = vThighHeight + vTibiaHeight;
         }
     }
 }

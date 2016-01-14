@@ -46,10 +46,7 @@ public class BodySegment
     //Analysis pipeline of the segment data
     public SegmentAnalysis mCurrentAnalysisSegment;
 
-    //TODO: extract this where appropriate
     //Detection of vertical Hip position
-    //private static float mInitThighHeight = 0.42f;
-    //private static float mInitTibiaHeight = 0.39f;
     private static float mHipHeight = 0.95f;
     private static float mRightLegHeight = 0.95f;
     private static float mLeftLegHeight = 0.95f;
@@ -126,7 +123,7 @@ public class BodySegment
     internal void UpdateHipHeight(BodySubSegment vSegment)
     {
         //Update body height
-        float vHipHeight;
+        float vHipHeight = mHipHeight;
 
         if (mRightLegHeight > mLeftLegHeight)
         {
@@ -137,7 +134,7 @@ public class BodySegment
             vHipHeight = mLeftLegHeight;
         }
 
-        vSegment.UpdateSubsegmentPosition(Mathf.Lerp(mHipHeight, vHipHeight, Time.time));
+        vSegment.UpdateSubsegmentPosition(Mathf.Lerp(mHipHeight, vHipHeight, InterpolationSpeed));
         mHipHeight = vHipHeight;
     }
 
@@ -249,7 +246,6 @@ public class BodySegment
 
         vULSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
 
-
         //Lower leg
         Quaternion vKneeInitQuat = Quaternion.Euler(0, -vKneeInitialRawEuler.z, 0);
         Quaternion vKneeQuatY = Quaternion.Euler(0, -vKneeCurrentRawEuler.z, 0);
@@ -283,15 +279,7 @@ public class BodySegment
         vRightLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
         vRightLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
         vRightLegAnalysis.AngleExtraction();
-        
-        ////Update Leg height
-        //Vector3 vThighVec = new Vector3(vHipOrientationMatrix[0, 1], vHipOrientationMatrix[1, 1], vHipOrientationMatrix[2, 1]);
-        //vThighVec.Normalize();
-        //Vector3 vTibiaVec = new Vector3(vKneeOrientationMatrix[0, 1], vKneeOrientationMatrix[1, 1], vKneeOrientationMatrix[2, 1]);
-        //vTibiaVec.Normalize();
-        //float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        //float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        //mRightLegHeight = vThighHeight + vTibiaHeight;//*/
+        mRightLegHeight = vRightLegAnalysis.LegHeight;
     }
 
     /// <summary>
@@ -370,16 +358,7 @@ public class BodySegment
         vLeftLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
         vLeftLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
         vLeftLegAnalysis.AngleExtraction();
-
-        ////Update leg height
-        ////TODO: this should be in the analysis section
-        //Vector3 vThighVec = new Vector3(vHipOrientation[0, 1], vHipOrientation[1, 1], vHipOrientation[2, 1]);
-        //vThighVec.Normalize();
-        //Vector3 vTibiaVec = new Vector3(vKneeOrientation[0, 1], vKneeOrientation[1, 1], vKneeOrientation[2, 1]);
-        //vTibiaVec.Normalize();
-        //float vThighHeight = mInitThighHeight * Vector3.Dot(vThighVec, new Vector3(0, 1, 0));
-        //float vTibiaHeight = mInitTibiaHeight/* * Vector3.Dot(vTibiaVec, vThighVec)*/;
-        //mLeftLegHeight = vThighHeight + vTibiaHeight;//*/
+        mLeftLegHeight = vLeftLegAnalysis.LegHeight;
     }
 
     /// <summary>
