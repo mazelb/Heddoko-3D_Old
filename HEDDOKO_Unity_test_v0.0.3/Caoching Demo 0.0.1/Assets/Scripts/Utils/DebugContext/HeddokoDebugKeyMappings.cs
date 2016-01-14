@@ -16,5 +16,8 @@ namespace Assets.Scripts.Utils.DebugContext
   {
         public static KeyCode ResetFrame = KeyCode.Home;
         public static KeyCode Pause = KeyCode.P;
+        public static KeyCode MoveNext = KeyCode.RightArrow;
+        public static KeyCode MoveToPrev = KeyCode.LeftArrow;
+        public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.S;
   }
 }

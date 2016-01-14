@@ -30,9 +30,7 @@ namespace Assets.Scripts.Cameras
         public float ReturnSpeed = 10f;
         public bool ReturnToPositionEnabled = true;
         [SerializeField]
-        private MoveCameraToPositon mAutoCamMover;
-
-
+        private MoveCameraToPositon mAutoCamMover; 
 
         private Vector3 mOriginalPos;
         private Quaternion mOriginalRotation;
@@ -41,7 +39,7 @@ namespace Assets.Scripts.Cameras
         public Button LeftButton;
         public Button RightButton;
         public LegMoveSwitcher LegSwitcher;
-        public CurrentViewBox CurrentViewBox;
+        public CurrentViewBox[] CurrentViewBox;
 
         private Vector3 mPositionOffset;
         [SerializeField]
@@ -79,11 +77,20 @@ namespace Assets.Scripts.Cameras
             {
                 if (mIn2DMode)
                 {
-                    CurrentViewBox.UpdateText(true, LegSwitcher.CurrentSpriteIndex);
+                    for (int i = 0; i< CurrentViewBox.Length; i++)
+                    {
+                        CurrentViewBox[i].UpdateText(true, LegSwitcher.CurrentSpriteIndex);
+                    }
+                   // CurrentViewBox.UpdateText(true, LegSwitcher.CurrentSpriteIndex);
                 }
                 else
                 {
-                    CurrentViewBox.UpdateText(false, mAutoCamMover.CurrentPosition);
+                    for (int i = 0; i < CurrentViewBox.Length; i++)
+                    {
+                        CurrentViewBox[i].UpdateText(false, mAutoCamMover.CurrentPosition);
+                        
+                    }
+             
                 }
 
             }

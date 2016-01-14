@@ -14,7 +14,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
     * LeftArmAnalysis class 
     * @brief LeftArmAnalysis class 
     */
-    internal class LeftArmAnalysis : ArmAnalysis
+    public class LeftArmAnalysis : ArmAnalysis
     {
         // Left Arm Extracted Angles, Angular velocities  and Angular accelerations, The names are chose based on the human body angles document
         public float mAngleLeftElbowFlexion = 0;

@@ -24,14 +24,14 @@ namespace Assets.Scripts.Cameras
         {
             if (Target)
             {
-                if (!UsePosition)
-                {
-                    transform.LookAt(Target.position + Offset);
-                }
-                else
-                {
-                    transform.LookAt(TargetPos);
-                }
+                 if (!UsePosition)
+                 {
+                     transform.LookAt(Target.position + Offset);
+                 }
+                 else
+                 {
+                     transform.LookAt(TargetPos);
+                 } 
             }
              
         }

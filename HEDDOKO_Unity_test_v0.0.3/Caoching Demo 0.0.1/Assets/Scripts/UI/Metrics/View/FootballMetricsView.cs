@@ -28,7 +28,7 @@ namespace Assets.Scripts.UI.Metrics.View
         public int NumberOfFramesToCount = 10;
         private int mFrameCount;
         private float mRightElbowVelSum = 0f;
-
+     
         internal ArmMetricsView ArmMetricsView
         {
             get
@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI.Metrics.View
         public  override  void Show()
         {
             gameObject.SetActive(true);
-            ArmMetricsView.gameObject.SetActive(true);
+            ArmMetricsView.gameObject.SetActive(true); 
         }
 
         /// <summary>
@@ -85,6 +85,7 @@ namespace Assets.Scripts.UI.Metrics.View
         public override void Hide()
         {
             gameObject.SetActive(false);
+            ArmMetricsView.gameObject.SetActive(false);
         }
 
         /// <summary>
