@@ -112,7 +112,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             AngleKneeFlexion = vAngleKneeFlexionNew;
 
             //calculate the Knee Rotation angle (angles between axis projection in XZ plane)
-            float vAngleKneeRotationNew = Vector3.Angle(Vector3.ProjectOnPlane(vHipAxisRight, vHipAxisUp), Vector3.ProjectOnPlane(vKneeAxisRight, vHipAxisUp));
+            float vAngleKneeRotationNew = 180 - Mathf.Abs(180 - KneeTransform.rotation.eulerAngles.y);
             float vAngularVelocityKneeRotationNew = Mathf.Abs(vAngleKneeRotationNew - Mathf.Abs(AngleKneeRotation)) / vDeltaTime;
             AngularAccelerationKneeRotation = Mathf.Abs(vAngularVelocityKneeRotationNew - AngularVelocityKneeRotation) / vDeltaTime;
             AngularVelocityKneeRotation = vAngularVelocityKneeRotationNew;
@@ -153,17 +153,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
             AngleHipAbduction = vAngleHipAbductionNew;
 
             //calculate the Hip Rotation angle (angles between axis projection in XZ plane) 
-            float vAngleHipRotationNew;
-
-            if (UseGlobalReference)
-            {
-                vAngleHipRotationNew = Vector3.Angle(HipGlobalTransform.right, Vector3.ProjectOnPlane(vHipAxisRight, HipGlobalTransform.up));
-            }
-            else
-            {
-                vAngleHipRotationNew = Vector3.Angle(Vector3.ProjectOnPlane(vTorsoAxisRight, vTorsoAxisUp), Vector3.ProjectOnPlane(vHipAxisRight, vTorsoAxisUp));
-            }
-
+            float vAngleHipRotationNew = 180 - Mathf.Abs(180 - HipTransform.rotation.eulerAngles.y); 
             float vAngularVelocityRHipRotationNew = Mathf.Abs(vAngleHipRotationNew - Mathf.Abs(AngleHipRotation)) / vDeltaTime;
             AngularAccelerationHipRotation = Mathf.Abs(vAngularVelocityRHipRotationNew - AngularVelocityHipRotation) / vDeltaTime;
             AngularVelocityHipRotation = vAngularVelocityRHipRotationNew;
