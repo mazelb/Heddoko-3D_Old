@@ -80,7 +80,7 @@ namespace Assets.Scripts.UI.Metrics
                 {
                     VisualSquatFeedback.fillAmount = vPositionOfSquat;
                 }
-                int vCurrentSquats = Mathf.FloorToInt(vRightLegAnalysis.NumberofRightSquats);
+                int vCurrentSquats = Mathf.FloorToInt(vRightLegAnalysis.NumberofSquats);
                 UpdateSquatsCount(vCurrentSquats);
             }
         }

@@ -48,8 +48,8 @@ namespace Assets.Scripts.UI.Metrics.View
                                     RightArmAnalysis;
                         if (vRightArmAnalysis != null)
                         {
-                            ElbowFlexionFill.fillAmount = Mathf.Abs(vRightArmAnalysis.mAngleRightElbowFlexion) / mMaxElbowFlexion;
-                            ElbowFlexionText.text = (int)Mathf.Abs(vRightArmAnalysis.mAngleRightElbowFlexion) + "°"; 
+                            ElbowFlexionFill.fillAmount = Mathf.Abs(vRightArmAnalysis.AngleElbowFlexion) / mMaxElbowFlexion;
+                            ElbowFlexionText.text = (int)Mathf.Abs(vRightArmAnalysis.AngleElbowFlexion) + "°"; 
                         }
                     }
                 }
@@ -61,8 +61,8 @@ namespace Assets.Scripts.UI.Metrics.View
                                     LeftArmAnalysis;
                         if (vLeftArmAnalysis != null)
                         {
-                            ElbowFlexionFill.fillAmount = Mathf.Abs(vLeftArmAnalysis.mAngleLeftElbowFlexion) / mMaxElbowFlexion;
-                            ElbowFlexionText.text = (int)Mathf.Abs(vLeftArmAnalysis.mAngleLeftElbowFlexion) + "°";
+                            ElbowFlexionFill.fillAmount = Mathf.Abs(vLeftArmAnalysis.AngleElbowFlexion) / mMaxElbowFlexion;
+                            ElbowFlexionText.text = (int)Mathf.Abs(vLeftArmAnalysis.AngleElbowFlexion) + "°";
                         }
                     }
                 }

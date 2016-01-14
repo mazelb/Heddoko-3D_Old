@@ -56,7 +56,7 @@ namespace Assets.Scripts.UI.Metrics.View
                                 RightArmAnalysis;
                     if (vRightArmAnalysis != null)
                     {
-                        mRightElbowVelSum += Mathf.Abs(vRightArmAnalysis.mAngularVelocityRightElbowFlexion);
+                        mRightElbowVelSum += Mathf.Abs(vRightArmAnalysis.AngularVelocityElbowFlexion);
                     }
                 }
             }
