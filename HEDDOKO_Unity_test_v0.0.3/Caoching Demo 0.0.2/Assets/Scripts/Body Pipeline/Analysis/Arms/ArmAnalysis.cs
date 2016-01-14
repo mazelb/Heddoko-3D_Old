@@ -18,6 +18,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
     {
         public Transform UpArTransform { get; set; }
         public Transform LoArTransform { get; set; }
+        public Vector3 ReferenceVector { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
         public Transform TorsoTransform { get { return TorsoAnalysisSegment.TorsoTransform; } }
     }

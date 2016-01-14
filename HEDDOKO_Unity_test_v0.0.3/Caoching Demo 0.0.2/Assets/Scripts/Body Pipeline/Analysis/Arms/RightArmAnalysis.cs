@@ -26,6 +26,10 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         public float AngleShoulderVertAbduction = 0;
         public float AngleShoulderHorAbduction = 0;
         public float AngleShoulderRotation = 0;
+        public float AngleShoulderReference = 0;
+        public float AngleShoulderReferenceXY = 0;
+        public float AngleShoulderReferenceXZ = 0;
+        public float AngleShoulderReferenceYZ = 0;
 
         //Velocities and Accelerations
         public float AngularVelocityElbowFlexion = 0;
@@ -112,6 +116,12 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             AngularAccelerationShoulderRotation = (vAngularVelocityShoulderRotationNew - AngularVelocityShoulderRotation) / vDeltaTime;
             AngularVelocityShoulderRotation = vAngularVelocityShoulderRotationNew;
             AngleShoulderRotation = vAngleShoulderRotationNew; //*/
+
+            //Calculate angle from reference
+            AngleShoulderReference = Vector3.Angle(vShoulderAxisRight, ReferenceVector);
+            AngleShoulderReferenceXY = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisRight, Vector3.forward), Vector3.ProjectOnPlane(ReferenceVector, Vector3.forward));
+            AngleShoulderReferenceXZ = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisRight, Vector3.up), Vector3.ProjectOnPlane(ReferenceVector, Vector3.up));
+            AngleShoulderReferenceYZ = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisRight, Vector3.right), Vector3.ProjectOnPlane(ReferenceVector, Vector3.right));
         }
-    }
+}
 }

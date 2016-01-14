@@ -453,9 +453,10 @@ public class BodySegment
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
-        /*RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
-        vRightArmAnalysis.LoArOrientation = vLoArOrientation;
-        vRightArmAnalysis.UpArOrientation = vUpArOrientation;
+        RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
+        vRightArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
+        vRightArmAnalysis.LoArTransform = vLASubsegment.AssociatedView.SubsegmentTransform;
+        vRightArmAnalysis.ReferenceVector = Vector3.one;
         vRightArmAnalysis.AngleExtraction();//*/
     }
 
@@ -530,10 +531,10 @@ public class BodySegment
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
-        /*RightArmAnalysis vRightArmAnalysis = (RightArmAnalysis)mCurrentAnalysisSegment;
-        vRightArmAnalysis.LoArOrientation = vLoArOrientation;
-        vRightArmAnalysis.UpArOrientation = vUpArOrientation;
-        vRightArmAnalysis.AngleExtraction();//*/
+        LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis)mCurrentAnalysisSegment;
+        vLeftArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
+        vLeftArmAnalysis.LoArTransform = vLASubsegment.AssociatedView.SubsegmentTransform;
+        vLeftArmAnalysis.AngleExtraction();//*/
     }
 
     /// <summary>
