@@ -35,30 +35,13 @@ namespace Assets.Scripts.UI.Metrics
         private float mLeftKneeVelAvg;
         [SerializeField]
         private bool mIsActive;
-
-        public float mInitialFlexion = 70;
-        [SerializeField]
-        private float mPreviousMeanVel = 0;
-        [SerializeField]
-        private float mMostUpToDateMeanVel = 0;
-        private List<float> mOldFrames;
-        public float LerpSpeed = 50;
-        private bool mContinueAnimation;
-        public float MaxKneeFlexVel = 999;
-
-        public Text VelocityText;
-        private float mInitialTime;
-
-        [SerializeField]
-        private float mTimeAccumulator;
-        [SerializeField]
-        private int mRevolution;
-
-        private AverageKneeFlexVelocity KneeFlexVelocityAvg;
+         
+        public Text VelocityText;  
         private PlayerStreamManager mPlayerStreamManager;
         public Image VelocityPowerbar;
         public FillAnimationComponent FillAnimationComponent;
 
+        [SerializeField]
         private LegMetricsView mLegMetricsView;
         public LegMetricsView LegMetricsView
         {
@@ -167,8 +150,7 @@ namespace Assets.Scripts.UI.Metrics
                         {
                             mRightKneeAvg /= NumberOfFrameToCount;
                             mCurrentCountOfFrames = 0;
-                            StopAllCoroutines();
-                            mContinueAnimation = false;
+                            StopAllCoroutines(); 
                             FillAnimationComponent.StartAnimation(mRightKneeAvg);
                             mRightKneeAvg = 0;
                         }
@@ -179,8 +161,7 @@ namespace Assets.Scripts.UI.Metrics
                         {
                             mLeftKneeVelAvg /= NumberOfFrameToCount;
                             mCurrentCountOfFrames = 0;
-                            StopAllCoroutines();
-                            mContinueAnimation = false;
+                            StopAllCoroutines(); 
                             FillAnimationComponent.StartAnimation(mLeftKneeVelAvg);
                             mRightKneeAvg = 0;
                         }
@@ -195,12 +176,7 @@ namespace Assets.Scripts.UI.Metrics
         /// ResetValues the biking metrics variables
         /// </summary>
         public void ResetValues()
-        {
-            mRevolution = 0;
-            mOldFrames = null; 
-            mPreviousMeanVel = 0;
-            mMostUpToDateMeanVel = 0;
-
+        { 
         }
  
 

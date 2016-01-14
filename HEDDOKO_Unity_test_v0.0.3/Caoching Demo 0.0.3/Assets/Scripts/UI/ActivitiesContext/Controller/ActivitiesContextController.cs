@@ -11,6 +11,7 @@ using Assets.Scripts.UI.ActivitiesContext.View;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.MainMenu.Controller;
 using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -226,6 +227,14 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             Train
         }
 
+
+        void Update()
+        {
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView))
+            {
+                SwitchtoTrainingViewState();
+            }
+        }
     
     }
 }

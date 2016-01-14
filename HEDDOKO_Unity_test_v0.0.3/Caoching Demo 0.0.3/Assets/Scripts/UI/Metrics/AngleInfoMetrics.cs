@@ -15,6 +15,9 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Metrics
 {
+    /// <summary>
+    /// Shows analytical information about leg knee flexion and veloctiy inside a textbox
+    /// </summary>
     public class AngleInfoMetrics : MonoBehaviour
     {
         public Text AngleInfoDisplayText;

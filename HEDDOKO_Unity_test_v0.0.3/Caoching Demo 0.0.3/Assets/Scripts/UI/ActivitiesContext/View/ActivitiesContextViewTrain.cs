@@ -72,8 +72,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
             {
-                SquatMetrics.Show();
                 NonSquatMetrics.Hide();
+                SquatMetrics.Show();
             }
             else
             {

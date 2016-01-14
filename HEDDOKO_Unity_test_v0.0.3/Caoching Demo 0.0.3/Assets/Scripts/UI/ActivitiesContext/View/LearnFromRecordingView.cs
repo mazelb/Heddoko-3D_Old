@@ -71,8 +71,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
 
             if (ActivitiesContextController.UsingSquats)
             {
-                SquatsMetrics.Show();
                 NonSquatMetrics.Hide();
+                SquatsMetrics.Show();
             }
 
             else
