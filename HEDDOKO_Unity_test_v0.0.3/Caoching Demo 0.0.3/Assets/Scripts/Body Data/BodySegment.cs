@@ -33,7 +33,7 @@ public class BodySegment
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
     public bool IsTrackingHeight = true;
-    public bool IsTrackingHipsY = false;
+    public bool IsHipsFollowingTorsoRotation = false;
     public bool IsUsingInterpolation = true;
     public float InterpolationSpeed = 0.3f;
 
@@ -179,7 +179,7 @@ public class BodySegment
             vHipQuat = Quaternion.Euler(0, vTorsoQuat.eulerAngles.y, 0);
         }
 
-        if (IsTrackingHipsY)
+        if (IsHipsFollowingTorsoRotation)
         {
             vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 0, true);
             vUSSubsegment.UpdateSubsegmentOrientation(Quaternion.Inverse(vHipQuat) * vTorsoQuat, 0, true);
