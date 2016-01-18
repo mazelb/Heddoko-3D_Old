@@ -38,18 +38,8 @@ public class BodyFrameThread : ThreadedJob
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
     
-    //====================================================FOR WRITING RAW FRAMES TO DISK ================================//
-    /// <summary>
-    /// For writing raw frames to disk
-    /// </summary>
-   // public bool CreateNewFile = true;
-
- //   public StreamWriter mStreamWriter;
-    //====================================================END OF WRITING RAW FRAMES TO DISK ================================//
-
     //For debug purposes
     public bool IsDebugging { get; set; }
-    //DebugBodyFrameLogger RawframeConversion = new DebugBodyFrameLogger("BodyFrameThread");
 
     public bool ContinueWorking
     {

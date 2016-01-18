@@ -237,13 +237,8 @@ public class Body
     /// <summary>
     /// Updates the initial frame sensors data in all segments
     /// </summary>
-    public void UpdateInitialFrameData(BodyFrame vInitialFrame = null)
+    public void UpdateInitialFrameData()
     {
-        if (vInitialFrame != null)
-        {
-            SetInitialFrame(vInitialFrame);
-        }
-
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
@@ -395,20 +390,9 @@ public class Body
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
 
-            /*Vector3 vInitRawEuler = new Vector3(vInitialRawEuler.z, vInitialRawEuler.y, vInitialRawEuler.x);
-            Vector3 vCurrRawEuler = new Vector3(vCurrentRawEuler.z, vCurrentRawEuler.y, vCurrentRawEuler.x);
-
-            float[,] vInitGlobalMatrix = MatrixTools.RotationLocal(vInitRawEuler.z, vInitRawEuler.x, vInitRawEuler.y);
-            float[,] vCurrentLocalMatrix = MatrixTools.RotationLocal(vCurrRawEuler.z, vCurrRawEuler.x, vCurrRawEuler.y);
-            float[,] vOrientationMatrix = MatrixTools.MultiplyMatrix(MatrixTools.MatrixTranspose(vInitGlobalMatrix), vCurrentLocalMatrix);//*/
-
             BodyStructureMap.TrackingStructure vStruct = new BodyStructureMap.TrackingStructure();
             vStruct.InitRawEuler = vInitialRawEuler;
             vStruct.CurrRawEuler = vCurrentRawEuler;
-
-            /*vStruct.InitGlobalMatrix = vInitGlobalMatrix;
-            vStruct.CurrentLocalMatrix = vCurrentLocalMatrix;
-            vStruct.OrientationMatrix = vOrientationMatrix;//*/
 
             vDic.Add(vKey, vStruct);
         }

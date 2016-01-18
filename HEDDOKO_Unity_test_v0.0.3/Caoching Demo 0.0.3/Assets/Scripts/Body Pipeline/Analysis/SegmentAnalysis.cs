@@ -25,19 +25,32 @@ namespace Assets.Scripts.Body_Pipeline.Analysis
             
         }
 
-        /*float SignedAngle(Vector3 a, Vector3 b, Vector3 n)
+        public float GetSignedAngle(Vector3 vVectorA, Vector3 vVectorB, Vector3 vVectorNormal)
         {
             // angle in [0,180]
-            float angle = Vector3.Angle(a,b);
-            float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+            float angle = Vector3.Angle(vVectorA,vVectorB);
+            float sign = Mathf.Sign(Vector3.Dot(vVectorNormal,Vector3.Cross(vVectorA, vVectorB)));
+            //Debug.Log(sign);
+
+            // angle in [-179,180]
+            float signed_angle = angle * sign;
+
+            return signed_angle;    
+        }//*/
+
+        public float Get360Angle(Vector3 vVectorA, Vector3 vVectorB, Vector3 vVectorNormal)
+        {
+            // angle in [0,180]
+            float angle = Vector3.Angle(vVectorA, vVectorB);
+            float sign = Mathf.Sign(Vector3.Dot(vVectorNormal, Vector3.Cross(vVectorA, vVectorB)));
 
             // angle in [-179,180]
             float signed_angle = angle * sign;
 
             // angle in [0,360] (not used but included here for completeness)
-            float angle360 =  (signed_angle + 180) % 360;
+            float angle360 = (signed_angle + 180) % 360;
 
-            return angle360;    
+            return angle360;
         }//*/
     }
 }

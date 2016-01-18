@@ -19,6 +19,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
     {
         //Elbow Angles
         public float AngleElbowFlexion = 0;
+        public float SignedAngleElbowFlexion = 0;
         public float AngleElbowPronation = 0;
 
         //Upper Arm Angles
@@ -29,6 +30,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
 
         //Velocities and Accelerations
         public float AngularVelocityElbowFlexion = 0;
+        public float PeakAngularVelocityElbowFlexion = 0;
         public float AngularAccelerationElbowFlexion = 0;
         public float AngularVelocityPronation = 0;
         public float AngularAccelerationElbowPronation = 0;
@@ -72,11 +74,15 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             vElbowAxisForward = LoArTransform.forward;
 
             //calculate the Elbow Flexion angle
-            float vAngleElbowFlexionNew = Vector3.Angle(Vector3.ProjectOnPlane(vShoulderAxisRight, vShoulderAxisForward), Vector3.ProjectOnPlane(vElbowAxisRight, vShoulderAxisForward));
+            Vector3 vProjectedShoulderAxisRight = Vector3.ProjectOnPlane(vShoulderAxisRight, vShoulderAxisForward);
+            Vector3 vProjectedElbowAxisRight = Vector3.ProjectOnPlane(vElbowAxisRight, vShoulderAxisForward);
+            float vAngleElbowFlexionNew = Vector3.Angle(vProjectedShoulderAxisRight, vProjectedElbowAxisRight);
             float vAngularVelocityElbowFlexionNew = (vAngleElbowFlexionNew - AngleElbowFlexion) / vDeltaTime;
             AngularAccelerationElbowFlexion = (vAngularVelocityElbowFlexionNew - AngularVelocityElbowFlexion) / vDeltaTime;
             AngularVelocityElbowFlexion = vAngularVelocityElbowFlexionNew;
+            PeakAngularVelocityElbowFlexion = Mathf.Max(Mathf.Abs(AngularVelocityElbowFlexion), PeakAngularVelocityElbowFlexion);
             AngleElbowFlexion = vAngleElbowFlexionNew;
+            SignedAngleElbowFlexion = GetSignedAngle(vElbowAxisRight, vShoulderAxisRight, vElbowAxisUp.normalized);
 
             //calculate the Elbow Pronation angle
             float vAngleElbowPronationNew = 180 - Mathf.Abs(180 - LoArTransform.rotation.eulerAngles.x);
