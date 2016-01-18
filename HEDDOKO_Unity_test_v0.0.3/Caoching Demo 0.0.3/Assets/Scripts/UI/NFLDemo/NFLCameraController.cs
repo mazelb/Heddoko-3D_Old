@@ -116,7 +116,7 @@ namespace Assets.Scripts.Cameras
                 CameraMovementPointSetting vNextPointSetting =
                   Curve[NextCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
 
-                vStartTime += Time.deltaTime;
+                vStartTime += Time.fixedDeltaTime;
                 mLerpPercentage = vStartTime / MovementSpeed;
                 //mLerpPercentage = mLerpPercentage * mLerpPercentage * mLerpPercentage * (mLerpPercentage * (6f * mLerpPercentage - 15f) + 10f);
                 Vector3 vNewPosition = BezierCurve.GetPoint(Curve[CurrCamIndex], Curve[NextCamIndex], mLerpPercentage);
@@ -168,8 +168,19 @@ namespace Assets.Scripts.Cameras
                 return null;
             }
 
+            return Curve[vIndex].gameObject.GetComponent<CameraMovementPointSetting>();
+        }
+        /// <summary>
+        /// Returns an CameraMovementPointSetting object that is held by a point on the curve. Null will be returned if an invalid index is given
+        /// </summary>
+        /// <param name="vIndex">the index of a point on the curve referenced by the current controller</param>
+        /// <returns> returns an CameraMovementPointSetting object held by a point on the curve</returns>
+        public CameraMovementPointSetting GetCurrentPointSetting()
+        { 
             return Curve[CurrCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
         }
+
+
 
         /// <summary>
         /// Reset the controller

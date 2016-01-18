@@ -24,7 +24,14 @@ namespace Assets.Scripts.Cameras
         public float OrthographicSize = 1f;
         public Transform LookAtTarget;
         public bool FollowLookAtTarget;
+         
+        //the Arcsprite's angle at this position.
+        public Sprite ArcSprite;
 
+        public Vector3 PlaneNormal;
+        //How far is the object away from the 
+        public Vector3 TransformOffset;
+        
         void LateUpdate()
         {
             if (FollowLookAtTarget)
@@ -32,6 +39,6 @@ namespace Assets.Scripts.Cameras
                 transform.position = LookAtTarget.position + Offset;
             }
         }
-
+ 
     }
 }

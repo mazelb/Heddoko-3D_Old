@@ -178,6 +178,8 @@ namespace Assets.Scripts.Cameras
         {
             StopAllCoroutines();
             mFinishedMovingCam = true;
+            CamLookAt.Target = Curve[0].gameObject.GetComponent<CameraMovementPointSetting>().LookAtTarget;
+            CamLookAt.TargetPos = Curve[0].gameObject.GetComponent<CameraMovementPointSetting>().LookAtTarget.position;
             for (int i = 0; i < Curve.length; i++)
             {
                 AnalysisView vAnalysisView = GetAnalysisView(i);

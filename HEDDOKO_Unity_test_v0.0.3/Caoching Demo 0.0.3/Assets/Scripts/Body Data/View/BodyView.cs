@@ -29,7 +29,13 @@ namespace Assets.Scripts.Body_Data.view
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
         [SerializeField]
-        private bool mIsPaused;
+        private bool mIsPaused ;
+
+        public bool IsPaused
+        {
+            get { return mIsPaused; }
+          
+        }
         [SerializeField]
         private bool mStartUpdating;
 
@@ -184,16 +190,7 @@ namespace Assets.Scripts.Body_Data.view
         /// </summary
         private void Awake()
         {
-            if (name != "body view guid: e75115c356218d84fa35dbd8a3159284")
-            {
-                GameObject vGo = GameObject.FindGameObjectWithTag("debug");
-                if (vGo)
-                {
-                    Application.targetFrameRate = 10;
-                    Debugger vDebugger = vGo.GetComponent<Debugger>();
-                    vDebugger.View = this;
-                }
-            }
+ 
         }
     }
 }

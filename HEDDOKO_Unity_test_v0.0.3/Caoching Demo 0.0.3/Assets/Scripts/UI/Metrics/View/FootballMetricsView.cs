@@ -9,6 +9,7 @@
 
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.NFLDemo;
 using Assets.Scripts.Utils.Animations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +29,13 @@ namespace Assets.Scripts.UI.Metrics.View
         public int NumberOfFramesToCount = 10;
         private int mFrameCount;
         private float mRightElbowVelSum = 0f;
-     
+        [SerializeField] private float mPeakAngularVelocity;
+        public AnalysisContentPanel AnalysisContentPanel;
+
+        public float PeakElbowAngularVelocity
+        {
+            get { return mPeakAngularVelocity; }
+        }
         internal ArmMetricsView ArmMetricsView
         {
             get
@@ -56,11 +63,19 @@ namespace Assets.Scripts.UI.Metrics.View
                                 RightArmAnalysis;
                     if (vRightArmAnalysis != null)
                     {
-                        mRightElbowVelSum += Mathf.Abs(vRightArmAnalysis.AngularVelocityElbowFlexion);
+                        float vElbowFlexionVel = vRightArmAnalysis.AngularVelocityElbowFlexion;
+                        mRightElbowVelSum += Mathf.Abs(vElbowFlexionVel);
+                        if (mPeakAngularVelocity < vElbowFlexionVel)
+                        {
+                            mPeakAngularVelocity = vElbowFlexionVel;
+                            AnalysisContentPanel.UpdatePeakValueText(mPeakAngularVelocity);
+                        }
+
                     }
                 }
             }
 
+ 
             if (mFrameCount == NumberOfFramesToCount)
             {
                 mFrameCount = 0;
@@ -68,6 +83,7 @@ namespace Assets.Scripts.UI.Metrics.View
                 FillAnimation.StartAnimation(vElbowFlexAvg);
                 mRightElbowVelSum = 0;
             }
+
             mFrameCount++;
         }
         /// <summary>
@@ -95,6 +111,7 @@ namespace Assets.Scripts.UI.Metrics.View
         {
             mFrameCount = 0;
             mRightElbowVelSum = 0f;
+            mPeakAngularVelocity = 0;
         }
 
     }

@@ -283,9 +283,16 @@ namespace Assets.Scripts.UI.MainMenu
         */
         public void ChangePauseState()
         {
-            CurrentBodyInPlay.View.PauseFrame();
+            CurrentBodyInPlay.View.PauseFrame(); 
         }
 
+        public void ResumeFromPauseState()
+        {
+            if (CurrentBodyInPlay.View.IsPaused)
+            {
+                CurrentBodyInPlay.View.PauseFrame();
+            }
+        }
         /// <summary>
         /// Listens to when a recording has been selected. sets the current state of the class accordingly
         /// </summary>
@@ -358,6 +365,7 @@ namespace Assets.Scripts.UI.MainMenu
         public void Stop()
         {
             CurrentBodyInPlay.StopThread();
+           // ChangeState(BodyPlaybackState.Waiting);
         }
 
         private void Update()

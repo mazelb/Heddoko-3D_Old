@@ -6,9 +6,6 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.Utils.DebugContext;
@@ -31,22 +28,22 @@ namespace Assets.Scripts.UI.NFLDemo
         private bool MoveCamState;
 
         public CameraMotionBlur CamBlur;
-        public CameraLookAt CamLookAt;
-
- 
-        public PlayerStreamManager PlayerStreamManager;
-
+        public CameraLookAt CamLookAt; 
+        public PlayerStreamManager PlayerStreamManager; 
         [SerializeField]
         public NFLCameraController NFLCamController;
         [SerializeField]
         private bool vMainEventStarted;
         private CurrentAnimationState vCurrentState = CurrentAnimationState.InTrainingView;
+     
+
         private int mCurrentCamPos = 0;
         private int mNextCamPos;
+         
+        public ArcAngleFill ArcAngleFill;
+        public AnalysisContentPanel AnalysisContentPanel;
 
-
-
-        //     private bool v
+ 
         private enum CurrentAnimationState
         {
             InTrainingView,
@@ -64,7 +61,7 @@ namespace Assets.Scripts.UI.NFLDemo
                 {
                     vMainEventStarted = true;
                     PlayerStreamManager.ChangePauseState();
-                 
+                    NFLCamController.Reset();
                     MoveCamState = MoveCameraToPositon.isActiveAndEnabled;
                     CameraController.enabled = false;
                     MoveCameraToPositon.enabled = false;
@@ -73,10 +70,15 @@ namespace Assets.Scripts.UI.NFLDemo
                     NFLCamController.enabled = true;
                     GroupFadeEffect.Hide();
                     NFLCamController.Curve.SetDirty();
+
                     //set the look at target
-                    CameraMovementPointSetting vPointSetting  = NFLCamController.GetPointAt(0);
-                    CamLookAt.TargetPos = vPointSetting.LookAtTarget.position;
-                    NFLCamController.MoveToNextPos();
+                    CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(0);
+                    
+                    CamLookAt.TargetPos = vPointParameters.LookAtTarget.position;
+                    ArcAngleFill.SetParametersFromPoint(vPointParameters);
+                     NFLCamController.MoveToNextPos();
+                    ArcAngleFill.Show();
+                    AnalysisContentPanel.Show();
                 }
             }
             else if (vMainEventStarted)
@@ -107,6 +109,8 @@ namespace Assets.Scripts.UI.NFLDemo
                                 {
                                     vCurrAnalysisView.Hide();
                                     NFLCamController.MoveToNextPos();
+                                    CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(NFLCamController.NextCamIndex); 
+                                    ArcAngleFill.SetParametersFromPoint(vPointParameters);
                                 }
                             }
 
@@ -116,6 +120,8 @@ namespace Assets.Scripts.UI.NFLDemo
                                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.MoveNext))
                                 {
                                     NFLCamController.MoveToNextPos();
+                                    CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(NFLCamController.NextCamIndex);
+                                    ArcAngleFill.SetParametersFromPoint(vPointParameters);
                                 }
                             }
                             if (vCurrAnalysisView != null && !vCurrAnalysisView.InView)
@@ -137,7 +143,7 @@ namespace Assets.Scripts.UI.NFLDemo
         /// <summary>
         /// Resets the view back to training
         /// </summary>
-        private void Reset()
+        public void Reset()
         {
             vMainEventStarted = false;
             PlayerStreamManager.ChangePauseState();
@@ -149,37 +155,34 @@ namespace Assets.Scripts.UI.NFLDemo
             NFLCamController.Reset();
             NFLCamController.enabled = false;
             GroupFadeEffect.Show();
+            CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(0);
+          
+            CamLookAt.TargetPos = vPointParameters.LookAtTarget.position;
+            ArcAngleFill.SetParametersFromPoint(vPointParameters);
+            AnalysisContentPanel.Hide();
+            ArcAngleFill.Hide();
+
         }
 
         /// <summary>
-        /// Vertifies the current state of the controller
+        /// In the event that the back button was pressed, reset the camera back to its original position
         /// </summary>
-        private void VerifyCurrentState()
+        public void BackButtonPressed()
         {
-            switch (vCurrentState)
-            {
-                case (CurrentAnimationState.InTrainingView):
-                    {
-                        break;
-                    }
-                case (CurrentAnimationState.HidingGroupAnimating):
-                    {
-
-                        break;
-                    }
-                case (CurrentAnimationState.CameraTransitionAnimation):
-                    {
-                        break;
-                    }
-                case (CurrentAnimationState.DisplayInfo):
-                    {
-                        break;
-                    }
-
-
-            }
+            GroupFadeEffect.ForceShow();
+            vMainEventStarted = false;
+            PlayerStreamManager.ResumeFromPauseState();
+            CamLookAt.enabled = false;
+            MoveCameraToPositon.gameObject.SetActive(MoveCamState);
+            CameraController.enabled = true;
+            MoveCameraToPositon.enabled = true;
+            CamBlur.enabled = false;
+            NFLCamController.Reset();
+            NFLCamController.enabled = false;
+            AnalysisContentPanel.Hide();
+            ArcAngleFill.Hide();
         }
-
+       
 
     }
 }

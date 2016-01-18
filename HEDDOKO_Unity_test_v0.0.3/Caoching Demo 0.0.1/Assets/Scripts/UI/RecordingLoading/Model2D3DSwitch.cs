@@ -90,7 +90,7 @@ namespace Assets.Scripts.UI.RecordingLoading
                 if (TrainingView.ActivitiesContextController.UsingSquats || PlayerStreamManager.SpineSplitDisabled)
                 {
                     CameraController.gameObject.SetActive(true);
-                    CameraController.SetCamFov(2.26f, Vector3.zero);
+                    CameraController.SetCamFov(1.6f, Vector3.zero);
 
                 }
                 else
@@ -176,7 +176,7 @@ namespace Assets.Scripts.UI.RecordingLoading
                     if (TrainingView.ActivitiesContextController.UsingSquats || PlayerStreamManager.SpineSplitDisabled)
                     {
 
-                        CameraController.SetCamFov(2.26f, Vector3.zero);
+                        CameraController.SetCamFov(1.6f, Vector3.zero);
 
 
                     }

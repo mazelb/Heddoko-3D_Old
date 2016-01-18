@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI.NFLDemo
                 {
                     vMainEventStarted = true;
                     PlayerStreamManager.ChangePauseState();
-                 
+                    NFLCamController.Reset();
                     MoveCamState = MoveCameraToPositon.isActiveAndEnabled;
                     CameraController.enabled = false;
                     MoveCameraToPositon.enabled = false;
@@ -137,7 +137,7 @@ namespace Assets.Scripts.UI.NFLDemo
         /// <summary>
         /// Resets the view back to training
         /// </summary>
-        private void Reset()
+        public void Reset()
         {
             vMainEventStarted = false;
             PlayerStreamManager.ChangePauseState();
@@ -151,6 +151,23 @@ namespace Assets.Scripts.UI.NFLDemo
             GroupFadeEffect.Show();
         }
 
+        /// <summary>
+        /// In the event that the back button was pressed, reset the camera back to its original position
+        /// </summary>
+        public void BackButtonPressed()
+        {
+            GroupFadeEffect.ForceShow();
+            vMainEventStarted = false;
+            PlayerStreamManager.ChangePauseState();
+            CamLookAt.enabled = false;
+            MoveCameraToPositon.gameObject.SetActive(MoveCamState);
+            CameraController.enabled = true;
+            MoveCameraToPositon.enabled = true;
+            CamBlur.enabled = false;
+            NFLCamController.Reset();
+            NFLCamController.enabled = false;
+           
+        }
         /// <summary>
         /// Vertifies the current state of the controller
         /// </summary>
@@ -180,6 +197,6 @@ namespace Assets.Scripts.UI.NFLDemo
             }
         }
 
-
+        
     }
 }

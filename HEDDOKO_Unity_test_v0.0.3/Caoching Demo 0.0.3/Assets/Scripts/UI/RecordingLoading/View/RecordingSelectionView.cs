@@ -19,17 +19,13 @@ namespace Assets.Scripts.UI.RecordingLoading.View
     /// </summary>
     public class RecordingSelectionView : MonoBehaviour
     {
-         
+
         // back button, return to main menu
         public Button BackButton;
         public RecordingPanelView RecordingPanelView;
         public PlayerStreamManager PlayerManager;
         public Camera LoadRecordingsCamera;
-        public Camera TrainAndLearningCamera;
-
-        //Gameobject that will play back the recording
-   //     public GameObject HeddokoModel;
-
+        public Camera TrainAndLearningCamera; 
         public Transform InviewAnchor;
         public Transform OutOfViewAnchor;
 
@@ -40,23 +36,22 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         /// </summary>
         public void Show()
         {
-            //HeddokoModel.transform.position = InviewAnchor.position;
-          //  HeddokoModel.transform.rotation = InviewAnchor.rotation;
+            Application.targetFrameRate = 30; 
             gameObject.SetActive(true);
             RecordingPanelView.Show();
-            ModelSwitcher.Show();   
-          LoadRecordingsCamera.gameObject.SetActive(true);
-          TrainAndLearningCamera.gameObject.SetActive(false);
+            ModelSwitcher.Show();
+            LoadRecordingsCamera.gameObject.SetActive(true);
+            TrainAndLearningCamera.gameObject.SetActive(false);
             PlayerManager.StickTorsoToHips(true);
-    }
+        }
 
         /// <summary>
         /// hides the recording selection view
         /// </summary>
         public void Hide()
         {
-           // HeddokoModel.transform.position = OutOfViewAnchor.position;
-          //  HeddokoModel.transform.rotation = OutOfViewAnchor.rotation;
+
+            Application.targetFrameRate = -1;
             gameObject.SetActive(false);
             RecordingPanelView.Hide();
             ModelSwitcher.Hide();
@@ -64,6 +59,6 @@ namespace Assets.Scripts.UI.RecordingLoading.View
             TrainAndLearningCamera.gameObject.SetActive(true);
         }
 
-        
+
     }
 }

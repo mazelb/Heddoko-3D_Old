@@ -62,6 +62,39 @@ namespace Assets.Scripts.UI.NFLDemo
             StartCoroutine(AlterInteraction(true, 1f));
         }
 
+        /// <summary>
+        /// Forces the group to show
+        /// </summary>
+        public void ForceShow()
+        {
+            float vStartTime = 0;
+
+            for (int i = 0; i < Buttons.Length; i++)
+            {
+                Buttons[i].interactable = true;
+            }
+
+
+            for (int i = 0; i < Images.Length; i++)
+            {
+                Color vCurrCol = Images[i].color;
+                vCurrCol.a = 1;
+                Images[i].color = vCurrCol;
+            }
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Color vCurrCol = Text[i].color;
+                vCurrCol.a = 1;
+                Text[i].color = vCurrCol;
+            }
+
+
+
+            if (AnimationCompleteTrigger != null)
+            {
+                AnimationCompleteTrigger();
+            }
+        }
 
         /// <summary>
         /// Alters the interaction of all items
@@ -71,10 +104,10 @@ namespace Assets.Scripts.UI.NFLDemo
         {
             float vStartTime = 0;
 
-            for (int i = 0; i < Buttons.Length; i++)
-            {
-                Buttons[i].interactable = vInteractive;
-            }
+            /*   for (int i = 0; i < Buttons.Length; i++)
+               {
+                   Buttons[i].interactable = vInteractive;
+               }*/
             float vStartAlpha = vNewAlpha < 0.1f ? 1f : 0f;
             while (true)
             {
