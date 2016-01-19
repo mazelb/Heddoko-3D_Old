@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI.NFLDemo
     /// Sets the TradingHeight, IsHipsEstimateForward, IsUsingInterpolation flags, as well as increments and decrements
     /// interpolation speed
     /// </summary>
-   public class BodySegmentSettingsKeyMap : MonoBehaviour
+    public class BodySegmentSettingsKeyMap : MonoBehaviour
     {
         public PlayerStreamManager PlayerStreamManager;
         private Body mBody;
@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI.NFLDemo
                 InputHandler();
             }
         }
-        
+
 
         /// <summary>
         /// Handles input key events
@@ -74,24 +74,18 @@ namespace Assets.Scripts.UI.NFLDemo
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateForward))
             {
-                for (int i = 0; i < mBody.BodySegments.Count; i++)
-                {
-                    BodySegment.IsHipsEstimateForward = !BodySegment.IsHipsEstimateForward;
-                }
+
+                BodySegment.IsHipsEstimateForward = !BodySegment.IsHipsEstimateForward;
+
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateUp))
             {
-                for (int i = 0; i < mBody.BodySegments.Count; i++)
-                {
-                    BodySegment.IsHipsEstimateUp = !BodySegment.IsHipsEstimateUp;
-                }
+                BodySegment.IsHipsEstimateUp = !BodySegment.IsHipsEstimateUp;
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsTrackingHeight))
             {
-                for (int i = 0; i < mBody.BodySegments.Count; i++)
-                {
-                    BodySegment.IsTrackingHeight = ! BodySegment.IsTrackingHeight;
-                }
+                BodySegment.IsTrackingHeight = !BodySegment.IsTrackingHeight;
+
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
             {
