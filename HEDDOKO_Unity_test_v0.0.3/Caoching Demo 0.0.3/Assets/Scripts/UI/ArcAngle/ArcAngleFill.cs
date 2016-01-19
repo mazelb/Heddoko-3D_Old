@@ -55,6 +55,7 @@ namespace Assets.Scripts.UI
             }
         }
 
+
         /// <summary>
         /// Updates the orientation of the canvas to be perpendicular to the camera
         /// </summary> 
@@ -72,9 +73,24 @@ namespace Assets.Scripts.UI
 
             transform.position = RightUpperArm.position + PositionOffset;
 
-            //set the image fill from the angles between two vectors
+           
+            Vector3 vCross = Vector3.Cross(vPerfectVectProjection, vElbowVector);
+            float vSign = Mathf.Sign(Vector3.Dot(NormalToThePlane, vCross));
+
+            if (vSign < 0)
+            {
+                ImageToFill.fillClockwise = true;
+            }
+
+            else
+            {
+                ImageToFill.fillClockwise = false;
+            }
+
             float vAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
             mFill = vAngle / 360f;
+
+            //set the image fill from the angles between two vectors
             ImageToFill.fillAmount = mFill;
             DisplayAngleText.text = (int)vAngle + "°";
 
