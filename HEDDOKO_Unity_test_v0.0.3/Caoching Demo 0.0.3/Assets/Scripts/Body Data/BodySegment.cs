@@ -36,7 +36,7 @@ public class BodySegment
     public bool IsResetting = false;
     public int IsResettingCounter = 0;
     static public bool IsHipsEstimateForward = true;
-    static public bool IsHipsEstimateUp = true;
+    static public bool IsHipsEstimateUp = false;
     public bool IsUsingInterpolation = true;
     public float InterpolationSpeed = 0.3f;
     private Quaternion mInitialArmAdjustment = Quaternion.identity;
@@ -186,16 +186,16 @@ public class BodySegment
 
         if (IsHipsEstimateForward)
         {
-            vForwardAngle = -EstimateHipsForwardAngle(vUSSubsegment.AssociatedView.SubsegmentTransform, vRULSubSegment.AssociatedView.SubsegmentTransform,
-                                                           vLULSubSegment.AssociatedView.SubsegmentTransform, vRLLSubsegment.AssociatedView.SubsegmentTransform,
-                                                           vLLLSubsegment.AssociatedView.SubsegmentTransform);
+            vForwardAngle = -EstimateHipsForwardAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform, 
+                                                      vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform, 
+                                                      vRLLSubsegment.AssociatedView.SubsegmentTransform, vLLLSubsegment.AssociatedView.SubsegmentTransform);
         }
 
         if(IsHipsEstimateUp)
         { 
-            vUpAngle = EstimateHipsUpAngle(vUSSubsegment.AssociatedView.SubsegmentTransform, vRULSubSegment.AssociatedView.SubsegmentTransform,
-                                                           vLULSubSegment.AssociatedView.SubsegmentTransform, vRLLSubsegment.AssociatedView.SubsegmentTransform,
-                                                           vLLLSubsegment.AssociatedView.SubsegmentTransform);
+            vUpAngle = -EstimateHipsUpAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform, 
+                                           vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform, 
+                                           vRLLSubsegment.AssociatedView.SubsegmentTransform, vLLLSubsegment.AssociatedView.SubsegmentTransform);
         }
 
         if (IsUsingInterpolation)
@@ -210,6 +210,7 @@ public class BodySegment
         }
 
         //Apply results
+        //vLSSubsegment.UpdateSubsegmentOrientation(vHipQuatY, 3, true);
         vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 3, true);
         vUSSubsegment.UpdateSubsegmentOrientation(vTorsoQuat, 0, true);
 
@@ -226,7 +227,7 @@ public class BodySegment
         }//*/
     }
 
-    internal float EstimateHipsForwardAngle(Transform vUSTransform, Transform vRULTransform, Transform vLULTransform, Transform vRLLTransform, Transform vLLLTransform)
+    internal float EstimateHipsForwardAngle(Transform vLSTransform, Transform vUSTransform, Transform vRULTransform, Transform vLULTransform, Transform vRLLTransform, Transform vLLLTransform)
     {
         //Estimate Hips forward orientation
         Vector3 vHipsForwardDirection = (Vector3.ProjectOnPlane(vUSTransform.forward, Vector3.up) + Vector3.ProjectOnPlane(vRULTransform.forward, Vector3.up) + 
@@ -236,14 +237,14 @@ public class BodySegment
         return SegmentAnalysis.GetSignedAngle(vHipsForwardDirection, Vector3.forward, Vector3.up);
     }
 
-    internal float EstimateHipsUpAngle(Transform vUSTransform, Transform vRULTransform, Transform vLULTransform, Transform vRLLTransform, Transform vLLLTransform)
+    internal float EstimateHipsUpAngle(Transform vLSTransform, Transform vUSTransform, Transform vRULTransform, Transform vLULTransform, Transform vRLLTransform, Transform vLLLTransform)
     {
         //Estimate Hips forward orientation
-        Vector3 vHipsForwardDirection = (Vector3.ProjectOnPlane(vUSTransform.forward, Vector3.right) + Vector3.ProjectOnPlane(vRULTransform.forward, Vector3.right) +
-                                         Vector3.ProjectOnPlane(vLULTransform.forward, Vector3.right) + Vector3.ProjectOnPlane(vRLLTransform.forward, Vector3.right) +
-                                         Vector3.ProjectOnPlane(vLLLTransform.forward, Vector3.right)) / 5;
+        Vector3 vHipsUpDirection = (Vector3.ProjectOnPlane(vUSTransform.up, Vector3.right) + Vector3.ProjectOnPlane(vRULTransform.up, Vector3.right) +
+                                         Vector3.ProjectOnPlane(vLULTransform.up, Vector3.right) + Vector3.ProjectOnPlane(vRLLTransform.up, Vector3.right) +
+                                         Vector3.ProjectOnPlane(vLLLTransform.up, Vector3.right)) / 5;
 
-        return SegmentAnalysis.GetSignedAngle(vHipsForwardDirection, Vector3.forward, Vector3.right);
+        return SegmentAnalysis.GetSignedAngle(vHipsUpDirection, Vector3.up, Vector3.right);
     }
 
     /// <summary>
