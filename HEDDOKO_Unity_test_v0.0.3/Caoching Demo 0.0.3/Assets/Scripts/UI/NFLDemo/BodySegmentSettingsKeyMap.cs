@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Assets.Scripts.UI.NFLDemo
 {
     /// <summary>
-    /// Sets the TradingHeight, IsHipFollowingTorsoRotation, IsUsingInterpolation flags, as well as increments and decrements
+    /// Sets the TradingHeight, IsHipsEstimateForward, IsUsingInterpolation flags, as well as increments and decrements
     /// interpolation speed
     /// </summary>
    public class BodySegmentSettingsKeyMap : MonoBehaviour
@@ -55,6 +55,15 @@ namespace Assets.Scripts.UI.NFLDemo
         /// </summary>
         void InputHandler()
         {
+            /*
+ 
+ 
+    public bool IsResetting = false;
+   
+   
+    static public bool IsHipsEstimateUp = true;
+    public bool IsUsingInterpolation = true;
+    */
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.DecBodyInterpoationSp))
             {
                 ChangeInterpolationValue(-0.05f);
@@ -63,18 +72,25 @@ namespace Assets.Scripts.UI.NFLDemo
             {
                 ChangeInterpolationValue(0.05f);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipFollowingTorsoRotation))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateForward))
             {
                 for (int i = 0; i < mBody.BodySegments.Count; i++)
                 {
-                    mBody.BodySegments[i].IsHipsFollowingTorsoRotation = !mBody.BodySegments[i].IsHipsFollowingTorsoRotation;
+                    BodySegment.IsHipsEstimateForward = !BodySegment.IsHipsEstimateForward;
+                }
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateUp))
+            {
+                for (int i = 0; i < mBody.BodySegments.Count; i++)
+                {
+                    BodySegment.IsHipsEstimateUp = !BodySegment.IsHipsEstimateUp;
                 }
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsTrackingHeight))
             {
                 for (int i = 0; i < mBody.BodySegments.Count; i++)
                 {
-                    mBody.BodySegments[i].IsTrackingHeight = !mBody.BodySegments[i].IsTrackingHeight;
+                    BodySegment.IsTrackingHeight = ! BodySegment.IsTrackingHeight;
                 }
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
