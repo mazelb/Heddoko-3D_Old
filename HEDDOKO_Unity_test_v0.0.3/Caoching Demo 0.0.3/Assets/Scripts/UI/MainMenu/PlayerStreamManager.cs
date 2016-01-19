@@ -27,6 +27,10 @@ namespace Assets.Scripts.UI.MainMenu
         public Body CurrentBodyInPlay { get; set; }
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
 
+        public delegate void BodyChangedDelegate(Body vNewBody);
+
+        public static event BodyChangedDelegate BodyChangedEvent;
+
         //  private bool mPlayButtonPushed; 
         public float PauseThreadTimer = 1f;
         private float mInternalTimer = 1f;
@@ -53,8 +57,12 @@ namespace Assets.Scripts.UI.MainMenu
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
         void Awake()
-        {
-            // mPlayButtonOriginalIcon = PlayButton.image.sprite;
+        { 
+            //register key
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
+            {
+                ResetPlayer();
+            }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)
             {
@@ -305,6 +313,10 @@ namespace Assets.Scripts.UI.MainMenu
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             mBodyRecordingUUID = vRec.BodyRecordingGuid;
             CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+            if (BodyChangedEvent != null && CurrentBodyInPlay != null)
+            {
+                BodyChangedEvent(CurrentBodyInPlay);
+            }
             //mPlayButtonPushed = false;
             ChangeState(BodyPlaybackState.Waiting);
         }
@@ -331,6 +343,7 @@ namespace Assets.Scripts.UI.MainMenu
                     BodiesManager.Instance.CreateNewBody("BrainpackPlaceholderBody");
                 }
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0]; //get the first body
+           
             }
             mCanUseBrainpack = true;
         }
@@ -369,11 +382,11 @@ namespace Assets.Scripts.UI.MainMenu
         }
 
         private void Update()
-        {
+        { 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
             {
                 ResetPlayer();
-            }
+            } 
            
         }
 

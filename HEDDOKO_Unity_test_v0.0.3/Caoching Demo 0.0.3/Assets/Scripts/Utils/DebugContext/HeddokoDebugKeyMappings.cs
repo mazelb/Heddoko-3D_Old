@@ -19,5 +19,12 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode MoveNext = KeyCode.RightArrow;
         public static KeyCode MoveToPrev = KeyCode.LeftArrow;
         public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.S;
-  }
+        public static KeyCode IsTrackingHeight = KeyCode.Alpha0;
+        public static KeyCode IsHipFollowingTorsoRotation = KeyCode.Alpha9;
+        public static KeyCode IncBodyInterpolationSp = KeyCode.Alpha2;
+        public static KeyCode DecBodyInterpoationSp = KeyCode.Alpha1;
+        public static KeyCode IsUsingInterpolationForBody = KeyCode.Alpha8;
+
+    
+    }
 }
