@@ -19,14 +19,14 @@ namespace Assets.Scripts.UI
     /// Calculate the angle between two vectors and sets the Arc gameobject to be oriented in the direction between the two vectors
     /// </summary>
     public class ArcAngleFill : MonoBehaviour
-    {  
+    {
 
         public Vector3 PositionOffset;
- 
+
         public Image ImageToFill;
         public GameObject ArcCanvas;
         public Transform ZeroElbowVector;
-        public Transform RightUpperArm; 
+        public Transform RightUpperArm;
         private float mFill;
         public float MinimalScale;
         public float MaxScale;
@@ -47,21 +47,22 @@ namespace Assets.Scripts.UI
         }
 
         private void Update()
-        { 
+        {
             Body vBody = PlayerStreamManager.CurrentBodyInPlay;
             if (vBody != null)
-            { 
-                UpdateTransform(); 
+            {
+                UpdateTransform();
             }
         }
+
 
         /// <summary>
         /// Updates the orientation of the canvas to be perpendicular to the camera
         /// </summary> 
         public void UpdateTransform()
         {
-            Vector3 vUpVector = NormalToThePlane; 
-        
+            Vector3 vUpVector = NormalToThePlane;
+
             //Get the projection of the perfect Vector
             Vector3 vPerfectVectProjection = Vector3.ProjectOnPlane(ZeroElbowVector.right, vUpVector);
 
@@ -69,14 +70,29 @@ namespace Assets.Scripts.UI
             Vector3 vElbowVector = Vector3.ProjectOnPlane(RightUpperArm.right, vUpVector);
             Quaternion Rotation = Quaternion.LookRotation(vUpVector, vPerfectVectProjection);
             transform.rotation = Rotation;
-             
+
             transform.position = RightUpperArm.position + PositionOffset;
 
+           
+            Vector3 vCross = Vector3.Cross(vPerfectVectProjection, vElbowVector);
+            float vSign = Mathf.Sign(Vector3.Dot(NormalToThePlane, vCross));
+
+            if (vSign < 0)
+            {
+                ImageToFill.fillClockwise = true;
+            }
+
+            else
+            {
+                ImageToFill.fillClockwise = false;
+            }
+
+            float vAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
+            mFill = vAngle / 360f;
+
             //set the image fill from the angles between two vectors
-            float vAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector) ;
-            mFill = vAngle/360f;
-           ImageToFill.fillAmount = mFill;
-            DisplayAngleText.text = (int) vAngle + "°";
+            ImageToFill.fillAmount = mFill;
+            DisplayAngleText.text = (int)vAngle + "°";
 
         }
 
@@ -94,7 +110,7 @@ namespace Assets.Scripts.UI
         /// </summary>
         /// <param name="vPointParameters"></param>
         public void SetParametersFromPoint(CameraMovementPointSetting vPointParameters)
-        { 
+        {
             PositionOffset = vPointParameters.TransformOffset;
             NormalToThePlane = vPointParameters.PlaneNormal;
             Sprite vNewArcSprite = vPointParameters.ArcSprite;

@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Assets.Scripts.Cameras
 {
     /// <summary>
-    /// Class holds a setting which a camera controller will reference as a camera approaches a LookAtTarget
+    /// Data model which holds settings for different view points, from which a camera controller will reference as a camera approaches a LookAtTarget
     /// </summary>
     [Serializable]
    public class CameraMovementPointSetting: MonoBehaviour

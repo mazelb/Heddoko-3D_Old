@@ -7,13 +7,8 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic;
-using System.Net;
-using Assets.Scripts.Body_Pipeline.Analysis.Legs;
-using Assets.Scripts.UI.MainMenu;
-using Assets.Scripts.UI.Metrics;
-using Assets.Scripts.Utils.DebugContext;
-using Assets.Scripts.Utils.UnityUtilities;
+using System.Collections.Generic; 
+using Assets.Scripts.Utils.DebugContext; 
 
 namespace Assets.Scripts.Body_Data.view
 {
