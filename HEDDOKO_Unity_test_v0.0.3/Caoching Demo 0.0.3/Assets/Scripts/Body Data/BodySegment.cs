@@ -375,7 +375,8 @@ public class BodySegment
 
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightUpperArm];
         BodySubSegment vLASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_RightForeArm];
-        BodySubSegment vTORSOSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
+        BodySegment vTORSOSegment = ParentBody.GetSegmentFromSegmentType(BodyStructureMap.SegmentTypes.SegmentType_Torso);
+        BodySubSegment vTORSOSubSegment = vTORSOSegment.BodySubSegmentsDictionary.FirstOrDefault(x => x.Key == (int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine).Value;
 
         ////////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
         Vector3 vUpArmInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_RightUpperArm].InitRawEuler * 180f / Mathf.PI;
@@ -415,17 +416,33 @@ public class BodySegment
 
         if (IsUsingInterpolation)
         {
-            vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTORSOSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
-            vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(mInitialArmAdjustment) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            if (vTORSOSubSegment != null)
+            {
+                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
+                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            }
+            else
+            {
+                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
+                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            }
         }
         else
         {
-            vUpArmQuat = Quaternion.Inverse(vTORSOSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
-            vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(mInitialArmAdjustment) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            if (vTORSOSubSegment != null)
+            {
+                vUpArmQuat = Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
+                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            }
+            else
+            {
+                vUpArmQuat = vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
+                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            }
         }
 
-        vUASubsegment.UpdateSubsegmentOrientation(vUpArmQuat, 0, true);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
+        vUASubsegment.UpdateSubsegmentOrientation(vUpArmQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         vRightArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
@@ -442,7 +459,8 @@ public class BodySegment
     {
         BodySubSegment vUASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftUpperArm];
         BodySubSegment vLASubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftForeArm];
-        BodySubSegment vTORSOSubsegment = BodySubSegmentsDictionary[(int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine];
+        BodySegment vTORSOSegment = ParentBody.GetSegmentFromSegmentType(BodyStructureMap.SegmentTypes.SegmentType_Torso);
+        BodySubSegment vTORSOSubSegment = vTORSOSegment.BodySubSegmentsDictionary.FirstOrDefault(x => x.Key == (int)BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine).Value;
 
         /// /////////////////////////////////////////////////////  Mapping /////////////////////////////////////////////////////////////////////
         Vector3 vUpArmInitialRawEuler = vTransformatricies[BodyStructureMap.SensorPositions.SP_LeftUpperArm].InitRawEuler * 180f / Mathf.PI;
@@ -482,17 +500,33 @@ public class BodySegment
 
         if (IsUsingInterpolation)
         {
-            vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTORSOSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
-            vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(mInitialArmAdjustment) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            if (vTORSOSubSegment != null)
+            {
+                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
+                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            }
+            else
+            {
+                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
+                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+            }
         }
         else
         {
-            vUpArmQuat = Quaternion.Inverse(vTORSOSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
-            vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(mInitialArmAdjustment) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            if (vTORSOSubSegment != null)
+            {
+                vUpArmQuat = Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
+                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTORSOSubSegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            }
+            else
+            {
+                vUpArmQuat = vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
+                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+            }
         }
 
-        vUASubsegment.UpdateSubsegmentOrientation(vUpArmQuat, 0, true);
         vLASubsegment.UpdateSubsegmentOrientation(vLoArmQuat, 0, true);
+        vUASubsegment.UpdateSubsegmentOrientation(vUpArmQuat, 0, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis)mCurrentAnalysisSegment;
@@ -574,10 +608,6 @@ public class BodySegment
     /// <param name="vFilteredDictionary">Dictionnary of tracked segments and their transformations.</param>
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
     {
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
-        {
-            MapTorsoSegment(vFilteredDictionary);
-        }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
             MapRightArmSubsegment(vFilteredDictionary);
@@ -585,6 +615,10 @@ public class BodySegment
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_LeftArm)
         {
             MapLeftArmSubsegment(vFilteredDictionary);
+        }
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
+        {
+            MapTorsoSegment(vFilteredDictionary);
         }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
         {
