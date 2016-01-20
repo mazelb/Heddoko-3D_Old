@@ -97,15 +97,14 @@ public class BodyRecordingsMgr
         {
             return;
         }
-        Profiler.enabled = true;
-        Profiler.logFile = "mylog.log";
+         
         BodyRecordingReader vTempReader = new BodyRecordingReader();
 
         if (vTempReader.ReadFile(vFilePath) > 0)
         {
             AddNewRecording(vTempReader.GetRecordingLines());            
         }
-        Profiler.enabled = false;
+       
     }
 
     /**
