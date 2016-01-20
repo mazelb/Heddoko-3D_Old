@@ -55,7 +55,7 @@ namespace Assets.Scripts.Cameras
             }
             private set
             {
-                mCurrCamIndex = value; 
+                mCurrCamIndex = value;
             }
         }
 
@@ -93,6 +93,13 @@ namespace Assets.Scripts.Cameras
             StopAllCoroutines();
             StartCoroutine(MoveNext());
         }
+
+        public void MoveTowardsStartPos()
+        {
+            FinishedMovingCam = false;
+            StopAllCoroutines();
+            StartCoroutine(MoveToStartPos());
+        }
         IEnumerator MoveNext()
         {
             Application.targetFrameRate = 60;
@@ -119,7 +126,6 @@ namespace Assets.Scripts.Cameras
 
                 vStartTime += Time.fixedDeltaTime;
                 mLerpPercentage = vStartTime / MovementSpeed;
-                //mLerpPercentage = mLerpPercentage * mLerpPercentage * mLerpPercentage * (mLerpPercentage * (6f * mLerpPercentage - 15f) + 10f);
                 Vector3 vNewPosition = BezierCurve.GetPoint(Curve[CurrCamIndex], Curve[NextCamIndex], mLerpPercentage);
                 float vNextOrthoSize = Mathf.Lerp(vCurrOrthoCam, vNextPointSetting.OrthographicSize, mLerpPercentage);
                 Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
@@ -127,7 +133,7 @@ namespace Assets.Scripts.Cameras
 
                 Camera.transform.position = vNewPosition;
                 Camera.orthographicSize = vNextOrthoSize;
-                 CamLookAt.TargetPos = vNextLookAtPos;
+                CamLookAt.TargetPos = vNextLookAtPos;
                 CamLookAt.Target = vNextPointSetting.LookAtTarget;
                 if (mLerpPercentage >= 1)
                 {
@@ -142,6 +148,45 @@ namespace Assets.Scripts.Cameras
             Application.targetFrameRate = -1;
         }
 
+        /// <summary>
+        /// Interpolate towards the start position
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator MoveToStartPos()
+        {
+
+            Application.targetFrameRate = 60;
+            float vStartTime = 0;
+            float vCurrOrthoCam = Camera.orthographicSize;
+            Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
+            Vector3 vStartPosition = transform.position;
+            CameraMovementPointSetting vNextPointSetting =
+                 Curve[0].gameObject.GetComponent<CameraMovementPointSetting>();
+
+            while (true)
+            {
+                vStartTime += Time.deltaTime;
+                mLerpPercentage = vStartTime / (MovementSpeed * 1.2f);
+                Vector3 vNewPosition = Vector3.Lerp(vStartPosition, Curve[0].position, mLerpPercentage); 
+                float vNextOrthoSize = Mathf.Lerp(vCurrOrthoCam, vNextPointSetting.OrthographicSize, mLerpPercentage);
+                Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
+                    mLerpPercentage);
+
+                Camera.transform.position = vNewPosition;
+                Camera.orthographicSize = vNextOrthoSize;
+                CamLookAt.TargetPos = vNextLookAtPos;
+                CamLookAt.Target = vNextPointSetting.LookAtTarget;
+                if (mLerpPercentage >= 1)
+                { 
+                    FinishedMovingCam = true;
+                    mLerpPercentage = 0;
+                    break;
+                }
+
+                yield return null;
+            }
+            Application.targetFrameRate = -1;
+        }
         /// <summary>
         /// Returns an AnalysisView object that is held by a point on the curve. Null will be returned if an invalid index is given
         /// </summary>
@@ -178,7 +223,7 @@ namespace Assets.Scripts.Cameras
         /// <param name="vIndex">the index of a point on the curve referenced by the current controller</param>
         /// <returns> returns an CameraMovementPointSetting object held by a point on the curve</returns>
         public CameraMovementPointSetting GetCurrentPointSetting()
-        { 
+        {
             return Curve[CurrCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
         }
 

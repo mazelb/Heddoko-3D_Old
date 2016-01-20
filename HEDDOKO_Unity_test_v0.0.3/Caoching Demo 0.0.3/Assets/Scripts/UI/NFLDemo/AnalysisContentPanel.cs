@@ -22,7 +22,13 @@ public class AnalysisContentPanel: MonoBehaviour
         public Text FeedbackText;
         public ArcAngleFill ArcAngleFill;
         public float Threshold = 5f;
-        
+        public Animator Animator;
+
+
+        void Awake()
+        {
+            Animator = GetComponent<Animator>();
+        }
         /// <summary>
         /// updates the peak value from the given float. vNewVal is rounded to an int 
         /// </summary>
@@ -38,6 +44,7 @@ public class AnalysisContentPanel: MonoBehaviour
         public void Show()
         {
             gameObject.SetActive(true);
+            Animator.SetBool("Show",true);
         }
 
         public void UpdateFeedbackText(CameraMovementPointSetting vPointParameters)
@@ -61,7 +68,8 @@ public class AnalysisContentPanel: MonoBehaviour
         /// </summary>
         public void Hide()
         {
-            gameObject.SetActive(false);
+            // gameObject.SetActive(false);
+            Animator.SetBool("Show", false);
         }
     }
 }
