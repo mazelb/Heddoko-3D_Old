@@ -73,12 +73,14 @@ namespace Assets.Scripts.UI.NFLDemo
 
                     //set the look at target
                     CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(0);
-                    
+                    CameraMovementPointSetting vNextPoint = NFLCamController.GetPointAt(1);
                     CamLookAt.TargetPos = vPointParameters.LookAtTarget.position;
-                    ArcAngleFill.SetParametersFromPoint(vPointParameters);
+                    
                      NFLCamController.MoveToNextPos();
                     ArcAngleFill.Show();
                     AnalysisContentPanel.Show();
+                    ArcAngleFill.SetParametersFromPoint(vNextPoint);
+                    AnalysisContentPanel.UpdateFeedbackText(vNextPoint);
                 }
             }
             else if (vMainEventStarted)
@@ -111,6 +113,7 @@ namespace Assets.Scripts.UI.NFLDemo
                                     NFLCamController.MoveToNextPos();
                                     CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(NFLCamController.NextCamIndex); 
                                     ArcAngleFill.SetParametersFromPoint(vPointParameters);
+                                    AnalysisContentPanel.UpdateFeedbackText(vPointParameters);
                                 }
                             }
 
@@ -122,6 +125,7 @@ namespace Assets.Scripts.UI.NFLDemo
                                     NFLCamController.MoveToNextPos();
                                     CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(NFLCamController.NextCamIndex);
                                     ArcAngleFill.SetParametersFromPoint(vPointParameters);
+                                    AnalysisContentPanel.UpdateFeedbackText(vPointParameters);
                                 }
                             }
                             if (vCurrAnalysisView != null && !vCurrAnalysisView.InView)

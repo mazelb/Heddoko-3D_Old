@@ -28,13 +28,15 @@ namespace Assets.Scripts.UI
         public Transform ZeroElbowVector;
         public Transform RightUpperArm;
         private float mFill;
+        private float mAngle;
         public float MinimalScale;
         public float MaxScale;
         public PlayerStreamManager PlayerStreamManager;
         public Camera WorldSpaceUiCamera;
         public Vector3 NormalToThePlane;
         public Text DisplayAngleText;
-
+        public Transform Torso;
+        
         /// <summary>
         /// The angle of the arc
         /// </summary>
@@ -42,7 +44,7 @@ namespace Assets.Scripts.UI
         {
             get
             {
-                return mFill * 360f;
+                return mAngle;
             }
         }
 
@@ -61,7 +63,7 @@ namespace Assets.Scripts.UI
         /// </summary> 
         public void UpdateTransform()
         {
-            Vector3 vUpVector = NormalToThePlane;
+            Vector3 vUpVector =  NormalToThePlane;
 
             //Get the projection of the perfect Vector
             Vector3 vPerfectVectProjection = Vector3.ProjectOnPlane(ZeroElbowVector.right, vUpVector);
@@ -72,27 +74,29 @@ namespace Assets.Scripts.UI
             transform.rotation = Rotation;
 
             transform.position = RightUpperArm.position + PositionOffset;
-
-           
+             
             Vector3 vCross = Vector3.Cross(vPerfectVectProjection, vElbowVector);
-            float vSign = Mathf.Sign(Vector3.Dot(NormalToThePlane, vCross));
+            float vSign = Mathf.Sign(Vector3.Dot(vUpVector, vCross));
+            mAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
+            mFill = mAngle / 360f;
 
+            //set the image fill from the angles between two vectors
+            ImageToFill.fillAmount = mFill;
+          
             if (vSign < 0)
             {
-                ImageToFill.fillClockwise = true;
+                ImageToFill.fillClockwise = true; 
             }
 
             else
             {
                 ImageToFill.fillClockwise = false;
+                mAngle *= -1;
             }
 
-            float vAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
-            mFill = vAngle / 360f;
+            DisplayAngleText.text = (int)mAngle + "°";
 
-            //set the image fill from the angles between two vectors
-            ImageToFill.fillAmount = mFill;
-            DisplayAngleText.text = (int)vAngle + "°";
+
 
         }
 
@@ -117,6 +121,7 @@ namespace Assets.Scripts.UI
             if (vNewArcSprite != null)
             {
                 ImageToFill.sprite = vPointParameters.ArcSprite;
+                UpdateTransform();
             }
             else
             {
