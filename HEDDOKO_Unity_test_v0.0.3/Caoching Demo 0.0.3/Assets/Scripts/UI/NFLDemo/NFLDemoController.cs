@@ -61,10 +61,8 @@ namespace Assets.Scripts.UI.NFLDemo
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
                 {
                     vMainEventStarted = true;
-#if ( !UNITY_EDITOR    )
-                    PlayerStreamManager.ChangePauseState();
-#endif                   
-
+ 
+                    PlayerStreamManager.ChangePauseState(); 
 
                     NFLCamController.Reset();
                     MoveCamState = MoveCameraToPositon.isActiveAndEnabled;
@@ -155,17 +153,16 @@ namespace Assets.Scripts.UI.NFLDemo
         public void Reset()
         {
             vMainEventStarted = false;
-            bool vIsDebugBuild = false;
-#if  UNITY_EDITOR
+         
+/*#if  UNITY_EDITOR
             vIsDebugBuild = true;
 
 #elif DEVELOPMENT_BUILD
             vIsDebugBuild = true;
-#endif
-            if (!vIsDebugBuild)
-            {
+#endif*/
+          
                 PlayerStreamManager.ChangePauseState();
-            }
+           
             CamLookAt.enabled = false;
             MoveCameraToPositon.gameObject.SetActive(MoveCamState);
             CameraController.enabled = true;

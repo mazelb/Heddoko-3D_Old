@@ -50,12 +50,12 @@ namespace Assets.Scripts.Cameras
             {
                 Dictionary<PlaneNormalFromTransformType, string> vLessThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);
                 vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, "Bad position on sagital plane ");
-                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOWS BACKWARDS");
+                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOW BACKWARDS");
                 vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, "LOWER ELBOW");
 
                 Dictionary<PlaneNormalFromTransformType, string> vGreaterThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);
                 vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, "Bad position on sagital plane ");
-                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOW  FORWARD");
+                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOW FORWARD");
                 vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, "RAISE ELBOW");
 
                 Dictionary<PlaneNormalFromTransformType, string> vGoodFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);

@@ -35,8 +35,7 @@ namespace Assets.Scripts.UI
         public PlayerStreamManager PlayerStreamManager;
         public Camera WorldSpaceUiCamera;
         public Vector3 NormalToThePlane;
-        public Text DisplayAngleText;
-        public Transform Torso;
+        public Text DisplayAngleText; 
         public float TextMagnitude = 0.5f;
         public float ShowTime=1f;
         
