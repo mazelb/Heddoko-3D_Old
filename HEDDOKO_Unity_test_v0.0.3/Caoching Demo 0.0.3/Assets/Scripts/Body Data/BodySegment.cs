@@ -33,13 +33,11 @@ public class BodySegment
     //Is segment tracked (based on body type) 
     public bool IsTracked = true;
     static public bool IsTrackingHeight = true;
-    public bool IsResetting = false;
-    public int IsResettingCounter = 0;
+    static public bool IsAdjustingArms = true;
     static public bool IsHipsEstimateForward = true;
-    static public bool IsHipsEstimateUp = false;
-    public bool IsUsingInterpolation = true;
-    public float InterpolationSpeed = 0.3f;
-    private Quaternion mInitialArmAdjustment = Quaternion.identity;
+    static public bool IsHipsEstimateUp = true;
+    static public bool IsUsingInterpolation = true;
+    static public float InterpolationSpeed = 0.3f;
 
     //Sensor data tuples
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
@@ -94,7 +92,6 @@ public class BodySegment
     /// <param name="vFrame">the body frame whose subframes will updates to initial sensors.</param>
     public void UpdateInitialSensorsData(BodyFrame vFrame)
     {
-        IsResetting = true;
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
         foreach (BodyStructureMap.SensorPositions vPos in vSensorPos)
         {
@@ -186,33 +183,32 @@ public class BodySegment
 
         if (IsHipsEstimateForward)
         {
-            vForwardAngle = -EstimateHipsForwardAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform, 
-                                                      vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform, 
+            vForwardAngle = -EstimateHipsForwardAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform,
+                                                      vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform,
                                                       vRLLSubsegment.AssociatedView.SubsegmentTransform, vLLLSubsegment.AssociatedView.SubsegmentTransform);
         }
 
-        if(IsHipsEstimateUp)
-        { 
-            vUpAngle = -EstimateHipsUpAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform, 
-                                           vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform, 
+        if (IsHipsEstimateUp)
+        {
+            vUpAngle = -EstimateHipsUpAngle(vLSSubsegment.AssociatedView.SubsegmentTransform, vUSSubsegment.AssociatedView.SubsegmentTransform,
+                                           vRULSubSegment.AssociatedView.SubsegmentTransform, vLULSubSegment.AssociatedView.SubsegmentTransform,
                                            vRLLSubsegment.AssociatedView.SubsegmentTransform, vLLLSubsegment.AssociatedView.SubsegmentTransform);
         }
 
         if (IsUsingInterpolation)
         {
-            vHipQuat = Quaternion.Slerp(vLSSubsegment.SubsegmentOrientation, Quaternion.Euler(vUpAngle, vForwardAngle, 0), InterpolationSpeed);
-            vTorsoQuat = Quaternion.Slerp(vUSSubsegment.SubsegmentOrientation,  Quaternion.Inverse(vLSSubsegment.SubsegmentOrientation) * vTorsoQuatY * vTorsoQuatX * vTorsoQuatZ, InterpolationSpeed);
+            vHipQuat = Quaternion.Slerp(vLSSubsegment.SubsegmentOrientation, Quaternion.Euler(vUpAngle, 0, 0) * Quaternion.Euler(0, vForwardAngle, 0), InterpolationSpeed);
+            vTorsoQuat = Quaternion.Slerp(vUSSubsegment.SubsegmentOrientation,  Quaternion.Inverse(vHipQuat) * vTorsoQuatY * vTorsoQuatX * vTorsoQuatZ, InterpolationSpeed);
         }
         else
         {
-            vHipQuat = Quaternion.Euler(vUpAngle, vForwardAngle, 0);
-            vTorsoQuat = Quaternion.Inverse(vLSSubsegment.SubsegmentOrientation) * vTorsoQuatY * vTorsoQuatX * vTorsoQuatZ;
+            vHipQuat = Quaternion.Euler(vUpAngle, 0, 0) * Quaternion.Euler(0, vForwardAngle, 0);
+            vTorsoQuat = Quaternion.Inverse(vHipQuat) * vTorsoQuatY * vTorsoQuatX * vTorsoQuatZ;
         }
 
         //Apply results
-        //vLSSubsegment.UpdateSubsegmentOrientation(vHipQuatY, 3, true);
-        vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 3, true);
         vUSSubsegment.UpdateSubsegmentOrientation(vTorsoQuat, 0, true);
+        vLSSubsegment.UpdateSubsegmentOrientation(vHipQuat, 3, true);
 
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         //Update the analysis inputs
@@ -462,15 +458,30 @@ public class BodySegment
         {
             if (vTorsoSubSegment != null && vHipsSubsegment != null)
             {
-                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * 
+                vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) *
                                               Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
-                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * 
-                                              Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                if (IsAdjustingArms)
+                {
+                    vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuatX) * Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) *
+                                                  Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                }
+                else
+                {
+                    vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) *
+                                                  Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                }
             }
             else
             {
                 vUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ, InterpolationSpeed);
-                vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                if (IsAdjustingArms)
+                {
+                    vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuatX) * Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                }
+                else
+                {
+                    vLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ, InterpolationSpeed);
+                }
             }
         }
         else
@@ -478,12 +489,26 @@ public class BodySegment
             if (vTorsoSubSegment != null && vHipsSubsegment != null)
             {
                 vUpArmQuat = Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
-                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                if (IsAdjustingArms)
+                {
+                    vLoArmQuat = Quaternion.Inverse(vUpArmQuatX) * Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                }
+                else
+                {
+                    vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * Quaternion.Inverse(vTorsoSubSegment.SubsegmentOrientation) * Quaternion.Inverse(vHipsSubsegment.SubsegmentOrientation) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                }
             }
             else
             {
                 vUpArmQuat = vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
-                vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                if (IsAdjustingArms)
+                {
+                    vLoArmQuat = Quaternion.Inverse(vUpArmQuatX) * Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                }
+                else
+                {
+                    vLoArmQuat = Quaternion.Inverse(vUpArmQuat) * vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
+                }
             }
         }
 

@@ -23,10 +23,8 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IsHipsEstimateForward = KeyCode.Alpha9;
         public static KeyCode IsHipsEstimateUp = KeyCode.Alpha8;
         public static KeyCode IsUsingInterpolationForBody = KeyCode.Alpha7;
+        public static KeyCode IsAdjustingArms = KeyCode.Alpha6;
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;
-    
-
-    
     }
 }

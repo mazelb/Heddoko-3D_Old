@@ -56,14 +56,10 @@ namespace Assets.Scripts.UI.NFLDemo
         void InputHandler()
         {
             /*
- 
- 
-    public bool IsResetting = false;
-   
-   
-    static public bool IsHipsEstimateUp = true;
-    public bool IsUsingInterpolation = true;
-    */
+            public bool IsResetting = false;
+            static public bool IsHipsEstimateUp = true;
+            public bool IsUsingInterpolation = true;
+            */
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.DecBodyInterpoationSp))
             {
                 ChangeInterpolationValue(-0.05f);
@@ -74,9 +70,7 @@ namespace Assets.Scripts.UI.NFLDemo
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateForward))
             {
-
                 BodySegment.IsHipsEstimateForward = !BodySegment.IsHipsEstimateForward;
-
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateUp))
             {
@@ -85,14 +79,14 @@ namespace Assets.Scripts.UI.NFLDemo
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsTrackingHeight))
             {
                 BodySegment.IsTrackingHeight = !BodySegment.IsTrackingHeight;
-
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
             {
-                for (int i = 0; i < mBody.BodySegments.Count; i++)
-                {
-                    mBody.BodySegments[i].IsUsingInterpolation = !mBody.BodySegments[i].IsUsingInterpolation;
-                }
+                BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
+            {
+                BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
             }
         }
 
@@ -102,13 +96,8 @@ namespace Assets.Scripts.UI.NFLDemo
         /// <param name="vIncValue"></param>
         private void ChangeInterpolationValue(float vIncValue)
         {
-            for (int i = 0; i < mBody.BodySegments.Count; i++)
-            {
-                mBody.BodySegments[i].InterpolationSpeed += vIncValue;
-                Mathf.Clamp01(mBody.BodySegments[i].InterpolationSpeed);
-            }
+            BodySegment.InterpolationSpeed += vIncValue;
+            Mathf.Clamp01(BodySegment.InterpolationSpeed);
         }
-
-
     }
 }
