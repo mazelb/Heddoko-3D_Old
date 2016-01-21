@@ -52,6 +52,7 @@ namespace Assets.Demos
                     HipsEstForwardTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateForward);
                     HipsEstUpTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateUp);
                     InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
+                    mBodySet = true;
                 }
                 InputHandler();
             }
