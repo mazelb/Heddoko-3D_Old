@@ -10,6 +10,7 @@
 using System.Collections;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.Utils.DebugContext;
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
 using UnityEngine;
@@ -252,6 +253,11 @@ namespace Assets.Demos
             ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
+        void Update()
+        {
+            
+        }
+ 
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state
         /// </summary>

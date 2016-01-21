@@ -26,5 +26,6 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IsAdjustingArms = KeyCode.Alpha6;
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;
-    }
+        public static KeyCode HideSegmentFlagPanel = KeyCode.H;
+  }
 }
