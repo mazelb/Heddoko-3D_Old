@@ -26,7 +26,7 @@ todo: can create an interface for handling these, subsequently every routine tha
 */
 public class BodyFrameThread : ThreadedJob
 {
-    private BodyFrameBuffer mBuffer;  //buffer  
+    private BodyFrameBuffer mBuffer;   
     private SourceDataType mDataSourceType;
     private PlaybackState mCurrentPlaybackState = PlaybackState.Pause;
     private PlaybackSettings mPlaybackSettings;
@@ -197,6 +197,7 @@ public class BodyFrameThread : ThreadedJob
                     BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
+
                     //reset back to 0
                     if (vBodyFrameIndex >= mRawFrames.Count) 
                     {

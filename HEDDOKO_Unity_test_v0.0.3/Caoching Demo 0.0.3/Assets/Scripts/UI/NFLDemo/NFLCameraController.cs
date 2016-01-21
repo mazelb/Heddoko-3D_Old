@@ -106,6 +106,7 @@ namespace Assets.Scripts.Cameras
             float vStartTime = 0;
             float vCurrOrthoCam = Camera.orthographicSize;
             Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
+            CameraMovementPointSetting vNextPointSetting = null;
             while (true)
             {
 
@@ -121,7 +122,7 @@ namespace Assets.Scripts.Cameras
                     NextCamIndex = 0;
                 }
 
-                CameraMovementPointSetting vNextPointSetting =
+                  vNextPointSetting =
                   Curve[NextCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
 
                 vStartTime += Time.fixedDeltaTime;
@@ -145,6 +146,7 @@ namespace Assets.Scripts.Cameras
 
                 yield return null;
             }
+            vNextPointSetting.gameObject.SetActive(false);
             Application.targetFrameRate = -1;
         }
 
@@ -186,6 +188,7 @@ namespace Assets.Scripts.Cameras
                 yield return null;
             }
             Application.targetFrameRate = -1;
+            vNextPointSetting.gameObject.SetActive(false);
         }
         /// <summary>
         /// Returns an AnalysisView object that is held by a point on the curve. Null will be returned if an invalid index is given
@@ -230,20 +233,25 @@ namespace Assets.Scripts.Cameras
 
 
         /// <summary>
-        /// Reset the controller
+        /// Reset the controller, parameters, and re-enables curve's points gameobject
         /// </summary>
         public void Reset()
         {
             StopAllCoroutines();
             mFinishedMovingCam = true;
-            for (int i = 0; i < Curve.length; i++)
+            for (int i = 0; i < Curve.pointCount; i ++)
             {
+                Curve[i].gameObject.SetActive(true);
+            }
+         /*   for (int i = 0; i < Curve.length; i++)
+            {
+                
                 AnalysisView vAnalysisView = GetAnalysisView(i);
                 if (vAnalysisView != null)
                 {
                     vAnalysisView.Hide();
                 }
-            }
+            }*/
             NextCamIndex = -1;
             CurrCamIndex = 0;
         }

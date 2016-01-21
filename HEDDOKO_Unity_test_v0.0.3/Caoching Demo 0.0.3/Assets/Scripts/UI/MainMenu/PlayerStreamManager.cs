@@ -390,13 +390,22 @@ namespace Assets.Scripts.UI.MainMenu
            
         }
 
-
+        /// <summary>
+        /// Clears the buffer of the current body in play.
+        /// </summary>
+        public void ClearBuffer()
+        {
+            if (CurrentBodyInPlay != null)
+            {
+                CurrentBodyInPlay.View.ClearBodyBuffer();
+            }
+        }
         /// <summary>
         /// Resets the body and the metrics associated with body.
         /// </summary>
         public void ResetPlayer()
-        {
-            ResetInitialFrame();
+        { 
+                ResetInitialFrame();
             if (CurrentBodyInPlay != null)
             {
                 RightLegAnalysis vRightLegAnalysis =
