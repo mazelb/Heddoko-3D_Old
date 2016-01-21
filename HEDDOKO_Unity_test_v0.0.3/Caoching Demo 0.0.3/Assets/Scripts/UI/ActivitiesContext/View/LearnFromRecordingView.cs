@@ -83,7 +83,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
 
             PlayerStreamManager.ResetPlayer();
             PlayerStreamManager.StickTorsoToHips(ActivitiesContextController.UsingSquats);
-            Application.targetFrameRate = 30;
+            Application.targetFrameRate = 45;
              QualitySettings.vSyncCount = 0;
         }
 

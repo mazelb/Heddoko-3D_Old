@@ -7,6 +7,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
+using System.Collections;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.MainMenu;
@@ -28,13 +29,17 @@ namespace Assets.Scripts.UI
         public Transform ZeroElbowVector;
         public Transform RightUpperArm;
         private float mFill;
+        private float mAngle;
         public float MinimalScale;
         public float MaxScale;
         public PlayerStreamManager PlayerStreamManager;
         public Camera WorldSpaceUiCamera;
         public Vector3 NormalToThePlane;
         public Text DisplayAngleText;
-
+        public Transform Torso;
+        public float TextMagnitude = 0.5f;
+        public float ShowTime=1f;
+        
         /// <summary>
         /// The angle of the arc
         /// </summary>
@@ -42,7 +47,7 @@ namespace Assets.Scripts.UI
         {
             get
             {
-                return mFill * 360f;
+                return mAngle;
             }
         }
 
@@ -61,7 +66,7 @@ namespace Assets.Scripts.UI
         /// </summary> 
         public void UpdateTransform()
         {
-            Vector3 vUpVector = NormalToThePlane;
+            Vector3 vUpVector =  NormalToThePlane;
 
             //Get the projection of the perfect Vector
             Vector3 vPerfectVectProjection = Vector3.ProjectOnPlane(ZeroElbowVector.right, vUpVector);
@@ -72,39 +77,99 @@ namespace Assets.Scripts.UI
             transform.rotation = Rotation;
 
             transform.position = RightUpperArm.position + PositionOffset;
-
-           
+             
             Vector3 vCross = Vector3.Cross(vPerfectVectProjection, vElbowVector);
-            float vSign = Mathf.Sign(Vector3.Dot(NormalToThePlane, vCross));
+            float vSign = Mathf.Sign(Vector3.Dot(vUpVector, vCross));
+            mAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
+            Vector3 vHalfwayVector3 = vPerfectVectProjection + vElbowVector;
+            vHalfwayVector3.Normalize();
+            DisplayAngleText.transform.position = transform.position + vHalfwayVector3* TextMagnitude;
 
+            mFill = mAngle / 360f;
+
+            //set the image fill from the angles between two vectors
+            ImageToFill.fillAmount = mFill;
+          
             if (vSign < 0)
             {
-                ImageToFill.fillClockwise = true;
+                ImageToFill.fillClockwise = true; 
             }
 
             else
             {
                 ImageToFill.fillClockwise = false;
+                mAngle *= -1;
             }
 
-            float vAngle = Vector3.Angle(vPerfectVectProjection, vElbowVector);
-            mFill = vAngle / 360f;
+            DisplayAngleText.text = (int)mAngle + "°";
 
-            //set the image fill from the angles between two vectors
-            ImageToFill.fillAmount = mFill;
-            DisplayAngleText.text = (int)vAngle + "°";
+
 
         }
 
+        /// <summary>
+        /// Start the object display process
+        /// </summary>
         public void Show()
         {
             gameObject.SetActive(true);
+            StopAllCoroutines();
+            StartCoroutine(ScaleTransform(1, 1f, false));
         }
 
+        /// <summary>
+        /// Start the hiding process
+        /// </summary>
         public void Hide()
         {
-            gameObject.SetActive(false);
+            StopAllCoroutines();
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(ScaleTransform(0, 0.4f, true));
+            }
         }
+
+
+        /// <summary>
+        /// Scales the transform with respect to Time.delta Time. and optional parameter to disable the gameobject
+        /// </summary>
+        /// <param name="vScale">the scale to interpolate towards</param>
+        /// <param name="vTimeScale">Scale the time  </param>
+        /// <param name="vDisableGO">Flag to disable once complete</param>
+        /// <returns></returns>
+        private IEnumerator ScaleTransform(float vScale,float vTimeScale, bool vDisableGO)
+        {
+            float vStartTime = 0;
+            Vector3 vStartScale = transform.localScale;
+            Vector3 vEndScale = Vector3.one*vScale;
+            float vPercentage = 0;
+            float vEndTime =  ShowTime*vTimeScale;
+            while (true)
+            {
+                vStartTime += Time.deltaTime;
+                vPercentage = vStartTime/vEndTime;
+
+                //use smoothstep interpolation
+                vPercentage = vPercentage*vPercentage*vPercentage* (vPercentage*(6f*vPercentage - 15f) + 10f);
+              
+                if (vPercentage >= 1)
+                {
+                    transform.localScale = vEndScale;
+                    break;
+                }
+
+                Vector3 vNewScale = Vector3.Lerp(vStartScale, vEndScale, vPercentage);
+                transform.localScale = vNewScale;
+                yield return null;
+            }
+
+            if (vDisableGO)
+            {
+                gameObject.SetActive(false);
+            }
+
+        }
+
         /// <summary>
         /// From the given point parameters, set the zero vector's orientation, the sprite used by the arc image fill and the plane normal 
         /// </summary>
@@ -117,6 +182,7 @@ namespace Assets.Scripts.UI
             if (vNewArcSprite != null)
             {
                 ImageToFill.sprite = vPointParameters.ArcSprite;
+                UpdateTransform();
             }
             else
             {

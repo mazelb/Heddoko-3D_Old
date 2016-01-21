@@ -58,7 +58,8 @@ namespace Assets.Scripts.UI.Scene_3d.View
                         Button vAvRecButton = vNewAvRecButton.GetComponent<Button>();
                         string vCleanedName = vRecordingsFiles[i].Replace(FilePathReferences.sCsvDirectory + "\\", null);
                         vAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
-                        int vTemp = i; //copy the variable i and pass it into the listener
+                        //copy the variable i and pass it into the listener
+                        int vTemp = i; 
                         vAvRecButton.onClick.AddListener(() => ChooseRecording(vTemp));
                         vNewAvRecButton.transform.SetParent(vContentPanel, false);
                     }

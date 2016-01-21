@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using Assets.Scripts.Cameras;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +19,16 @@ public class AnalysisContentPanel: MonoBehaviour
     {
 
         public Text PeakValueText;
+        public Text FeedbackText;
+        public ArcAngleFill ArcAngleFill;
+        public float Threshold = 5f;
+        public Animator Animator;
 
+
+        void Awake()
+        {
+            Animator = GetComponent<Animator>();
+        }
         /// <summary>
         /// updates the peak value from the given float. vNewVal is rounded to an int 
         /// </summary>
@@ -34,14 +44,32 @@ public class AnalysisContentPanel: MonoBehaviour
         public void Show()
         {
             gameObject.SetActive(true);
+            Animator.SetBool("Show",true);
         }
 
+        public void UpdateFeedbackText(CameraMovementPointSetting vPointParameters)
+        {
+            float vAngle =  ArcAngleFill.Angle ;
+            if (vAngle > Threshold)
+            {
+                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.GreaterThan);
+            }
+            else if (vAngle < Threshold *-1f)
+            {
+                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.LessThan);
+            }
+            else
+            {
+                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.Good);
+            }
+        }
         /// <summary>
         /// Hides the content panel in scene
         /// </summary>
         public void Hide()
         {
-            gameObject.SetActive(false);
+            // gameObject.SetActive(false);
+            Animator.SetBool("Show", false);
         }
     }
 }

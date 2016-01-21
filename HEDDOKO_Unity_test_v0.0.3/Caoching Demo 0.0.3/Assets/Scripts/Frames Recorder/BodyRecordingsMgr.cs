@@ -97,13 +97,14 @@ public class BodyRecordingsMgr
         {
             return;
         }
-
+         
         BodyRecordingReader vTempReader = new BodyRecordingReader();
 
         if (vTempReader.ReadFile(vFilePath) > 0)
         {
             AddNewRecording(vTempReader.GetRecordingLines());            
         }
+       
     }
 
     /**

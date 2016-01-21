@@ -104,10 +104,10 @@ namespace Assets.Scripts.UI.NFLDemo
         {
             float vStartTime = 0;
 
-            /*   for (int i = 0; i < Buttons.Length; i++)
+               for (int i = 0; i < Buttons.Length; i++)
                {
                    Buttons[i].interactable = vInteractive;
-               }*/
+               } 
             float vStartAlpha = vNewAlpha < 0.1f ? 1f : 0f;
             while (true)
             {

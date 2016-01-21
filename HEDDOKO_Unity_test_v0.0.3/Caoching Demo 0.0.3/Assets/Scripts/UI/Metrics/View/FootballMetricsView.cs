@@ -31,11 +31,7 @@ namespace Assets.Scripts.UI.Metrics.View
         private float mRightElbowVelSum = 0f;
         [SerializeField] private float mPeakAngularVelocity;
         public AnalysisContentPanel AnalysisContentPanel;
-
-        public float PeakElbowAngularVelocity
-        {
-            get { return mPeakAngularVelocity; }
-        }
+ 
         internal ArmMetricsView ArmMetricsView
         {
             get
@@ -65,9 +61,9 @@ namespace Assets.Scripts.UI.Metrics.View
                     {
                         float vElbowFlexionVel = vRightArmAnalysis.AngularVelocityElbowFlexion;
                         mRightElbowVelSum += Mathf.Abs(vElbowFlexionVel);
-                        if (mPeakAngularVelocity < vElbowFlexionVel)
+                        if (mPeakAngularVelocity < vRightArmAnalysis.PeakAngularVelocityElbowFlexion)
                         {
-                            mPeakAngularVelocity = vElbowFlexionVel;
+                            mPeakAngularVelocity = vRightArmAnalysis.PeakAngularVelocityElbowFlexion;
                             AnalysisContentPanel.UpdatePeakValueText(mPeakAngularVelocity);
                         }
 
