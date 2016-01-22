@@ -18,7 +18,7 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode Pause = KeyCode.P;
         public static KeyCode MoveNext = KeyCode.RightArrow;
         public static KeyCode MoveToPrev = KeyCode.LeftArrow;
-        public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.S;
+  
         public static KeyCode IsTrackingHeight = KeyCode.Alpha0;
         public static KeyCode IsHipsEstimateForward = KeyCode.Alpha9;
         public static KeyCode IsHipsEstimateUp = KeyCode.Alpha8;
@@ -27,5 +27,7 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
-  }
+        public static KeyCode SwitchToRecordingFromLive = KeyCode.S;
+        public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.D;
+    }
 }
