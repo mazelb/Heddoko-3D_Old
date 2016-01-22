@@ -46,13 +46,13 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(BikingHookFunction);
- 
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchtoTrainingViewState);
+
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearnFromRecordingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearnFromRecordingView.TrainButton.onClick.AddListener(SwitchtoTrainingViewState);
-            ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearnByRecordingState);
+            ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
             //LearningView
         }
 
@@ -94,92 +94,109 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             switch (CurrentState)
             {
                 case (ActivitiesContextViewState.Idle):
-                {
-                    if (vNewState == ActivitiesContextViewState.Main)
                     {
-                        CurrentState = ActivitiesContextViewState.Main;
-                        ActivitesContextView.Show();
-                        ActivitesContextView.SwitchToMainView();
+                        if (vNewState == ActivitiesContextViewState.Main)
+                        {
+                            CurrentState = ActivitiesContextViewState.Main;
+                            ActivitesContextView.Show();
+                            ActivitesContextView.SwitchToMainView();
+                        }
                     }
-                }
                     break;
                 case (ActivitiesContextViewState.Main):
-                {
-                    if (vNewState == ActivitiesContextViewState.Idle)
                     {
-                        CurrentState = ActivitiesContextViewState.Idle;
-                        ActivitesContextView.SwitchToIdleView();
-                        ActivitesContextView.Hide();
-                        MainMenuController.SwitchToMainMenu();
-                        break;
+                        if (vNewState == ActivitiesContextViewState.Idle)
+                        {
+                            CurrentState = ActivitiesContextViewState.Idle;
+                            ActivitesContextView.SwitchToIdleView();
+                            ActivitesContextView.Hide();
+                            MainMenuController.SwitchToMainMenu();
+                            break;
+                        }
+                        if (vNewState == ActivitiesContextViewState.Learn)
+                        {
+                            CurrentState = ActivitiesContextViewState.Learn;
+                            ActivitesContextView.HideMainView();
+                            ActivitesContextView.SwitchToLearningView();
+                            break;
+                        }
                     }
-                    if (vNewState == ActivitiesContextViewState.Learn)
-                    {
-                        CurrentState = ActivitiesContextViewState.Learn;
-                        ActivitesContextView.HideMainView();
-                        ActivitesContextView.SwitchToLearningView();
-                        break;
-                    }
-                }
                     break;
                 case (ActivitiesContextViewState.Learn):
-                {
-                    if (vNewState == ActivitiesContextViewState.LearnByRecording)
                     {
-                        CurrentState = ActivitiesContextViewState.LearnByRecording;
-                        ActivitesContextView.HideLearningView();
-                        ActivitesContextView.SwitchToLearnByRecordingView();
+                        if (vNewState == ActivitiesContextViewState.LearnByRecording)
+                        {
+                            CurrentState = ActivitiesContextViewState.LearnByRecording;
+                            ActivitesContextView.HideLearningView();
+                            ActivitesContextView.SwitchToLearnByRecordingView();
+                            break;
+                        }
+                        if (vNewState == ActivitiesContextViewState.Main)
+                        {
+                            CurrentState = ActivitiesContextViewState.Main;
+                            ActivitesContextView.HideLearningView();
+                            ActivitesContextView.Show();
+                            ActivitesContextView.SwitchToMainView();
+                        }
+                        if (vNewState == ActivitiesContextViewState.Train)
+                        {
+                            CurrentState = ActivitiesContextViewState.Train;
+                            ActivitesContextView.HideLearningView();
+                            ActivitesContextView.HideLearnByRecordingView();
+                            ActivitesContextView.SwitchToTrainingView();
+                            PlayerStreamManager.SetBodytoStreamFromBrainpack();
+
+                            break;
+                        }
                         break;
                     }
-                    if (vNewState == ActivitiesContextViewState.Main)
-                    {
-                        CurrentState = ActivitiesContextViewState.Main;
-                        ActivitesContextView.HideLearningView();
-                        ActivitesContextView.Show();
-                        ActivitesContextView.SwitchToMainView();
-                    }
-                    break;
-                }
 
                 case (ActivitiesContextViewState.LearnByRecording):
-                {
-                    if (vNewState == ActivitiesContextViewState.Learn)
                     {
-                        CurrentState = ActivitiesContextViewState.Learn;
-                        ActivitesContextView.HideLearnByRecordingView();
-                        ActivitesContextView.SwitchToLearningView();
-                        break;
-                    }
-                    if (vNewState == ActivitiesContextViewState.Train)
-                    {
-                        CurrentState = ActivitiesContextViewState.Train;
-                        ActivitesContextView.HideLearnByRecordingView();
-                        ActivitesContextView.SwitchToTrainingView();
-                        PlayerStreamManager.SetBodytoStreamFromBrainpack();
-                        break;
-                    }
+                        if (vNewState == ActivitiesContextViewState.Learn)
+                        {
+                            CurrentState = ActivitiesContextViewState.Learn;
+                            ActivitesContextView.HideLearnByRecordingView();
+                            ActivitesContextView.SwitchToLearningView();
+                            break;
+                        }
+                        if (vNewState == ActivitiesContextViewState.Train)
+                        {
+                            CurrentState = ActivitiesContextViewState.Train;
+                            ActivitesContextView.HideLearnByRecordingView();
+                            ActivitesContextView.SwitchToTrainingView();
+                            PlayerStreamManager.SetBodytoStreamFromBrainpack();
+                            break;
+                        }
 
-                    break;
-                }
+                        break;
+                    }
 
                 case (ActivitiesContextViewState.Train):
-                {
-                    if (vNewState == ActivitiesContextViewState.LearnByRecording)
                     {
-                        CurrentState = ActivitiesContextViewState.LearnByRecording;
-                        ActivitesContextView.HideTrainingView();
-                        ActivitesContextView.SwitchToLearnByRecordingView();
-                        PlayerStreamManager.SetBodyToStreamFromRecording();
+                        if (vNewState == ActivitiesContextViewState.LearnByRecording)
+                        {
+                            CurrentState = ActivitiesContextViewState.LearnByRecording;
+                            ActivitesContextView.HideTrainingView();
+                            ActivitesContextView.SwitchToLearnByRecordingView();
+                            PlayerStreamManager.SetBodyToStreamFromRecording();
+                        }
+                        if (vNewState == ActivitiesContextViewState.Learn)
+                        {
+                            CurrentState = ActivitiesContextViewState.Learn;
+                            ActivitesContextView.HideTrainingView();
+                            ActivitesContextView.SwitchToLearningView();
+                            break;
+                        }
+                        break;
                     }
-                    break;
-                }
             }
         }
 
-      
-    
 
-    /// <summary>
+
+
+        /// <summary>
         /// Switch to learning view state
         /// </summary>
         public void SwitchToLearningViewState()
@@ -206,7 +223,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         /// </summary>
         public void ReturnToMainMenu()
         {
-            ChangeState(ActivitiesContextViewState.Idle); 
+            ChangeState(ActivitiesContextViewState.Idle);
         }
         /// <summary>
         /// Change the current state idle
@@ -234,7 +251,13 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             {
                 SwitchtoTrainingViewState();
             }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive))
+            {
+                BikingHookFunction();
+            }
         }
-    
+
+        
+        
     }
 }

@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         /// </summary>
         public void Show()
         {
-            Application.targetFrameRate = 30; 
+            Application.targetFrameRate = 50; 
             gameObject.SetActive(true);
             RecordingPanelView.Show();
             ModelSwitcher.Show();

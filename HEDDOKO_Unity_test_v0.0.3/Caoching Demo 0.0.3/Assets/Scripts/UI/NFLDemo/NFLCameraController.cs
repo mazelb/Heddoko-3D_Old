@@ -147,7 +147,7 @@ namespace Assets.Scripts.Cameras
                 yield return null;
             }
             vNextPointSetting.gameObject.SetActive(false);
-            Application.targetFrameRate = -1;
+           // Application.targetFrameRate = -1;
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Assets.Scripts.Cameras
 
                 yield return null;
             }
-            Application.targetFrameRate = -1;
+            //Application.targetFrameRate = -1;
             vNextPointSetting.gameObject.SetActive(false);
         }
         /// <summary>

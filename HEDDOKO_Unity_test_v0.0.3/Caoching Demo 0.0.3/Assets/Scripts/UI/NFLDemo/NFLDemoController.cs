@@ -92,7 +92,8 @@ namespace Assets.Scripts.UI.NFLDemo
                 //stop the event
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
                 {
-                    ClearBufferAfterNSeconds(.5f);
+                    //  StartCoroutine(ClearBufferAfterNSeconds(.5f));
+                    PlayerStreamManager.ClearBuffer();
                     Reset();
                 }
                 else
@@ -147,6 +148,7 @@ namespace Assets.Scripts.UI.NFLDemo
                     }
                 }
             }
+            Debug.Log("FR" +Application.targetFrameRate);
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace Assets.Scripts.UI.NFLDemo
 #endif*/
           
                 PlayerStreamManager.ChangePauseState();
-           
+            PlayerStreamManager.ClearBuffer();
             CamLookAt.enabled = false;
             MoveCameraToPositon.gameObject.SetActive(MoveCamState);
             CameraController.enabled = true;
@@ -208,5 +210,6 @@ namespace Assets.Scripts.UI.NFLDemo
             PlayerStreamManager.ClearBuffer();
         }
 
+        
     }
 }

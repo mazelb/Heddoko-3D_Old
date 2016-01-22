@@ -27,5 +27,6 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
+        public static KeyCode SwitchToRecordingFromLive = KeyCode.D;
   }
 }
