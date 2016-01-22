@@ -50,7 +50,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
             {
                 if (!mGoToRecordingInstead)
-                {
+                { 
                     UsingSquats = false;
                     SwitchtoTrainingViewState();
                 }
