@@ -182,10 +182,21 @@ namespace Assets.Scripts.Body_Data.view
 
         /// <summary>
         /// Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
-        /// </summary
+        /// </summary>
         private void Awake()
         {
  
+        }
+
+        /// <summary>
+        /// Clears the buffer
+        /// </summary>
+        public void ClearBodyBuffer()
+        {
+            if (mBuffer != null)
+            {
+                mBuffer.Clear();
+            }
         }
     }
 }

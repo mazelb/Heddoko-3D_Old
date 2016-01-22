@@ -101,13 +101,13 @@ namespace Assets.Scripts.Cameras
             }
         }
 
-
+        public float multi=1f;
 
         void LateUpdate()
         {
             if (FollowLookAtTarget)
             {
-                transform.position = LookAtTarget.position + Offset;
+                transform.position = LookAtTarget.position  + (((LookAtTarget.forward  )*  5f * multi ))  ;
             }
         }
         public enum PlaneNormalFromTransformType

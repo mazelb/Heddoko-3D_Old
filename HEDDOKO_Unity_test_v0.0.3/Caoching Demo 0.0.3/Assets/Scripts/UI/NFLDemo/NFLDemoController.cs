@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 using System;
+using System.Collections;
 using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
@@ -91,6 +92,7 @@ namespace Assets.Scripts.UI.NFLDemo
                 //stop the event
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
                 {
+                    ClearBufferAfterNSeconds(.5f);
                     Reset();
                 }
                 else
@@ -200,6 +202,11 @@ namespace Assets.Scripts.UI.NFLDemo
             ArcAngleFill.Hide();
         }
 
+        private IEnumerator ClearBufferAfterNSeconds(float vSecs)
+        {
+            yield return new WaitForSeconds(vSecs);
+            PlayerStreamManager.ClearBuffer();
+        }
 
     }
 }
