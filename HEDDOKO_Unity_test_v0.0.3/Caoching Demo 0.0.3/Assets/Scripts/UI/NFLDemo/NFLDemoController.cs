@@ -24,6 +24,7 @@ namespace Assets.Scripts.UI.NFLDemo
     {
         public CameraController CameraController;
         public MoveCameraToPositon MoveCameraToPositon;
+
         [SerializeField]
         public GroupFadeEffect GroupFadeEffect;
         //the state of the cam look at will be saved once the event is triggered
@@ -56,14 +57,20 @@ namespace Assets.Scripts.UI.NFLDemo
         }
         private void Update()
         {
-            if (!vMainEventStarted && !ActivitiesContextController.UsingSquats)
+            //is the correct context
+            bool vCorrectContext = ActivitiesContextController.CurrentState ==
+                                   ActivitiesContextController.ActivitiesContextViewState.LearnByRecording
+                                   ||
+                                   ActivitiesContextController.CurrentState ==
+                                   ActivitiesContextController.ActivitiesContextViewState.Train;
+            if (!vMainEventStarted && !ActivitiesContextController.UsingSquats && vCorrectContext)
             {
                 //start the event
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
                 {
                     vMainEventStarted = true;
- 
-                    PlayerStreamManager.ChangePauseState(); 
+
+                    PlayerStreamManager.ChangePauseState();
 
                     NFLCamController.Reset();
                     MoveCamState = MoveCameraToPositon.isActiveAndEnabled;
@@ -77,7 +84,6 @@ namespace Assets.Scripts.UI.NFLDemo
 
                     //set the look at target
                     CameraMovementPointSetting vPointParameters = NFLCamController.GetPointAt(0);
-                    //CameraMovementPointSetting vNextPoint = NFLCamController.GetPointAt(1);
                     CamLookAt.TargetPos = vPointParameters.LookAtTarget.position;
 
                     NFLCamController.MoveTowardsStartPos();
@@ -92,14 +98,13 @@ namespace Assets.Scripts.UI.NFLDemo
                 //stop the event
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
                 {
-                    //  StartCoroutine(ClearBufferAfterNSeconds(.5f));
                     PlayerStreamManager.ClearBuffer();
                     Reset();
                 }
                 else
                 {
                     //get the current index and next index
-                    int vCurrentCamIdx = NFLCamController.CurrCamIndex; 
+                    int vCurrentCamIdx = NFLCamController.CurrCamIndex;
 
                     //Is the group effect still animating?
                     if (GroupFadeEffect.FinishedAnimating)
@@ -140,15 +145,49 @@ namespace Assets.Scripts.UI.NFLDemo
                             }
                         }
 
-                      /*  //check if next pos is 0, go back into training view
-                        if (NFLCamController.NextCamIndex == 0)
-                        {
-                            Reset();
-                        }*/
+                        /*  //check if next pos is 0, go back into training view
+                          if (NFLCamController.NextCamIndex == 0)
+                          {
+                              Reset();
+                          }*/
                     }
                 }
             }
-            Debug.Log("FR" +Application.targetFrameRate);
+
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive) &&
+                (ActivitiesContextController.CurrentState ==
+                                   ActivitiesContextController.ActivitiesContextViewState.Train)
+
+                )
+            {
+                BackButtonPressed();
+                ActivitiesContextController.NonSquatHookFunction();
+                PlayerStreamManager.ResumeFromPauseState();
+
+            }
+
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView) &&
+                (ActivitiesContextController.CurrentState ==
+                                   ActivitiesContextController.ActivitiesContextViewState.LearnByRecording)
+                )
+            {
+                BackButtonPressed();
+                ActivitiesContextController.SwitchtoTrainingViewState();
+                PlayerStreamManager.ResumeFromPauseState();
+            }
+
+            /*    if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView))
+                {
+                    Reset();
+                    ActivitiesContextController.SwitchtoTrainingViewState();
+                    PlayerStreamManager.ResumeFromPauseState();
+                }
+                if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive))
+                {
+                    Reset();
+                    ActivitiesContextController.NonSquatHookFunction();
+                    PlayerStreamManager.ResumeFromPauseState();
+                }*/
         }
 
         /// <summary>
@@ -157,15 +196,15 @@ namespace Assets.Scripts.UI.NFLDemo
         public void Reset()
         {
             vMainEventStarted = false;
-         
-/*#if  UNITY_EDITOR
-            vIsDebugBuild = true;
 
-#elif DEVELOPMENT_BUILD
-            vIsDebugBuild = true;
-#endif*/
-          
-                PlayerStreamManager.ChangePauseState();
+            /*#if  UNITY_EDITOR
+                        vIsDebugBuild = true;
+
+            #elif DEVELOPMENT_BUILD
+                        vIsDebugBuild = true;
+            #endif*/
+
+            PlayerStreamManager.ChangePauseState();
             PlayerStreamManager.ClearBuffer();
             CamLookAt.enabled = false;
             MoveCameraToPositon.gameObject.SetActive(MoveCamState);
@@ -210,6 +249,6 @@ namespace Assets.Scripts.UI.NFLDemo
             PlayerStreamManager.ClearBuffer();
         }
 
-        
+
     }
 }

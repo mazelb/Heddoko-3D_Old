@@ -35,6 +35,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public string BikeRecordingSubPath;
         private string ActivityTypeSubPath;
 
+        [SerializeField] private bool mGoToRecordingInstead = false;
 
         public bool UsingSquats { get; set; }
 
@@ -46,7 +47,19 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchtoTrainingViewState);
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
+            {
+                if (!mGoToRecordingInstead)
+                {
+                    UsingSquats = false;
+                    SwitchtoTrainingViewState();
+                }
+                else
+                {
+                    NonSquatHookFunction();
+                    mGoToRecordingInstead = false;
+                }
+            });
 
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
@@ -68,7 +81,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             SwitchToLearnByRecordingState();
         }
 
-        private void BikingHookFunction()
+        public void NonSquatHookFunction()
         {
             ActivityTypeSubPath = BikeRecordingSubPath;
             BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
@@ -80,7 +93,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         /// <summary>
         /// changes states to Learn
         /// </summary>
-        private void SwitchToLearnByRecordingState()
+        public void SwitchToLearnByRecordingState()
         {
             ChangeState(ActivitiesContextViewState.LearnByRecording);
         }
@@ -244,18 +257,15 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             Train
         }
 
-
         void Update()
         {
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive) && CurrentState  == ActivitiesContextViewState.Learn)
             {
-                SwitchtoTrainingViewState();
-            }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive))
-            {
-                BikingHookFunction();
+                mGoToRecordingInstead = true;
             }
         }
+
+      
 
         
         

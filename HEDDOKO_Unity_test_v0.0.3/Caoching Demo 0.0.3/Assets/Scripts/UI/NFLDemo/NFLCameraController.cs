@@ -78,10 +78,7 @@ namespace Assets.Scripts.Cameras
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                StartCoroutine(MoveNext());
-            }
+            
         }
 
         /// <summary>
@@ -97,6 +94,7 @@ namespace Assets.Scripts.Cameras
         public void MoveTowardsStartPos()
         {
             FinishedMovingCam = false;
+           
             StopAllCoroutines();
             StartCoroutine(MoveToStartPos());
         }
@@ -156,27 +154,28 @@ namespace Assets.Scripts.Cameras
         /// <returns></returns>
         IEnumerator MoveToStartPos()
         {
-
+            bool vPreFollowPos = CamLookAt.UsePosition;
+            CamLookAt.UsePosition = false;
             Application.targetFrameRate = 60;
             float vStartTime = 0;
             float vCurrOrthoCam = Camera.orthographicSize;
-            Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
+            CamLookAt.TargetPos = CamLookAt.Target.position;
             Vector3 vStartPosition = transform.position;
             CameraMovementPointSetting vNextPointSetting =
                  Curve[0].gameObject.GetComponent<CameraMovementPointSetting>();
 
             while (true)
             {
-                vStartTime += Time.deltaTime;
-                mLerpPercentage = vStartTime / (MovementSpeed * 1.2f);
+                vStartTime += Time.fixedDeltaTime;
+                mLerpPercentage = vStartTime / (MovementSpeed );
                 Vector3 vNewPosition = Vector3.Lerp(vStartPosition, Curve[0].position, mLerpPercentage); 
                 float vNextOrthoSize = Mathf.Lerp(vCurrOrthoCam, vNextPointSetting.OrthographicSize, mLerpPercentage);
-                Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
-                    mLerpPercentage);
+                //Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
+                   // mLerpPercentage);
 
                 Camera.transform.position = vNewPosition;
                 Camera.orthographicSize = vNextOrthoSize;
-                CamLookAt.TargetPos = vNextLookAtPos;
+               // CamLookAt.TargetPos = vNextLookAtPos;
                 CamLookAt.Target = vNextPointSetting.LookAtTarget;
                 if (mLerpPercentage >= 1)
                 { 
@@ -187,6 +186,7 @@ namespace Assets.Scripts.Cameras
 
                 yield return null;
             }
+            CamLookAt.UsePosition = vPreFollowPos;
             //Application.targetFrameRate = -1;
             vNextPointSetting.gameObject.SetActive(false);
         }
