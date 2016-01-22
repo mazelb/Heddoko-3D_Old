@@ -280,6 +280,8 @@ public class BodyFrameThread : ThreadedJob
     */
     private void BrainFrameTask()
     {
+        int vStartTime = 0;
+        int vCounter = 0;
         while (true)
         {
             string vLogMessage = "";
@@ -305,11 +307,11 @@ public class BodyFrameThread : ThreadedJob
             string vUnwrappedString = "";
 
             try
-            { 
-              bool vAllClear = false; 
+            {
+                bool vAllClear = false;
                 //first unwrap the string and break it down 
                 vUnwrappedString = HeddokoPacket.Unwrap(vPacket.Payload);
-                
+
                 //Debug here
 
                 //todo place a check here for valid data
@@ -320,25 +322,28 @@ public class BodyFrameThread : ThreadedJob
                 {
                     continue;
                 }
-              
+
                 //the first value is a timestamp in int
                 int vTimeStamp = Convert.ToInt32(vExploded[0]);
-                
+                if (++vCounter == 1)
+                {
+                    vStartTime = vTimeStamp;
+                }
                 //get the bitmask from index 1
                 Int16 vBitmask = Convert.ToInt16(vExploded[1], 16);
 
                 int vStartIndex = 2;
                 int vEndIndex = 11;
                 int vBitmaskCheck = 0;
-                
+
                 //is used to set vPreviouslyValid values indicies 
-                int vSetterIndex = 0; 
+                int vSetterIndex = 0;
 
                 for (int i = vStartIndex; i < vEndIndex; i++, vBitmaskCheck++, vSetterIndex++)
                 {
                     //get the bitmask and check if the sensors values are valid(not disconnected)
                     //data is valid 
-                    if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck)) 
+                    if ((vBitmask & (1 << vBitmaskCheck)) == (1 << vBitmaskCheck))
                     {
                         //conversion happens here, todo: place a check here for invalid data(less than 4 bytes in length
                         string[] v3data = vExploded[i].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -350,7 +355,8 @@ public class BodyFrameThread : ThreadedJob
                     }
                 }
                 BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
-                vBodyFrame.Timestamp = vTimeStamp;
+                //Todo: convert the timestamp to a float
+                vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f;//vTimeStamp;
                 BodyFrameBuffer.Enqueue(vBodyFrame);
                 vLogMessage += vUnwrappedString;
 
@@ -362,58 +368,20 @@ public class BodyFrameThread : ThreadedJob
             }
             catch (Exception e)
             {
-                vLogMessage = e.Message + "\n" + e.GetBaseException() + "\n" + e.StackTrace; 
-               
+                vLogMessage = e.Message + "\n" + e.GetBaseException() + "\n" + e.StackTrace;
+
             }
-          
+
             vStopwatch.Stop();
             if (IsDebugging)
             {
                 double vTotalMs = vStopwatch.Elapsed.TotalMilliseconds;
                 //RawframeConversion.WriteLog(vTotalMs, vLogMessage);
             }
-        
+
         }
     }
-/*
-    private void WriteToDiskSubTask(string vPacket)
-    { 
-        if (CreateNewFile)
-        {
-            CloseFile();
-
-            //Check if folder exists
-           
-            string vSubPath = Directory.GetCurrentDirectory() + "/RawRecordings";
-            bool vPathExists = Directory.Exists(vSubPath);
-            if (!vPathExists)
-            {
-               Directory.CreateDirectory(vSubPath);
-            }
-
-            System.Random vRandom = new System.Random();
-            //get a random value to append to the file name
-
-            int vNext = vRandom.Next(0, 65556);
-            //file name
-            string vFileName = vSubPath+ "/Raw_" + DateTime.Now.ToString(@"MM-dd-yyyy_h-mm-tt")+ vNext + ".csv";
-            //mStreamWriter = new StreamWriter(vFileName); 
-          
-           // CreateNewFile = false;
-        }
-        try
-        {
-            if (vPacket.Length < 4)
-            {
-                return;
-            }
-           // mStreamWriter.WriteLine(vPacket);
-        }
-        catch (Exception e)
-        {
-            CloseFile();
-        }
-    }*/
+    
     /// <summary>
     /// Close the file
     /// </summary>

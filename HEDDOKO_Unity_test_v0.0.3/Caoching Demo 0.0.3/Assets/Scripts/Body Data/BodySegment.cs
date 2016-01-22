@@ -39,6 +39,11 @@ public class BodySegment
     static public bool IsUsingInterpolation = true;
     static public float InterpolationSpeed = 0.3f;
 
+    //Extract the delta time of the frames
+    public float LastFrameTime = 0.0f;
+    public float CurrentFrameTime = 0.0f;
+    public float DeltaTime = 0.0f;
+
     //Sensor data tuples
     private List<SensorTuple> SensorsTuple = new List<SensorTuple>();
 
@@ -59,6 +64,11 @@ public class BodySegment
     /// <param name="vFrame"></param>
     public void UpdateSensorsData(BodyFrame vFrame)
     {
+        //Update the delta time
+        CurrentFrameTime = vFrame.Timestamp;
+        DeltaTime = CurrentFrameTime - LastFrameTime;
+        LastFrameTime = CurrentFrameTime;
+
         //get the sensor 
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];
 
@@ -215,6 +225,7 @@ public class BodySegment
         //Update the analysis inputs
         vTorsoAnalysis.TorsoTransform = vUSSubsegment.AssociatedView.SubsegmentTransform;
         vTorsoAnalysis.HipGlobalTransform = vLSSubsegment.AssociatedView.SubsegmentTransform;
+        vTorsoAnalysis.DeltaTime = DeltaTime;
         vTorsoAnalysis.AngleExtraction();
 
         //Update vertical position
@@ -267,6 +278,7 @@ public class BodySegment
         RightLegAnalysis vRightLegAnalysis = (RightLegAnalysis)mCurrentAnalysisSegment;
         vRightLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
         vRightLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
+        vRightLegAnalysis.DeltaTime = DeltaTime;
         vRightLegAnalysis.AngleExtraction();
         mRightLegHeight = vRightLegAnalysis.LegHeight;
     }
@@ -294,6 +306,7 @@ public class BodySegment
         LeftLegAnalysis vLeftLegAnalysis = (LeftLegAnalysis)mCurrentAnalysisSegment;
         vLeftLegAnalysis.HipTransform = vULSubsegment.AssociatedView.SubsegmentTransform;
         vLeftLegAnalysis.KneeTransform = vLLSubsegment.AssociatedView.SubsegmentTransform;
+        vLeftLegAnalysis.DeltaTime = DeltaTime;
         vLeftLegAnalysis.AngleExtraction();
         mLeftLegHeight = vLeftLegAnalysis.LegHeight;
     }
@@ -389,6 +402,8 @@ public class BodySegment
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         vRightArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
         vRightArmAnalysis.LoArTransform = vLASubsegment.AssociatedView.SubsegmentTransform;
+        Debug.Log(DeltaTime);
+        vRightArmAnalysis.DeltaTime = DeltaTime;
         vRightArmAnalysis.ReferenceVector = Vector3.one;
         vRightArmAnalysis.AngleExtraction();//*/
     }
@@ -416,6 +431,7 @@ public class BodySegment
         LeftArmAnalysis vLeftArmAnalysis = (LeftArmAnalysis)mCurrentAnalysisSegment;
         vLeftArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
         vLeftArmAnalysis.LoArTransform = vLASubsegment.AssociatedView.SubsegmentTransform;
+        vLeftArmAnalysis.DeltaTime = DeltaTime;
         vLeftArmAnalysis.AngleExtraction();//*/
     }
 
@@ -590,6 +606,10 @@ public class BodySegment
     /// <param name="vFilteredDictionary">Dictionnary of tracked segments and their transformations.</param>
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
     {
+        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
+        {
+            MapTorsoSegment(vFilteredDictionary);
+        }
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
             MapRightArmSubsegment(vFilteredDictionary);

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis
     [Serializable]
     public abstract class SegmentAnalysis
     {
-        internal float DeltaTime;
+        public float DeltaTime;
         internal BodyStructureMap.SegmentTypes SegmentType;
         internal float mLastTimeCalled;
 
