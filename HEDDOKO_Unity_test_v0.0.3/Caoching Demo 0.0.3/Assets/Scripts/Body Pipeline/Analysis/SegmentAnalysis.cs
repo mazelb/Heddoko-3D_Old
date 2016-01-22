@@ -25,6 +25,14 @@ namespace Assets.Scripts.Body_Pipeline.Analysis
             
         }
 
+        /// <summary>
+        /// Reset the metrics calculations
+        /// </summary>
+        public virtual void ResetMetrics()
+        {
+
+        }
+
         static public float GetSignedAngle(Vector3 vVectorA, Vector3 vVectorB, Vector3 vVectorNormal)
         {
             // angle in [0,180]

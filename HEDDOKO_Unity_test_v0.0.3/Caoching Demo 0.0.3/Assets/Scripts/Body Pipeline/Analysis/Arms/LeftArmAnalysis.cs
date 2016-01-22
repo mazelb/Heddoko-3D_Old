@@ -44,6 +44,34 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         public float AngularAccelerationShoulderRotation = 0;
 
         /// <summary>
+        /// Reset the metrics calculations
+        /// </summary>
+        public override void ResetMetrics()
+        {
+            AngleElbowFlexion = 0;
+            SignedAngleElbowFlexion = 0;
+            AngleElbowPronation = 0;
+            AngleShoulderFlexion = 0;
+            AngleShoulderVertAbduction = 0;
+            AngleShoulderHorAbduction = 0;
+            AngleShoulderRotation = 0;
+            AngularVelocityElbowFlexion = 0;
+            PeakAngularVelocityElbowFlexion = 0;
+            AngularAccelerationElbowFlexion = 0;
+            AngularVelocityPronation = 0;
+            AngularAccelerationElbowPronation = 0;
+            AngularVelocityShoulderFlexion = 0;
+            AngularAccelerationShoulderFlexion = 0;
+            AngularVelocityShoulderVertAbduction = 0;
+            AngularAccelerationShoulderVertAbduction = 0;
+            AngularVelocityShoulderHorAbduction = 0;
+            AngularAccelerationShoulderHorAbduction = 0;
+            AngularVelocityShoulderRotation = 0;
+            AngularAccelerationShoulderRotation = 0;
+            mLastTimeCalled = Time.time;
+        }
+
+        /// <summary>
         /// Extract angles from orientations
         /// </summary>
         public override void AngleExtraction()

@@ -114,6 +114,7 @@ public class BodySegment
                 }
             }
         }
+        mCurrentAnalysisSegment.ResetMetrics();
     }
 
     /// <summary>
