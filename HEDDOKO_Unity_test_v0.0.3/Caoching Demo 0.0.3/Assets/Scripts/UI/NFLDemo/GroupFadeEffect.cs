@@ -63,7 +63,7 @@ namespace Assets.Scripts.UI.NFLDemo
         }
 
         /// <summary>
-        /// Forces the group to show
+        /// Forces the group to render in scene
         /// </summary>
         public void ForceShow()
         {
