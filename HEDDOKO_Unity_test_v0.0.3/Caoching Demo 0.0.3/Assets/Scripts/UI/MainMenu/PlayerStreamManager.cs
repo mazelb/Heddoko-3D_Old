@@ -25,6 +25,7 @@ namespace Assets.Scripts.UI.MainMenu
     public class PlayerStreamManager : MonoBehaviour
     {
         public Body CurrentBodyInPlay { get; set; }
+        [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
 
         public delegate void BodyChangedDelegate(Body vNewBody);
@@ -53,6 +54,15 @@ namespace Assets.Scripts.UI.MainMenu
 
         public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
 
+        /// <summary>
+        /// Current state of the playback
+        /// </summary>
+        protected enum BodyPlaybackState
+        {
+            Waiting, //waiting for a response
+            PlayingRecording,
+            StreamingFromBrainPack
+        }
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
@@ -280,6 +290,16 @@ namespace Assets.Scripts.UI.MainMenu
 
                             mCurrentState = vNewstate;
                         }
+
+                        //in the case that a new body and its associated view have been created, the stream needs to be connected
+                        //to this body
+                        if (vNewstate == BodyPlaybackState.StreamingFromBrainPack)
+                        {
+                            CurrentBodyInPlay.StopThread();
+                            CurrentBodyInPlay.StreamFromBrainpack();
+                        }
+
+
                         break;
                     }
             }
@@ -364,17 +384,7 @@ namespace Assets.Scripts.UI.MainMenu
         {
             mCanUseBrainpack = false;
         }
-
-        /// <summary>
-        /// Current state of the playback
-        /// </summary>
-        protected enum BodyPlaybackState
-        {
-            Waiting, //waiting for a response
-            PlayingRecording,
-            StreamingFromBrainPack
-        }
-
+         
         public void Stop()
         {
             CurrentBodyInPlay.StopThread();

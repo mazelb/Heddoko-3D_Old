@@ -20,11 +20,15 @@ namespace Assets.Scripts.Cameras
     [Serializable]
     public class CameraMovementPointSetting : MonoBehaviour
     {
-        private static Dictionary<FeedbackTextCategory, Dictionary<PlaneNormalFromTransformType, string>> sgFeedbackTextMapping =
-          new Dictionary<FeedbackTextCategory, Dictionary<PlaneNormalFromTransformType, string>>();
+        private static Dictionary<FeedbackTextCategory, Dictionary<PlaneNormalFromTransformType, Feedback>> sgFeedbackTextMapping =
+          new Dictionary<FeedbackTextCategory, Dictionary<PlaneNormalFromTransformType, Feedback>>();
 
         private static bool sgFeedbackTextMapComplete=false;
-
+        public Sprite Good;
+        public Sprite DownArrow;
+        public Sprite UpArrow;
+        public Sprite RightArrow;
+        public Sprite LeftArrow;
         //Offset from the transform
         public Vector3 Offset;
         public float OrthographicSize = 1f;
@@ -43,25 +47,42 @@ namespace Assets.Scripts.Cameras
         public Vector3 TransformOffset;
         [SerializeField]
         private PlaneNormalFromTransformType PlaneNormalType;
+        public float multi = 1f;
+        public float OffsetMultiplier=1f;
+
 
         void Awake()
         {
             if (!sgFeedbackTextMapComplete)
             {
-                Dictionary<PlaneNormalFromTransformType, string> vLessThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);
-                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, "Bad position on sagital plane ");
-                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOW BACKWARDS");
-                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, "LOWER ELBOW");
+                //xy plane
+                Feedback vMoveElbowUp = new Feedback(UpArrow, "RAISE ELBOW");  
+                Feedback vMoveElbowDown = new Feedback(DownArrow, "LOWER ELBOW");
 
-                Dictionary<PlaneNormalFromTransformType, string> vGreaterThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);
-                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, "Bad position on sagital plane ");
-                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , "MOVE ELBOW FORWARD");
-                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, "RAISE ELBOW");
+                //xz plane
+                Feedback vMoveElbowBack = new Feedback(LeftArrow, "MOVE ELBOW BACKWARDS");
+                Feedback vMoveElbowForward = new Feedback(RightArrow, "MOVE ELBOW FORWARD");
 
-                Dictionary<PlaneNormalFromTransformType, string> vGoodFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, string>(3);
-                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Right, "GOOD");
-                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, "GOOD");
-                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Up, "GOOD");
+                //yz plane
+                Feedback vBadSagitalFeedback = new Feedback(DownArrow, "Bad position on sagital plane ");
+
+                //Good feedback
+                Feedback vGoodFeedback = new Feedback(Good, "GOOD");
+
+                Dictionary<PlaneNormalFromTransformType, Feedback> vLessThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, Feedback>(3);
+                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, vBadSagitalFeedback);
+                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , vMoveElbowBack);
+                vLessThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, vMoveElbowDown);
+
+                Dictionary<PlaneNormalFromTransformType, Feedback> vGreaterThanFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, Feedback>(3);
+                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Right, vBadSagitalFeedback);
+                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Up , vMoveElbowForward);
+                vGreaterThanFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, vMoveElbowUp);
+
+                Dictionary<PlaneNormalFromTransformType, Feedback> vGoodFeedbackMapping = new Dictionary<PlaneNormalFromTransformType, Feedback>(3);
+                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Right, vGoodFeedback);
+                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Forward, vGoodFeedback);
+                vGoodFeedbackMapping.Add(PlaneNormalFromTransformType.Up, vGoodFeedback);
 
                 sgFeedbackTextMapping.Add(FeedbackTextCategory.LessThan, vLessThanFeedbackMapping);
                 sgFeedbackTextMapping.Add(FeedbackTextCategory.GreaterThan, vGreaterThanFeedbackMapping);
@@ -74,7 +95,7 @@ namespace Assets.Scripts.Cameras
         /// <summary>
         /// Getter that returns feedback text at current point
         /// </summary>
-        public string GetFeedBackTextAtCurrentPoint(FeedbackTextCategory vTextCategory)
+        public Feedback GetFeedBackTextAtCurrentPoint(FeedbackTextCategory vTextCategory)
         {
             return sgFeedbackTextMapping[vTextCategory][PlaneNormalType];
         }
@@ -101,13 +122,13 @@ namespace Assets.Scripts.Cameras
             }
         }
 
-        public float multi=1f;
+        
 
         void LateUpdate()
         {
             if (FollowLookAtTarget)
             {
-                transform.position = LookAtTarget.position  + (((LookAtTarget.forward  )*  5f * multi ))  ;
+                transform.position = LookAtTarget.position  + (((LookAtTarget.forward  )*  1f * multi )) + Offset  ;
             }
         }
         public enum PlaneNormalFromTransformType
@@ -124,6 +145,19 @@ namespace Assets.Scripts.Cameras
             GreaterThan
         }
 
+        /// <summary>
+        /// A structure to hold feedback strings with their respective sprites
+        /// </summary>
+        public struct Feedback
+        {
+            public string FeedbackMSG;
+            public Sprite FeedbackImg;
 
+            public Feedback(Sprite vFeedbackImage, string vFeedbackMsg)
+            {
+                FeedbackImg = vFeedbackImage;
+                FeedbackMSG = vFeedbackMsg;
+            }
+        }
     }
 }
