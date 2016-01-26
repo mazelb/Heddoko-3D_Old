@@ -15,7 +15,7 @@ namespace Assets.Scripts.Utils.DebugContext
   public  static class HeddokoDebugKeyMappings
   {
         public static KeyCode ResetFrame = KeyCode.Home;
-        public static KeyCode Pause = KeyCode.P;
+        public static KeyCode Pause = KeyCode.UpArrow;
         public static KeyCode MoveNext = KeyCode.RightArrow;
         public static KeyCode MoveToPrev = KeyCode.LeftArrow;
   
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
-        public static KeyCode SwitchToRecordingFromLive = KeyCode.S;
-        public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.D;
+        public static KeyCode SwitchToRecordingFromLive = KeyCode.Escape;
+        public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.Return;
     }
 }
