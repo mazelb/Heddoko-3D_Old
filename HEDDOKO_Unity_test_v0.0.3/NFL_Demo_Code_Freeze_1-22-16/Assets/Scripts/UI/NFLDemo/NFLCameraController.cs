@@ -78,7 +78,7 @@ namespace Assets.Scripts.Cameras
 
         private void Update()
         {
-            
+
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Assets.Scripts.Cameras
         public void MoveTowardsStartPos()
         {
             FinishedMovingCam = false;
-           
+
             StopAllCoroutines();
             StartCoroutine(MoveToStartPos());
         }
@@ -120,8 +120,8 @@ namespace Assets.Scripts.Cameras
                     NextCamIndex = 0;
                 }
 
-                  vNextPointSetting =
-                  Curve[NextCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
+                vNextPointSetting =
+                Curve[NextCamIndex].gameObject.GetComponent<CameraMovementPointSetting>();
 
                 vStartTime += Time.fixedDeltaTime;
                 mLerpPercentage = vStartTime / MovementSpeed;
@@ -145,7 +145,7 @@ namespace Assets.Scripts.Cameras
                 yield return null;
             }
             vNextPointSetting.gameObject.SetActive(false);
-           // Application.targetFrameRate = -1;
+            // Application.targetFrameRate = -1;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Assets.Scripts.Cameras
             Application.targetFrameRate = 60;
             float vStartTime = 0;
             float vCurrOrthoCam = Camera.orthographicSize;
-            CamLookAt.TargetPos = CamLookAt.Target.position;
+            Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
             Vector3 vStartPosition = transform.position;
             CameraMovementPointSetting vNextPointSetting =
                  Curve[0].gameObject.GetComponent<CameraMovementPointSetting>();
@@ -167,18 +167,18 @@ namespace Assets.Scripts.Cameras
             while (true)
             {
                 vStartTime += Time.fixedDeltaTime;
-                mLerpPercentage = vStartTime / (MovementSpeed );
-                Vector3 vNewPosition = Vector3.Lerp(vStartPosition, Curve[0].position, mLerpPercentage); 
+                mLerpPercentage = vStartTime / (MovementSpeed);
+                Vector3 vNewPosition = Vector3.Lerp(vStartPosition, Curve[0].position, mLerpPercentage);
                 float vNextOrthoSize = Mathf.Lerp(vCurrOrthoCam, vNextPointSetting.OrthographicSize, mLerpPercentage);
-                //Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
-                   // mLerpPercentage);
+                Vector3 vNextLookAtPos = Vector3.Lerp(vCurrentLookAtPos, vNextPointSetting.LookAtTarget.position,
+                 mLerpPercentage);
 
                 Camera.transform.position = vNewPosition;
                 Camera.orthographicSize = vNextOrthoSize;
-               // CamLookAt.TargetPos = vNextLookAtPos;
+                CamLookAt.TargetPos = vNextLookAtPos;
                 CamLookAt.Target = vNextPointSetting.LookAtTarget;
                 if (mLerpPercentage >= 1)
-                { 
+                {
                     FinishedMovingCam = true;
                     mLerpPercentage = 0;
                     break;
@@ -239,19 +239,19 @@ namespace Assets.Scripts.Cameras
         {
             StopAllCoroutines();
             mFinishedMovingCam = true;
-            for (int i = 0; i < Curve.pointCount; i ++)
+            for (int i = 0; i < Curve.pointCount; i++)
             {
                 Curve[i].gameObject.SetActive(true);
             }
-         /*   for (int i = 0; i < Curve.length; i++)
-            {
-                
-                AnalysisView vAnalysisView = GetAnalysisView(i);
-                if (vAnalysisView != null)
-                {
-                    vAnalysisView.Hide();
-                }
-            }*/
+            /*   for (int i = 0; i < Curve.length; i++)
+               {
+
+                   AnalysisView vAnalysisView = GetAnalysisView(i);
+                   if (vAnalysisView != null)
+                   {
+                       vAnalysisView.Hide();
+                   }
+               }*/
             NextCamIndex = -1;
             CurrCamIndex = 0;
         }

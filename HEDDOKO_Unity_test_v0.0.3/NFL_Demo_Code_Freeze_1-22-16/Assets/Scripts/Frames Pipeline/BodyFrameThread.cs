@@ -199,9 +199,10 @@ public class BodyFrameThread : ThreadedJob
                     vBodyFrameIndex++;
 
                     //reset back to 0
-                    if (vBodyFrameIndex >= mRawFrames.Count) 
+                    if (vBodyFrameIndex >= mRawFrames.Count)
                     {
-                        vBodyFrameIndex = 0;
+                        break;
+                        // vBodyFrameIndex = 0;
                     }
                 }
                 catch (Exception e)

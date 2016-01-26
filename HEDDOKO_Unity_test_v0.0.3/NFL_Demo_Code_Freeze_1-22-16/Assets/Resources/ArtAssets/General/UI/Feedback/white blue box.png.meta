@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f601e48646075324ba70ac1ffc805dd4
-timeCreated: 1453741658
+guid: ede821579960ff948848afcd8a6b02ae
+timeCreated: 1453739139
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: line white_0
+    21300000: white blue box_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -43,22 +43,22 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 0, y: 82, z: 0, w: 80}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: line white_0
+    - name: white blue box_0
       rect:
         serializedVersion: 2
-        x: 43
-        y: 63
-        width: 1070
-        height: 9
+        x: 0
+        y: 82
+        width: 900
+        height: 738
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

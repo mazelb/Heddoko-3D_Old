@@ -7,8 +7,7 @@
 */
 using System;
 using Assets.Scripts.Body_Data.view;
-using UnityEngine;
-using Assets.Scripts.Utils;
+using UnityEngine; 
 
 /**
 * BodySubSegment class 

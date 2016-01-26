@@ -25,6 +25,7 @@ namespace Assets.Scripts.UI.MainMenu
     public class PlayerStreamManager : MonoBehaviour
     {
         public Body CurrentBodyInPlay { get; set; }
+        [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
 
         public delegate void BodyChangedDelegate(Body vNewBody);
@@ -279,6 +280,11 @@ namespace Assets.Scripts.UI.MainMenu
                             }
 
                             mCurrentState = vNewstate;
+                        }
+                        if (vNewstate == BodyPlaybackState.StreamingFromBrainPack)
+                        {
+                            CurrentBodyInPlay.StopThread();
+                            CurrentBodyInPlay.StreamFromBrainpack();
                         }
                         break;
                     }

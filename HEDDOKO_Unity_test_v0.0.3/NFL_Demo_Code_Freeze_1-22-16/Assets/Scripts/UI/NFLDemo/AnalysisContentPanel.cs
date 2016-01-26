@@ -15,11 +15,12 @@ namespace Assets.Scripts.UI.NFLDemo
     /// <summary>
     /// A content panel that displays content regarding analysis
     /// </summary>
-public class AnalysisContentPanel: MonoBehaviour
+    public class AnalysisContentPanel : MonoBehaviour
     {
 
         public Text PeakValueText;
         public Text FeedbackText;
+        public Image FeedbackImage;
         public ArcAngleFill ArcAngleFill;
         public float Threshold = 5f;
         public Animator Animator;
@@ -44,24 +45,31 @@ public class AnalysisContentPanel: MonoBehaviour
         public void Show()
         {
             gameObject.SetActive(true);
-            Animator.SetBool("Show",true);
+            Animator.SetBool("Show", true);
         }
 
         public void UpdateFeedbackText(CameraMovementPointSetting vPointParameters)
         {
-            float vAngle =  ArcAngleFill.Angle ;
+            float vAngle = ArcAngleFill.Angle;
+            CameraMovementPointSetting.Feedback vFeedback;
             if (vAngle > Threshold)
             {
-                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.GreaterThan);
+                vFeedback = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.GreaterThan);
             }
-            else if (vAngle < Threshold *-1f)
+            else if (vAngle < Threshold * -1f)
             {
-                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.LessThan);
+                vFeedback = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.LessThan);
             }
             else
             {
-                FeedbackText.text = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.Good);
+                vFeedback = vPointParameters.GetFeedBackTextAtCurrentPoint(CameraMovementPointSetting.FeedbackTextCategory.Good);
             }
+            FeedbackText.text = vFeedback.FeedbackMSG;
+            if (vFeedback.FeedbackImg != null)
+            {
+                FeedbackImage.sprite = vFeedback.FeedbackImg;
+            }
+
         }
         /// <summary>
         /// Hides the content panel in scene

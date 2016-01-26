@@ -130,11 +130,11 @@ public class BodyStructureMap
     //Build body structure maps
     public void ReadBodyStructureFile()
     {
-        string path = FilePathReferences.LocalSavedDataPath("body_structure_map.json");
+        string vPath = FilePathReferences.LocalSavedDataPath("body_structure_map.json");
         BodyStructureMap vBSm = null;
         try
         {
-            vBSm = JsonUtilities.JsonFileToObject<BodyStructureMap>(path);
+            vBSm = JsonUtilities.JsonFileToObject<BodyStructureMap>(vPath);
         }
         catch (FileNotFoundException) //in case the file isn't found, write a new one with generic values
         {
@@ -143,7 +143,7 @@ public class BodyStructureMap
             CreateSegmentToSubSegmentMap();
             CreateSensorPosToSensorIDMap();
             CreateSensorPosToSensorTypeMap();
-            JsonUtilities.ConvertObjectToJson(path, this);
+            JsonUtilities.ConvertObjectToJson(vPath, this);
             return;
         }
 
