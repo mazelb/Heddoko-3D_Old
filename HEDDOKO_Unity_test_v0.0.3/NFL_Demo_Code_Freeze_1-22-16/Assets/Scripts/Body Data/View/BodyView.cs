@@ -7,7 +7,8 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using Assets.Scripts.UI.NFLDemo;
 using Assets.Scripts.Utils.DebugContext; 
 
 namespace Assets.Scripts.Body_Data.view
@@ -25,6 +26,8 @@ namespace Assets.Scripts.Body_Data.view
         private BodyFrame mCurreBodyFrame;
         [SerializeField]
         private bool mIsPaused ;
+
+        public NFLDemoController DemoController;
 
         public bool IsPaused
         {
@@ -85,6 +88,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mAssociatedBody != null)
             {
+                DemoController.ResetTimer();
                 BodyFrame vTempBodyFrame = null;
 
                 if (vBodyFrame == null)
@@ -185,7 +189,8 @@ namespace Assets.Scripts.Body_Data.view
         /// </summary>
         private void Awake()
         {
- 
+            GameObject vDemo = GameObject.FindWithTag("NFLDemoController");
+            DemoController = vDemo.GetComponent<NFLDemoController>();
         }
 
         /// <summary>

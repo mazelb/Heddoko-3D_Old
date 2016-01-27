@@ -29,5 +29,6 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
         public static KeyCode SwitchToRecordingFromLive = KeyCode.Escape;
         public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.Return;
-    }
+        public static KeyCode EnableTimerKey = KeyCode.PageUp;
+  }
 }

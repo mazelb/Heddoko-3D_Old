@@ -37,6 +37,9 @@ namespace Assets.Scripts.UI.NFLDemo
         public NFLCameraController NFLCamController;
         [SerializeField]
         private bool vMainEventStarted;
+
+        [SerializeField]
+        private bool mResetFrameInitiated = false;
         private CurrentAnimationState vCurrentState = CurrentAnimationState.InTrainingView;
 
 
@@ -46,6 +49,10 @@ namespace Assets.Scripts.UI.NFLDemo
         public ArcAngleFill ArcAngleFill;
         public AnalysisContentPanel AnalysisContentPanel;
 
+        public float Timer = 3.79f;
+        [SerializeField]
+        private float mTimer = 3.79f;
+        public bool StartTimer { get; set; }
 
         private enum CurrentAnimationState
         {
@@ -55,7 +62,23 @@ namespace Assets.Scripts.UI.NFLDemo
             DisplayInfo
 
         }
+
+        void Awake()
+
+        {
+            mTimer = Timer;
+        }
+
         private void Update()
+        {
+             
+        }
+
+        public void ResetTimer()
+        {
+            mTimer = Timer;
+        }
+        private void LateUpdate()
         {
             //is the correct context
             bool vCorrectContext = ActivitiesContextController.CurrentState ==
@@ -63,13 +86,21 @@ namespace Assets.Scripts.UI.NFLDemo
                                    ||
                                    ActivitiesContextController.CurrentState ==
                                    ActivitiesContextController.ActivitiesContextViewState.Train;
+
             if (!vMainEventStarted && !ActivitiesContextController.UsingSquats && vCorrectContext)
             {
+                
+                    if (StartTimer)
+                    {
+                        mTimer -= Time.deltaTime;
+                    }
+              
                 //start the event
-                if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause))
+                if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause) || (mTimer <= 0.001f))
                 {
                     vMainEventStarted = true;
-
+                    StartTimer = false;
+                    mResetFrameInitiated = false;
                     PlayerStreamManager.ChangePauseState();
 
                     NFLCamController.Reset();
@@ -220,6 +251,9 @@ namespace Assets.Scripts.UI.NFLDemo
             ArcAngleFill.SetParametersFromPoint(vPointParameters);
             AnalysisContentPanel.Hide();
             ArcAngleFill.Hide();
+            StartTimer = false;
+            mResetFrameInitiated = false;
+            mTimer = Timer;
 
         }
 
@@ -241,6 +275,10 @@ namespace Assets.Scripts.UI.NFLDemo
             NFLCamController.enabled = false;
 
             ArcAngleFill.Hide();
+            StartTimer = false;
+            mResetFrameInitiated = false;
+            mTimer = Timer;
+
         }
 
         private IEnumerator ClearBufferAfterNSeconds(float vSecs)

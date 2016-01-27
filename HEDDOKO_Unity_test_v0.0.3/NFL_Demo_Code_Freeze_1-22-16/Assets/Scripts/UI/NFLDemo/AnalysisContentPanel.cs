@@ -67,7 +67,7 @@ namespace Assets.Scripts.UI.NFLDemo
             FeedbackText.text = vFeedback.FeedbackMSG;
             if (vFeedback.FeedbackImg != null)
             {
-                FeedbackImage.sprite = vFeedback.FeedbackImg;
+              FeedbackImage.sprite = vFeedback.FeedbackImg;
             }
 
         }

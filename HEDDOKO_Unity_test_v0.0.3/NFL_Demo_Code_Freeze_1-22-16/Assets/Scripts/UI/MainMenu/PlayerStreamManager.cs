@@ -13,6 +13,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.UI.NFLDemo;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,7 @@ namespace Assets.Scripts.UI.MainMenu
         private bool mCanUseBrainpack = false;
 
         public Button[] TPoseButtons;
-
+        public NFLDemoController DemoContrller;
         public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace Assets.Scripts.UI.MainMenu
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
             {
                 ResetPlayer();
+              
             }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)

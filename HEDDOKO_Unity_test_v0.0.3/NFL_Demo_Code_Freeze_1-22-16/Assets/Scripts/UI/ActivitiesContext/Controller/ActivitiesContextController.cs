@@ -11,6 +11,7 @@ using Assets.Scripts.UI.ActivitiesContext.View;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.MainMenu.Controller;
 using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.NFLDemo;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public ActivitiesContextViewState CurrentState = ActivitiesContextViewState.Idle;
         public ActivitiesContextView ActivitesContextView;
         public MainMenuController MainMenuController;
+        public NFLDemoController NFLDemoController;
         public PlayerStreamManager PlayerStreamManager;
 
         public string SquatRecordingSubPath;
@@ -263,6 +265,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             {
                 mGoToRecordingInstead = true;
             }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.EnableTimerKey) &&
+                CurrentState == ActivitiesContextViewState.Learn)
+            {
+                NFLDemoController.StartTimer = true;
+            }
+
         }
 
       
