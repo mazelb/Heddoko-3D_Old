@@ -8,6 +8,7 @@
 
 
 using Assets.Scripts.Cameras;
+using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.ActivitiesContext.View;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Metrics;
@@ -22,9 +23,9 @@ namespace Assets.Scripts.UI.RecordingLoading
     public class Model2D3DSwitch : MonoBehaviour
     {
         public GameObject Model3D;
-        public GameObject Model2D;
-        //    public AngleInfoMetrics AngleInfo;
+        public GameObject Model2D; 
         public ActivitiesContextViewTrain TrainingView;
+
         /// <summary>
         /// Location placement
         /// </summary>
@@ -33,13 +34,13 @@ namespace Assets.Scripts.UI.RecordingLoading
         public Transform TransformOutOfViewLocation;
 
         public Button Button2DSwitch;
-        public Button Button3DSwitch;
+        public Button Button3DSwitch; 
 
         public PlayerStreamManager PlayerStreamManager;
         public CurrentViewBox InformationBox;
         public CameraController CameraController;
-
-        //  public CameraController OrthoCamController;
+        public ActivitiesContextController ActivityContextController;
+         
         /// <summary>
         /// Flag to check if only using 2D model
         /// </summary>

@@ -5,10 +5,10 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
- 
+
 using Assets.Scripts.UI.MainMenu.View;
 using Assets.Scripts.UI.RecordingLoading.View;
-using UnityEngine; 
+using UnityEngine;
 
 namespace Assets.Scripts.UI.MainMenu.Controller
 {
@@ -22,9 +22,10 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         public MainMenuView MainMenuView;
 
         public SplashScreen SplashScreen;
+        [SerializeField]
         private MainMenuState mCurrentState = MainMenuState.SplashScreen;
 
-
+        public MainMenuState CurrentState { get { return mCurrentState; } }
         void Awake()
         {
             bool vSplashScreenEnabled = SplashScreen != null && SplashScreen.gameObject.activeSelf;
@@ -43,14 +44,14 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                 MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
                 MainMenuView.RecordingsSelectionButton.onClick.AddListener(() => ChangeState(MainMenuState.RecordingsSelection));
             }
-           
+
         }
 
         /// <summary>
         /// changes the state of the main menu
         /// </summary>
         /// <param name="vNewState"></param>
-        private void ChangeState(MainMenuState vNewState)
+        public void ChangeState(MainMenuState vNewState)
         {
             switch (mCurrentState)
             {
@@ -147,7 +148,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         {
             ChangeState(MainMenuState.MainMenu);
         }
-  
+
     }
     /// <summary>
     /// Determine which state the main menu is in

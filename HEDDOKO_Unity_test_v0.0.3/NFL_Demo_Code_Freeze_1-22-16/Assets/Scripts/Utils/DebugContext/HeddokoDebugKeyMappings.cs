@@ -6,6 +6,8 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
+using System.Security.Policy;
 using UnityEngine;
 namespace Assets.Scripts.Utils.DebugContext
 {
@@ -15,7 +17,7 @@ namespace Assets.Scripts.Utils.DebugContext
   public  static class HeddokoDebugKeyMappings
   {
         public static KeyCode ResetFrame = KeyCode.Home;
-        public static KeyCode Pause = KeyCode.UpArrow;
+        public static KeyCode Pause = KeyCode.Menu;
         public static KeyCode MoveNext = KeyCode.RightArrow;
         public static KeyCode MoveToPrev = KeyCode.LeftArrow;
   
@@ -30,5 +32,7 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode SwitchToRecordingFromLive = KeyCode.Escape;
         public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.Return;
         public static KeyCode EnableTimerKey = KeyCode.PageUp;
+        public static KeyCode ReturnToActivitySelection = KeyCode.DownArrow;
+        public static KeyCode GoToFootballView = KeyCode.UpArrow;
   }
 }

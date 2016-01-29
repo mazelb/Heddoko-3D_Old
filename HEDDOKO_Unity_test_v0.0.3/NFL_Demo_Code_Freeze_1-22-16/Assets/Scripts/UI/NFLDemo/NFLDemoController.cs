@@ -10,6 +10,7 @@ using System.Collections;
 using Assets.Scripts.Cameras;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.UI.MainMenu.Controller;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
@@ -48,6 +49,7 @@ namespace Assets.Scripts.UI.NFLDemo
 
         public ArcAngleFill ArcAngleFill;
         public AnalysisContentPanel AnalysisContentPanel;
+        public MainMenuController MainMenuController;
 
         public float Timer = 3.79f;
         [SerializeField]
@@ -71,7 +73,7 @@ namespace Assets.Scripts.UI.NFLDemo
 
         private void Update()
         {
-             
+
         }
 
         public void ResetTimer()
@@ -80,6 +82,10 @@ namespace Assets.Scripts.UI.NFLDemo
         }
         private void LateUpdate()
         {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                string s = "";
+            }
             //is the correct context
             bool vCorrectContext = ActivitiesContextController.CurrentState ==
                                    ActivitiesContextController.ActivitiesContextViewState.LearnByRecording
@@ -89,12 +95,12 @@ namespace Assets.Scripts.UI.NFLDemo
 
             if (!vMainEventStarted && !ActivitiesContextController.UsingSquats && vCorrectContext)
             {
-                
-                    if (StartTimer)
-                    {
-                        mTimer -= Time.deltaTime;
-                    }
-              
+
+                if (StartTimer)
+                {
+                    mTimer -= Time.deltaTime;
+                }
+
                 //start the event
                 if (Input.GetKeyDown(HeddokoDebugKeyMappings.Pause) || (mTimer <= 0.001f))
                 {
@@ -176,15 +182,11 @@ namespace Assets.Scripts.UI.NFLDemo
                             }
                         }
 
-                        /*  //check if next pos is 0, go back into training view
-                          if (NFLCamController.NextCamIndex == 0)
-                          {
-                              Reset();
-                          }*/
+
                     }
                 }
             }
-
+       
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive) &&
                 (ActivitiesContextController.CurrentState ==
                                    ActivitiesContextController.ActivitiesContextViewState.Train)
@@ -197,7 +199,7 @@ namespace Assets.Scripts.UI.NFLDemo
 
             }
 
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView) &&
+           else if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView) &&
                 (ActivitiesContextController.CurrentState ==
                                    ActivitiesContextController.ActivitiesContextViewState.LearnByRecording)
                 )
@@ -207,18 +209,45 @@ namespace Assets.Scripts.UI.NFLDemo
                 PlayerStreamManager.ResumeFromPauseState();
             }
 
-            /*    if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView))
-                {
-                    Reset();
-                    ActivitiesContextController.SwitchtoTrainingViewState();
-                    PlayerStreamManager.ResumeFromPauseState();
-                }
-                if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive))
-                {
-                    Reset();
-                    ActivitiesContextController.NonSquatHookFunction();
-                    PlayerStreamManager.ResumeFromPauseState();
-                }*/
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.ReturnToActivitySelection) &&
+              (ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.LearnByRecording ||
+               ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.Train))
+            {
+                BackButtonPressed();
+                ActivitiesContextController.SwitchToLearningViewState();
+                PlayerStreamManager.ResumeFromPauseState();
+            }
+
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.GoToFootballView) &&
+             (ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.Learn))
+            {
+                ActivitiesContextController.SwitchToFootballView();
+            }
+
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.ReturnToActivitySelection) &&
+           (ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.Learn))
+            {
+                ActivitiesContextController.SwitchtoMainActivityView();
+            }
+
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.GoToFootballView) &&
+           (ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.Main))
+            {
+                ActivitiesContextController.SwitchToLearningViewState();
+            }
+
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.ReturnToActivitySelection) &&
+      ( ActivitiesContextController.CurrentState == ActivitiesContextController.ActivitiesContextViewState.Main))
+            {
+                ActivitiesContextController.SetToIdleState();
+
+                MainMenuController.ChangeState(MainMenuState.MainMenu);
+            }
+            else if (Input.GetKeyDown(HeddokoDebugKeyMappings.GoToFootballView) && MainMenuController.CurrentState == MainMenuState.MainMenu)
+            {
+                MainMenuController.ChangeState(MainMenuState.ActivityContext);
+            }
+
         }
 
         /// <summary>

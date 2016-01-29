@@ -49,19 +49,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
             ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
             ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
-            {
-                if (!mGoToRecordingInstead)
-                { 
-                    UsingSquats = false;
-                    SwitchtoTrainingViewState();
-                }
-                else
-                {
-                    NonSquatHookFunction();
-                    mGoToRecordingInstead = false;
-                }
-            });
+            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(SwitchToFootballView);
 
             ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
             ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
@@ -81,6 +69,21 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
             UsingSquats = true;
             SwitchToLearnByRecordingState();
+        }
+
+        public void SwitchToFootballView()
+        {
+
+            if (!mGoToRecordingInstead)
+            {
+                UsingSquats = false;
+                SwitchtoTrainingViewState();
+            }
+            else
+            {
+                NonSquatHookFunction();
+                mGoToRecordingInstead = false;
+            }
         }
 
         public void NonSquatHookFunction()
@@ -270,6 +273,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
             {
                 NFLDemoController.StartTimer = true;
             }
+
+          
 
         }
 

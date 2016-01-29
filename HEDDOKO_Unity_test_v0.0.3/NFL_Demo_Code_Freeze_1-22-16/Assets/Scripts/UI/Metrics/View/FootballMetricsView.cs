@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI.Metrics.View
         private float mRightElbowVelSum = 0f;
         [SerializeField] private float mPeakAngularVelocity;
         public AnalysisContentPanel AnalysisContentPanel;
- 
+        [SerializeField] private float mMaxPeak=1000f;
         internal ArmMetricsView ArmMetricsView
         {
             get
@@ -46,6 +46,7 @@ namespace Assets.Scripts.UI.Metrics.View
         void Awake()
         {
             PlayerStreamManager.ResettableViews.Add(this);
+            mMaxPeak = Random.Range(950f, 1150f);
         }
 
         void Update()
@@ -64,6 +65,8 @@ namespace Assets.Scripts.UI.Metrics.View
                         if (mPeakAngularVelocity < vRightArmAnalysis.PeakAngularVelocityElbowFlexion)
                         {
                             mPeakAngularVelocity = vRightArmAnalysis.PeakAngularVelocityElbowFlexion;
+
+                            mPeakAngularVelocity = Mathf.Clamp(mPeakAngularVelocity, 0,mMaxPeak);
                             AnalysisContentPanel.UpdatePeakValueText(mPeakAngularVelocity);
                         }
 
@@ -108,6 +111,7 @@ namespace Assets.Scripts.UI.Metrics.View
             mFrameCount = 0;
             mRightElbowVelSum = 0f;
             mPeakAngularVelocity = 0;
+            mMaxPeak = Random.Range(950f, 1050f);
         }
 
     }

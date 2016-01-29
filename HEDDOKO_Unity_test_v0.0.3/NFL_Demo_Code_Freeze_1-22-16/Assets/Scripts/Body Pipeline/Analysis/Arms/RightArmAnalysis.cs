@@ -51,7 +51,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
         /// Reset the metrics calculations
         /// </summary>
         public override void ResetMetrics()
-        {
+        {/*
             AngleElbowFlexion = 0;
             SignedAngleElbowFlexion = 0;
             AngleElbowPronation = 0;
@@ -59,9 +59,9 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             AngleShoulderVertAbduction = 0;
             AngleShoulderHorAbduction = 0;
             AngleShoulderRotation = 0;
-            AngularVelocityElbowFlexion = 0;
+            AngularVelocityElbowFlexion = 0;*/
             PeakAngularVelocityElbowFlexion = 0;
-            AngularAccelerationElbowFlexion = 0;
+          /*  AngularAccelerationElbowFlexion = 0;
             AngularVelocityPronation = 0;
             AngularAccelerationElbowPronation = 0;
             AngularVelocityShoulderFlexion = 0;
@@ -72,7 +72,7 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Arms
             AngularAccelerationShoulderHorAbduction = 0;
             AngularVelocityShoulderRotation = 0;
             AngularAccelerationShoulderRotation = 0;
-            mLastTimeCalled = Time.time;
+            mLastTimeCalled = Time.time;*/
         }
 
         /// <summary>

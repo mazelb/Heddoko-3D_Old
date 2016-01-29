@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Assets.Demos;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.UI.Metrics;
 using Assets.Scripts.UI.NFLDemo;
@@ -53,18 +54,19 @@ namespace Assets.Scripts.UI.MainMenu
 
         public Button[] TPoseButtons;
         public NFLDemoController DemoContrller;
+        public ActivitiesContextController ActivityContextController;
         public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
 
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
         void Awake()
-        { 
+        {
             //register key
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
             {
                 ResetPlayer();
-              
+
             }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)
@@ -90,10 +92,19 @@ namespace Assets.Scripts.UI.MainMenu
             }
             for (int i = 0; i < TPoseButtons.Length; i++)
             {
-                TPoseButtons[i].onClick.AddListener(ResetPlayer);
+                TPoseButtons[i].onClick.AddListener(ResetButtonPressed);
             }
         }
 
+
+        private void ResetButtonPressed()
+        {
+            if (ActivityContextController.CurrentState != ActivitiesContextController.ActivitiesContextViewState.LearnByRecording)
+            {
+                ResetPlayer();
+            }
+
+        }
         /// <summary>
         /// OnEnable, hook listeners
         /// </summary>
@@ -299,7 +310,7 @@ namespace Assets.Scripts.UI.MainMenu
         */
         public void ChangePauseState()
         {
-            CurrentBodyInPlay.View.PauseFrame(); 
+            CurrentBodyInPlay.View.PauseFrame();
         }
 
         public void ResumeFromPauseState()
@@ -351,7 +362,7 @@ namespace Assets.Scripts.UI.MainMenu
                     BodiesManager.Instance.CreateNewBody("BrainpackPlaceholderBody");
                 }
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0]; //get the first body
-           
+
             }
             mCanUseBrainpack = true;
         }
@@ -386,16 +397,16 @@ namespace Assets.Scripts.UI.MainMenu
         public void Stop()
         {
             CurrentBodyInPlay.StopThread();
-           // ChangeState(BodyPlaybackState.Waiting);
+            // ChangeState(BodyPlaybackState.Waiting);
         }
 
         private void Update()
-        { 
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
+        {
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame) && ActivityContextController.CurrentState != ActivitiesContextController.ActivitiesContextViewState.LearnByRecording)
             {
                 ResetPlayer();
-            } 
-           
+            }
+
         }
 
         /// <summary>
@@ -412,8 +423,8 @@ namespace Assets.Scripts.UI.MainMenu
         /// Resets the body and the metrics associated with body.
         /// </summary>
         public void ResetPlayer()
-        { 
-                ResetInitialFrame();
+        {
+            ResetInitialFrame();
             if (CurrentBodyInPlay != null)
             {
                 RightLegAnalysis vRightLegAnalysis =

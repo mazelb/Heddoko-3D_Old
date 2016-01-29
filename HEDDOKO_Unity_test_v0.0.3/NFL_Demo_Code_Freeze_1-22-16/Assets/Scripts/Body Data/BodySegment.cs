@@ -606,10 +606,7 @@ public class BodySegment
     /// <param name="vFilteredDictionary">Dictionnary of tracked segments and their transformations.</param>
     private void MapSubSegments(Dictionary<BodyStructureMap.SensorPositions, BodyStructureMap.TrackingStructure> vFilteredDictionary)
     {
-        if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso)
-        {
-            MapTorsoSegment(vFilteredDictionary);
-        }
+        
         if (SegmentType == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
         {
             MapRightArmSubsegment(vFilteredDictionary);
