@@ -341,41 +341,8 @@
 		<col def="S0">ISDotNetInstallerArgsCommit</col>
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
-		<row><td>ASimplePlugin.dll</td><td>{A5962F5A-ABAA-45E3-9161-31EA93302604}</td><td>PLUGINS</td><td>2</td><td/><td>asimpleplugin.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Assembly_CSharp.dll</td><td>{ED71B55D-3922-4950-9CEB-FB4D67BA0E73}</td><td>MANAGED</td><td>2</td><td/><td>assembly_csharp.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Assembly_CSharp_firstpass.dll</td><td>{AFB275F3-B3BB-414B-A809-B4D3F3F6470C}</td><td>MANAGED</td><td>2</td><td/><td>assembly_csharp_firstpass.dl</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>BrainpackService.Primary_output</td><td>{87291212-CA43-4166-B822-01145E9A2FC1}</td><td>BRAINPACK_SERVICE</td><td>2</td><td/><td>brainpackservice.primary_out</td><td>81</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>HeddokoLib.dll</td><td>{6BE2FEFD-654D-4758-888C-5993A45313C5}</td><td>MANAGED</td><td>2</td><td/><td>heddokolib.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{5A1C36BF-C3BB-4D05-AFB8-54BEF0C32DDC}</td><td>BRAINPACK_SERVICE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{E4489F59-38C5-4F2E-A741-7B16FCECDBA7}</td><td>DESKTOP_APPLICATION</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT10</td><td>{9984D389-61DA-449C-B37E-CB2923729D8D}</td><td>MCONFIG</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT11</td><td>{5F67B3D3-A969-4C63-9513-C6B86787AD3C}</td><td>PLUGINS</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT12</td><td>{709CC741-11F7-4797-B55C-E1F425D33B5C}</td><td>RESOURCES</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT13</td><td>{5F8B4ED6-B4EC-48A9-9843-3BE850BCFCEC}</td><td>RECORDINGS</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{E0D14233-49C2-4405-B893-1485FE7CD266}</td><td>NFL_TECHCRUNCH_DATA</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{C9103D1B-9F22-40D6-BDB8-D7A54AEF3A45}</td><td>MANAGED</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{91D7780E-C4F9-4D6F-B73F-0B4F9EB55370}</td><td>MONO</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{95EB2BD4-FAAD-479A-AD54-99F7E173E1E6}</td><td>ETC</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{56BD3E80-2CE7-4D6E-8B7E-C4AB3B925723}</td><td>MONO1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{E74E7821-CDE8-40F7-AFFD-91915145A481}</td><td>_.0</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{C9AA6F86-85C2-4F79-883D-EACC8E6101FC}</td><td>_.01</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{1FD70D88-CE86-4060-B6D3-8342850895D4}</td><td>BROWSERS</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Mono.Data.Tds.dll</td><td>{66BAAC12-E199-42BC-90A6-E90085B7B72C}</td><td>MANAGED</td><td>2</td><td/><td>mono.data.tds.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Mono.Security.dll</td><td>{C6FE452A-9978-4333-B990-4AD2FF38B8D0}</td><td>MANAGED</td><td>2</td><td/><td>mono.security.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>NFL_Techcrunch.exe</td><td>{68AB39A6-932A-41FF-87D7-A0C36B8676A0}</td><td>DESKTOP_APPLICATION</td><td>2</td><td/><td>nfl_techcrunch.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Newtonsoft.Json.dll</td><td>{3A33ECE6-BFC4-4090-9B51-06D48EA407D7}</td><td>MANAGED</td><td>2</td><td/><td>newtonsoft.json.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Photon3Unity3D.dll</td><td>{87D32294-8B0F-45EA-887A-0839E30EF66A}</td><td>MANAGED</td><td>2</td><td/><td>photon3unity3d.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>System.Core.dll</td><td>{781C05A1-E4F2-4BF1-B721-64AA04FB360A}</td><td>MANAGED</td><td>2</td><td/><td>system.core.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>System.Data.dll</td><td>{D800871F-6541-4424-880D-A97EEA072D82}</td><td>MANAGED</td><td>2</td><td/><td>system.data.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>System.Transactions.dll</td><td>{E2D9ACE5-9EFD-4F86-922E-8E58DD95DB0E}</td><td>MANAGED</td><td>2</td><td/><td>system.transactions.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>System.Xml.dll</td><td>{F0EB88D1-E552-4E99-83F0-455FE816D648}</td><td>MANAGED</td><td>2</td><td/><td>system.xml.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>System.dll</td><td>{294E3800-A286-44D2-92C2-66451ED95795}</td><td>MANAGED</td><td>2</td><td/><td>system.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>UnityEngine.Analytics.dll</td><td>{31BAB9D6-B07A-4B87-A0F6-469BBFD9B348}</td><td>MANAGED</td><td>2</td><td/><td>unityengine.analytics.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>UnityEngine.Networking.dll</td><td>{936561FF-ED06-4EEA-ABE0-E54EA0DEBFB2}</td><td>MANAGED</td><td>2</td><td/><td>unityengine.networking.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>UnityEngine.UI.dll</td><td>{406772EB-F04B-49B5-8E4D-BF151AD00F09}</td><td>MANAGED</td><td>2</td><td/><td>unityengine.ui.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>UnityEngine.dll</td><td>{5FD58FDD-89CC-46B7-9669-6725652A05B3}</td><td>MANAGED</td><td>2</td><td/><td>unityengine.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>mono.dll</td><td>{CC3DD69C-94BA-48BA-8BCD-51FBFBA6ACE9}</td><td>MONO</td><td>2</td><td/><td>mono.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>mscorlib.dll</td><td>{B84CB12D-44CC-4B61-9E7D-2987F0ED2F58}</td><td>MANAGED</td><td>2</td><td/><td>mscorlib.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1090,74 +1057,8 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>BRAINPACK_SERVICE</td><td>BrainpackService.Primary_output</td></row>
 		<row><td>BRAINPACK_SERVICE</td><td>ISX_DEFAULTCOMPONENT</td></row>
-		<row><td>BROWSERS</td><td>ISX_DEFAULTCOMPONENT9</td></row>
-		<row><td>DESKTOP_APPLICATION</td><td>ISX_DEFAULTCOMPONENT1</td></row>
-		<row><td>DESKTOP_APPLICATION</td><td>NFL_Techcrunch.exe</td></row>
-		<row><td>ETC</td><td>ISX_DEFAULTCOMPONENT5</td></row>
-		<row><td>INSTALLDIR</td><td>ASimplePlugin.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Assembly_CSharp.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Assembly_CSharp_firstpass.dll</td></row>
 		<row><td>INSTALLDIR</td><td>BrainpackService.Primary_output</td></row>
-		<row><td>INSTALLDIR</td><td>HeddokoLib.dll</td></row>
 		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT1</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT10</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT11</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT12</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT13</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT2</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT3</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT4</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT5</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT6</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT7</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT8</td></row>
-		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT9</td></row>
-		<row><td>INSTALLDIR</td><td>Mono.Data.Tds.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Mono.Security.dll</td></row>
-		<row><td>INSTALLDIR</td><td>NFL_Techcrunch.exe</td></row>
-		<row><td>INSTALLDIR</td><td>Newtonsoft.Json.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Photon3Unity3D.dll</td></row>
-		<row><td>INSTALLDIR</td><td>System.Core.dll</td></row>
-		<row><td>INSTALLDIR</td><td>System.Data.dll</td></row>
-		<row><td>INSTALLDIR</td><td>System.Transactions.dll</td></row>
-		<row><td>INSTALLDIR</td><td>System.Xml.dll</td></row>
-		<row><td>INSTALLDIR</td><td>System.dll</td></row>
-		<row><td>INSTALLDIR</td><td>UnityEngine.Analytics.dll</td></row>
-		<row><td>INSTALLDIR</td><td>UnityEngine.Networking.dll</td></row>
-		<row><td>INSTALLDIR</td><td>UnityEngine.UI.dll</td></row>
-		<row><td>INSTALLDIR</td><td>UnityEngine.dll</td></row>
-		<row><td>INSTALLDIR</td><td>mono.dll</td></row>
-		<row><td>INSTALLDIR</td><td>mscorlib.dll</td></row>
-		<row><td>MANAGED</td><td>Assembly_CSharp.dll</td></row>
-		<row><td>MANAGED</td><td>Assembly_CSharp_firstpass.dll</td></row>
-		<row><td>MANAGED</td><td>HeddokoLib.dll</td></row>
-		<row><td>MANAGED</td><td>ISX_DEFAULTCOMPONENT3</td></row>
-		<row><td>MANAGED</td><td>Mono.Data.Tds.dll</td></row>
-		<row><td>MANAGED</td><td>Mono.Security.dll</td></row>
-		<row><td>MANAGED</td><td>Newtonsoft.Json.dll</td></row>
-		<row><td>MANAGED</td><td>Photon3Unity3D.dll</td></row>
-		<row><td>MANAGED</td><td>System.Core.dll</td></row>
-		<row><td>MANAGED</td><td>System.Data.dll</td></row>
-		<row><td>MANAGED</td><td>System.Transactions.dll</td></row>
-		<row><td>MANAGED</td><td>System.Xml.dll</td></row>
-		<row><td>MANAGED</td><td>System.dll</td></row>
-		<row><td>MANAGED</td><td>UnityEngine.Analytics.dll</td></row>
-		<row><td>MANAGED</td><td>UnityEngine.Networking.dll</td></row>
-		<row><td>MANAGED</td><td>UnityEngine.UI.dll</td></row>
-		<row><td>MANAGED</td><td>UnityEngine.dll</td></row>
-		<row><td>MANAGED</td><td>mscorlib.dll</td></row>
-		<row><td>MCONFIG</td><td>ISX_DEFAULTCOMPONENT10</td></row>
-		<row><td>MONO</td><td>ISX_DEFAULTCOMPONENT4</td></row>
-		<row><td>MONO</td><td>mono.dll</td></row>
-		<row><td>MONO1</td><td>ISX_DEFAULTCOMPONENT6</td></row>
-		<row><td>NFL_TECHCRUNCH_DATA</td><td>ISX_DEFAULTCOMPONENT2</td></row>
-		<row><td>PLUGINS</td><td>ASimplePlugin.dll</td></row>
-		<row><td>PLUGINS</td><td>ISX_DEFAULTCOMPONENT11</td></row>
-		<row><td>RECORDINGS</td><td>ISX_DEFAULTCOMPONENT13</td></row>
-		<row><td>RESOURCES</td><td>ISX_DEFAULTCOMPONENT12</td></row>
-		<row><td>_.0</td><td>ISX_DEFAULTCOMPONENT7</td></row>
-		<row><td>_.01</td><td>ISX_DEFAULTCOMPONENT8</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1242,14 +1143,11 @@
 		<row><td>AdminToolsFolder</td><td>TARGETDIR</td><td>.:Admint~1|AdminTools</td><td/><td>0</td><td/></row>
 		<row><td>AppDataFolder</td><td>TARGETDIR</td><td>.:APPLIC~1|Application Data</td><td/><td>0</td><td/></row>
 		<row><td>BRAINPACK_SERVICE</td><td>INSTALLDIR</td><td>BRAINP~1|Brainpack Service</td><td/><td>0</td><td/></row>
-		<row><td>BROWSERS</td><td>_.01</td><td>Browsers</td><td/><td>0</td><td/></row>
 		<row><td>CommonAppDataFolder</td><td>TARGETDIR</td><td>.:Common~1|CommonAppData</td><td/><td>0</td><td/></row>
 		<row><td>CommonFiles64Folder</td><td>TARGETDIR</td><td>.:Common64</td><td/><td>0</td><td/></row>
 		<row><td>CommonFilesFolder</td><td>TARGETDIR</td><td>.:Common</td><td/><td>0</td><td/></row>
 		<row><td>DATABASEDIR</td><td>ISYourDataBaseDir</td><td>.</td><td/><td>0</td><td/></row>
-		<row><td>DESKTOP_APPLICATION</td><td>INSTALLDIR</td><td>DESKTO~1|Desktop Application</td><td/><td>0</td><td/></row>
 		<row><td>DesktopFolder</td><td>TARGETDIR</td><td>.:Desktop</td><td/><td>3</td><td/></row>
-		<row><td>ETC</td><td>MONO</td><td>etc</td><td/><td>0</td><td/></row>
 		<row><td>FavoritesFolder</td><td>TARGETDIR</td><td>.:FAVORI~1|Favorites</td><td/><td>0</td><td/></row>
 		<row><td>FontsFolder</td><td>TARGETDIR</td><td>.:Fonts</td><td/><td>0</td><td/></row>
 		<row><td>GlobalAssemblyCache</td><td>TARGETDIR</td><td>.:Global~1|GlobalAssemblyCache</td><td/><td>0</td><td/></row>
@@ -1260,24 +1158,16 @@
 		<row><td>ISMyProductDir</td><td>ISMyCompanyDir</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>ISYourDataBaseDir</td><td>INSTALLDIR</td><td>Database</td><td/><td>0</td><td/></row>
 		<row><td>LocalAppDataFolder</td><td>TARGETDIR</td><td>.:LocalA~1|LocalAppData</td><td/><td>0</td><td/></row>
-		<row><td>MANAGED</td><td>NFL_TECHCRUNCH_DATA</td><td>Managed</td><td/><td>0</td><td/></row>
-		<row><td>MCONFIG</td><td>MONO1</td><td>mconfig</td><td/><td>0</td><td/></row>
-		<row><td>MONO</td><td>NFL_TECHCRUNCH_DATA</td><td>Mono</td><td/><td>0</td><td/></row>
-		<row><td>MONO1</td><td>ETC</td><td>mono</td><td/><td>0</td><td/></row>
 		<row><td>MY_PRODUCT_NAME</td><td>HEDDOKO</td><td>HEDDOK~1|Heddoko Desktop</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
 		<row><td>NEW_FOLDER_1</td><td>TARGETDIR</td><td>NEW_FOLDER_1</td><td/><td>0</td><td/></row>
-		<row><td>NFL_TECHCRUNCH_DATA</td><td>DESKTOP_APPLICATION</td><td>NFLTEC~1|NFL Techcrunch_Data</td><td/><td>0</td><td/></row>
 		<row><td>NetHoodFolder</td><td>TARGETDIR</td><td>.:NetHood</td><td/><td>0</td><td/></row>
-		<row><td>PLUGINS</td><td>NFL_TECHCRUNCH_DATA</td><td>Plugins</td><td/><td>0</td><td/></row>
 		<row><td>PersonalFolder</td><td>TARGETDIR</td><td>.:Personal</td><td/><td>0</td><td/></row>
 		<row><td>PrimaryVolumePath</td><td>TARGETDIR</td><td>.:Primar~1|PrimaryVolumePath</td><td/><td>0</td><td/></row>
 		<row><td>PrintHoodFolder</td><td>TARGETDIR</td><td>.:PRINTH~1|PrintHood</td><td/><td>0</td><td/></row>
 		<row><td>ProgramFiles64Folder</td><td>TARGETDIR</td><td>.:Prog64~1|Program Files 64</td><td/><td>0</td><td/></row>
 		<row><td>ProgramFilesFolder</td><td>TARGETDIR</td><td>.:PROGRA~1|program files</td><td/><td>0</td><td/></row>
 		<row><td>ProgramMenuFolder</td><td>TARGETDIR</td><td>.:Programs</td><td/><td>3</td><td/></row>
-		<row><td>RECORDINGS</td><td>RESOURCES</td><td>RECORD~1|Recordings</td><td/><td>0</td><td/></row>
-		<row><td>RESOURCES</td><td>NFL_TECHCRUNCH_DATA</td><td>RESOUR~1|Resources</td><td/><td>0</td><td/></row>
 		<row><td>RecentFolder</td><td>TARGETDIR</td><td>.:Recent</td><td/><td>0</td><td/></row>
 		<row><td>SendToFolder</td><td>TARGETDIR</td><td>.:SendTo</td><td/><td>3</td><td/></row>
 		<row><td>StartMenuFolder</td><td>TARGETDIR</td><td>.:STARTM~1|Start Menu</td><td/><td>3</td><td/></row>
@@ -1291,8 +1181,6 @@
 		<row><td>USERPROFILE</td><td>TARGETDIR</td><td>.:USERPR~1|UserProfile</td><td/><td>0</td><td/></row>
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
-		<row><td>_.0</td><td>MONO1</td><td>1.0</td><td/><td>0</td><td/></row>
-		<row><td>_.01</td><td>MONO1</td><td>2.0</td><td/><td>0</td><td/></row>
 		<row><td>heddok_1_heddoko_desktop</td><td>heddoko</td><td>HEDDOK~1|Heddoko Desktop</td><td/><td>1</td><td/></row>
 		<row><td>heddoko</td><td>ProgramMenuFolder</td><td>Heddoko</td><td/><td>1</td><td/></row>
 	</table>
@@ -1986,41 +1874,8 @@
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
-		<row><td>AlwaysInstall</td><td>ASimplePlugin.dll</td></row>
-		<row><td>AlwaysInstall</td><td>Assembly_CSharp.dll</td></row>
-		<row><td>AlwaysInstall</td><td>Assembly_CSharp_firstpass.dll</td></row>
 		<row><td>AlwaysInstall</td><td>BrainpackService.Primary_output</td></row>
-		<row><td>AlwaysInstall</td><td>HeddokoLib.dll</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT10</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT11</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT12</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT13</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT4</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT5</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT6</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT7</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT8</td></row>
-		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT9</td></row>
-		<row><td>AlwaysInstall</td><td>Mono.Data.Tds.dll</td></row>
-		<row><td>AlwaysInstall</td><td>Mono.Security.dll</td></row>
-		<row><td>AlwaysInstall</td><td>NFL_Techcrunch.exe</td></row>
-		<row><td>AlwaysInstall</td><td>Newtonsoft.Json.dll</td></row>
-		<row><td>AlwaysInstall</td><td>Photon3Unity3D.dll</td></row>
-		<row><td>AlwaysInstall</td><td>System.Core.dll</td></row>
-		<row><td>AlwaysInstall</td><td>System.Data.dll</td></row>
-		<row><td>AlwaysInstall</td><td>System.Transactions.dll</td></row>
-		<row><td>AlwaysInstall</td><td>System.Xml.dll</td></row>
-		<row><td>AlwaysInstall</td><td>System.dll</td></row>
-		<row><td>AlwaysInstall</td><td>UnityEngine.Analytics.dll</td></row>
-		<row><td>AlwaysInstall</td><td>UnityEngine.Networking.dll</td></row>
-		<row><td>AlwaysInstall</td><td>UnityEngine.UI.dll</td></row>
-		<row><td>AlwaysInstall</td><td>UnityEngine.dll</td></row>
-		<row><td>AlwaysInstall</td><td>mono.dll</td></row>
-		<row><td>AlwaysInstall</td><td>mscorlib.dll</td></row>
 	</table>
 
 	<table name="File">
@@ -2035,115 +1890,7 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
-		<row><td>asimpleplugin.dll</td><td>ASimplePlugin.dll</td><td>ASIMPL~1.DLL|ASimplePlugin.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Plugins\ASimplePlugin.dll</td><td>1</td><td/></row>
-		<row><td>assembly_csharp.dll</td><td>Assembly_CSharp.dll</td><td>ASSEMB~1.DLL|Assembly-CSharp.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Assembly-CSharp.dll</td><td>1</td><td/></row>
-		<row><td>assembly_csharp_firstpass.dl</td><td>Assembly_CSharp_firstpass.dll</td><td>ASSEMB~1.DLL|Assembly-CSharp-firstpass.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Assembly-CSharp-firstpass.dll</td><td>1</td><td/></row>
-		<row><td>bicycle_1_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.CSV|Bicycle_1_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_1_converted.csv</td><td>1</td><td/></row>
-		<row><td>bicycle_1_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.MET|Bicycle_1_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_1_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>bicycle_2_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.CSV|Bicycle_2_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_2_converted.csv</td><td>1</td><td/></row>
-		<row><td>bicycle_2_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.MET|Bicycle_2_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_2_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>bicycle_3_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.CSV|Bicycle_3_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_3_converted.csv</td><td>1</td><td/></row>
-		<row><td>bicycle_3_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.MET|Bicycle_3_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_3_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>bicycle_4_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.CSV|Bicycle_4_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_4_converted.csv</td><td>1</td><td/></row>
-		<row><td>bicycle_4_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.MET|Bicycle_4_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_4_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>bicycle_5_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.CSV|Bicycle_5_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_5_converted.csv</td><td>1</td><td/></row>
-		<row><td>bicycle_5_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>BICYCL~1.MET|Bicycle_5_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Bicycle_5_converted.csv.meta</td><td>1</td><td/></row>
 		<row><td>brainpackservice.primary_out</td><td>BrainpackService.Primary_output</td><td>BrainpackService.Primary output</td><td>0</td><td/><td/><td>0</td><td>1</td><td>&lt;BrainpackService&gt;|Built</td><td>3</td><td/></row>
-		<row><td>browscap.ini</td><td>ISX_DEFAULTCOMPONENT6</td><td>browscap.ini</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\browscap.ini</td><td>1</td><td/></row>
-		<row><td>compat.browser</td><td>ISX_DEFAULTCOMPONENT9</td><td>COMPAT~1.BRO|Compat.browser</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\2.0\Browsers\Compat.browser</td><td>1</td><td/></row>
-		<row><td>config</td><td>ISX_DEFAULTCOMPONENT6</td><td>config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\config</td><td>1</td><td/></row>
-		<row><td>config.xml</td><td>ISX_DEFAULTCOMPONENT10</td><td>config.xml</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\mconfig\config.xml</td><td>1</td><td/></row>
-		<row><td>defaultwsdlhelpgenerator.asp</td><td>ISX_DEFAULTCOMPONENT7</td><td>DEFAUL~1.ASP|DefaultWsdlHelpGenerator.aspx</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\1.0\DefaultWsdlHelpGenerator.aspx</td><td>1</td><td/></row>
-		<row><td>defaultwsdlhelpgenerator.asp1</td><td>ISX_DEFAULTCOMPONENT8</td><td>DEFAUL~1.ASP|DefaultWsdlHelpGenerator.aspx</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\2.0\DefaultWsdlHelpGenerator.aspx</td><td>1</td><td/></row>
-		<row><td>heddokolib.dll</td><td>HeddokoLib.dll</td><td>HEDDOK~1.DLL|HeddokoLib.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\HeddokoLib.dll</td><td>1</td><td/></row>
-		<row><td>machine.config</td><td>ISX_DEFAULTCOMPONENT7</td><td>MACHIN~1.CON|machine.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\1.0\machine.config</td><td>1</td><td/></row>
-		<row><td>machine.config1</td><td>ISX_DEFAULTCOMPONENT8</td><td>MACHIN~1.CON|machine.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\2.0\machine.config</td><td>1</td><td/></row>
-		<row><td>maindata</td><td>ISX_DEFAULTCOMPONENT2</td><td>mainData</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\mainData</td><td>1</td><td/></row>
-		<row><td>mono.data.tds.dll</td><td>Mono.Data.Tds.dll</td><td>MONODA~1.DLL|Mono.Data.Tds.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Mono.Data.Tds.dll</td><td>1</td><td/></row>
-		<row><td>mono.dll</td><td>mono.dll</td><td>mono.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\mono.dll</td><td>1</td><td/></row>
-		<row><td>mono.security.dll</td><td>Mono.Security.dll</td><td>MONOSE~1.DLL|Mono.Security.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Mono.Security.dll</td><td>1</td><td/></row>
-		<row><td>mscorlib.dll</td><td>mscorlib.dll</td><td>mscorlib.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\mscorlib.dll</td><td>1</td><td/></row>
-		<row><td>newtonsoft.json.dll</td><td>Newtonsoft.Json.dll</td><td>NEWTON~1.DLL|Newtonsoft.Json.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Newtonsoft.Json.dll</td><td>1</td><td/></row>
-		<row><td>nfl_techcrunch.exe</td><td>NFL_Techcrunch.exe</td><td>NFLTEC~1.EXE|NFL Techcrunch.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch.exe</td><td>1</td><td/></row>
-		<row><td>photon3unity3d.dll</td><td>Photon3Unity3D.dll</td><td>PHOTON~1.DLL|Photon3Unity3D.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\Photon3Unity3D.dll</td><td>1</td><td/></row>
-		<row><td>resources.assets</td><td>ISX_DEFAULTCOMPONENT2</td><td>RESOUR~1.ASS|resources.assets</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\resources.assets</td><td>1</td><td/></row>
-		<row><td>settings.map</td><td>ISX_DEFAULTCOMPONENT8</td><td>settings.map</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\2.0\settings.map</td><td>1</td><td/></row>
-		<row><td>sharedassets0.assets</td><td>ISX_DEFAULTCOMPONENT2</td><td>SHARED~1.ASS|sharedassets0.assets</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\sharedassets0.assets</td><td>1</td><td/></row>
-		<row><td>squats_0_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_0_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_0_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_0_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_0_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_0_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_10_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_10_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_10_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_10_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_10_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_10_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_1_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_1_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_1_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_1_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_1_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_1_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_2_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_2_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_2_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_2_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_2_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_2_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_3_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_3_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_3_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_3_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_3_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_3_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_4_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_4_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_4_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_4_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_4_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_4_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_5_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_5_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_5_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_5_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_5_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_5_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_6_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_6_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_6_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_6_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_6_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_6_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_7_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_7_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_7_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_7_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_7_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_7_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_8_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_8_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_8_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_8_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_8_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_8_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>squats_9_converted.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.CSV|Squats_9_converted.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_9_converted.csv</td><td>1</td><td/></row>
-		<row><td>squats_9_converted.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>SQUATS~1.MET|Squats_9_converted.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Squats_9_converted.csv.meta</td><td>1</td><td/></row>
-		<row><td>system.core.dll</td><td>System.Core.dll</td><td>SYSTEM~1.DLL|System.Core.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\System.Core.dll</td><td>1</td><td/></row>
-		<row><td>system.data.dll</td><td>System.Data.dll</td><td>SYSTEM~1.DLL|System.Data.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\System.Data.dll</td><td>1</td><td/></row>
-		<row><td>system.dll</td><td>System.dll</td><td>System.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\System.dll</td><td>1</td><td/></row>
-		<row><td>system.transactions.dll</td><td>System.Transactions.dll</td><td>SYSTEM~1.DLL|System.Transactions.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\System.Transactions.dll</td><td>1</td><td/></row>
-		<row><td>system.xml.dll</td><td>System.Xml.dll</td><td>SYSTEM~1.DLL|System.Xml.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\System.Xml.dll</td><td>1</td><td/></row>
-		<row><td>test_elbow_anterior.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.CSV|Test_elbow_anterior.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_anterior.csv</td><td>1</td><td/></row>
-		<row><td>test_elbow_anterior.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.MET|Test_elbow_anterior.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_anterior.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_elbow_flexion.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.CSV|Test_elbow_Flexion.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_Flexion.csv</td><td>1</td><td/></row>
-		<row><td>test_elbow_flexion.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.MET|Test_elbow_Flexion.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_Flexion.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_elbow_horizontal.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.CSV|Test_elbow_horizontal.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_horizontal.csv</td><td>1</td><td/></row>
-		<row><td>test_elbow_horizontal.csv.me</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.MET|Test_elbow_horizontal.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_horizontal.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_elbow_vertical.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.CSV|Test_elbow_vertical.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_vertical.csv</td><td>1</td><td/></row>
-		<row><td>test_elbow_vertical.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_E~1.MET|Test_elbow_vertical.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_elbow_vertical.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_hip_abduction.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.CSV|Test_hip_abduction.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_abduction.csv</td><td>1</td><td/></row>
-		<row><td>test_hip_abduction.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.MET|Test_hip_abduction.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_abduction.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_hip_flexion.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.CSV|Test_hip_flexion.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_flexion.csv</td><td>1</td><td/></row>
-		<row><td>test_hip_flexion.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.MET|Test_hip_flexion.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_flexion.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_hip_internal.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.CSV|Test_hip_internal.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_internal.csv</td><td>1</td><td/></row>
-		<row><td>test_hip_internal.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_H~1.MET|Test_hip_internal.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_hip_internal.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_knee_flexion.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_K~1.CSV|Test_knee_flexion.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_knee_flexion.csv</td><td>1</td><td/></row>
-		<row><td>test_knee_flexion.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_K~1.MET|Test_knee_flexion.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_knee_flexion.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_knee_hip.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_K~1.CSV|Test_knee_hip.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_knee_hip.csv</td><td>1</td><td/></row>
-		<row><td>test_knee_hip.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_K~1.MET|Test_knee_hip.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_knee_hip.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_shoulder_flexion.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.CSV|Test_shoulder_Flexion.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_Flexion.csv</td><td>1</td><td/></row>
-		<row><td>test_shoulder_flexion.csv.me</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.MET|Test_shoulder_Flexion.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_Flexion.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_shoulder_horizontal.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.CSV|Test_shoulder_horizontal.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_horizontal.csv</td><td>1</td><td/></row>
-		<row><td>test_shoulder_horizontal.csv1</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.MET|Test_shoulder_horizontal.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_horizontal.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_shoulder_vertical.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.CSV|Test_shoulder_vertical.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_vertical.csv</td><td>1</td><td/></row>
-		<row><td>test_shoulder_vertical.csv.m</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_S~1.MET|Test_shoulder_vertical.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_shoulder_vertical.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_trunk_flexion.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.CSV|Test_trunk_flexion.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_flexion.csv</td><td>1</td><td/></row>
-		<row><td>test_trunk_flexion.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.MET|Test_trunk_flexion.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_flexion.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_trunk_lateral.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.CSV|Test_trunk_lateral.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_lateral.csv</td><td>1</td><td/></row>
-		<row><td>test_trunk_lateral.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.MET|Test_trunk_lateral.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_lateral.csv.meta</td><td>1</td><td/></row>
-		<row><td>test_trunk_rotation.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.CSV|Test_trunk_rotation.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_rotation.csv</td><td>1</td><td/></row>
-		<row><td>test_trunk_rotation.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TEST_T~1.MET|Test_trunk_rotation.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Test_trunk_rotation.csv.meta</td><td>1</td><td/></row>
-		<row><td>testing_capture.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.CSV|Testing_capture.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_capture.csv</td><td>1</td><td/></row>
-		<row><td>testing_capture.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.MET|Testing_capture.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_capture.csv.meta</td><td>1</td><td/></row>
-		<row><td>testing_catpure_1.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.CSV|Testing_catpure_1.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_1.csv</td><td>1</td><td/></row>
-		<row><td>testing_catpure_1.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.MET|Testing_catpure_1.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_1.csv.meta</td><td>1</td><td/></row>
-		<row><td>testing_catpure_11.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.CSV|Testing_catpure_11.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_11.csv</td><td>1</td><td/></row>
-		<row><td>testing_catpure_11.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.MET|Testing_catpure_11.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_11.csv.meta</td><td>1</td><td/></row>
-		<row><td>testing_catpure_111.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.CSV|Testing_catpure_111.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_111.csv</td><td>1</td><td/></row>
-		<row><td>testing_catpure_111.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.MET|Testing_catpure_111.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_111.csv.meta</td><td>1</td><td/></row>
-		<row><td>testing_catpure_2.csv</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.CSV|Testing_catpure_2.csv</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_2.csv</td><td>1</td><td/></row>
-		<row><td>testing_catpure_2.csv.meta</td><td>ISX_DEFAULTCOMPONENT13</td><td>TESTIN~1.MET|Testing_catpure_2.csv.meta</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\Recordings\Testing_catpure_2.csv.meta</td><td>1</td><td/></row>
-		<row><td>unity_builtin_extra</td><td>ISX_DEFAULTCOMPONENT12</td><td>UNITY_~1|unity_builtin_extra</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\unity_builtin_extra</td><td>1</td><td/></row>
-		<row><td>unity_default_resources</td><td>ISX_DEFAULTCOMPONENT12</td><td>UNITYD~1|unity default resources</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Resources\unity default resources</td><td>1</td><td/></row>
-		<row><td>unityengine.analytics.dll</td><td>UnityEngine.Analytics.dll</td><td>UNITYE~1.DLL|UnityEngine.Analytics.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\UnityEngine.Analytics.dll</td><td>1</td><td/></row>
-		<row><td>unityengine.dll</td><td>UnityEngine.dll</td><td>UNITYE~1.DLL|UnityEngine.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\UnityEngine.dll</td><td>1</td><td/></row>
-		<row><td>unityengine.networking.dll</td><td>UnityEngine.Networking.dll</td><td>UNITYE~1.DLL|UnityEngine.Networking.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\UnityEngine.Networking.dll</td><td>1</td><td/></row>
-		<row><td>unityengine.ui.dll</td><td>UnityEngine.UI.dll</td><td>UNITYE~1.DLL|UnityEngine.UI.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\UnityEngine.UI.dll</td><td>1</td><td/></row>
-		<row><td>unityengine.xml</td><td>ISX_DEFAULTCOMPONENT3</td><td>UNITYE~1.XML|UnityEngine.xml</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Managed\UnityEngine.xml</td><td>1</td><td/></row>
-		<row><td>web.config</td><td>ISX_DEFAULTCOMPONENT8</td><td>WEB~1.CON|web.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Heddoko\Desktop\NFL techcrunch\NFL Techcrunch_Data\Mono\etc\mono\2.0\web.config</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2285,41 +2032,8 @@
 		<col def="S0">FTPLocation</col>
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
-		<row><td>ASimplePlugin.dll</td><td/><td/><td>_AFB2E657_6230_4466_B1DB_032D95FECE24_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Assembly_CSharp.dll</td><td/><td/><td>_89949C55_C17B_413B_A525_4D2E4D630F70_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Assembly_CSharp_firstpass.dll</td><td/><td/><td>_C7B738C0_2971_4715_96F5_4DA934C24297_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>BrainpackService.Primary_output</td><td/><td/><td>_0398955E_2DE2_4192_8195_DCFD24B67436_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>HeddokoLib.dll</td><td/><td/><td>_A9F8FF64_9C09_417B_811D_3F9D7D77FB4F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_C70990B4_3BF8_4416_9813_C8857D2938E6_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_D1355C24_C5EF_4B96_A367_3F2336BB55C2_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT10</td><td/><td/><td>_13E1A83D_6367_40B6_BA4E_C8A033978B4F_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT11</td><td/><td/><td>_FE09B2F9_4ADD_410A_94D1_77D19EC7A828_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT12</td><td/><td/><td>_2580EB64_5DDF_4314_AF70_D2EC1A899384_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT13</td><td/><td/><td>_0CEA8C11_7AB7_43C0_84CF_42F6EB6559B1_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_A620FD2D_3F2D_4E80_98D4_B5A1BFEFDB87_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_58B15FDA_4B16_4DAA_9A6B_9220DD995117_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_D6BBC777_EC23_4FDE_A1C1_270795550AE9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_DCE3FD83_4272_4C6A_8782_A55D4C6C8F89_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_3B7BEE30_FFC3_4A2E_AFF6_69D5DA538AF6_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_66076238_4B59_4873_B3C1_067EEE6EACB4_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_A2CB0EE3_8177_4E75_847E_95F93C0E41AF_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_5EFF966D_AA87_4891_A313_B3FB4BBC64D7_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Mono.Data.Tds.dll</td><td/><td/><td>_CACBBB16_250D_4CA5_9B18_8A6817BD3191_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Mono.Security.dll</td><td/><td/><td>_321AB2AC_32CD_4276_8978_1009E49C0D3D_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>NFL_Techcrunch.exe</td><td/><td/><td>_5E269283_89D1_484E_B9BF_356F1E2B804F_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Newtonsoft.Json.dll</td><td/><td/><td>_C1B49523_E6A7_49C9_B0BB_E8E0FD7A633A_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Photon3Unity3D.dll</td><td/><td/><td>_0FBCB847_2B80_4312_BA4E_1CD79C385709_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>System.Core.dll</td><td/><td/><td>_594BD319_ADB0_458E_835A_03F26A063902_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>System.Data.dll</td><td/><td/><td>_5B2CC8D2_DDDF_4143_9374_EFE1ECE1DF48_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>System.Transactions.dll</td><td/><td/><td>_1D69E30C_80C1_441F_9322_741365EA2E5B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>System.Xml.dll</td><td/><td/><td>_CBF0C9D2_971E_44D1_AB74_3ED5E6C0CAEA_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>System.dll</td><td/><td/><td>_186E9CD6_8A74_49CE_B556_4F5D943FC29C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>UnityEngine.Analytics.dll</td><td/><td/><td>_B43ACADD_9CEB_4092_8ED7_9F27645010DD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>UnityEngine.Networking.dll</td><td/><td/><td>_FA9EB0FB_F196_4D96_B1E1_647C7818B148_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>UnityEngine.UI.dll</td><td/><td/><td>_0FA2EB8B_0C3C_46EA_A446_962C9D125B6C_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>UnityEngine.dll</td><td/><td/><td>_C62CB345_00F3_4343_9874_190C10D46CF0_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>mono.dll</td><td/><td/><td>_FA3585DD_2390_4906_9108_F2B1E8345285_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>mscorlib.dll</td><td/><td/><td>_BFC7CBFF_6C79_4F98_BCCC_E79E562A406B_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2659,13 +2373,13 @@
 		<col def="S255">DotNetBuildConfiguration</col>
 		<col def="S255">MsiCommandLine</col>
 		<col def="I4">ISSetupPrerequisiteLocation</col>
-		<row><td>CD_ROM</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>0</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>650</td><td>0</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
+		<row><td>CD_ROM</td><td>Express</td><td>E:\Code\Binaries\HeddokoDesktop</td><td>Default</td><td>0</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>650</td><td>0</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
 		<row><td>Custom</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>2</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>100</td><td>0</td><td>1024</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
 		<row><td>DVD-10</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>3</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>8.75</td><td>1</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
 		<row><td>DVD-18</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>3</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>15.83</td><td>1</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
-		<row><td>DVD-5</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>3</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>4.38</td><td>1</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
+		<row><td>DVD-5</td><td>Express</td><td>E:\Code\Binaries\HeddokoDesktop</td><td>Default</td><td>3</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>4.38</td><td>1</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
 		<row><td>DVD-9</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>Default</td><td>3</td><td>1033</td><td>0</td><td>2</td><td>Intel</td><td/><td>1033</td><td>0</td><td>7.95</td><td>1</td><td>2048</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>75805</td><td/><td/><td/><td>3</td></row>
-		<row><td>SingleImage</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>PackageName</td><td>1</td><td>1033</td><td>0</td><td>1</td><td>Intel</td><td/><td>1033</td><td>2</td><td>0</td><td>0</td><td>0</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>108572</td><td/><td/><td/><td>3</td></row>
+		<row><td>SingleImage</td><td>Express</td><td>E:\Code\Binaries\HeddokoDesktop</td><td>PackageName</td><td>1</td><td>1033</td><td>0</td><td>1</td><td>Intel</td><td/><td>1033</td><td>2</td><td>0</td><td>0</td><td>0</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>108572</td><td/><td/><td/><td>3</td></row>
 		<row><td>WebDeployment</td><td>Express</td><td>&lt;ISProjectDataFolder&gt;</td><td>PackageName</td><td>4</td><td>1033</td><td>2</td><td>1</td><td>Intel</td><td/><td>1033</td><td>0</td><td>0</td><td>0</td><td>0</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>124941</td><td/><td/><td/><td>3</td></row>
 	</table>
 
@@ -4247,8 +3961,8 @@
 		<col def="S0">Value</col>
 		<row><td>ActiveLanguage</td><td>1033</td></row>
 		<row><td>Comments</td><td/></row>
-		<row><td>CurrentMedia</td><td dt:dt="bin.base64" md5="de9f554a3bc05c12be9c31b998217995">
-UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
+		<row><td>CurrentMedia</td><td dt:dt="bin.base64" md5="6d78a46bf2c52ee27034bbcad20f7f95">
+QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 			</td></row>
 		<row><td>DefaultProductConfiguration</td><td>Express</td></row>
 		<row><td>EnableSwidtag</td><td>1</td></row>
@@ -4265,7 +3979,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{44427C23-2E91-49E3-BCBA-7BB72352EA92}</td></row>
 		<row><td>ISUSSignature</td><td>{818B0DF8-68B4-454E-AAB8-6B7A21EAB25D}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewRelease,viewAppFiles</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewRelease,viewAppFiles,viewObjects</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4718,9 +4432,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
-		<row><td>FileKey1</td><td>NFL_Techcrunch.exe</td><td/><td>heddoko</td><td>2</td></row>
-		<row><td>FileKey2</td><td>NFL_Techcrunch.exe</td><td/><td>heddok_1_heddoko_desktop</td><td>2</td></row>
-		<row><td>NFL_Techcrunch.exe</td><td>NFL_Techcrunch.exe</td><td/><td>heddok_1_heddoko_desktop</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4806,8 +4517,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>NFL_Techcrunch.exe</td><td>heddok_1_heddoko_desktop</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>NFL_Techcrunch.exe</td><td>AlwaysInstall</td><td/><td/><td/><td>NFL_Techcrunch.exe_B699FE27102140C9B1F71DC937CFD583.exe</td><td>1</td><td>1</td><td>DESKTOP_APPLICATION</td><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>NFL_Techcrunch.exe1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>NFL_Techcrunch.exe</td><td>AlwaysInstall</td><td/><td/><td/><td>NFL_Techcrunch.exe_624BB0F5D36448D0B31A5DA0032D9318.exe</td><td>1</td><td>1</td><td>DESKTOP_APPLICATION</td><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">
