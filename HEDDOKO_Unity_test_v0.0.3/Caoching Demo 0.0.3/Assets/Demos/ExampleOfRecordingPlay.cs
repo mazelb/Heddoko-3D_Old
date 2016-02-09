@@ -35,7 +35,7 @@ public class ExampleOfRecordingPlay : MonoBehaviour
     private void Start()
     {
         //scan recordings in directory
-        BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.sCsvDirectory);
+        BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.RecordingsDirectory);
 
         //read the recordings
         BodyRecordingsMgr.Instance.ReadAllRecordings();

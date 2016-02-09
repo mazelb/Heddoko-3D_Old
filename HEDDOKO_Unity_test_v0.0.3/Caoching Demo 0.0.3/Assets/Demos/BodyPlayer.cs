@@ -9,7 +9,7 @@
 
 using System.Collections;
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.MainScene.Model; 
+using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
 using UnityEngine;
@@ -99,7 +99,10 @@ namespace Assets.Demos
                     mPlayButtonPushed = true;
                     PlayButton.gameObject.SetActive(false);
                     ChangeState(BodyPlaybackState.PlayingRecording);
-                    DisplayLegAngleExtractions.CurrentBody = CurrentBodyInPlay;
+                    if (CurrentBodyInPlay != null)
+                    {
+                        DisplayLegAngleExtractions.CurrentBody = CurrentBodyInPlay;
+                    }
                 }
             }
         }

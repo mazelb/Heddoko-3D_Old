@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.Scripts.Body_Pipeline.Analysis.Legs;
-using Assets.Scripts.UI.MainScene.Model;
+﻿
+/** 
+* @file DisplayLegAngleExtractions.cs
+* @brief Contains the DisplayLegAngleExtractions class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date February 2016
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
+using Assets.Scripts.Body_Pipeline.Analysis.Legs; 
 using UnityEngine;
 using UnityEngine.UI;
 

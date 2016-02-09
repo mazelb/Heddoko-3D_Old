@@ -7,6 +7,8 @@
 */
 using UnityEngine; 
 using System.Collections.Generic;
+using System.Threading;
+using Assets.Scripts.Utils;
 
 /**
 * BodiesManager class 
@@ -57,7 +59,8 @@ public sealed class BodiesManager : MonoBehaviour
     public void CreateNewBody(string vBodyUUID = "")
     {
         Body vBody = new Body();
-        vBody.InitBody(vBodyUUID);
+        
+        vBody.InitBody(vBodyUUID, CoroutineHelper.IsUnityThread(Thread.CurrentThread));
         Bodies.Add(vBody);
     }
 

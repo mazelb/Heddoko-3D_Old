@@ -27,35 +27,19 @@ namespace Assets.Scripts.Communication
     {
         private static PacketCommandRouter sInstance;
 
-       // private SocketClient mSocketClient;
 
- //       public SocketClient ClientSocket
- //       {
-   //         get
-    //        {
-  //              if (mSocketClient == null)
-  //              {
- //                   mSocketClient = new SocketClient();
- //                   mSocketClient.Initialize(new SuitSocketClientSettings());
- //                   mSocketClient.StartWorking();
- //               }
-    //            return mSocketClient;
-   //         }
-     //   }
         private SynchronousClient mSocketClient;
 
         public SynchronousClient ClientSocket
         {
             get
-         {
+            {
                 if (mSocketClient == null)
-                 {
-                        mSocketClient = new SynchronousClient();
-                 //    mSocketClient.Initialize(new SuitSocketClientSettings());
-                     //  mSocketClient.StartWorking();
-                   }
+                {
+                    mSocketClient = new SynchronousClient();
+                }
                 return mSocketClient;
-          }
+            }
         }
 
         public static PacketCommandRouter Instance
@@ -72,7 +56,9 @@ namespace Assets.Scripts.Communication
         }
         private Command mCommand = new Command();
         private object mFrameTheadAccessLock = new object();
-        private BodyFrameThread mBodyFrameThread; //On brainpack data retreival, send the data to the bodyframethread
+
+        //On brainpack data retreival, send the data to the bodyframethread
+        private BodyFrameThread mBodyFrameThread; 
 
         private BodyFrameThread FrameThread
         {
@@ -92,7 +78,8 @@ namespace Assets.Scripts.Communication
                 }
             }
         }
-        /**
+
+       /**
        * Initialize 
        * @brief Begins command delegate registration. Please see documentation for HeddokoCommand for further information on what each numerical value 
        * represents  
@@ -285,7 +272,7 @@ namespace Assets.Scripts.Communication
         private void Stop(object vSender, object vArgs)
         {
             ClientSocket.Stop();
-            
+
         }
 
     }

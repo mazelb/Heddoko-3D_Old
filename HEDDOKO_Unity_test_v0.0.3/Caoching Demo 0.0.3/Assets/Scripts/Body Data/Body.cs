@@ -16,6 +16,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 
 /**
 * Body class 
@@ -112,11 +113,18 @@ public class Body
     * @param vBodyUUID the new body UUID (could be empty)
     * @brief Initializes a new body 
     */
-    public void InitBody(string vBodyUUID)
+    public void InitBody(string vBodyUUID, bool vCallFromUnityThread)
     {
-        InitBody(vBodyUUID, BodyType);
+        if (!vCallFromUnityThread)
+        {
+            CoroutineHelper.TriggerActionInUnity( () => InitBody(vBodyUUID, BodyType));
+        }
+        else
+        {
+            InitBody(vBodyUUID, BodyType);
+        }
     }
-
+    
     /**
     * InitBody(string vBodyUUID , BodyStructureMap.BodyTypes vBodyType)
     * @param vBodyUUID the new body UUID (could be empty), BodyType is the desired BodyType
@@ -145,7 +153,7 @@ public class Body
     * @param  vBodyType: the desired BodyType, this also initializes the body's analysis segment
     * @brief Initializes a new body structure's internal properties with the desired body type
     */
-    public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
+    public void  CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
         List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
         TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
@@ -260,7 +268,7 @@ public class Body
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-            BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+            BodyFrame frame = RawFrameConverterManager.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
             SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();

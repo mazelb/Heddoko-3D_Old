@@ -7,7 +7,8 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 using Assets.Scripts.Utils.DebugContext; 
 
 namespace Assets.Scripts.Body_Data.view
@@ -33,6 +34,8 @@ namespace Assets.Scripts.Body_Data.view
         }
         [SerializeField]
         private bool mStartUpdating;
+ 
+
 
         /// <summary>
         /// Internally set the Body associated to this view. Class property that returns the Body associated with this view.
@@ -96,8 +99,11 @@ namespace Assets.Scripts.Body_Data.view
                     vTempBodyFrame = vBodyFrame;
                 }
 
+                RawFrameConverterManager.ResetStartTimeListener(vTempBodyFrame);
                 AssociatedBody.SetInitialFrame(vTempBodyFrame);
                 UpdateViewTracking(vTempBodyFrame);
+
+                 
             }
         }
 
@@ -185,7 +191,7 @@ namespace Assets.Scripts.Body_Data.view
         /// </summary>
         private void Awake()
         {
- 
+           
         }
 
         /// <summary>

@@ -15,33 +15,7 @@ namespace Assets.Scripts.Utils
     * @brief Class contains reference to repos where key files are located
     */
     public static class FilePathReferences
-    {
-        public static string sCsvDirectory = Application.dataPath + "/Resources/Recordings";
-
-        /// <summary>
-        /// Settings file 
-        /// </summary>
-        public static string gsSettingsFile = "settings.setting";
-
-        /// <summary>
-        ///returns the settings file's application path, if it doesn't exist, the folder will be  created
-        /// </summary>
-        public static string SettingsFolder
-        {
-            get
-            {
-                //check if the folder currently exists
-                string vCurrentPath = Environment.CurrentDirectory + "/Settings";
-
-                if (!Directory.Exists(vCurrentPath))
-                {
-                    Directory.CreateDirectory(vCurrentPath);
-                }
-
-                return vCurrentPath;
-            } 
-        }
-
+    { 
 
         /**
         * LocalSavedDataPath(string vSuffix)
@@ -60,7 +34,12 @@ namespace Assets.Scripts.Utils
         {
             get
             {
-                return Application.dataPath + "/Resources/Recordings";
+                string vPath = Application.persistentDataPath + "/Resources/Recordings";
+                if(!Directory.Exists(vPath))
+                {
+                    Directory.CreateDirectory(vPath);
+                }
+                return vPath;
             }
         }
 

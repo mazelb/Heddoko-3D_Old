@@ -33,5 +33,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         {
             gameObject.SetActive(false); 
         }
+
+        public Button Backbutton { get; set; }
     }
 }

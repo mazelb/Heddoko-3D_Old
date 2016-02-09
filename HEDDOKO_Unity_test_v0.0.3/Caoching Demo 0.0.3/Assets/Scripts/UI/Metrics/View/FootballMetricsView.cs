@@ -16,9 +16,7 @@ using UnityEngine.UI;
 namespace Assets.Scripts.UI.Metrics.View
 {
     public class FootballMetricsView : NonSquatWrapperView, IResettableMetricView
-    {
-        [SerializeField]
-        private float mMaxElbowFlexion = 175f;
+    { 
 
         public Image ElbowFlexionFill;
         public PlayerStreamManager PlayerStreamManager;
@@ -28,7 +26,7 @@ namespace Assets.Scripts.UI.Metrics.View
         public FillAnimationComponent FillAnimation;
         public int NumberOfFramesToCount = 10;
         private int mFrameCount;
-        private float mRightElbowVelSum = 0f;
+        private float mRightElbowVelSum ;
         [SerializeField] private float mPeakAngularVelocity;
         public AnalysisContentPanel AnalysisContentPanel;
  
@@ -43,11 +41,13 @@ namespace Assets.Scripts.UI.Metrics.View
                 return mArmMetrics;
             }
         }
+        // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             PlayerStreamManager.ResettableViews.Add(this);
         }
 
+        // ReSharper disable once UnusedMember.Local
         void Update()
         {
             Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;

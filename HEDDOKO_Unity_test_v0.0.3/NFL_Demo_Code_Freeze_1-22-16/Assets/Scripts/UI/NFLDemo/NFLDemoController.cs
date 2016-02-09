@@ -71,21 +71,14 @@ namespace Assets.Scripts.UI.NFLDemo
             mTimer = Timer;
         }
 
-        private void Update()
-        {
-
-        }
+ 
 
         public void ResetTimer()
         {
             mTimer = Timer;
         }
-        private void LateUpdate()
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                string s = "";
-            }
+        private void Update()
+        { 
             //is the correct context
             bool vCorrectContext = ActivitiesContextController.CurrentState ==
                                    ActivitiesContextController.ActivitiesContextViewState.LearnByRecording

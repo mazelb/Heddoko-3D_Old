@@ -7,12 +7,9 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+using System.Collections.Generic; 
 using Assets.Scripts.Frames_Pipeline;
-using Assets.Scripts.Utils;
-//using Assets.Scripts.Utils.Debugging;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;  
 using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
@@ -194,7 +191,7 @@ public class BodyFrameThread : ThreadedJob
                 try
                 {
                     //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
+                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
 
@@ -257,7 +254,7 @@ public class BodyFrameThread : ThreadedJob
                     }
 
                     //convert to body frame 
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
+                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                 }
                 catch (Exception e)
@@ -284,9 +281,7 @@ public class BodyFrameThread : ThreadedJob
         int vCounter = 0;
         while (true)
         {
-            string vLogMessage = "";
-            Stopwatch vStopwatch = new Stopwatch();
-            vStopwatch.Start();
+            string vLogMessage = "";  
             if (!ContinueWorking)
             {
                 //finished working
@@ -354,11 +349,10 @@ public class BodyFrameThread : ThreadedJob
                         vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
-                BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
+                BodyFrame vBodyFrame = RawFrameConverterManager.CreateBodyFrame(vPreviouslyValidValues);
                 //Todo: convert the timestamp to a float
                 vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f;//vTimeStamp;
-                BodyFrameBuffer.Enqueue(vBodyFrame);
-                vLogMessage += vUnwrappedString;
+                BodyFrameBuffer.Enqueue(vBodyFrame); 
 
             }
             catch (IndexOutOfRangeException)
@@ -372,13 +366,7 @@ public class BodyFrameThread : ThreadedJob
 
             }
 
-            vStopwatch.Stop();
-            if (IsDebugging)
-            {
-                double vTotalMs = vStopwatch.Elapsed.TotalMilliseconds;
-                //RawframeConversion.WriteLog(vTotalMs, vLogMessage);
-            }
-
+          
         }
     }
     

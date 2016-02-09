@@ -87,7 +87,9 @@ public class BezierCurveEditor : Editor
 		
 		if(GUILayout.Button("X", GUILayout.Width(20)))
 		{
+#pragma warning disable 618
 			Undo.RegisterSceneUndo("Remove Point");
+#pragma warning restore 618
 			pointsProp.MoveArrayElement(curve.GetPointIndex(point), curve.pointCount - 1);
 			pointsProp.arraySize--;
 			DestroyImmediate(point.gameObject);
@@ -150,7 +152,9 @@ public class BezierCurveEditor : Editor
 		Vector3 newPointPos = EditorGUILayout.Vector3Field("Position : ", point.transform.localPosition);
 		if(newPointPos != point.transform.localPosition)
 		{
+#pragma warning disable 618
 			Undo.RegisterUndo(point.transform, "Move Bezier Point");
+#pragma warning restore 618
 			point.transform.localPosition = newPointPos;
 		}
 		

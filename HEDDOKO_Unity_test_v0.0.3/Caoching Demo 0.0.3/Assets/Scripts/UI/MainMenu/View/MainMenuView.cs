@@ -26,12 +26,13 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Camera TrainingAndLearningCam;
         public Camera RecordingSelectionCam;
 
-        //The Activities context view
-        public ActivitiesContextController ActivitiesContext;
+
+     
+        //The Activities context view controller
+   public ActivitiesContextController ActivitiesContext;
 
         //The Brainpack/Bluetooth connection view
-        public MainMenuBrainpackView BrainpackConnectionView;
-
+        public MainMenuBrainpackView BrainpackConnectionView; 
         public RecordingSelectionView RecordingSelectionView;
         /// <summary>
         /// Shows the Main menu view

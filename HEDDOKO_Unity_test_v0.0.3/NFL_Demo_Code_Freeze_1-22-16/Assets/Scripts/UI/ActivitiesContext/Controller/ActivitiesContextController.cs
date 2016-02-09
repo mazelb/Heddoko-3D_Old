@@ -37,7 +37,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public string BikeRecordingSubPath;
         private string ActivityTypeSubPath;
 
-        [SerializeField] private bool mGoToRecordingInstead = false;
+        [SerializeField] private bool mGotoLiveView = false;
 
         public bool UsingSquats { get; set; }
 
@@ -74,15 +74,15 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public void SwitchToFootballView()
         {
 
-            if (!mGoToRecordingInstead)
+            if (!mGotoLiveView)
             {
                 UsingSquats = false;
-                SwitchtoTrainingViewState();
+                NonSquatHookFunction();
             }
             else
             {
-                NonSquatHookFunction();
-                mGoToRecordingInstead = false;
+                SwitchtoTrainingViewState(); 
+                mGotoLiveView = false;
             }
         }
 
@@ -264,9 +264,9 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
 
         void Update()
         {
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SwitchToRecordingFromLive) && CurrentState  == ActivitiesContextViewState.Learn)
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.SkipToLiveViewFromRecordingView) && CurrentState  == ActivitiesContextViewState.Learn)
             {
-                mGoToRecordingInstead = true;
+                mGotoLiveView = true;
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.EnableTimerKey) &&
                 CurrentState == ActivitiesContextViewState.Learn)

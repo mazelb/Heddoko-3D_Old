@@ -7,7 +7,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using Assets.Scripts.Cameras;
+using System; 
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Metrics;
@@ -21,7 +21,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
     /// <summary>
     /// Represents the training context view
     /// </summary>
-    public class ActivitiesContextViewTrain : MonoBehaviour, IActivitiesContextViewSubcomponent
+    [Serializable]
+    public class ActivitiesContextViewTrain : AbstractInActivityView
     {
         /// <summary>
         /// When the model needs to be shown, it will be placed on this anchor
@@ -32,8 +33,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// When the model needs to be hidden, it will be placed on this anchor
         /// </summary>
         public Transform HeddokoModelHiddenAnchor;
-
-        public Button BackButton;
+        [SerializeField]
+        private Button mBackButton;
         public Camera TrainingAndLearningCam;  
  
         public ActivitiesContextController ActivitiesContextController;
@@ -43,9 +44,13 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
 
 
         private PlayerStreamManager mPlayerStreamManager;
-        private bool mIsActive;
+        private bool mIsActive { get; set; }
         public Model2D3DSwitch ModelSwitcher;
 
+        public override Button Backbutton
+        {
+            get { return mBackButton; }
+        }
         public PlayerStreamManager PlayerStreamManager
         {
             get
@@ -57,10 +62,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 return mPlayerStreamManager;
             }
         }
+
+
         /// <summary>
         /// Enables and shows the view
         /// </summary>
-        public void Show()
+        public override void Show()
         { 
             gameObject.SetActive(true); 
             ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
@@ -85,7 +92,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// Hides the view
         /// </summary>
-        public void Hide()
+        public override void Hide()
         {
             SquatMetrics.Hide();
             NonSquatMetrics.Hide();
@@ -97,5 +104,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             mIsActive = false;
  
         }
+
+
     }
 }

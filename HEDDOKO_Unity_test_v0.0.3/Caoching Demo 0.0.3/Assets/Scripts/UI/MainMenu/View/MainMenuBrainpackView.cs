@@ -9,7 +9,7 @@
 
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Interfaces;
-using Assets.Scripts.Utils.DebugContext;
+using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.Utils.UnityUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +32,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         
         public FadeInFadeOutEffect FadeInFadeOutEffect;
         public GameObject BrainpackComPortInput;
+        public ScrollablePanel ScrollablePanel;
         /// <summary>
         /// RectTransform associated with this view
         /// </summary>
@@ -140,6 +141,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         public void Show()
         {
             gameObject.SetActive(true);
+            ScrollablePanel.Show();
+            
         }
 
         /// <summary>

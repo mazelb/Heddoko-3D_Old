@@ -7,11 +7,10 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using System.Collections.Generic;
-using Assets.Demos;
+using System.Collections.Generic; 
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.Loading; 
 using Assets.Scripts.UI.Metrics;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
@@ -42,6 +41,8 @@ namespace Assets.Scripts.UI.MainMenu
         public string SquatRecordingUUID;
         public string BikeRecordingUUID;
 
+
+        private string mSelectedRecordingPath;
         // pause thread routine started
         private bool mResetRoutineStarted = false;
 
@@ -53,6 +54,8 @@ namespace Assets.Scripts.UI.MainMenu
         public Button[] TPoseButtons;
 
         public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
+        private Dictionary<string, BodyFramesRecording> mRecordings = new Dictionary<string, BodyFramesRecording>(10); 
+        
 
         /// <summary>
         /// Current state of the playback
@@ -73,14 +76,14 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 ResetPlayer();
             }
-            BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
+      /*      BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)
             {
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
                 mBodyRecordingUUID = vRec.BodyRecordingGuid;
                 CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
             }
-
+*/
             if (CurrentBodyInPlay == null)
             {
                 //check what the current count is
@@ -106,7 +109,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         void OnEnable()
         {
-            BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
+           // BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
             BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent += OnBrainpackDisconnectListener;
         }
@@ -206,7 +209,7 @@ namespace Assets.Scripts.UI.MainMenu
        */
         public void ResetInitialFrame()
         {
-            if (CurrentBodyInPlay != null && CurrentBodyInPlay.InitialBodyFrame != null)
+            if (CurrentBodyInPlay != null && CurrentBodyInPlay.CurrentBodyFrame != null )
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
             }
@@ -321,7 +324,7 @@ namespace Assets.Scripts.UI.MainMenu
                 CurrentBodyInPlay.View.PauseFrame();
             }
         }
-        /// <summary>
+/*        /// <summary>
         /// Listens to when a recording has been selected. sets the current state of the class accordingly
         /// </summary>
         private void ListenToBodyRecordingsChange()
@@ -339,7 +342,7 @@ namespace Assets.Scripts.UI.MainMenu
             }
             //mPlayButtonPushed = false;
             ChangeState(BodyPlaybackState.Waiting);
-        }
+        }*/
 
         /// <summary>
         /// Listens to when the brainpackcontroller is in a connected state
@@ -433,5 +436,92 @@ namespace Assets.Scripts.UI.MainMenu
             }
 
         }
+        /// <summary>
+        /// Requests to load a recording based on the requested index
+        /// </summary>
+        /// <param name="vRecordingIndex">the recording index </param>
+        public void RequestRecordingForPlayback( int vRecordingIndex)
+        {
+            
+            if (vRecordingIndex >= 0  && vRecordingIndex < BodyRecordingsMgr.Instance.FilePaths.Length)
+            {
+                //get the recording path from the list of all the scanned file paths
+                mSelectedRecordingPath = BodyRecordingsMgr.Instance.FilePaths[vRecordingIndex];
+                LoadingBoard.StartLoadingAnimation();
+                
+                //check if the recording already exists 
+                if (!mRecordings.ContainsKey(mSelectedRecordingPath))
+                {
+                    BodyRecordingsMgr.Instance.ReadRecordingFile(mSelectedRecordingPath, RequestRecordingCallback);
+                }
+                //start play back
+                else
+                {
+                    LoadingBoard.StopLoadingAnimation();
+                    BodyFramesRecording vRecording = mRecordings[mSelectedRecordingPath];
+                    CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(vRecording.BodyRecordingGuid); 
+                    mBodyRecordingUUID = vRecording.BodyRecordingGuid;
+                    ChangeState(BodyPlaybackState.Waiting);
+                    Play();
+                    ResetInitialFrame();
+                  
+                }
+            }
+             
+
+        }
+
+        /// <summary>
+        /// Requests to load a recording based on the requested partial or full path
+        /// </summary>
+        /// <param name="vSubPath"></param>
+        public void RequestRecordingForPlayback(string vSubPath)
+        {
+            //check if the path exists first from the subpath parameter
+            int vRecordingIndex= -1;
+            string[] vFullPaths = BodyRecordingsMgr.Instance.FilePaths;
+            for (int i  = 0 ; i < vFullPaths.Length ;i++)
+            {
+                if (vFullPaths[i].Contains(vSubPath))
+                {
+                    vRecordingIndex = i;
+                }
+            }
+ 
+                RequestRecordingForPlayback(vRecordingIndex);
+            
+            
+            
+
+        }
+        /// <summary>
+        /// After a request has been initiated, the callback function is called on completion
+        /// </summary>
+
+        private void RequestRecordingCallback(BodyFramesRecording vRecording)
+        {
+            if (vRecording != null)
+            {
+                LoadingBoard.StopLoadingAnimation();
+                //find the recording in play
+                CurrentBodyInPlay =  BodiesManager.Instance.GetBodyFromUUID(vRecording.BodyGuid);
+                //add it to the current list of recordings
+                mRecordings.Add(mSelectedRecordingPath, vRecording);
+                mBodyRecordingUUID = vRecording.BodyRecordingGuid;
+                ChangeState(BodyPlaybackState.Waiting);
+                Play();
+                ResetInitialFrame();
+               
+            }
+        }
+
+        /// <summary>
+        /// On application quit, call the BodyRecordingsManager stop function
+        /// </summary>
+        private void OnApplicationQuit()
+        {
+            BodyRecordingsMgr.Stop();
+        }
+       
     }
 }

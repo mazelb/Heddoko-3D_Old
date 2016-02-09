@@ -7,12 +7,13 @@
 */
 
 using System.Collections;
+using System.Text.RegularExpressions;
 using Assets.Scripts.Communication.View;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.UI.MainMenu.View;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
-using UnityEngine; 
+using UnityEngine;
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
 
@@ -40,32 +41,17 @@ namespace Assets.Scripts.Communication.Controller
 
         [SerializeField]
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Idle;
-        public string BrainpackComPort = "COM7";
+        public string BrainpackComPort = "";
 
         [SerializeField]
         private int vTotalTries;
 
-        public float Timeout =4;
-        public int MaxConnectionAttempts = 4; 
-        private GameObject mLoadingScreen;
+        public float Timeout = 4;
+        public int MaxConnectionAttempts = 4;
+        // private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
         private IBrainpackConnectionView mView;
-
-        private GameObject LoadingScreen
-        {
-            get
-            {
-                if (mLoadingScreen == null)
-                {
-                    GameObject vCanvas = GameObject.FindGameObjectWithTag("UiCanvas");
-                    mLoadingScreen = Instantiate(PrefabRepo.LoadingScreenPrefab);
-                    mLoadingScreen.transform.SetParent(vCanvas.transform, false);
-                    mLoadingScreen.SetActive(false);
-                    mLoadingScreen.transform.SetAsLastSibling();
-                }
-                return mLoadingScreen;
-            }
-        }
+ 
 
         /// <summary>
         /// returns the current state of the controller
@@ -83,7 +69,7 @@ namespace Assets.Scripts.Communication.Controller
             get
             {
                 //Check what scene this instance is in
-                
+
                 if (mView == null)
                 {
                     if (Application.loadedLevelName == "Coaching_utility_scene - split_screen")
@@ -95,10 +81,10 @@ namespace Assets.Scripts.Communication.Controller
                         mView = vInstantiated.GetComponent<BrainpackConnectionView>();
                     }
                     else
-                    { 
-                        mView = FindObjectOfType<MainMenuBrainpackView>(); 
+                    {
+                        mView = FindObjectOfType<MainMenuBrainpackView>();
                     }
-                       
+
                 }
                 return mView;
             }
@@ -131,17 +117,35 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         public void ConnectToBrainpack()
         {
-            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
-            ChangeCurrentState(BrainpackConnectionState.Connecting);
-            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+            //validate the comport
+            if (Validate(BrainpackComPort))
+            {
+                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RequestToConnectToBP, BrainpackComPort);
+                ChangeCurrentState(BrainpackConnectionState.Connecting);
+                PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+            }
+            
         }
 
+        private bool Validate(string vComport)
+        {
+            if (string.IsNullOrEmpty(vComport))
+            {
+                return false;
+            }
+            string vPattern = @"(?i)COM(?-i)\d+";
+            if (Regex.IsMatch(vComport, vPattern))
+            {
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Set the Brainpack controller to idle
         /// </summary>
         public void SetStateToIdle()
-        { 
-            ChangeCurrentState(BrainpackConnectionState.Idle); 
+        {
+            ChangeCurrentState(BrainpackConnectionState.Idle);
         }
 
         /// <summary>
@@ -152,7 +156,14 @@ namespace Assets.Scripts.Communication.Controller
         {
             SocketClientErrorTrigger.Triggered = true;
             SocketClientErrorTrigger.Args = vArgs;
-           
+
+        }
+
+        internal void DisconnectBrainpack()
+        {
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
+            ChangeCurrentState(BrainpackConnectionState.Disconnected);
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
         /// <summary>
         /// The result of the brainpack connection
@@ -181,25 +192,8 @@ namespace Assets.Scripts.Communication.Controller
             }
         }
 
-        /// <summary>
-        /// Changes the scene to the main 3d scene
-        /// </summary>
-        private void ChangeTo3DSceneView()
-        {
-            LoadingScreen.SetActive(true);
-            StartCoroutine(LoadMainScene());
-        }
 
-        /// <summary>
-        /// Helper method that asynchrounously loads the main 3d scene
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator LoadMainScene()
-        {
-            AsyncOperation async = Application.LoadLevelAsync(1);
-            yield return async;
-            LoadingScreen.SetActive(false);
-        }
+
 
         /// <summary>
         /// Wait and then try to reconnect
@@ -228,8 +222,8 @@ namespace Assets.Scripts.Communication.Controller
                             if (ConnectingStateEvent != null)
                             {
                                 mCurrentConnectionState = vNewState;
-                                ConnectingStateEvent(); 
-                            } 
+                                ConnectingStateEvent();
+                            }
                         }
                         break;
                     }
@@ -242,7 +236,7 @@ namespace Assets.Scripts.Communication.Controller
                                 mCurrentConnectionState = vNewState;
                                 FailedToConnectStateEvent();
                             }
-                          
+
                             break;
                         }
                         if (vNewState == BrainpackConnectionState.Connected)
@@ -253,7 +247,7 @@ namespace Assets.Scripts.Communication.Controller
                                 ConnectedStateEvent();
                                 //start pulling data
                             }
-                        
+
                         }
                         break;
                     }
@@ -265,7 +259,7 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
-                            } 
+                            }
                             break;
                         }
                         if (vNewState == BrainpackConnectionState.Connecting)
@@ -297,7 +291,7 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 ConnectingStateEvent();
-                            } 
+                            }
                         }
                         break;
                     }
@@ -315,7 +309,7 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// on Awake: Initialize the instance 
         /// </summary>
-        void Awake()
+        public void Awake()
         {
             Instance.Init();
         }
@@ -325,10 +319,12 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         void OnApplicationQuit()
         {
+            DisconnectBrainpack();
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+
         }
-        
+
         /// <summary>
         /// reset the number of reconnect tries
         /// </summary>
@@ -354,8 +350,8 @@ namespace Assets.Scripts.Communication.Controller
                 {
                     View.SetWarningBoxMessage((string)SocketClientErrorTrigger.Args);
                 }
-               
-                ChangeCurrentState(BrainpackConnectionState.Failure); 
+
+                ChangeCurrentState(BrainpackConnectionState.Failure);
             }
 
             //start pulling data
@@ -365,7 +361,7 @@ namespace Assets.Scripts.Communication.Controller
                 PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
             }
 
-            
+
         }
 
         /// <summary>

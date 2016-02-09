@@ -4,7 +4,8 @@
 * @author Mohammed Haider(mohamed@heddoko.com) 
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
-*/
+*/ 
+
 using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.Utils;
 using UnityEngine;
@@ -18,8 +19,8 @@ namespace Assets.Scripts.UI.Scene_3d.View
     public class ImportRecordingView : MonoBehaviour, IInGameMenuItem
     {
         public GameObject AvailableRecordingPanel;
-        public GameObject AvailableRecordingButtonPrefab;
-        private bool mImportCompleted;
+        public GameObject AvailableRecordingButtonPrefab; 
+        private bool mImportCompleted { get; set; }
         /// <summary>
         /// hides the current view from the scene(the button remains active)
         /// </summary>
@@ -45,7 +46,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
                 string[] vRecordingsFiles = BodyRecordingsMgr.Instance.FilePaths;
                 if (vRecordingsFiles == null)
                 {
-                    BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.RecordingsDirectory);
+                    BodyRecordingsMgr.Instance.ScanRecordings(Application.dataPath+"/Resources/Recordings");
                     vRecordingsFiles = BodyRecordingsMgr.Instance.FilePaths;
                 }
                 if (vContentPanel != null)
@@ -56,7 +57,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
 
                         GameObject vNewAvRecButton = Instantiate(AvailableRecordingButtonPrefab);
                         Button vAvRecButton = vNewAvRecButton.GetComponent<Button>();
-                        string vCleanedName = vRecordingsFiles[i].Replace(FilePathReferences.sCsvDirectory + "\\", null);
+                        string vCleanedName = vRecordingsFiles[i].Replace(Application.dataPath + "/Resources/Recordings" + "\\", null);
                         vAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
                         //copy the variable i and pass it into the listener
                         int vTemp = i; 
@@ -74,8 +75,8 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// </summary>
         /// <param name="vIndex"></param>
         public void ChooseRecording(int vIndex)
-        {
-            BodySelectedInfo.Instance.UpdateSelectedRecording(vIndex);
+        { 
+           BodySelectedInfo.Instance.UpdateSelectedRecording(vIndex);
         }
     }
 }

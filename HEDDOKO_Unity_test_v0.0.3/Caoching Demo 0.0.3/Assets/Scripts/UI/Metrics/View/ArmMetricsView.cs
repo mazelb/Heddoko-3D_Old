@@ -19,10 +19,7 @@ namespace Assets.Scripts.UI.Metrics.View
     {
         [SerializeField]
         private float mMaxElbowFlexion = 175f;
-        [SerializeField]
-        private float mMaxAngularVelocity = 175f;
-        [SerializeField]
-        private float mLerpSpeed = 175f;
+       
 
         public Image ElbowVelocityFill; 
         public Image ElbowFlexionFill;
@@ -30,11 +27,13 @@ namespace Assets.Scripts.UI.Metrics.View
         public bool DisplayRightArmAnalysis;
         public PlayerStreamManager PlayerStreamManager;
 
+        // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             PlayerStreamManager.ResettableViews.Add(this);
         }
 
+        // ReSharper disable once UnusedMember.Local
         void Update()
         {
             Body vCurrentBody = PlayerStreamManager.CurrentBodyInPlay;
