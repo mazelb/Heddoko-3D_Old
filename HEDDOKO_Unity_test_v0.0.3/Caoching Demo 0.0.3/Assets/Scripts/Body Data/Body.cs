@@ -243,6 +243,16 @@ public class Body
         }
     }
 
+    /// <summary>
+    /// Resets body metrics
+    /// </summary>
+    public void ResetBodyMetrics()
+    {
+        for (int i = 0; i < BodySegments.Count; i++)
+        {
+            BodySegments[i].ResetMetrics();
+        }
+    }
 
     /**
     * PlayRecording(string vRecUUID)

@@ -18,11 +18,14 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode Pause = KeyCode.P;
         public static KeyCode MoveNext = KeyCode.RightArrow;
         public static KeyCode MoveToPrev = KeyCode.LeftArrow;
-  
+
+        public static KeyCode ResetMetrics = KeyCode.Equals;
         public static KeyCode IsTrackingHeight = KeyCode.Alpha0;
+        public static KeyCode IsTrackingHips = KeyCode.Minus;
         public static KeyCode IsHipsEstimateForward = KeyCode.Alpha9;
         public static KeyCode IsHipsEstimateUp = KeyCode.Alpha8;
         public static KeyCode IsUsingInterpolationForBody = KeyCode.Alpha7;
+        public static KeyCode IsUsingFusionForBody = KeyCode.F;
         public static KeyCode IsAdjustingArms = KeyCode.Alpha6;
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;
         public static KeyCode DecBodyInterpoationSp = KeyCode.K ;

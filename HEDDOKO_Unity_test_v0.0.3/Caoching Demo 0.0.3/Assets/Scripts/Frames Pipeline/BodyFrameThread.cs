@@ -150,19 +150,10 @@ public class BodyFrameThread : ThreadedJob
             case SourceDataType.BrainFrame:
                 BodyFrameBuffer.AllowOverflow = true;
                 BrainFrameTask();
-                //todo
                 break;
-            case SourceDataType.DataStream:
-                BodyFrameBuffer.AllowOverflow = true;
-                DataStreamTask();
-
-                //todo
-                break;
-
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
-           RecordingTask();
-                //   RecordingPlaybackTask();
+                RecordingTask();
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -189,6 +180,7 @@ public class BodyFrameThread : ThreadedJob
                 }
                 if (BodyFrameBuffer.IsFull() || mPauseWorker)
                 {
+                    //UnityEngine.Debug.Log("BODY FRAME BUFFER IS FULL !");
                     continue;
                 }
                 try
@@ -210,62 +202,6 @@ public class BodyFrameThread : ThreadedJob
                     string vMessage = e.GetBaseException().Message;
                     vMessage += "\n" + e.Message;
                     vMessage += "\n" + e.StackTrace; 
-                    break;
-                }
-
-            }
-        }
-    }
-
-    private void RecordingPlaybackTask()
-    {
-
-        // long vStartTime = DateTime.Now.Ticks;
-        float vStartTime = TimeUtility.Time;
-        //frame position
-        int vPosition = 0; 
-
-        while (ContinueWorking)
-        {
-            while (true)
-            {
-                if (!ContinueWorking)
-                {
-                    break;
-                }
-                if (BodyFrameBuffer.IsFull() || mPauseWorker)
-                {
-                    //vStartTime = DateTime.Now.Ticks;  //reset the start time
-                    continue;
-                }
-                try
-                {
-
-                    float vDeltaTime = TimeUtility.Time - vStartTime;
-                    float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
-
-                    vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
-                    //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
-                    vPosition = (int)(1 * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
-
-                    if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
-                    {
-                        mPauseWorker = true;
-                        vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
-                        vStartTime = DateTime.Now.Ticks;
-                        break;
-                    }
-
-                    //convert to body frame 
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
-                    BodyFrameBuffer.Enqueue(vBodyFrame);
-                }
-                catch (Exception e)
-                {
-                    //ContinueWorking = false;
-                    string vMessage = e.GetBaseException().Message;
-                    vMessage += "\n" + e.Message;
-                    vMessage += "\n" + e.StackTrace;
                     break;
                 }
 
@@ -395,18 +331,7 @@ public class BodyFrameThread : ThreadedJob
         catch(Exception)
         {
             
-        }
-   
-    }
-
-    /**
-    * DataStreamTask()
-    * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
-    * comes from a the brainframe
-    */
-    private void DataStreamTask()
-    {
-
+        }   
     }
 
     /**

@@ -60,6 +60,10 @@ namespace Assets.Scripts.UI.NFLDemo
             static public bool IsHipsEstimateUp = true;
             public bool IsUsingInterpolation = true;
             */
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetMetrics))
+            {
+                mBody.ResetBodyMetrics();
+            }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.DecBodyInterpoationSp))
             {
                 ChangeInterpolationValue(-0.05f);
@@ -80,6 +84,10 @@ namespace Assets.Scripts.UI.NFLDemo
             {
                 BodySegment.IsTrackingHeight = !BodySegment.IsTrackingHeight;
             }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsTrackingHips))
+            {
+                BodySegment.IsTrackingHips = !BodySegment.IsTrackingHips;
+            }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
             {
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
@@ -87,6 +95,10 @@ namespace Assets.Scripts.UI.NFLDemo
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
             {
                 BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingFusionForBody))
+            {
+                BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
             }
         }
 

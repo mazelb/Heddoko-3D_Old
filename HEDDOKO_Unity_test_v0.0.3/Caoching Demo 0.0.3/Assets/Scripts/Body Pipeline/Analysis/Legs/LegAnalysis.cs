@@ -16,7 +16,12 @@ namespace Assets.Scripts.Body_Pipeline.Analysis.Legs
     [Serializable]
     public abstract class LegAnalysis : SegmentAnalysis
     {
-        public Transform HipTransform { get; set; }
+        public Vector3 RightLegStride;
+        public Vector3 LeftLegStride;
+        //public Vector3 RightLegDirection;
+        //public Vector3 LeftLegDirection;
+
+        public Transform ThighTransform { get; set; }
         public Transform KneeTransform { get; set; }
         public TorsoAnalysis TorsoAnalysisSegment { get; set; }
         public Transform TorsoTransform { get { return TorsoAnalysisSegment.TorsoTransform; } }
