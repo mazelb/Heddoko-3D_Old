@@ -8,8 +8,7 @@
 */
 
 
-using System.Collections;
-using Newtonsoft.Json.Converters;
+using System.Collections; 
 using UnityEngine;
 
 namespace Assets.Scripts.Cameras
@@ -39,9 +38,7 @@ namespace Assets.Scripts.Cameras
 
 
         void OnDisable()
-        {
-            // Cam.orthographic = false;
-
+        {  
             StopAllCoroutines();
         }
 

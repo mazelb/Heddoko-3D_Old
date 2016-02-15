@@ -74,7 +74,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
             ModelSwitcher.Show(); 
             TrainingAndLearningCam.gameObject.SetActive(true);
-            PlayerStreamManager.ResetPlayer();
+            PlayerStreamManager.ChangeState(PlayerStreamManager.BodyPlaybackState.Waiting);
 
             //check if using squats or bike
             if (ActivitiesContextController.UsingSquats)
@@ -99,7 +99,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false); 
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetPlayer();
+            PlayerStreamManager.ResetBody();
             gameObject.SetActive(false);
             mIsActive = false;
  

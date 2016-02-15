@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
     /// <summary>
     /// Represents the analysis context view
     /// </summary>
-    public class ActivitiesContextViewAnalyze : MonoBehaviour, IActivitiesContextViewSubcomponent
+    public class ActivitiesContextViewAnalyze : AbstractView
     {
 
         public GameObject HeddokoModel;
@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// Enables and shows the view
         /// </summary>
-        public void Show()
+        public override void Show()
         {
             HeddokoModel.SetActive(true);
             gameObject.SetActive(true);
@@ -34,7 +34,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// Hides the view
         /// </summary>
-        public void Hide()
+        public override void Hide()
         {
             HeddokoModel.SetActive(false);
             gameObject.SetActive(false);

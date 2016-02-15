@@ -8,8 +8,7 @@
 
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
-using Assets.Scripts.UI.MainMenu;
-using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.UI.MainMenu; 
 using UnityEngine;
 
 namespace Assets.Scripts.UI._2DSkeleton

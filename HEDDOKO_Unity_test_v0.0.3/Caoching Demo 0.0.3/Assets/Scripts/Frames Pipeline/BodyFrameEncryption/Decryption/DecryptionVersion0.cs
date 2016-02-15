@@ -9,9 +9,10 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using Assets.Scripts.UI.Loading;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
 {
@@ -26,31 +27,26 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
         {
             string vStringOut = Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n";
             try
-            {
-                /*   using (FileStream fs = new FileStream(vFilepath, FileMode.Open, FileAccess.Read))
-                   {
-
-                       Int32 vReadbyte = 0x00;
-                       while ((vReadbyte = (Int32)fs.ReadByte()) != -1)
-                       {
-                           Int32 vTemp = vReadbyte + 0x80;
-                           vStringOut += Convert.ToChar((byte)vTemp); 
-                       }
-                   }*/
-              
-                byte[] vByteArr = File.ReadAllBytes(vFilepath); 
-
+            { 
+   
+               byte[] vByteArr = File.ReadAllBytes(vFilepath);
+             
+                
                 for (int i = 0; i < vByteArr.Length; i++)
                 {
-                    Int32 vReadbyte = vByteArr[i]; 
-                    Int32 vTemp = vReadbyte + 0x80;
-                    vStringOut += (char)((byte)vTemp);
+                    byte vReadbyte = vByteArr[i];
+                    const byte vAdd = 0x80;
+                    vByteArr[i] -= vAdd;
+                    // vStringOut += vTemp.ToString();\
+                    //vByteArr[i] = vTemp;
                     if (StopDecryption)
                     {
                         return ""; 
                     }
                    // LoadingBoard.UpdateAnimation();
                 }
+                vStringOut = System.Text.Encoding.Default.GetString(vByteArr);
+           
             }
 
             catch
@@ -64,7 +60,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
 
         public IEnumerator U3DDecryptFile(string vFilePath, Action<string> vGetter)
         {
-            Debug.Log(" in decryption  start");
+             
             string vOutPut = Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n";
 
             using (FileStream fs = new FileStream(vFilePath, FileMode.Open, FileAccess.Read))
@@ -77,7 +73,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
                     yield return null;
                 }
             }
-            Debug.Log("completed decryption");
+          
             vGetter(vOutPut);
         }
 

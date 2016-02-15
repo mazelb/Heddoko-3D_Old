@@ -9,6 +9,7 @@
 
 
 using Assets.Scripts.Utils;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.Settings
 {
@@ -27,7 +28,13 @@ namespace Assets.Scripts.UI.Settings
         /// </summary>
         public static string PreferedRecordingsFolder
         {
-            get { return sPreferedRecordingsFolder; }
+            get
+            {
+#if UNITY_EDITOR
+                return Application.dataPath+"/Resources/Recordings";
+#endif
+                return sPreferedRecordingsFolder;
+            }
             set
             {
                 if (string.IsNullOrEmpty(value))

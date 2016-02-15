@@ -91,8 +91,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 NonSquatMetrics.Show();
             }
 
-            PlayerStreamManager.ResetPlayer();
-            PlayerStreamManager.StickTorsoToHips(ActivitiesContextController.UsingSquats);
+            PlayerStreamManager.ResetBody();
+          
             Application.targetFrameRate = 45;
              QualitySettings.vSyncCount = 0;
         }
@@ -105,7 +105,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             Application.targetFrameRate = -1;
             gameObject.SetActive(false);
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetPlayer();
+            PlayerStreamManager.ResetBody();
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false);
             SquatsMetrics.Hide();

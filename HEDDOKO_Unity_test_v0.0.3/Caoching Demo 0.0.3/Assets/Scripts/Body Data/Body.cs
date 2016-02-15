@@ -117,14 +117,14 @@ public class Body
     {
         if (!vCallFromUnityThread)
         {
-            CoroutineHelper.TriggerActionInUnity( () => InitBody(vBodyUUID, BodyType));
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => InitBody(vBodyUUID, BodyType));
         }
         else
         {
             InitBody(vBodyUUID, BodyType);
         }
     }
-    
+
     /**
     * InitBody(string vBodyUUID , BodyStructureMap.BodyTypes vBodyType)
     * @param vBodyUUID the new body UUID (could be empty), BodyType is the desired BodyType
@@ -153,7 +153,7 @@ public class Body
     * @param  vBodyType: the desired BodyType, this also initializes the body's analysis segment
     * @brief Initializes a new body structure's internal properties with the desired body type
     */
-    public void  CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
+    public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
         List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
         TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
@@ -183,7 +183,7 @@ public class Body
                 vLeftArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftArmSegmentAnalysis;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftArm, vLeftArmSegmentAnalysis);
-                LeftArmAnalysis= vLeftArmSegmentAnalysis;
+                LeftArmAnalysis = vLeftArmSegmentAnalysis;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
             {
@@ -201,7 +201,7 @@ public class Body
                 vLeftLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftLeg, vLeftLegAnalysisSegment);
-                LeftLegAnalysis= vLeftLegAnalysisSegment;
+                LeftLegAnalysis = vLeftLegAnalysisSegment;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
             {
@@ -210,7 +210,7 @@ public class Body
                 vRightLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vRightLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightLeg, vRightLegAnalysisSegment);
-                RightLegAnalysis= vRightLegAnalysisSegment;
+                RightLegAnalysis = vRightLegAnalysisSegment;
             }
         }
     }
@@ -261,20 +261,20 @@ public class Body
     {
         //Stops the current thread from running.
         StopThread();
-
+        InitialBodyFrame = null;
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
-        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
+        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-            BodyFrame frame = RawFrameConverterManager.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+           // BodyFrame frame = RawFrameConverterManager.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
-            SetInitialFrame(frame);
+            //SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
-
+            vBuffer1.Capacity = 1024;
+            vBuffer1.AllowOverflow = false;
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-
             View.Init(this, vBuffer1);
             mBodyFrameThread.Start();
             View.StartUpdating = true;
@@ -299,7 +299,7 @@ public class Body
         //stop the current thread and get ready for a new connection. 
         StopThread();
 
-        BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
+        BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(512);
         mBodyFrameThread = new BodyFrameThread(vBuffer1, BodyFrameThread.SourceDataType.BrainFrame);
         mBodyFrameThread.Start();
         View.StartUpdating = true;

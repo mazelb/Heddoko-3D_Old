@@ -402,7 +402,7 @@ public class BodySegment
         ////////////////////////////////////////////////////////  Analysis /////////////////////////////////////////////////////////////////////
         vRightArmAnalysis.UpArTransform = vUASubsegment.AssociatedView.SubsegmentTransform;
         vRightArmAnalysis.LoArTransform = vLASubsegment.AssociatedView.SubsegmentTransform;
-//        Debug.Log(DeltaTime);
+
         vRightArmAnalysis.DeltaTime = DeltaTime;
         vRightArmAnalysis.ReferenceVector = Vector3.one;
         vRightArmAnalysis.AngleExtraction();//*/

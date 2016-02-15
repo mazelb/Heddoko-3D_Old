@@ -34,7 +34,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
             }
             MainMenuView.BrainpackButton.onClick.AddListener(() => ChangeState(MainMenuState.BrainpackView));
             MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
-
+            MainMenuView.ExitButton.onClick.AddListener(QuitApplication);
             MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
 
             if (MainMenuView.RecordingSelectionView != null)
@@ -136,6 +136,11 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                     }
             }
         }
+        private void QuitApplication()
+        {
+            //Todo: add a modal window asking if EU is sure that they want to quit
+            Application.Quit();
+        }
         /// <summary>
         /// Switch to the main menu view
         /// </summary>
@@ -152,6 +157,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         }
 
     }
+ 
     /// <summary>
     /// Determine which state the main menu is in
     /// </summary>

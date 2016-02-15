@@ -25,8 +25,9 @@ namespace Assets.Scripts.Body_Data.view
 
         //Initial subsegment position 
         private Vector3 mInitialPosition = Vector3.zero;
-        public Quaternion mInitialRotation;
+        public Quaternion mInitialRotation { get; set; }//= Quaternion.identity;
 
+        
         //Sprite Transform2D
         private ISpriteMover mSpriteMover;
 
@@ -76,7 +77,7 @@ namespace Assets.Scripts.Body_Data.view
             {
                 if(vResetRotation)
                 {
-                    vObjTransform.localRotation = mInitialRotation;
+                     vObjTransform.localRotation = mInitialRotation;
                     vObjTransform.rotation = mInitialRotation;
                 }
 
@@ -186,7 +187,7 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void Awake()
         {
-            AssignTransforms();
+            AssignTransforms(); 
         }
 
         internal void Start()

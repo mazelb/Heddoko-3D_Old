@@ -6,8 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using Assets.Scripts.UI.ActivitiesContext.Controller;
-using Assets.Scripts.UI.ActivitiesContext.View;
+using Assets.Scripts.UI.ActivitiesContext.Controller; 
 using Assets.Scripts.UI.RecordingLoading.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +16,7 @@ namespace Assets.Scripts.UI.MainMenu.View
     /// <summary>
     /// MainMenuView class:  The view of the main menu, directly after the splash Screen
     /// </summary>
-    public class MainMenuView : MonoBehaviour
+    public class MainMenuView : AbstractView
     {
 
         public Button BrainpackButton;
@@ -25,11 +24,12 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Button RecordingsSelectionButton;
         public Camera TrainingAndLearningCam;
         public Camera RecordingSelectionCam;
+        public Button ExitButton;
 
 
      
         //The Activities context view controller
-   public ActivitiesContextController ActivitiesContext;
+    public ActivitiesContextController ActivitiesContext;
 
         //The Brainpack/Bluetooth connection view
         public MainMenuBrainpackView BrainpackConnectionView; 

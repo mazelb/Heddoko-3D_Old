@@ -4,7 +4,7 @@
 * @brief Contains the CryptoManager class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date January 2016
-* Copyright Heddoko(TM) 2015, all rights reserved
+* Copyright Heddoko(TM) 2016, all rights reserved
 */
 
 using System;
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption
         {
             Debug.Log("in U3DDecryptFile,start...");
 
-            yield return CoroutineHelper.HelpStartCoroutine(mFrameDecryptor.U3DDecryptFile(vFilePath, vDecryptedMsgSetter));
+            yield return OutterThreadToUnityThreadIntermediary.HelpStartCoroutine(mFrameDecryptor.U3DDecryptFile(vFilePath, vDecryptedMsgSetter));
         }
 
         /// <summary>

@@ -46,29 +46,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         private void Awake()
         {
             ActivitesContextView.MainView.Backbutton.onClick.AddListener(ReturnToMainMenu);
-
-          //  ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
-           // ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-          //  ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
-      /*      {
-                if (!mGoToRecordingInstead)
-                { 
-                    UsingSquats = false;
-                    SwitchtoTrainingViewState();
-                }
-                else
-                {
-                    NonSquatHookFunction();
-                    mGoToRecordingInstead = false;
-                }
-            };*/
-
-         //   ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
-          //  ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
-          //  ActivitesContextView.LearnFromRecordingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
-          //  ActivitesContextView.LearnFromRecordingView.TrainButton.onClick.AddListener(SwitchtoTrainingViewState);
-           // ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
-            //LearningView
+ 
         }
 
         /// <summary>

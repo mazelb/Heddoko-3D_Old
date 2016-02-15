@@ -4,12 +4,11 @@
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
-*/
-using System;
-using Assets.Scripts.UI.MainMenu; 
+*/ 
+using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Settings;
 using Assets.Scripts.Utils;
- 
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,9 +25,9 @@ namespace Assets.Scripts.UI.Scene_3d.View
         public Button RightSelectionRecording;
 
         public GameObject AvailableRecordingButtonPrefab;
-        private bool mImportCompleted; 
+        private bool mImportCompleted;
 
-        private int mCurrentIndex  ; 
+        private int mCurrentIndex;
         public Scrollbar Scrollbar;
 
         private PlayerStreamManager mPlayerStreamManager;
@@ -47,7 +46,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
-        { 
+        {
             LeftSelectionRecording.onClick.AddListener(LeftButtonEngaged);
             RightSelectionRecording.onClick.AddListener(RightButtonEngaged);
             UpArrow.onClick.AddListener(UpButtonEngaged);
@@ -80,24 +79,23 @@ namespace Assets.Scripts.UI.Scene_3d.View
                         vNewAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
 
                         //copy the variable i and pass it into the listener
-                        int vTemp = i; 
+                        int vTemp = i;
                         vAvRecButton.onClick.AddListener(() => ChooseAndPlayRecording(vTemp));
                         vNewAvRecButton.transform.SetParent(vContentPanel, false);
                     }
-                } 
+                }
                 mImportCompleted = true;
             }
             gameObject.SetActive(true);
         }
 
-        
+
         /// <summary>
         /// Hides the view
         /// </summary>
         public void Hide()
         {
-            PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetInitialFrame();
+           PlayerStreamManager.ChangeState(PlayerStreamManager.BodyPlaybackState.Waiting);
             gameObject.SetActive(false);
         }
 
@@ -107,22 +105,11 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// <param name="vRecordingIndex"></param>
         private void ChooseAndPlayRecording(int vRecordingIndex)
         {
-            PlayerStreamManager.Stop();
-            try
-            {
-                PlayerStreamManager.ResetInitialFrame();
-            }
-            catch (Exception)
-            {
-                // ignored
-            } 
-
-            PlayerStreamManager.RequestRecordingForPlayback(vRecordingIndex);
-            PlayerStreamManager.Play();
-            mCurrentIndex = vRecordingIndex; 
+            mCurrentIndex = vRecordingIndex;
+            PlayerStreamManager.RequestRecordingForPlayback(vRecordingIndex); 
         }
 
-     
+
 
         /// <summary>
         /// The right button has been pressed

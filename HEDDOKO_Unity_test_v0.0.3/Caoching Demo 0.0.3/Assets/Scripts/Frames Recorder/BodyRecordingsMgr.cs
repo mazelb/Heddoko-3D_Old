@@ -16,11 +16,12 @@ using Assets.Scripts.Utils;
 * RecordingsManager class 
 * @brief manager class for recordings (interface later)
 */
+// ReSharper disable once CheckNamespace
 public class BodyRecordingsMgr
 {
     #region Singleton definition
-    private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr(); 
-    private Queue<FilePathReqCallback> mRequestQueue = new Queue<FilePathReqCallback>(10);
+    // ReSharper disable once InconsistentNaming
+    private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr();  
     public delegate void StopActionDelegate();
 
     public event StopActionDelegate StopActionEvent;
@@ -123,21 +124,24 @@ public class BodyRecordingsMgr
     }
 
  
-    private void ReadCallback(System.Object threadContext)
+    private void ReadCallback( object threadContext)
     {
         if (threadContext is Array)
         {
             object[] vObjectArray = (object[]) threadContext;
           
             BodyRecordingReader vTempReader = vObjectArray[0] as BodyRecordingReader;
-            StopActionEvent += vTempReader.Stop;
-            Action<BodyFramesRecording> vCallbackAction = (Action<BodyFramesRecording>) vObjectArray[1];
-
-            if (vTempReader.ReadFile(vTempReader.FilePath) > 0)
+            if (vTempReader != null)
             {
-                AddNewRecording(vTempReader.GetRecordingLines(), vTempReader.IsFromDatFile, vCallbackAction);
+                StopActionEvent += vTempReader.Stop;
+                Action<BodyFramesRecording> vCallbackAction = (Action<BodyFramesRecording>) vObjectArray[1];
+
+                if (vTempReader.ReadFile(vTempReader.FilePath) > 0)
+                {
+                    AddNewRecording(vTempReader.GetRecordingLines(), vTempReader.IsFromDatFile, vCallbackAction);
+                }
+                StopActionEvent -= vTempReader.Stop;
             }
-            StopActionEvent -= vTempReader.Stop;
         }
         else
         {
@@ -152,7 +156,7 @@ public class BodyRecordingsMgr
                 }
                 catch
                 {
-                  
+                    // ignored
                 }
             }
             StopActionEvent -= vTempReader.Stop;
@@ -215,12 +219,11 @@ public class BodyRecordingsMgr
     /// Adds a recording to the list, with a callback performed on completion
     /// </summary>
     /// <param name="vRecordingLines">the lines of recordings</param>
-    /// <param name="mRxFromDatFile">was the source received from a dat file?</param>
+    /// <param name="vrxFromDatFile">was the source received from a dat file?</param>
     /// <param name="vCallbackAction">the callback action with a BodyFramesRecording parameter</param>
-    public void AddNewRecording(string[] vRecordingLines, bool mRxFromDatFile, Action<BodyFramesRecording> vCallbackAction)
+    public void AddNewRecording(string[] vRecordingLines, bool vrxFromDatFile, Action<BodyFramesRecording> vCallbackAction)
     {
-        BodyFramesRecording vTempRecording = new BodyFramesRecording();
-        vTempRecording.FromDatFile = mRxFromDatFile;
+        BodyFramesRecording vTempRecording = new BodyFramesRecording {FromDatFile = vrxFromDatFile};
         vTempRecording.ExtractRecordingUUIDs(vRecordingLines);
     
         //If recording already exists, do nothing
@@ -239,7 +242,7 @@ public class BodyRecordingsMgr
         }
         if (vCallbackAction != null)
         {
-           CoroutineHelper.TriggerActionInUnity(() => vCallbackAction(vTempRecording));
+           OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => vCallbackAction(vTempRecording));
         }
    
     }
@@ -260,24 +263,24 @@ public class BodyRecordingsMgr
     * @param vRecUUID: The recording UUID
     * @brief maps Recording UUID to Body UUID for future searches
     */
-    public void MapRecordingToBody(string vBodyUUID, string vRecUUID)
+    public void MapRecordingToBody(string vBodyUuid, string vRecUuid)
     {
-        if (BodiesManager.Instance.BodyExist(vBodyUUID))
+        if (BodiesManager.Instance.BodyExist(vBodyUuid))
         {
             List<string> vListOfRecordings;
-            RecordingsDictionary.TryGetValue(vBodyUUID, out vListOfRecordings);
+            RecordingsDictionary.TryGetValue(vBodyUuid, out vListOfRecordings);
 
             //if there are no recordings, create a new mapping
             //if recordings are already mapped, add more to it
             if (vListOfRecordings == null)
             {
                 vListOfRecordings = new List<string>();
-                vListOfRecordings.Add(vRecUUID);
-                RecordingsDictionary.Add(vBodyUUID, vListOfRecordings);
+                vListOfRecordings.Add(vRecUuid);
+                RecordingsDictionary.Add(vBodyUuid, vListOfRecordings);
             }
             else
             {
-                vListOfRecordings.Add(vRecUUID);
+                vListOfRecordings.Add(vRecUuid);
             }
         }
     }
@@ -288,9 +291,9 @@ public class BodyRecordingsMgr
     * @return bool: True if the recording exists
     * @brief searches if the recording exists in the manager
     */
-    public bool RecordingExist(string vRecUUID)
+    public bool RecordingExist(string vRecUuid)
     {
-        return Recordings.Exists(x => x.BodyRecordingGuid == vRecUUID);
+        return Recordings.Exists(vX => vX.BodyRecordingGuid == vRecUuid);
     }
 
     /**
@@ -299,19 +302,19 @@ public class BodyRecordingsMgr
     * @return List<BodyFramesRecording>: the list of recordings assigned to the body
     * @brief returns all the recordings assigned to a body if they exist
     */
-    public List<BodyFramesRecording> GetRecordingsForBody(string vBodyUUID)
+    public List<BodyFramesRecording> GetRecordingsForBody(string vBodyUuid)
     {
         //look for the recording only if the body exists
-        if (BodiesManager.Instance.BodyExist(vBodyUUID))
+        if (BodiesManager.Instance.BodyExist(vBodyUuid))
         {
             //get the recordings from the list of recording IDs assigned to that body
             List<string> vListOfRecordingIds;
             List<BodyFramesRecording> vListOfRecordings = new List<BodyFramesRecording>();
-            if (RecordingsDictionary.TryGetValue(vBodyUUID, out vListOfRecordingIds))
+            if (RecordingsDictionary.TryGetValue(vBodyUuid, out vListOfRecordingIds))
             {
-                for (int i = 0; i < vListOfRecordingIds.Count; i++)
+                for (int vIndex = 0; vIndex < vListOfRecordingIds.Count; vIndex++)
                 {
-                    BodyFramesRecording vRecording = GetRecordingByUUID(vListOfRecordingIds[i]);
+                    BodyFramesRecording vRecording = GetRecordingByUuid(vListOfRecordingIds[vIndex]);
                     if (vRecording != null)
                     {
                         vListOfRecordings.Add(vRecording);
@@ -334,11 +337,11 @@ public class BodyRecordingsMgr
     * @return BodyFramesRecording: The recording
     * @brief looks for a recording by its UUID
     */
-    public BodyFramesRecording GetRecordingByUUID(string vRecUUID)
+    public BodyFramesRecording GetRecordingByUuid(string vRecUuid)
     {
-        if (RecordingExist(vRecUUID))
+        if (RecordingExist(vRecUuid))
         {
-            return Recordings.Find(x => x.BodyRecordingGuid == vRecUUID);
+            return Recordings.Find(vX => vX.BodyRecordingGuid == vRecUuid);
         }
 
         return null;

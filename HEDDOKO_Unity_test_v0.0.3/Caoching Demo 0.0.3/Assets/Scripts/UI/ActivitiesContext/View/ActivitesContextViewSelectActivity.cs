@@ -6,8 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using System;
-using System.Collections.Generic;
+using System; 
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,15 +36,14 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// <summary>
         /// Enables and displays the main Activities  learning  view
         /// </summary>
-        public void Show()
+        public override void Show()
         {
-            
             gameObject.SetActive(true);
         }
         /// <summary>
         /// Hides the main Activities  learning  view
         /// </summary>
-        public void Hide()
+        public override void Hide()
         {
             gameObject.SetActive(false);
         }
