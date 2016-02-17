@@ -40,8 +40,9 @@ public class Body
     public BodyStructureMap.BodyTypes BodyType = BodyStructureMap.BodyTypes.BodyType_FullBody;
 
     [SerializeField]
-    //Current body Frame 
     public BodyFrame CurrentBodyFrame;
+    [SerializeField]
+    public BodyFrame PreviousBodyFrame;
 
     [SerializeField]
     //Initial body Frame
@@ -222,6 +223,7 @@ public class Body
     */
     public void UpdateBody(BodyFrame vFrame)
     {
+        PreviousBodyFrame = CurrentBodyFrame;
         CurrentBodyFrame = vFrame;
         for (int i = 0; i < BodySegments.Count; i++)
         {
@@ -405,10 +407,12 @@ public class Body
 
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
+            Vector3 vPreviousRawEuler = vBody.PreviousBodyFrame.FrameData[vKey];
 
             BodyStructureMap.TrackingStructure vStruct = new BodyStructureMap.TrackingStructure();
             vStruct.InitRawEuler = vInitialRawEuler;
             vStruct.CurrRawEuler = vCurrentRawEuler;
+            vStruct.PrevRawEuler = vPreviousRawEuler;
 
             vDic.Add(vKey, vStruct);
         }
