@@ -149,19 +149,14 @@ public class BodyFrameThread : ThreadedJob
             case SourceDataType.BrainFrame:
                 BodyFrameBuffer.AllowOverflow = true;
                 BrainFrameTask();
-                //todo
                 break;
-            case SourceDataType.DataStream:
-                BodyFrameBuffer.AllowOverflow = true;
-                DataStreamTask();
-
-                //todo
-                break;
-
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
                 RecordingTask();
+
                 //   RecordingPlaybackTask();
+
+
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -178,7 +173,7 @@ public class BodyFrameThread : ThreadedJob
     private void RecordingTask()
     {
         int vBodyFrameIndex = 0;
- 
+
 
         while (ContinueWorking)
         {
@@ -190,34 +185,36 @@ public class BodyFrameThread : ThreadedJob
                 }
                 if (BodyFrameBuffer.IsFull() || mPauseWorker)
                 {
+                    //UnityEngine.Debug.Log("BODY FRAME BUFFER IS FULL !");
                     continue;
                 }
-                
-                    try
-                    { 
-                        //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                        BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
-                        BodyFrameBuffer.Enqueue(vBodyFrame);
-                        vBodyFrameIndex++;
 
-                        //reset back to 0
-                        if (vBodyFrameIndex >= mRawFrames.Count)
-                        {
-                            vBodyFrameIndex = 0;
-                        }
-                    }
-                    catch (Exception e)
+                try
+                {
+                    //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
+                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
+                    BodyFrameBuffer.Enqueue(vBodyFrame);
+                    vBodyFrameIndex++;
+
+                    //reset back to 0
+                    if (vBodyFrameIndex >= mRawFrames.Count)
                     {
-                        //ContinueWorking = false;
-                        string vMessage = e.GetBaseException().Message;
-                        vMessage += "\n" + e.Message;
-                        vMessage += "\n" + e.StackTrace;
-                        break;
+                        vBodyFrameIndex = 0;
                     }
+                }
+                catch (Exception e)
+                {
+                    //ContinueWorking = false;
+                    string vMessage = e.GetBaseException().Message;
+                    vMessage += "\n" + e.Message;
+                    vMessage += "\n" + e.StackTrace;
+                    break;
+                }
 
             }
         }
     }
+
 
     private void RecordingPlaybackTask()
     {
@@ -273,6 +270,7 @@ public class BodyFrameThread : ThreadedJob
             }
         }
     }
+
 
     /**
     * BrainFrameTask()
@@ -387,6 +385,7 @@ public class BodyFrameThread : ThreadedJob
         catch (Exception)
         {
 
+
         }
 
     }
@@ -399,12 +398,16 @@ public class BodyFrameThread : ThreadedJob
     private void DataStreamTask()
     {
 
+
+
     }
+
+
 
     /**
     * CleanUp
     * @brief Helping function cleans ups  
-    */
+*/
     public void StopThread()
     {
 
@@ -415,7 +418,7 @@ public class BodyFrameThread : ThreadedJob
     /**
     * OnFinished()
     * @brief Callback when the thread is done executing
-    */
+*/
     protected override void OnFinished()
     {
         //This is executed by the Unity main thread when the job is finished 

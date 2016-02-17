@@ -183,7 +183,11 @@ namespace Assets.Demos
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
                 InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
             }
+ 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
+ 
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingFusionForBody))
+ 
             {
                 BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
                 FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);

@@ -179,7 +179,7 @@ public class BodySegment
                 vDisplacement.z = -mRightLegStride.z;
             }
         }
-        else
+        else;
         {
             if(vHeightDiff > 0)
             {

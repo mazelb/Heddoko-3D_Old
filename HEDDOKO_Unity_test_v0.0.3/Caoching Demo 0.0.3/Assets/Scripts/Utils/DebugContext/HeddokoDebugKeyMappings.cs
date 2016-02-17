@@ -21,16 +21,23 @@ namespace Assets.Scripts.Utils.DebugContext
 
         public static KeyCode ResetMetrics = KeyCode.Equals;
         public static KeyCode IsTrackingHeight = KeyCode.Alpha0;
+ 
        
         public static KeyCode IsFusingLegs = KeyCode.Alpha3;
   
       
         public static KeyCode IsTrackingGait = KeyCode.Alpha5;
+ 
+        public static KeyCode IsTrackingHips = KeyCode.Minus;
+        public static KeyCode IsHipsEstimateForward = KeyCode.Alpha9;
+        public static KeyCode IsHipsEstimateUp = KeyCode.Alpha8;
+        public static KeyCode IsUsingInterpolationForBody = KeyCode.Alpha7;
+        public static KeyCode IsUsingFusionForBody = KeyCode.F;
+ 
         public static KeyCode IsAdjustingArms = KeyCode.Alpha6;
         public static KeyCode IsUsingInterpolation = KeyCode.Alpha7;
-        public static KeyCode IsHipsEstimateUp = KeyCode.Alpha8;
-        public static KeyCode IsHipsEstimateForward = KeyCode.Alpha9;
-        public static KeyCode IsTrackingHips = KeyCode.Minus;
+ 
+ 
         public static KeyCode IsFusingSubSegments = KeyCode.F;
 
         public static KeyCode IncBodyInterpolationSp = KeyCode.J;

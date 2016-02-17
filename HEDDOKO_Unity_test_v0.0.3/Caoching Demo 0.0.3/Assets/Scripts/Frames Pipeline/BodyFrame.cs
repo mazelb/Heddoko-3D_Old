@@ -27,7 +27,7 @@ public class BodyFrame
 
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
     {
-          get
+        get
         {
             if (mFrameData == null)
             {
@@ -35,7 +35,7 @@ public class BodyFrame
             }
             return mFrameData;
         }
-          set
+        set
         {
             mFrameData = value;
         }
