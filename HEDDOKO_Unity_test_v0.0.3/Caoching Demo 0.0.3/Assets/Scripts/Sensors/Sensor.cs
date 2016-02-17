@@ -5,10 +5,10 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
- 
+using UnityEngine;
 using System;  
 using System.Collections.Generic;
-public class Sensor  
+public class Sensor //: MonoBehaviour
 {
     //Sensor type
     public BodyStructureMap.SensorTypes SensorType;
@@ -66,7 +66,7 @@ public class Sensor
     }
 }
 
-public class SensorTuple  
+public class SensorTuple : MonoBehaviour
 {
     public Sensor InitSensor;
     public Sensor CurrentSensor;

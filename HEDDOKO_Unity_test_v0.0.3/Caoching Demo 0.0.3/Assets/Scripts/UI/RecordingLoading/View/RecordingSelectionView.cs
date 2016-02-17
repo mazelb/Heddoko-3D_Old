@@ -37,8 +37,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         {
             AnalysisButton.onClick.AddListener(
                 () =>
-                {
-                    //hide current view
+                { 
                     Hide();
                     NextView.PreviousView = this;
                     NextView.Show();
@@ -68,6 +67,8 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         {
 
             Application.targetFrameRate = -1;
+           
+            PlayerManager.ResetBody();
             gameObject.SetActive(false);
             RecordingPanelView.Hide();
             ModelSwitcher.Hide();

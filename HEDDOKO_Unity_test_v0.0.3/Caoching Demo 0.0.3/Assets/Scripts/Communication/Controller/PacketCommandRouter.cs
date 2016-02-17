@@ -95,6 +95,9 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.ConnectionAck, ConnectionAcknowledged);
             mCommand.Register(HeddokoCommands.StopHeddokoUnityClient, Stop);
             mCommand.Register(HeddokoCommands.ClientError, SocketClientError);
+            mCommand.Register(HeddokoCommands.DisconnectBrainpack, DisconnectBrainpackRequest);
+            mCommand.Register(HeddokoCommands.DiscoAcknowledged, DisconnectAcknowledged);
+
         }
         /**
         * Process(object vSender, HeddokoPacket vPacket)
@@ -181,9 +184,24 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+             
+            ClientSocket.Requests.Enqueue(vPayload);
+        }
+
+        private void DisconnectBrainpackRequest(object vSender, object vArg)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArg;
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             // AsynchronousClient.SendMessage(vPayload);
             ClientSocket.Requests.Enqueue(vPayload);
         }
+
+        private void DisconnectAcknowledged(object vSender, object vArg)
+        {
+            
+            //todo:
+        }
+
         /// <summary>
         /// A error produced by the socket client and informs the BrainpackConnectionController
         /// </summary>

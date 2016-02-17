@@ -25,9 +25,8 @@ namespace Assets.Scripts.Body_Data.view
 
         //Initial subsegment position 
         private Vector3 mInitialPosition = Vector3.zero;
-        public Quaternion mInitialRotation { get; set; }//= Quaternion.identity;
+        public Quaternion mInitialRotation;
 
-        
         //Sprite Transform2D
         private ISpriteMover mSpriteMover;
 
@@ -77,7 +76,7 @@ namespace Assets.Scripts.Body_Data.view
             {
                 if(vResetRotation)
                 {
-                     vObjTransform.localRotation = mInitialRotation;
+                    vObjTransform.localRotation = mInitialRotation;
                     vObjTransform.rotation = mInitialRotation;
                 }
 
@@ -100,23 +99,21 @@ namespace Assets.Scripts.Body_Data.view
             if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTransformations();
-
-            }
+            }           
         }
 
 
-        public void ApplyTranslations(float vNewDisplacement)
+        public void ApplyTranslations(Vector3 vNewDisplacement)
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                Vector3 v3 = vObjTransform.localPosition;
-                v3.y = vNewDisplacement + 0.15f;
-                vObjTransform.localPosition = v3;
+                //Debug.Log(vNewDisplacement - vObjTransform.position);
+                vObjTransform.position = vNewDisplacement;
             }
 
             if (mSpriteMover != null)
             {
-                mSpriteMover.ApplyTranslations(vNewDisplacement);
+                //mSpriteMover.ApplyTranslations(vNewDisplacement);
             }
         }
 
@@ -132,6 +129,20 @@ namespace Assets.Scripts.Body_Data.view
             {
                 mSpriteMover.ResetOrientations();
             }
+            if (Camera.main != null)
+            {
+                Camera.main.Render();
+            }
+        }
+
+        public void ResetPositions()
+        {
+            foreach (Transform vObjTransform in SubSegmentTransforms)
+            {
+                vObjTransform.localPosition = mInitialPosition;
+                //vObjTransform.position = mInitialPosition;
+            }
+
             if (Camera.main != null)
             {
                 Camera.main.Render();
@@ -160,7 +171,7 @@ namespace Assets.Scripts.Body_Data.view
         * @param Quaternion vNewOrientation: the new orientation of the subsegment
         * @brief Updates the current orientation with the passed in parameter
         */
-        internal void UpdatePosition(float vNewDisplacemetn)
+        internal void UpdatePosition(Vector3 vNewDisplacemetn)
         {
             try
             {
@@ -176,9 +187,10 @@ namespace Assets.Scripts.Body_Data.view
         * ResetOrientation()
         * @brief Resets the current orientation to its initial value
         */
-        internal void ResetOrientation()
+        internal void ResetTransforms()
         {
             ResetOrientations();
+            ResetPositions();
         }
 
         /**
@@ -187,7 +199,7 @@ namespace Assets.Scripts.Body_Data.view
         */
         internal void Awake()
         {
-            AssignTransforms(); 
+            AssignTransforms();
         }
 
         internal void Start()

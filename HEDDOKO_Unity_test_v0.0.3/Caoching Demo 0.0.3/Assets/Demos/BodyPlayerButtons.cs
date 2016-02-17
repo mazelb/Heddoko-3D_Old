@@ -19,8 +19,14 @@ namespace Assets.Demos
     public class BodyPlayerButtons : MonoBehaviour
     {
         public BodyPlayer BodyPlayer;
+
+        public Button ResetMetrics;
+
         public Button TrackingHeight;
         public Text TrackHeightTxt;
+
+        public Button TrackingHips;
+        public Text TrackHipsTxt;
 
         public Button ArmAdjustment;
         public Text ArmAdjustmentTxt;
@@ -33,6 +39,10 @@ namespace Assets.Demos
 
         public Button Interpolation;
         public Text InterpolationTxt;
+
+        public Button Fusion;
+        public Text FusionTxt;
+
 
         public Text HideText;
 
@@ -48,10 +58,12 @@ namespace Assets.Demos
                 if (!mBodySet)
                 {
                     TrackHeightTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHeight);
+                    TrackHipsTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHips);
                     ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingArms);
                     HipsEstForwardTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateForward);
                     HipsEstUpTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateUp);
                     InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
+                    FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
                     mBodySet = true;
                 }
                 InputHandler();
@@ -67,12 +79,29 @@ namespace Assets.Demos
         void Awake()
         {
             HideText.text = "Press " + HeddokoDebugKeyMappings.HideSegmentFlagPanel + "  to hide/show ";
+            ResetMetrics.onClick.AddListener(() =>
+            {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodyPlayer.CurrentBodyInPlay.ResetBodyMetrics();
+                }
+            }
+                );
             TrackingHeight.onClick.AddListener(() =>
             {
                 if (BodyPlayer.CurrentBodyInPlay != null)
                 {
                     BodySegment.IsTrackingHeight = !BodySegment.IsTrackingHeight;
                     TrackHeightTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHeight);
+                }
+            }
+                );
+            TrackingHips.onClick.AddListener(() =>
+            {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodySegment.IsTrackingHips = !BodySegment.IsTrackingHips;
+                    TrackHipsTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHips);
                 }
             }
                 );
@@ -109,7 +138,14 @@ namespace Assets.Demos
                 }
             }
               );
-
+            Fusion.onClick.AddListener(() => {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
+                    FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
+                }
+            }
+              );
         }
         /// <summary>
         /// Handles input from keyboard
@@ -122,7 +158,11 @@ namespace Assets.Demos
                 BodySegment.IsTrackingHeight = !BodySegment.IsTrackingHeight;
                 TrackHeightTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHeight);
             }
-
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsTrackingHips))
+            {
+                BodySegment.IsTrackingHips = !BodySegment.IsTrackingHips;
+                TrackHipsTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHips);
+            }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
             {
                 BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
@@ -138,10 +178,15 @@ namespace Assets.Demos
                 BodySegment.IsHipsEstimateUp = !BodySegment.IsHipsEstimateUp;
                 HipsEstUpTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateUp);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolation))
             {
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
                 InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
+            {
+                BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
+                FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
             }
         }
 
@@ -149,7 +194,7 @@ namespace Assets.Demos
         ///from the bool passed in, returns either On or Off
         /// </summary>
         /// <returns></returns>
-        private string ReturnOnOffFromBool(bool vValue)
+        public static string ReturnOnOffFromBool(bool vValue)
         {
             return vValue ? "ON" : "OFF";
         }

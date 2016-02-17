@@ -7,8 +7,7 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic;
-using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
+using System.Collections.Generic; 
 using Assets.Scripts.Utils.DebugContext; 
 
 namespace Assets.Scripts.Body_Data.view
@@ -34,8 +33,6 @@ namespace Assets.Scripts.Body_Data.view
         }
         [SerializeField]
         private bool mStartUpdating;
- 
-
 
         /// <summary>
         /// Internally set the Body associated to this view. Class property that returns the Body associated with this view.
@@ -85,8 +82,7 @@ namespace Assets.Scripts.Body_Data.view
         /// </summary>
         /// <param name="vBodyFrame">the body frame to reset to</param>
         public void ResetInitialFrame(BodyFrame vBodyFrame = null)
-        { 
-         
+        {
             if (mAssociatedBody != null)
             {
                 BodyFrame vTempBodyFrame = null;
@@ -100,12 +96,9 @@ namespace Assets.Scripts.Body_Data.view
                     vTempBodyFrame = vBodyFrame;
                 }
 
-             
-                RawFrameConverterManager.ResetStartTimeListener(vTempBodyFrame);
                 AssociatedBody.SetInitialFrame(vTempBodyFrame);
-                UpdateViewTracking(vTempBodyFrame);  
+                UpdateViewTracking(vTempBodyFrame);
             }
-         //   BodySegment.IsUsingInterpolation = true;
         }
 
         /// <summary>
@@ -148,7 +141,6 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
-        public int count = 0;
         /// <summary>
         /// Automatically called by Unity and if conditions are set, will update the associated body with body frame data fetched from mBuffer.
         /// </summary>
@@ -162,15 +154,18 @@ namespace Assets.Scripts.Body_Data.view
                 }
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
-                    count = mBuffer.Count;
                     BodyFrame vBodyFrame = mBuffer.Dequeue();
 
                     if (AssociatedBody.InitialBodyFrame == null)
-                    { 
+                    {
+                        //AssociatedBody.SetInitialFrame(vBodyFrame);
                         ResetInitialFrame(vBodyFrame);
                     }
+
                     UpdateViewTracking(vBodyFrame);
                 }
+
+               // InputHandler();
             }
         }
 
@@ -185,6 +180,13 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
+        /// <summary>
+        /// Automatically called by Unity when the game object awakes. In this case, look for the debug gameobject in the scene 
+        /// </summary>
+        private void Awake()
+        {
+ 
+        }
 
         /// <summary>
         /// Clears the buffer
@@ -193,12 +195,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             if (mBuffer != null)
             {
-                bool vBufferOverwrite = mBuffer.AllowOverflow;
-                
                 mBuffer.Clear();
-                mBuffer = new BodyFrameBuffer(mBuffer.Capacity);
-                mBuffer.AllowOverflow = vBufferOverwrite;
-                // 
             }
         }
     }

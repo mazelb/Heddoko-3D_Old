@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI.Loading
         /// <summary>
         /// the image that will be animated
         /// </summary>
-        public Image LoadingImage;
+        public MaskableGraphic LoadingImage;
 
         public float AngleSpeed = 1f;
 

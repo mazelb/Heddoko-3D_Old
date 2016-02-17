@@ -61,7 +61,8 @@ namespace Assets.Scripts.UI.Analysis
             SubViewCameraPool.Depth = 3;
             SubViewCameraPool.CameraParent = GameObject.FindGameObjectWithTag("CameraGroup").transform;
             SubViewCameraPool.CullingMask = LayerMask.GetMask("UiGridLayer", "model");
-            SubViewCameraPool.OriginalTarget = GameObject.FindGameObjectWithTag("CamLookAtTarget").transform;
+            GameObject vCamLookAtTarget = GameObject.FindGameObjectWithTag("CamLookAtTarget");
+            SubViewCameraPool.OriginalTarget = vCamLookAtTarget.transform;
 
             AnalysisSubViewPool.AnalysisSubviewParent = GetComponent<RectTransform>();
 

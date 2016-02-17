@@ -364,8 +364,11 @@ namespace Assets.Scripts.UI.MainMenu
         /// Resets the body and the metrics associated with body.
         /// </summary>
         public void ResetBody()
-        { 
-            ResetInitialFrame();  
+        {
+            bool vPreIntVal = BodySegment.IsUsingInterpolation;
+            BodySegment.IsUsingInterpolation = false;
+            ResetInitialFrame();
+            BodySegment.IsUsingInterpolation = vPreIntVal;
             if (CurrentBodyInPlay != null)
             {
                 RightLegAnalysis vRightLegAnalysis =

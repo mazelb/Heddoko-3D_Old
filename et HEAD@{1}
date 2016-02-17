@@ -1,0 +1,79 @@
+[33m406bddb[m HEAD@{0}: checkout: moving from new_branch to master
+[33m61b4502[m HEAD@{1}: checkout: moving from master to new_branch
+[33m406bddb[m HEAD@{2}: reset: moving to Head~
+[33m61b4502[m HEAD@{3}: reset: moving to Head~
+[33mdd1685d[m HEAD@{4}: checkout: moving from temp to master
+[33mdd1685d[m HEAD@{5}: checkout: moving from dd1685d8b1e28575071ede8dffd23965a10ee877 to temp
+[33mdd1685d[m HEAD@{6}: commit: git requested to add the Sqlite db file
+[33m61b4502[m HEAD@{7}: pull --progress --rebase --prune origin master: checkout 61b45024fa60a121927bb4689539cfcc11b70d08
+[33m26a9b55[m HEAD@{8}: commit: fixes and name changes
+[33ma5f3d2a[m HEAD@{9}: commit: phillips app completed
+[33m406bddb[m HEAD@{10}: pull --progress --prune origin master: Fast-forward
+[33mff936db[m HEAD@{11}: commit: removed heddoko desktop, brainpack service and launcher
+[33m716188f[m HEAD@{12}: commit: removed mkGlow plugin
+[33mfc83fd5[m HEAD@{13}: commit: removed a plugin and updated bodysegment.cs
+[33md90eb69[m HEAD@{14}: commit: updated heddoko desktop
+[33m9e0569f[m HEAD@{15}: commit: added a timer to start the pause effect
+[33mf3b802a[m HEAD@{16}: commit: Fixed camera values to enable side view
+[33mc51e7d4[m HEAD@{17}: commit: remapped keys to clicker keys
+[33mfa50d41[m HEAD@{18}: commit: fixed camera pathing, was pathing directly into the arm
+[33m91e3541[m HEAD@{19}: commit: nfl demo no longer loops recording until selected again.
+[33m04dd1a4[m HEAD@{20}: commit: ui update, brainpack stream, Phillips start
+[33m8a91043[m HEAD@{21}: commit: Fixed comment to better reflect what the function does. Fixed an issue with the camera that was causing the avatar not to render
+[33m97f4de6[m HEAD@{22}: commit: NFL demo code freeze
+[33ma25e304[m HEAD@{23}: rebase finished: returning to refs/heads/master
+[33ma25e304[m HEAD@{24}: pull --progress --rebase --prune origin master: Fixed an issue where the throw recording wasn't being played back when selected.
+[33mb4100e4[m HEAD@{25}: pull --progress --rebase --prune origin master: checkout b4100e4810600643b7345f3eb5a519d904d05135
+[33m3f1e8ef[m HEAD@{26}: commit: Fixed an issue where the throw recording wasn't being played back when selected.
+[33m5a70e00[m HEAD@{27}: rebase finished: returning to refs/heads/master
+[33m5a70e00[m HEAD@{28}: pull --progress --rebase --prune origin master: pressing S from the activity sel goes to recording
+[33mee887ce[m HEAD@{29}: pull --progress --rebase --prune origin master: UI flow updates
+[33me59ef72[m HEAD@{30}: pull --progress --rebase --prune origin master: checkout e59ef722a7b35379b257965a8f887fcf012ad66f
+[33m0f0dfc2[m HEAD@{31}: commit: pressing S from the activity sel goes to recording
+[33mb459e3f[m HEAD@{32}: commit: UI flow updates
+[33m8c1647e[m HEAD@{33}: commit (merge): Merge remote-tracking branch 'origin/master'
+[33m1e53741[m HEAD@{34}: rebase: aborting
+[33me7e4d4e[m HEAD@{35}: pull --progress --rebase --prune origin master: checkout e7e4d4e15f7cc38aa059e4ab8de490964c437504
+[33m1e53741[m HEAD@{36}: commit: Updated NFL_techcrunch_demo
+[33m514c3a6[m HEAD@{37}: commit: Changed hexagones, and clearing the buffer
+[33m19eb1dd[m HEAD@{38}: commit: bodyset to true after initializing corrected
+[33me2a5457[m HEAD@{39}: commit: Added a panel and mapped keys to...
+[33mac7dbef[m HEAD@{40}: rebase finished: returning to refs/heads/master
+[33mac7dbef[m HEAD@{41}: pull --progress --rebase --prune origin master: few bug resolves
+[33m121de50[m HEAD@{42}: pull --progress --rebase --prune origin master: checkout 121de50d46a50f53e64d369ebb9c7446521250c7
+[33m53d2a68[m HEAD@{43}: commit: few bug resolves
+[33m444e731[m HEAD@{44}: commit: removed profiler logs
+[33m455adaa[m HEAD@{45}: commit (merge): merge requested
+[33madbd155[m HEAD@{46}: commit: updated analysis components set the main event camera to loop on itself
+[33m9dd7ca2[m HEAD@{47}: commit: added feedback analysis
+[33m630ed4c[m HEAD@{48}: commit: key code mapping correction
+[33m843fe55[m HEAD@{49}: commit: Updated keycode mapping with new names and functions
+[33mecf63dc[m HEAD@{50}: pull --progress --prune origin master: Merge made by the 'recursive' strategy.
+[33m74dba50[m HEAD@{51}: commit: Keymappings for bodysegments setup
+[33md4ce31b[m HEAD@{52}: rebase finished: returning to refs/heads/master
+[33md4ce31b[m HEAD@{53}: pull --progress --rebase --prune origin master: Fixed arc angle display, disabled vync
+[33m8fd264c[m HEAD@{54}: pull --progress --rebase --prune origin master: Cleaned comments, and added clearer comments
+[33mb267dbc[m HEAD@{55}: pull --progress --rebase --prune origin master: checkout b267dbcb10acf38081203a7eec5991086f52285a
+[33mef7ab10[m HEAD@{56}: commit: Fixed arc angle display, disabled vync
+[33m9a7399f[m HEAD@{57}: commit: Cleaned comments, and added clearer comments
+[33m8ab85c2[m HEAD@{58}: rebase finished: returning to refs/heads/master
+[33m8ab85c2[m HEAD@{59}: pull --progress --rebase --prune origin master: added art assets, NFL demo work
+[33m8361cb1[m HEAD@{60}: pull --progress --rebase --prune origin master: checkout 8361cb111fee98eb3d6f8e9660a7079ad1e9f6b6
+[33m3de0f99[m HEAD@{61}: commit: added art assets, NFL demo work
+[33m01dc564[m HEAD@{62}: commit: Fixed CES Scene, Merge NFL demo Scene. renamed...
+[33m757629b[m HEAD@{63}: commit (merge): Merge branch 'master' of https://github.com/chepundup/Heddoko-3D
+[33m061f10c[m HEAD@{64}: commit: Continued with NFL demo scene
+[33m43ce030[m HEAD@{65}: commit: created installer for nfl tech crunch demo
+[33mb405a19[m HEAD@{66}: reset: moving to HEAD~
+[33ma33ca57[m HEAD@{67}: commit: finished installer
+[33mb405a19[m HEAD@{68}: rebase finished: returning to refs/heads/master
+[33mb405a19[m HEAD@{69}: pull --progress --rebase --prune origin master: added motion and motion blur to training camera
+[33m9ba2a10[m HEAD@{70}: pull --progress --rebase --prune origin master: checkout 9ba2a1005f44eabe6c879b89d263bdaa78f8251a
+[33m79d34f7[m HEAD@{71}: commit: added motion and motion blur to training camera
+[33m1976546[m HEAD@{72}: commit: Prepping for NFL demo, added coaching dem 0.0.2
+[33m6200745[m HEAD@{73}: commit: Installer for the Heddoko Desktop App started
+[33m0cb1950[m HEAD@{74}: commit: Removed Exes
+[33ma42ef30[m HEAD@{75}: commit: Disabling debbuging,
+[33mc20bfa2[m HEAD@{76}: commit: reverted Body,BodyView, BodySegment, BodySegmentView, BodySubSegment, BodySubSegmentView, MatrixTools to a previous commit
+[33m442d72b[m HEAD@{77}: commit: 2nd CES folder created
+[33mc4d4acb[m HEAD@{78}: commit: removed raw recordings. Added a debug scene in order to gather logs. Added a debug class that writes log files. Changed foreach loops inside the body and body segment class to for loops,since objects being enumerated in foreach loops weren't implementing IEnumerable.

@@ -23,6 +23,7 @@ namespace Assets.Demos
     {
         public Body CurrentBodyInPlay { get; set; }
         public Button PlayButton;
+        [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
         private bool mPlayButtonPushed;
         public Button ResetButton;

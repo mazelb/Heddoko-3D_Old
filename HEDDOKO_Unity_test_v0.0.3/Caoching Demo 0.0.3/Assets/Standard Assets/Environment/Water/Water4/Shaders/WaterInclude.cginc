@@ -23,8 +23,7 @@ inline half3 PerPixelNormalUnpacked(sampler2D bumpMap, half4 coords, half bumpSt
 } 
 
 inline half3 GetNormal(half4 tf) {
-	
-	WATER_VERTEX_DISPLACEMENT_ON
+	#ifdef WATER_VERTEX_DISPLACEMENT_ON
 		return half3(2,1,2) * tf.rbg - half3(1,0,1);
 	#else
 		return half3(0,1,0);

@@ -19,7 +19,7 @@ public class BodySubSegment
     //TODO: Sub Segment Orientation Type (Raw-Tracked-fused-mapped)
     public BodyStructureMap.SubSegmentTypes subsegmentType;
     public Quaternion SubsegmentOrientation = Quaternion.identity;
-    public float SubSegmentPosition;
+    public Vector3 SubSegmentPosition;
     public SubSegmentOrientationType SubsegmentOrientationType;
     public BodySubsegmentView AssociatedView;
 
@@ -37,9 +37,9 @@ public class BodySubSegment
     /// <summary>
     /// Resets the orientations of the associated view
     /// </summary>
-    public void ResetViewOrientation()
+    public void ResetViewTransforms()
     {
-        AssociatedView.ResetOrientation();
+        AssociatedView.ResetTransforms();
     }
 
     /**
@@ -54,12 +54,18 @@ public class BodySubSegment
         AssociatedView.UpdateOrientation(vNewOrientation, vApplyLocal, vResetRotation);
     }
 
+    public Transform GetSubSegmentTransform()
+    {
+        return AssociatedView.SubsegmentTransform;
+    }
+
+
     /**
     * UpdateSubsegmentPosition(Vector3 vNewPosition)
     * @param  vOrientation: the orientation that will update the subsegment's orientation
     * @brief  Updates the subsegments orientation
     */
-    public void UpdateSubsegmentPosition(float vNewDisplacement)
+    public void UpdateSubsegmentPosition(Vector3 vNewDisplacement)
     {
         //update the view
         SubSegmentPosition = vNewDisplacement;

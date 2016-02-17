@@ -6,9 +6,7 @@
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
-using Mono.Data.Sqlite;
-using System.Data;
-using System;
+using Mono.Data.Sqlite; 
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.UI.Loading;
@@ -33,7 +31,8 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             if (mDbConnection == null)
             {
                 //check if the file exists first. 
-                if (File.Exists(Application.persistentDataPath +"/db/" + DBSettings.DbName))
+                string vFilePath = Application.persistentDataPath + "/db/" + DBSettings.DbName;
+                if (File.Exists(vFilePath))
                 {
                     mDbConnection = new SqliteConnection("URI=file:" + Application.persistentDataPath+" /db/" + DBSettings.DbName);
                     mDbConnection.Open();

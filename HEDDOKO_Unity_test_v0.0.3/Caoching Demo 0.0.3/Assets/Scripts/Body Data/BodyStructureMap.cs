@@ -317,6 +317,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_RightLeg:
                     {
                         List<SensorPositions> vRightLegSensorPos = new List<SensorPositions>();
+                        vRightLegSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vRightLegSensorPos.Add(SensorPositions.SP_LowerSpine);
                         vRightLegSensorPos.Add(SensorPositions.SP_RightThigh);
                         vRightLegSensorPos.Add(SensorPositions.SP_RightCalf);
@@ -327,6 +328,7 @@ public class BodyStructureMap
                 case SegmentTypes.SegmentType_LeftLeg:
                     {
                         List<SensorPositions> vLeftLegSensorPos = new List<SensorPositions>();
+                        vLeftLegSensorPos.Add(SensorPositions.SP_UpperSpine);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LowerSpine);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftThigh);
                         vLeftLegSensorPos.Add(SensorPositions.SP_LeftCalf);

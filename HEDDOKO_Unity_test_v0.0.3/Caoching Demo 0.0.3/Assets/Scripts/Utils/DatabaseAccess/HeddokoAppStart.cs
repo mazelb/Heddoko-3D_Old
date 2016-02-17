@@ -18,12 +18,13 @@ namespace Assets.Scripts.Utils.DatabaseAccess
     {
         private DBAccess mDbAccess;
         public GameObject[] GOtoReEnable;
-        public ScrollablePanel ContentPanel;
+        public ScrollablePanel ContentPanel; 
 
+  
         // ReSharper disable once UnusedMember.Local
         void Awake()
         {
-             
+            BodySegment.IsTrackingHeight = false;
             bool vAppSafelyLaunched;
 
 
@@ -78,7 +79,6 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
                     }
                     ContentPanel.Contents = vContentList;
-
                     EnableObjects(true);
                 }
                 else
@@ -109,7 +109,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private void AppNotLaunchedThroughLauncher()
         {
             LoadingBoard.StopLoadingAnimation();
-            ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again.", Application.Quit);
+            ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. dbloc ", Application.Quit);
         }
     }
 }
