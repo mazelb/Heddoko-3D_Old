@@ -75,6 +75,7 @@ namespace Assets.Scripts.Communication.View
         /// <summary>
         /// On Start, hook listener's into Controller events
         /// </summary> 
+        // ReSharper disable once UnusedMember.Local
         void Start()
         {
             BrainpackConnectionController.ConnectingStateEvent += OnConnection;
@@ -168,6 +169,7 @@ namespace Assets.Scripts.Communication.View
         public void SetWarningBoxMessage(string vMsg)
         {
             WarningBox.WarningText.text= vMsg;
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
             WarningBox.WarningText.text.Replace("\\n", "\n");
         }
 

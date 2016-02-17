@@ -6,14 +6,11 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
-
 using System.Collections.Generic;
-using Assets.Demos;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.Loading;
 using Assets.Scripts.UI.Metrics;
-using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,13 +25,13 @@ namespace Assets.Scripts.UI.MainMenu
         [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
 
+
         public delegate void BodyChangedDelegate(Body vNewBody);
 
         public static event BodyChangedDelegate BodyChangedEvent;
 
         //  private bool mPlayButtonPushed; 
         public float PauseThreadTimer = 1f;
-        private float mInternalTimer = 1f;
         public float OriginalSpineHeight = 0.09226318f;
         public float SpineYOffset = 2.13f;
         public Transform Spine;
@@ -42,6 +39,8 @@ namespace Assets.Scripts.UI.MainMenu
         public string SquatRecordingUUID;
         public string BikeRecordingUUID;
 
+
+        private string mSelectedRecordingPath;
         // pause thread routine started
         private bool mResetRoutineStarted = false;
 
@@ -53,13 +52,16 @@ namespace Assets.Scripts.UI.MainMenu
         public Button[] TPoseButtons;
 
         public List<IResettableMetricView> ResettableViews = new List<IResettableMetricView>(4);
+        private Dictionary<string, BodyFramesRecording> mRecordings = new Dictionary<string, BodyFramesRecording>(10);
 
+        public BodyPlaybackState CurrentState { get { return mCurrentState; } }
         /// <summary>
         /// Current state of the playback
         /// </summary>
-        protected enum BodyPlaybackState
+        public enum BodyPlaybackState
         {
-            Waiting, //waiting for a response
+            //waiting for a response
+            Waiting,
             PlayingRecording,
             StreamingFromBrainPack
         }
@@ -67,20 +69,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
         void Awake()
-        { 
-            //register key
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
-            {
-                ResetPlayer();
-            }
-            BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
-            if (vRec != null)
-            {
-                mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
-            }
-
+        {
             if (CurrentBodyInPlay == null)
             {
                 //check what the current count is
@@ -97,7 +86,7 @@ namespace Assets.Scripts.UI.MainMenu
             }
             for (int i = 0; i < TPoseButtons.Length; i++)
             {
-                TPoseButtons[i].onClick.AddListener(ResetPlayer);
+                TPoseButtons[i].onClick.AddListener(ResetBody);
             }
         }
 
@@ -106,7 +95,6 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         void OnEnable()
         {
-            BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
             BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
             BrainpackConnectionController.DisconnectedStateEvent += OnBrainpackDisconnectListener;
         }
@@ -129,7 +117,6 @@ namespace Assets.Scripts.UI.MainMenu
         {
             if (CurrentBodyInPlay != null)
             {
-                // mPlayButtonPushed = true; 
                 ChangeState(BodyPlaybackState.PlayingRecording);
             }
         }
@@ -138,9 +125,9 @@ namespace Assets.Scripts.UI.MainMenu
         /// Sets/unsets the torso from the hips
         /// </summary>
         /// <param name="vFlag"></param>
+
         public void StickTorsoToHips(bool vFlag)
         {
-
             if (CurrentBodyInPlay != null)
             {
                 Vector3 vPos = Vector3.zero;
@@ -161,7 +148,6 @@ namespace Assets.Scripts.UI.MainMenu
                             vPos.y = OriginalSpineHeight;
                             Spine.position = vPos;
                         }
-
                     }
                 }
                 else
@@ -182,22 +168,11 @@ namespace Assets.Scripts.UI.MainMenu
                             Spine.position = vPos;
                         }
                     }
-
-
                 }
-
-                BodySegment vSegment = CurrentBodyInPlay.BodySegments.Find(
-                       x => x.SegmentType == BodyStructureMap.SegmentTypes.SegmentType_Torso);
-                if (vSegment != null)
-                {
-                    //vSegment.IsTrackingHeight = vFlag;
-                }
-                //     mPlayButtonPushed = true;
                 ChangeState(BodyPlaybackState.PlayingRecording);
             }
-            // }
-        }
 
+        }
 
 
         /**
@@ -206,9 +181,10 @@ namespace Assets.Scripts.UI.MainMenu
        */
         public void ResetInitialFrame()
         {
-            if (CurrentBodyInPlay != null && CurrentBodyInPlay.InitialBodyFrame != null)
+            if (CurrentBodyInPlay != null && CurrentBodyInPlay.CurrentBodyFrame != null)
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
+
             }
         }
 
@@ -232,7 +208,7 @@ namespace Assets.Scripts.UI.MainMenu
         /// Safely change the current state of the body player
         /// </summary>
         /// <param name="vNewstate"></param>
-        void ChangeState(BodyPlaybackState vNewstate)
+        public void ChangeState(BodyPlaybackState vNewstate)
         {
             switch (mCurrentState)
             {
@@ -240,17 +216,18 @@ namespace Assets.Scripts.UI.MainMenu
                     {
                         if (vNewstate == BodyPlaybackState.PlayingRecording)
                         {
-                            CurrentBodyInPlay.StopThread();
                             if (!string.IsNullOrEmpty(mBodyRecordingUUID))
                             {
+                                CurrentBodyInPlay.StopThread();
                                 CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
+
                             }
                             mCurrentState = vNewstate;
                             break;
                         }
                         if (vNewstate == BodyPlaybackState.StreamingFromBrainPack)
                         {
-                            CurrentBodyInPlay.StopThread();
+                            Stop();
                             CurrentBodyInPlay.StreamFromBrainpack();
                             mCurrentState = vNewstate;
                         }
@@ -260,31 +237,43 @@ namespace Assets.Scripts.UI.MainMenu
                     {
                         if (vNewstate == BodyPlaybackState.Waiting)
                         {
-                            CurrentBodyInPlay.StopThread();
+                            Stop();
+                            ResetInitialFrame();
                             mCurrentState = vNewstate;
                             break;
                         }
                         if (vNewstate == BodyPlaybackState.StreamingFromBrainPack)
                         {
-                            CurrentBodyInPlay.StopThread();
+                            Stop();
                             CurrentBodyInPlay.StreamFromBrainpack();
                             mCurrentState = vNewstate;
+                            break;
+                        }
+                        if (vNewstate == BodyPlaybackState.PlayingRecording)
+                        {
+                            if (!string.IsNullOrEmpty(mBodyRecordingUUID))
+                            { 
+                                CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
+                            }
+                            mCurrentState = vNewstate;
+
                         }
                         break;
                     }
                 case BodyPlaybackState.StreamingFromBrainPack:
                     {
                         if (vNewstate == BodyPlaybackState.Waiting)
-                        {
-                            CurrentBodyInPlay.StopThread();
+                        { 
+                            Stop();
+                            ResetInitialFrame();
                             mCurrentState = vNewstate;
                             break;
                         }
                         if (vNewstate == BodyPlaybackState.PlayingRecording)
                         {
-                            CurrentBodyInPlay.StopThread();
                             if (!string.IsNullOrEmpty(mBodyRecordingUUID))
                             {
+                                Stop();
                                 CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
                             }
 
@@ -295,7 +284,7 @@ namespace Assets.Scripts.UI.MainMenu
                         //to this body
                         if (vNewstate == BodyPlaybackState.StreamingFromBrainPack)
                         {
-                            CurrentBodyInPlay.StopThread();
+                            Stop();
                             CurrentBodyInPlay.StreamFromBrainpack();
                         }
 
@@ -311,7 +300,7 @@ namespace Assets.Scripts.UI.MainMenu
         */
         public void ChangePauseState()
         {
-            CurrentBodyInPlay.View.PauseFrame(); 
+            CurrentBodyInPlay.View.PauseFrame();
         }
 
         public void ResumeFromPauseState()
@@ -321,37 +310,13 @@ namespace Assets.Scripts.UI.MainMenu
                 CurrentBodyInPlay.View.PauseFrame();
             }
         }
-        /// <summary>
-        /// Listens to when a recording has been selected. sets the current state of the class accordingly
-        /// </summary>
-        private void ListenToBodyRecordingsChange()
-        {
-            if (CurrentBodyInPlay != null)
-            {
-                CurrentBodyInPlay.StopThread();
-            }
-            BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
-            mBodyRecordingUUID = vRec.BodyRecordingGuid;
-            CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
-            if (BodyChangedEvent != null && CurrentBodyInPlay != null)
-            {
-                BodyChangedEvent(CurrentBodyInPlay);
-            }
-            //mPlayButtonPushed = false;
-            ChangeState(BodyPlaybackState.Waiting);
-        }
+
 
         /// <summary>
         /// Listens to when the brainpackcontroller is in a connected state
         /// </summary>
         private void OnBrainpackConnectSuccessListener()
         {
-            /*   FadeInFadeOutEffect vFadeInFadeOutEffect = PlayButton.gameObject.AddComponent<FadeInFadeOutEffect>();
-               vFadeInFadeOutEffect.FadeEffectTime = 2.5f;
-               vFadeInFadeOutEffect.MaxAlpha = 255f;
-               vFadeInFadeOutEffect.MinAlpha = 20;
-               todo: keep this here in case we add a bluetooth animation
-    */
             //first check if there is a current body
             if (CurrentBodyInPlay == null)
             {
@@ -363,18 +328,9 @@ namespace Assets.Scripts.UI.MainMenu
                     BodiesManager.Instance.CreateNewBody("BrainpackPlaceholderBody");
                 }
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0]; //get the first body
-           
+
             }
             mCanUseBrainpack = true;
-        }
-
-
-        public void StartCountingSquatsOn()
-        {
-            if (CurrentBodyInPlay != null)
-            {
-
-            }
         }
 
         /// <summary>
@@ -384,21 +340,15 @@ namespace Assets.Scripts.UI.MainMenu
         {
             mCanUseBrainpack = false;
         }
-         
+
         public void Stop()
         {
-            CurrentBodyInPlay.StopThread();
-           // ChangeState(BodyPlaybackState.Waiting);
+            if (CurrentBodyInPlay != null)
+            {
+                CurrentBodyInPlay.StopThread();
+            }
         }
 
-        private void Update()
-        { 
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
-            {
-                ResetPlayer();
-            } 
-           
-        }
 
         /// <summary>
         /// Clears the buffer of the current body in play.
@@ -413,25 +363,114 @@ namespace Assets.Scripts.UI.MainMenu
         /// <summary>
         /// Resets the body and the metrics associated with body.
         /// </summary>
-        public void ResetPlayer()
-        { 
-                ResetInitialFrame();
+        public void ResetBody()
+        {
+            bool vPreIntVal = BodySegment.IsUsingInterpolation;
+            BodySegment.IsUsingInterpolation = false;
+            ResetInitialFrame();
+            BodySegment.IsUsingInterpolation = vPreIntVal;
             if (CurrentBodyInPlay != null)
             {
                 RightLegAnalysis vRightLegAnalysis =
                       CurrentBodyInPlay.AnalysisSegments[BodyStructureMap.SegmentTypes.SegmentType_RightLeg] as
                           RightLegAnalysis;
-                vRightLegAnalysis.NumberofSquats = 0;
+                if (vRightLegAnalysis != null)
+                {
+                    vRightLegAnalysis.NumberofSquats = 0;
+                }
             }
 
             if (ResettableViews != null)
             {
-                for (int i = 0; i < ResettableViews.Count; i++)
+                for (int vI = 0; vI < ResettableViews.Count; vI++)
                 {
-                    ResettableViews[i].ResetValues();
+                    ResettableViews[vI].ResetValues();
                 }
             }
 
         }
+        /// <summary>
+        /// Requests to load a recording based on the requested index
+        /// </summary>
+        /// <param name="vRecordingIndex">the recording index </param>
+        public void RequestRecordingForPlayback(int vRecordingIndex)
+        {
+            Stop();
+            if (vRecordingIndex >= 0 && vRecordingIndex < BodyRecordingsMgr.Instance.FilePaths.Length)
+            {
+                //get the recording path from the list of all the scanned file paths
+                mSelectedRecordingPath = BodyRecordingsMgr.Instance.FilePaths[vRecordingIndex];
+                LoadingBoard.StartLoadingAnimation();
+
+                //check if the recording doesnt exists 
+                if (!mRecordings.ContainsKey(mSelectedRecordingPath))
+                {
+                    // ChangeState(BodyPlaybackState.Waiting);
+                    BodyRecordingsMgr.Instance.ReadRecordingFile(mSelectedRecordingPath, RequestRecordingCallback);
+                }
+
+                //start play back
+                else
+                { 
+                    LoadingBoard.StopLoadingAnimation();
+                    BodyFramesRecording vRecording = mRecordings[mSelectedRecordingPath];
+                    CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(vRecording.BodyRecordingGuid);
+                    mBodyRecordingUUID = vRecording.BodyRecordingGuid;
+                    ChangeState(BodyPlaybackState.PlayingRecording);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Requests to load a recording based on the requested partial or full path
+        /// </summary>
+        /// <param name="vSubPath"></param>
+        public void RequestRecordingForPlayback(string vSubPath)
+        {
+            //check if the path exists first from the subpath parameter
+            int vRecordingIndex = -1;
+            string[] vFullPaths = BodyRecordingsMgr.Instance.FilePaths;
+            for (int vI = 0; vI < vFullPaths.Length; vI++)
+            {
+                if (vFullPaths[vI].Contains(vSubPath))
+                {
+                    vRecordingIndex = vI;
+                }
+            }
+
+            RequestRecordingForPlayback(vRecordingIndex);
+        }
+        /// <summary>
+        /// After a request has been initiated, the callback function is called on completion
+        /// </summary>
+
+        private void RequestRecordingCallback(BodyFramesRecording vRecording)
+        {
+            if (vRecording != null)
+            {
+
+                LoadingBoard.StopLoadingAnimation();
+                //find the recording in play
+                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromUUID(vRecording.BodyGuid);
+                //add it to the current list of recordings
+                mRecordings.Add(mSelectedRecordingPath, vRecording);
+                mBodyRecordingUUID = vRecording.BodyRecordingGuid;
+                //  ChangeState(BodyPlaybackState.PlayingRecording);
+                Play();
+
+
+
+            }
+        }
+
+        /// <summary>
+        /// On application quit, call the BodyRecordingsManager stop function
+        /// </summary>
+        // ReSharper disable once UnusedMember.Local
+        private void OnApplicationQuit()
+        {
+            BodyRecordingsMgr.Stop();
+        }
+
     }
 }

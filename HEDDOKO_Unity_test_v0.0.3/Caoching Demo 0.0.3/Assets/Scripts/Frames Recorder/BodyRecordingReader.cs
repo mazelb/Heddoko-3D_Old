@@ -8,9 +8,11 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption;
+using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption;
+using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Encryption;
+using Assets.Scripts.Utils;
 
 /**
 * BodyRecordingReader class 
@@ -21,7 +23,7 @@ using System.IO;
 * SUIT GUID
 * BOIMECH_sensorID_1, Yaw;Pitch;Roll, ... BOIMECH_sensorID_9, Yaw;Pitch;Roll, FLEXCORE_sensorID_1, SensorValue, ... ,FLEXCORE_sensorID_4, SensorValue
 */
-public class BodyRecordingReader : MonoBehaviour
+public class BodyRecordingReader
 {
     //The file path to read
     private string mFilePath;
@@ -29,6 +31,22 @@ public class BodyRecordingReader : MonoBehaviour
     private string mFileContents;
     //Line by line content
     private string[] mFileLines;
+
+    private CryptoManager mCryptoManager;
+    public string FilePath { get { return mFilePath; } }
+
+    /// <summary>
+    /// Was the recording taken from a dat file or csv file?
+    /// </summary>
+    public bool IsFromDatFile { get; private set; }
+
+   
+
+    public BodyRecordingReader(string vFilepath)
+    {
+        mCryptoManager = new CryptoManager(new DecryptionVersion0(), new EncryptionVersion0());
+        mFilePath = vFilepath;
+    }
 
     /**
     * ReadFile()
@@ -40,20 +58,43 @@ public class BodyRecordingReader : MonoBehaviour
     public int ReadFile(string vFilePath)
     {
         mFilePath = vFilePath;
-        
-        //open file from the disk (file path is the path to the file to be opened)
-        using (StreamReader vStreamReader = new StreamReader(File.OpenRead(mFilePath)))
-        {
-            mFileContents = vStreamReader.ReadToEnd();
 
-            if (mFileContents.Length > 0)
+        //open file from the disk (file path is the path to the file to be opened)
+        if (vFilePath.Contains(".csv"))
+        {
+            using (StreamReader vStreamReader = new StreamReader(File.OpenRead(mFilePath)))
             {
-                PopulateRecordingLines(mFileContents);
+                mFileContents = vStreamReader.ReadToEnd();
+                if (mFileContents.Length > 0)
+                {
+                    PopulateRecordingLines(mFileContents);
+                }
             }
         }
+        else
+        {
+            try
+            {
+                // byte[] vContents = File.ReadAllBytes(vFilePath);
+                mFileContents = mCryptoManager.Decrypt(vFilePath);
+                if (mFileContents.Length > 0)
+                {
+                    IsFromDatFile = true;
+                    PopulateRecordingLines(mFileContents);
+                }
 
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+ 
         return mFileContents.Length;
     }
+ 
+
 
     /**
     * PopulateRecordingLines()
@@ -61,7 +102,7 @@ public class BodyRecordingReader : MonoBehaviour
     */
     public void PopulateRecordingLines()
     {
-        if(mFileContents.Length > 0)
+        if (mFileContents.Length > 0)
         {
             PopulateRecordingLines(mFileContents);
         }
@@ -81,6 +122,8 @@ public class BodyRecordingReader : MonoBehaviour
         }
     }
 
+
+
     /**
     * GetRecordingLines()
     * @brief Returns all lines read from CSV
@@ -88,5 +131,13 @@ public class BodyRecordingReader : MonoBehaviour
     public string[] GetRecordingLines()
     {
         return mFileLines;
+    }
+
+    /// <summary>
+    /// stops processes safely
+    /// </summary>
+    internal void Stop()
+    {
+        mCryptoManager.StopDecryption();
     }
 }

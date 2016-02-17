@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace Assets.Scripts.UI.ModalWindow
 {
@@ -24,9 +25,8 @@ namespace Assets.Scripts.UI.ModalWindow
         {
             if (!mModalPanel)
             {
-                mModalPanel = FindObjectOfType(typeof(ModalPanel)) as ModalPanel;
-                if (!mModalPanel)
-                    Debug.LogError("There needs to be one active ModalPanel script on a GameObject in your scene.");
+                mModalPanel = FindObjectOfType<ModalPanel>();
+                DontDestroyOnLoad(mModalPanel.gameObject);
             }
 
             return mModalPanel;
@@ -120,6 +120,21 @@ namespace Assets.Scripts.UI.ModalWindow
             YesButton.gameObject.SetActive(true);
             NoButton.gameObject.SetActive(true);
             CancelButton.gameObject.SetActive(false);
+        }
+
+        public static void SingleChoice(string vQuestion, UnityAction vOkEvent)
+        {
+            Instance().ModalPanelObject.SetActive(true);
+
+            Instance().CancelButton.onClick.RemoveAllListeners();
+            Instance().CancelButton.onClick.AddListener(Instance().ClosePanel);
+            Instance().CancelButton.onClick.AddListener(vOkEvent);
+
+            Instance().Question.text = vQuestion;
+
+            Instance().YesButton.gameObject.SetActive(false);
+            Instance().NoButton.gameObject.SetActive(false);
+            Instance().CancelButton.gameObject.SetActive(true);
         }
         void ClosePanel()
         {

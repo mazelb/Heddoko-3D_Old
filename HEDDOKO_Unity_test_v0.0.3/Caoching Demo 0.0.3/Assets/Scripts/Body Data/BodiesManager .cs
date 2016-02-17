@@ -7,6 +7,8 @@
 */
 using UnityEngine; 
 using System.Collections.Generic;
+using System.Threading;
+using Assets.Scripts.Utils;
 
 /**
 * BodiesManager class 
@@ -57,7 +59,8 @@ public sealed class BodiesManager : MonoBehaviour
     public void CreateNewBody(string vBodyUUID = "")
     {
         Body vBody = new Body();
-        vBody.InitBody(vBodyUUID);
+        
+        vBody.InitBody(vBodyUUID, OutterThreadToUnityThreadIntermediary.IsUnityThread(Thread.CurrentThread));
         Bodies.Add(vBody);
     }
 
@@ -100,7 +103,7 @@ public sealed class BodiesManager : MonoBehaviour
     public Body GetBodyFromRecordingUUID(string vRecUUID)
     {
         //Find the recording first
-        BodyFramesRecording vTempRecording = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
+        BodyFramesRecording vTempRecording = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
         if(vTempRecording != null)
         {
             //Find the related body

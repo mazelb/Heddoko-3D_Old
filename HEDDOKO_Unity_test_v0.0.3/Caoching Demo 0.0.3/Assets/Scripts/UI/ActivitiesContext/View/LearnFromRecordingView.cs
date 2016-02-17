@@ -20,7 +20,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
     /// <summary>
     /// Represents the learn from recording view
     /// </summary>
-    public class LearnFromRecordingView : MonoBehaviour, IActivitiesContextViewSubcomponent
+    public class LearnFromRecordingView : MonoBehaviour, IActivitiesContextViewSubcomponent, IContextSpecificLearningView
     {
         /// <summary>
         /// When the model needs to be shown, it will be placed on this anchor
@@ -34,9 +34,15 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Transform HeddokoModelHiddenAnchor;
 
         public Camera TrainingAndLearningCam;
-        public Button CancelButton;
+     
         public Button TrainButton;
-        public Button BackButton;
+        [SerializeField]
+        private  Button mBackButton;
+
+        public IActivitiesContextViewSubcomponent ContextViewSubcomponent { get; set; }
+        public Button ContextSpecificButton { get; set; }
+
+
         private PlayerStreamManager mPlayerStreamManager;
         public Model2D3DSwitch ModelSwitcher;
         public ActivitiesContextController ActivitiesContextController;
@@ -57,6 +63,10 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             }
         }
 
+        public Button Backbutton
+        {
+            get { return mBackButton; }
+        }
         /// <summary>
         /// Enables and displays the view
         /// </summary>
@@ -81,8 +91,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 NonSquatMetrics.Show();
             }
 
-            PlayerStreamManager.ResetPlayer();
-            PlayerStreamManager.StickTorsoToHips(ActivitiesContextController.UsingSquats);
+            PlayerStreamManager.ResetBody();
+          
             Application.targetFrameRate = 45;
              QualitySettings.vSyncCount = 0;
         }
@@ -95,11 +105,14 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             Application.targetFrameRate = -1;
             gameObject.SetActive(false);
             PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetPlayer();
+            PlayerStreamManager.ResetBody();
             ModelSwitcher.Hide();
             TrainingAndLearningCam.gameObject.SetActive(false);
             SquatsMetrics.Hide();
             NonSquatMetrics.Hide();
         }
+
+
+        
     }
 }

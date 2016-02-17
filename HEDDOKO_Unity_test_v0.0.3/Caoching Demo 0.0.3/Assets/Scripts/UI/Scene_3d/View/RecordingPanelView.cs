@@ -4,17 +4,19 @@
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
-*/
-using System;
+*/ 
 using Assets.Scripts.UI.MainMenu;
-using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.Settings;
 using Assets.Scripts.Utils;
- 
+
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Scene_3d.View
 {
+    /// <summary>
+    /// A recording Panel view in split screen scene
+    /// </summary>
     public class RecordingPanelView : MonoBehaviour
     {
         public Button UpArrow;
@@ -24,10 +26,8 @@ namespace Assets.Scripts.UI.Scene_3d.View
 
         public GameObject AvailableRecordingButtonPrefab;
         private bool mImportCompleted;
-        private bool mBottomButDisabled;
 
-        private int mCurrentIndex = 0;
-        private bool mRecordingSelected; 
+        private int mCurrentIndex;
         public Scrollbar Scrollbar;
 
         private PlayerStreamManager mPlayerStreamManager;
@@ -44,9 +44,9 @@ namespace Assets.Scripts.UI.Scene_3d.View
             }
         }
 
+        // ReSharper disable once UnusedMember.Local
         void Awake()
         {
-            Scrollbar.onValueChanged.AddListener(OnScrollValueChanged);
             LeftSelectionRecording.onClick.AddListener(LeftButtonEngaged);
             RightSelectionRecording.onClick.AddListener(RightButtonEngaged);
             UpArrow.onClick.AddListener(UpButtonEngaged);
@@ -59,10 +59,9 @@ namespace Assets.Scripts.UI.Scene_3d.View
             {
                 Transform vContentPanel = SceneObjectFinder<Transform>.FindObjectByName(transform, "ScrollView") as Transform;
                 string[] vRecordingsFiles = BodyRecordingsMgr.Instance.FilePaths;
-                Button vFirstInsertedButton = null;
                 if (vRecordingsFiles == null)
                 {
-                    BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.RecordingsDirectory);
+                    BodyRecordingsMgr.Instance.ScanRecordings(ApplicationSettings.PreferedRecordingsFolder);
                     vRecordingsFiles = BodyRecordingsMgr.Instance.FilePaths;
                 }
                 if (vContentPanel != null)
@@ -75,67 +74,28 @@ namespace Assets.Scripts.UI.Scene_3d.View
                         Button vAvRecButton = vNewAvRecButton.GetComponentInChildren<Button>();
                         if (i == 0)
                         {
-                            vFirstInsertedButton = vAvRecButton;
                         }
-                        string vCleanedName = vRecordingsFiles[i].Replace(FilePathReferences.sCsvDirectory + "\\", null);
+                        string vCleanedName = vRecordingsFiles[i].Replace(ApplicationSettings.PreferedRecordingsFolder + "\\", null);
                         vNewAvRecButton.GetComponentInChildren<Text>().text = vCleanedName;
-                        int vTemp = i; //copy the variable i and pass it into the listener
+
+                        //copy the variable i and pass it into the listener
+                        int vTemp = i;
                         vAvRecButton.onClick.AddListener(() => ChooseAndPlayRecording(vTemp));
                         vNewAvRecButton.transform.SetParent(vContentPanel, false);
                     }
                 }
-
-                //check if the panel isn't completely filled, disable the down arrow button if that is the case.
-                //get the height of the content panel
-
-               /* if (vFirstInsertedButton != null)
-                {
-                    float vContentPanelHeight = vContentPanel.GetComponent<RectTransform>().rect.height;
-                    float vButtonHeight = vFirstInsertedButton.GetComponent<RectTransform>().rect.height;
-                    if (CheckIfBotButtonNeedsRemoval(vContentPanelHeight, vButtonHeight, vRecordingsFiles.Length))
-                    {
-                        DownArrow.gameObject.SetActive(false);
-                        mBottomButDisabled = true;
-                    }
-                }*/
-
-
-          /*      if (vFirstInsertedButton == null)
-                {
-                    UpArrow.gameObject.SetActive(false);
-                    DownArrow.gameObject.SetActive(false);
-                    mBottomButDisabled = true;
-                }*/
-
                 mImportCompleted = true;
             }
             gameObject.SetActive(true);
         }
 
-        /// <summary>
-        /// Checks if the bottom button needs to be removed. 
-        /// </summary>
-        /// <param name="vPanelHeight"></param>
-        /// <param name="vButtonHeight"></param>
-        /// <param name="vNumberOfButtons"></param>
-        /// <returns></returns>
-        private bool CheckIfBotButtonNeedsRemoval(float vPanelHeight, float vButtonHeight, int vNumberOfButtons)
-        {
-            float vTotalH = vNumberOfButtons * vButtonHeight;
-            if (vTotalH >= vPanelHeight)
-            {
-                return false;
-            }
-            return true;
-        }
 
         /// <summary>
         /// Hides the view
         /// </summary>
         public void Hide()
         {
-            PlayerStreamManager.Stop();
-            PlayerStreamManager.ResetInitialFrame();
+           PlayerStreamManager.ChangeState(PlayerStreamManager.BodyPlaybackState.Waiting);
             gameObject.SetActive(false);
         }
 
@@ -145,44 +105,11 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// <param name="vRecordingIndex"></param>
         private void ChooseAndPlayRecording(int vRecordingIndex)
         {
-            PlayerStreamManager.Stop();
-            try
-            {
-                PlayerStreamManager.ResetInitialFrame();
-            }
-            catch (Exception)
-            {
-                
-             
-            }
-            
-            BodySelectedInfo.Instance.UpdateSelectedRecording(vRecordingIndex);
-            PlayerStreamManager.Play();
             mCurrentIndex = vRecordingIndex;
+            PlayerStreamManager.RequestRecordingForPlayback(vRecordingIndex); 
         }
 
-        /// <summary>
-        /// Listener to scrollbar, listens to when the value has changed
-        /// </summary>
-        private void OnScrollValueChanged(float vNewValue)
-        {
-           /* if (vNewValue <= 0)
-            {
-                UpArrow.gameObject.SetActive(false);
-            }
-            if (vNewValue >= 1)
-            {
-                DownArrow.gameObject.SetActive(false);
-            }
-            if (vNewValue > 0 && Scrollbar.value < 1)
-            {
-                if (!mBottomButDisabled)
-                {
-                    DownArrow.gameObject.SetActive(true);
-                }
-                UpArrow.gameObject.SetActive(true);
-            }*/
-        }
+
 
         /// <summary>
         /// The right button has been pressed
@@ -215,7 +142,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// </summary>
         private void UpButtonEngaged()
         {
-            float vNewVal = Scrollbar.value + 0.1f;
+            float vNewVal = Scrollbar.value + 0.12f;
             Scrollbar.value = vNewVal;
         }
 
@@ -224,7 +151,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         /// </summary>
         private void DownButtonEngaged()
         {
-            float vNewVal = Scrollbar.value - 0.1f;
+            float vNewVal = Scrollbar.value - 0.12f;
             Scrollbar.value = vNewVal;
         }
     }

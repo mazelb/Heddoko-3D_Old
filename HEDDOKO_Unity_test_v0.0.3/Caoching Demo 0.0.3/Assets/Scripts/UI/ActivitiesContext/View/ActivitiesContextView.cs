@@ -6,17 +6,17 @@
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
  
-using UnityEngine;
- 
+using UnityEngine; 
+
 namespace Assets.Scripts.UI.ActivitiesContext.View
 {
     public class ActivitiesContextView : MonoBehaviour
     {
-        public ActivitiesContextViewMain MainView;
-        public ActivitiesContextViewTrain TrainingView;
-        public ActivitesContextViewLearn LearningView;
-        public LearnFromRecordingView LearnFromRecordingView;
-      
+        public AbstractInActivityView MainView;
+        public IActivitiesContextViewSubcomponent TrainingView;
+        public IActivitiesContextViewSubcomponent LearningView;
+        public IContextSpecificLearningView LearnFromRecordingView;
+        
         /// <summary>
         /// Shows the ActivitiesContextView 
         /// </summary>
@@ -67,14 +67,14 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         /// </summary>
         public void SwitchToLearnByRecordingView()
         { 
-             LearnFromRecordingView.Show();
+             LearnFromRecordingView.ContextViewSubcomponent.Show();
         }
         /// <summary>
         /// hides the learn by recording view
         /// </summary>
         public void HideLearnByRecordingView()
         {
-            LearnFromRecordingView.Hide();
+            LearnFromRecordingView.ContextViewSubcomponent.Hide();
         }
         /// <summary>
         /// Shows the training view

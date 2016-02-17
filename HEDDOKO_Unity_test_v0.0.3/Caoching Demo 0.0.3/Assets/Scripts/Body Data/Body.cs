@@ -16,6 +16,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 
 /**
 * Body class 
@@ -113,9 +114,16 @@ public class Body
     * @param vBodyUUID the new body UUID (could be empty)
     * @brief Initializes a new body 
     */
-    public void InitBody(string vBodyUUID)
+    public void InitBody(string vBodyUUID, bool vCallFromUnityThread)
     {
-        InitBody(vBodyUUID, BodyType);
+        if (vCallFromUnityThread)
+        {
+            InitBody(vBodyUUID, BodyType);
+        }
+        else
+        {
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(()=>InitBody(vBodyUUID, BodyType));
+        }
     }
 
     /**
@@ -268,13 +276,13 @@ public class Body
 
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
-        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUUID(vRecUUID);
+        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-            BodyFrame frame = BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+           // BodyFrame frame = RawFrameConverterManager.BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
-            SetInitialFrame(frame);
+           // SetInitialFrame(frame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);

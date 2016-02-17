@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
     /// <summary>
     /// The view associated with the learning  view
     /// </summary>
-    public class ActivitesContextViewLearn: MonoBehaviour, IActivitiesContextViewSubcomponent
+    public class ActivitesContextViewLearn: AbstractView
     {
         public Button SquatButton;
         public Button BikeButton;

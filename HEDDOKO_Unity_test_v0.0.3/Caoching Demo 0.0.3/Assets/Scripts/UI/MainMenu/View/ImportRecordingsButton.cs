@@ -1,7 +1,11 @@
-﻿ 
-using System.Collections.Generic; 
-using Assets.Scripts.UI.MainScene.Model;
-using Assets.Scripts.Utils;
+﻿
+/** 
+* @file ImportRecordingsButton.cs
+* @brief Contains the ImportRecordingsButton class
+* @author Mohammed Haider(mohamed@heddoko.com)
+* @date February 2016
+* Copyright Heddoko(TM) 2016, all rights reserved
+*/
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

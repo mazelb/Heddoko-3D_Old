@@ -5,10 +5,9 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
- 
+
 using Assets.Scripts.UI.MainMenu.View;
-using Assets.Scripts.UI.RecordingLoading.View;
-using UnityEngine; 
+using UnityEngine;
 
 namespace Assets.Scripts.UI.MainMenu.Controller
 {
@@ -20,11 +19,12 @@ namespace Assets.Scripts.UI.MainMenu.Controller
 
         //The main menu view
         public MainMenuView MainMenuView;
-
         public SplashScreen SplashScreen;
+        [SerializeField]
         private MainMenuState mCurrentState = MainMenuState.SplashScreen;
 
 
+        // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             bool vSplashScreenEnabled = SplashScreen != null && SplashScreen.gameObject.activeSelf;
@@ -35,7 +35,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
             }
             MainMenuView.BrainpackButton.onClick.AddListener(() => ChangeState(MainMenuState.BrainpackView));
             MainMenuView.BrainpackConnectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
-
+            MainMenuView.ExitButton.onClick.AddListener(QuitApplication);
             MainMenuView.ActivitiesButton.onClick.AddListener(() => ChangeState(MainMenuState.ActivityContext));
 
             if (MainMenuView.RecordingSelectionView != null)
@@ -43,7 +43,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                 MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
                 MainMenuView.RecordingsSelectionButton.onClick.AddListener(() => ChangeState(MainMenuState.RecordingsSelection));
             }
-           
+
         }
 
         /// <summary>
@@ -60,6 +60,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                         {
                             MainMenuView.ShowMainMenuContextView();
                             mCurrentState = MainMenuState.MainMenu;
+                            // ReSharper disable once RedundantJumpStatement
                             break;
                         }
                         break;
@@ -72,6 +73,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             MainMenuView.HideActivityContextView();
                             MainMenuView.ShowMainMenuContextView();
                             mCurrentState = MainMenuState.MainMenu;
+                            // ReSharper disable once RedundantJumpStatement
                             break;
                         }
                         break;
@@ -85,6 +87,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             MainMenuView.HideBrainpackContextView();
                             MainMenuView.ShowMainMenuContextView();
                             mCurrentState = MainMenuState.MainMenu;
+                            // ReSharper disable once RedundantJumpStatement
                             break;
                         }
                         break;
@@ -97,6 +100,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             MainMenuView.HideRecordingsSelection();
                             MainMenuView.ShowMainMenuContextView();
                             mCurrentState = MainMenuState.MainMenu;
+                            // ReSharper disable once RedundantJumpStatement
                             break;
                         }
                         break;
@@ -125,13 +129,18 @@ namespace Assets.Scripts.UI.MainMenu.Controller
                             MainMenuView.HideMainMenuContextView();
                             MainMenuView.ShowRecordingsSelection();
                             mCurrentState = MainMenuState.RecordingsSelection;
+                            // ReSharper disable once RedundantJumpStatement
                             break;
                         }
 
                         break;
                     }
-
             }
+        }
+        private void QuitApplication()
+        {
+            //Todo: add a modal window asking if EU is sure that they want to quit
+            Application.Quit();
         }
         /// <summary>
         /// Switch to the main menu view
@@ -147,8 +156,9 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         {
             ChangeState(MainMenuState.MainMenu);
         }
-  
+
     }
+ 
     /// <summary>
     /// Determine which state the main menu is in
     /// </summary>

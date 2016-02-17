@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 
-public class BodyFrameStream : MonoBehaviour {
+public class BodyFrameStream  {
     
     //MemoryStream to hold the received data
     private MemoryStream mMemoryStream = new MemoryStream();

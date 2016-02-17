@@ -6,11 +6,10 @@
 * Copyright Heddoko(TM) 2015, all rights reserved 
 */
 
-using System.Xml.Serialization;
+using System.Collections.Generic; 
 using Assets.Scripts.UI.ActivitiesContext.View;
 using Assets.Scripts.UI.MainMenu;
-using Assets.Scripts.UI.MainMenu.Controller;
-using Assets.Scripts.UI.MainScene.Model;
+using Assets.Scripts.UI.MainMenu.Controller; 
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +29,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public ActivitiesContextView ActivitesContextView;
         public MainMenuController MainMenuController;
         public PlayerStreamManager PlayerStreamManager;
+        private Dictionary<Button, IContextSpecificLearningView> ContextSpecificMap = new Dictionary<Button, IContextSpecificLearningView>();
+       // public IActivitiesContextViewSubcomponent 
 
         public string SquatRecordingSubPath;
         public string BikeRecordingSubPath;
@@ -44,39 +45,18 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         /// </summary>
         private void Awake()
         {
-            ActivitesContextView.MainView.BackButton.onClick.AddListener(ReturnToMainMenu);
-            ActivitesContextView.MainView.ActivityTrainingButton.onClick.AddListener(SwitchToLearningViewState);
-            ActivitesContextView.LearningView.SquatButton.onClick.AddListener(SquatHookFunction);
-            ActivitesContextView.LearningView.BikeButton.onClick.AddListener(() =>
-            {
-                if (!mGoToRecordingInstead)
-                { 
-                    UsingSquats = false;
-                    SwitchtoTrainingViewState();
-                }
-                else
-                {
-                    NonSquatHookFunction();
-                    mGoToRecordingInstead = false;
-                }
-            });
-
-            ActivitesContextView.LearningView.Backbutton.onClick.AddListener(SwitchtoMainActivityView);
-            ActivitesContextView.LearnFromRecordingView.CancelButton.onClick.AddListener(SwitchToLearningViewState);
-            ActivitesContextView.LearnFromRecordingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
-            ActivitesContextView.LearnFromRecordingView.TrainButton.onClick.AddListener(SwitchtoTrainingViewState);
-            ActivitesContextView.TrainingView.BackButton.onClick.AddListener(SwitchToLearningViewState);
-            //LearningView
+            ActivitesContextView.MainView.Backbutton.onClick.AddListener(ReturnToMainMenu);
+ 
         }
 
         /// <summary>
         /// hooks this function into the learning squat button
         /// </summary>
         private void SquatHookFunction()
-        {
-
+        { 
             ActivityTypeSubPath = SquatRecordingSubPath;
-            BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
+            PlayerStreamManager.RequestRecordingForPlayback(ActivityTypeSubPath);
+            //BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
             UsingSquats = true;
             SwitchToLearnByRecordingState();
         }
@@ -84,7 +64,8 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
         public void NonSquatHookFunction()
         {
             ActivityTypeSubPath = BikeRecordingSubPath;
-            BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);
+            PlayerStreamManager.RequestRecordingForPlayback(ActivityTypeSubPath);
+          // BodySelectedInfo.Instance.UpdateSelectedRecording(ActivityTypeSubPath);dafda
             UsingSquats = false;
             SwitchToLearnByRecordingState();
         }

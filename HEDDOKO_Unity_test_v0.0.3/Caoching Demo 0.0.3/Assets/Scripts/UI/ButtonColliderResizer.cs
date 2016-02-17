@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+
 /// <summary>
 /// GuiColliderResizerClass: Responsible for resizing the collider attached to the game objects according to the handles 
 /// This script will set up the vertices of polygoncolliders on awake
@@ -29,6 +30,10 @@ public class ButtonColliderResizer : MonoBehaviour
         
     }
 
+    void Update()
+    {
+        ResizeCollider();
+    }
     /// <summary>
     /// Resize a collider
     /// </summary>
@@ -41,10 +46,7 @@ public class ButtonColliderResizer : MonoBehaviour
         {
             //Get the anchor point in world space
             Vector2 vAnchoringPoint = Anchors[i].TransformPoint(Anchors[i].rect.center);
-            vAnchoringPoint = ButtonRectTransform.InverseTransformPoint(vAnchoringPoint);
-            //Get the ButtonRectTransform point in world space
-            //Vector2 vParentButtonPoint = ButtonRectTransform.TransformPoint(ButtonRectTransform.rect.center); 
-            //vAnchoringPoint -= vParentButtonPoint;
+            vAnchoringPoint = ButtonRectTransform.InverseTransformPoint(vAnchoringPoint); 
             //set the anchor point 
             vVertices[i] = vAnchoringPoint;
         }

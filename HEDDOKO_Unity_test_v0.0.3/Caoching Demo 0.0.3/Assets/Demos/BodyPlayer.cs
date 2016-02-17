@@ -6,10 +6,9 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
-
-using System.Collections;
+ 
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.MainScene.Model; 
+using Assets.Scripts.UI.MainScene.Model;
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
 using UnityEngine;
@@ -24,14 +23,12 @@ namespace Assets.Demos
     {
         public Body CurrentBodyInPlay { get; set; }
         public Button PlayButton;
+        [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
         private bool mPlayButtonPushed;
         public Button ResetButton;
-        public float PauseThreadTimer = 1f;
-        private float mInternalTimer = 1f;
-        private bool mResetRoutineStarted = false; // pause thread routine started
-        private string mBodyRecordingUUID;
-        private bool mUsingBrainpack = false;
+        public float PauseThreadTimer = 1f;  
+        private string mBodyRecordingUuid; 
         private Sprite mBluetoothIcon;
         private Sprite mPlayButtonOriginalIcon;
         public DisplayLegAngleExtractions DisplayLegAngleExtractions;
@@ -51,15 +48,16 @@ namespace Assets.Demos
         /// <summary>
         /// On the start of the scene, initialize all the components to be able to start playing
         /// </summary>
+        // ReSharper disable once UnusedMember.Local
         void Start()
         {
             mPlayButtonOriginalIcon = PlayButton.image.sprite;
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
             if (vRec != null)
             {
-                mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                mBodyRecordingUUID = vRec.BodyRecordingGuid;
-                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+                mBodyRecordingUuid = vRec.BodyRecordingGuid;
+                mBodyRecordingUuid = vRec.BodyRecordingGuid;
+                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUuid);
             }
 
             PlayButton.onClick.AddListener(Play);
@@ -70,7 +68,7 @@ namespace Assets.Demos
         /// <summary>
         /// OnEnable, hook listeners
         /// </summary>
-        void OnEnable()
+        public void OnEnable()
         {
             BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
             BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
@@ -82,7 +80,9 @@ namespace Assets.Demos
         /// </summary>
         public void OnDisable()
         { 
+            // ReSharper disable once DelegateSubtraction
             BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
+            // ReSharper disable once DelegateSubtraction
             BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
 
@@ -99,7 +99,10 @@ namespace Assets.Demos
                     mPlayButtonPushed = true;
                     PlayButton.gameObject.SetActive(false);
                     ChangeState(BodyPlaybackState.PlayingRecording);
-                    DisplayLegAngleExtractions.CurrentBody = CurrentBodyInPlay;
+                    if (CurrentBodyInPlay != null && DisplayLegAngleExtractions!= null)
+                    {
+                        DisplayLegAngleExtractions.CurrentBody = CurrentBodyInPlay;
+                    }
                 }
             }
         }
@@ -127,7 +130,7 @@ namespace Assets.Demos
                         if (vNewstate == BodyPlaybackState.PlayingRecording)
                         { 
                             CurrentBodyInPlay.StopThread();
-                            CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
+                            CurrentBodyInPlay.PlayRecording(mBodyRecordingUuid);
                             mCurrentState = vNewstate;
                             break;
                         }
@@ -166,7 +169,7 @@ namespace Assets.Demos
                         if (vNewstate == BodyPlaybackState.PlayingRecording)
                         {
                             CurrentBodyInPlay.StopThread();
-                            CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
+                            CurrentBodyInPlay.PlayRecording(mBodyRecordingUuid);
                             mCurrentState = vNewstate;
                         }
                         break;
@@ -182,30 +185,7 @@ namespace Assets.Demos
         {
             CurrentBodyInPlay.View.PauseFrame();
         }
-
-        private IEnumerator StartPausingCountdown()
-        {
-            if (mResetRoutineStarted)
-            {
-                mInternalTimer += PauseThreadTimer; //if this has already started, just add to the timer and then exit
-                yield break;
-            }
-            mInternalTimer = PauseThreadTimer;
-            mResetRoutineStarted = true;
-            ChangePauseState();
-
-            while (true)
-            {
-                mInternalTimer -= Time.deltaTime;
-                if (mInternalTimer < 0)
-                {
-                    break;
-                }
-                yield return null;
-            }
-            ChangePauseState();
-            mResetRoutineStarted = false;
-        }
+ 
 
         /// <summary>
         /// Listens to when a recording has been selected. sets the current state of the class accordingly
@@ -218,8 +198,8 @@ namespace Assets.Demos
                 CurrentBodyInPlay.StopThread(); 
             }
             BodyFramesRecording vRec = BodySelectedInfo.Instance.CurrentSelectedRecording;
-            mBodyRecordingUUID = vRec.BodyRecordingGuid;
-            CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUUID);
+            mBodyRecordingUuid = vRec.BodyRecordingGuid;
+            CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(mBodyRecordingUuid);
             mPlayButtonPushed = false;
             ChangeState(BodyPlaybackState.Waiting);
         }
@@ -252,10 +232,7 @@ namespace Assets.Demos
             ChangeState(BodyPlaybackState.StreamingFromBrainPack);
         }
 
-        void Update()
-        {
-            
-        }
+ 
  
         /// <summary>
         /// Listens to when the BrainpackController is in a disconnected state

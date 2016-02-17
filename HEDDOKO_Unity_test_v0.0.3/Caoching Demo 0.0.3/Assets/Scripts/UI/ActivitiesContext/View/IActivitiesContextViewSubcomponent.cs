@@ -6,16 +6,19 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using JetBrains.Annotations;
+using System;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.ActivitiesContext.View
 {
     /// <summary>
     /// Interface for subcomponents of all activitiesContextView
     /// </summary>
-    interface IActivitiesContextViewSubcomponent
+   
+   public interface IActivitiesContextViewSubcomponent
     {
         void Show();
         void Hide();
+        Button Backbutton { get; }
     }
 }

@@ -70,7 +70,7 @@ namespace Assets.Scripts.UI.MainScene.Model
         /// </summary>
         public void UpdateNumberOfRecordings()
         {
-            TotalRecordingsAvailable = BodyRecordingsMgr.Instance.ScanRecordings(FilePathReferences.RecordingsDirectory);
+            TotalRecordingsAvailable = BodyRecordingsMgr.Instance.ScanRecordings("/Resources/Recordings");
         }
 
         /// <summary>

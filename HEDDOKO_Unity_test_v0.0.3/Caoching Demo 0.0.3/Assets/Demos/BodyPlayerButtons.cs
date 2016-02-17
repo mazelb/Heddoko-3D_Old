@@ -178,12 +178,16 @@ namespace Assets.Demos
                 BodySegment.IsHipsEstimateUp = !BodySegment.IsHipsEstimateUp;
                 HipsEstUpTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateUp);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolation))
             {
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
                 InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
             }
+ 
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
+ 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingFusionForBody))
+ 
             {
                 BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
                 FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
@@ -194,7 +198,7 @@ namespace Assets.Demos
         ///from the bool passed in, returns either On or Off
         /// </summary>
         /// <returns></returns>
-        private string ReturnOnOffFromBool(bool vValue)
+        public static string ReturnOnOffFromBool(bool vValue)
         {
             return vValue ? "ON" : "OFF";
         }

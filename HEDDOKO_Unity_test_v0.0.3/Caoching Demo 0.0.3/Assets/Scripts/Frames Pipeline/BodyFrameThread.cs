@@ -8,16 +8,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using Assets.Scripts.Frames_Pipeline;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 using Assets.Scripts.Utils;
-//using Assets.Scripts.Utils.Debugging;
 using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 
 /**
 * BodyFrameThread class 
@@ -26,7 +25,7 @@ todo: can create an interface for handling these, subsequently every routine tha
 */
 public class BodyFrameThread : ThreadedJob
 {
-    private BodyFrameBuffer mBuffer;   
+    private BodyFrameBuffer mBuffer;
     private SourceDataType mDataSourceType;
     private PlaybackState mCurrentPlaybackState = PlaybackState.Pause;
     private PlaybackSettings mPlaybackSettings;
@@ -37,7 +36,7 @@ public class BodyFrameThread : ThreadedJob
     private bool mPauseWorker;
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
-    
+
     //For debug purposes
     public bool IsDebugging { get; set; }
 
@@ -61,7 +60,7 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
-    internal BodyFrameBuffer BodyFrameBuffer
+    public BodyFrameBuffer BodyFrameBuffer
     {
         get
         {
@@ -154,6 +153,10 @@ public class BodyFrameThread : ThreadedJob
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
                 RecordingTask();
+
+                //   RecordingPlaybackTask();
+
+
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -170,6 +173,8 @@ public class BodyFrameThread : ThreadedJob
     private void RecordingTask()
     {
         int vBodyFrameIndex = 0;
+
+
         while (ContinueWorking)
         {
             while (true)
@@ -183,15 +188,16 @@ public class BodyFrameThread : ThreadedJob
                     //UnityEngine.Debug.Log("BODY FRAME BUFFER IS FULL !");
                     continue;
                 }
+
                 try
                 {
                     //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                    BodyFrame vBodyFrame = BodyFrame.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
+                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
 
                     //reset back to 0
-                    if (vBodyFrameIndex >= mRawFrames.Count) 
+                    if (vBodyFrameIndex >= mRawFrames.Count)
                     {
                         vBodyFrameIndex = 0;
                     }
@@ -201,13 +207,70 @@ public class BodyFrameThread : ThreadedJob
                     //ContinueWorking = false;
                     string vMessage = e.GetBaseException().Message;
                     vMessage += "\n" + e.Message;
-                    vMessage += "\n" + e.StackTrace; 
+                    vMessage += "\n" + e.StackTrace;
                     break;
                 }
 
             }
         }
     }
+
+
+    private void RecordingPlaybackTask()
+    {
+        // long vStartTime = DateTime.Now.Ticks;
+        float vStartTime = TimeUtility.Time;
+        //frame position
+        int vPosition = 0;
+
+        while (ContinueWorking)
+        {
+            while (true)
+            {
+                if (!ContinueWorking)
+                {
+                    break;
+                }
+                if (BodyFrameBuffer.IsFull() || mPauseWorker)
+                {
+                    //vStartTime = DateTime.Now.Ticks;  //reset the start time
+                    continue;
+                }
+                try
+                {
+
+                    float vDeltaTime = TimeUtility.Time - vStartTime;
+                    float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
+
+                    vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
+                    //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
+                    vPosition = (int)(1 * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
+
+                    if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
+                    {
+                        mPauseWorker = true;
+                        vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
+                        vStartTime = DateTime.Now.Ticks;
+                        break;
+                    }
+
+                    //convert to body frame 
+                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
+                    BodyFrameBuffer.Enqueue(vBodyFrame);
+                }
+                catch (Exception e)
+                {
+                    //ContinueWorking = false;
+                    string vMessage = e.GetBaseException().Message;
+                    vMessage += "\n" + e.Message;
+                    vMessage += "\n" + e.StackTrace;
+                    break;
+                }
+
+            }
+        }
+    }
+
 
     /**
     * BrainFrameTask()
@@ -221,8 +284,6 @@ public class BodyFrameThread : ThreadedJob
         while (true)
         {
             string vLogMessage = "";
-            Stopwatch vStopwatch = new Stopwatch();
-            vStopwatch.Start();
             if (!ContinueWorking)
             {
                 //finished working
@@ -290,11 +351,10 @@ public class BodyFrameThread : ThreadedJob
                         vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
-                BodyFrame vBodyFrame = BodyFrame.CreateBodyFrame(vPreviouslyValidValues);
+                BodyFrame vBodyFrame = RawFrameConverterManager.CreateBodyFrame(vPreviouslyValidValues);
                 //Todo: convert the timestamp to a float
                 vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f;//vTimeStamp;
                 BodyFrameBuffer.Enqueue(vBodyFrame);
-                vLogMessage += vUnwrappedString;
 
             }
             catch (IndexOutOfRangeException)
@@ -308,16 +368,10 @@ public class BodyFrameThread : ThreadedJob
 
             }
 
-            vStopwatch.Stop();
-            if (IsDebugging)
-            {
-                double vTotalMs = vStopwatch.Elapsed.TotalMilliseconds;
-                //RawframeConversion.WriteLog(vTotalMs, vLogMessage);
-            }
 
         }
     }
-    
+
     /// <summary>
     /// Close the file
     /// </summary>
@@ -326,29 +380,45 @@ public class BodyFrameThread : ThreadedJob
         try
         {
             //mStreamWriter.Flush();
-          //  mStreamWriter.Close();
+            //  mStreamWriter.Close();
         }
-        catch(Exception)
+        catch (Exception)
         {
-            
-        }   
+
+
+        }
+
     }
+
+    /**
+    * DataStreamTask()
+    * @brief Helping function that ensures that pushes data onto a circular buffer. If the buffer is filled,then the oldest frame gets overwritten. this task is for the case that the data 
+    * comes from a the brainframe
+    */
+    private void DataStreamTask()
+    {
+
+
+
+    }
+
+
 
     /**
     * CleanUp
     * @brief Helping function cleans ups  
-    */
+*/
     public void StopThread()
     {
-      
-        ContinueWorking = false; 
+
+        ContinueWorking = false;
         CloseFile();
     }
 
     /**
     * OnFinished()
     * @brief Callback when the thread is done executing
-    */
+*/
     protected override void OnFinished()
     {
         //This is executed by the Unity main thread when the job is finished 

@@ -88,7 +88,11 @@ namespace Assets.Scripts.UI.NFLDemo
             {
                 BodySegment.IsTrackingHips = !BodySegment.IsTrackingHips;
             }
+ 
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolation))
+ 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingInterpolationForBody))
+ 
             {
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
             }
@@ -96,7 +100,11 @@ namespace Assets.Scripts.UI.NFLDemo
             {
                 BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
             }
+ 
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
+ 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingFusionForBody))
+ 
             {
                 BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
             }
