@@ -51,7 +51,7 @@ namespace Assets.Scripts.Communication.Controller
         // private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
         private IBrainpackConnectionView mView;
- 
+
 
         /// <summary>
         /// returns the current state of the controller
@@ -124,7 +124,7 @@ namespace Assets.Scripts.Communication.Controller
                 ChangeCurrentState(BrainpackConnectionState.Connecting);
                 PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
             }
-            
+
         }
 
         private bool Validate(string vComport)
@@ -161,6 +161,7 @@ namespace Assets.Scripts.Communication.Controller
 
         internal void DisconnectBrainpack()
         {
+
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
             ChangeCurrentState(BrainpackConnectionState.Disconnected);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
@@ -319,10 +320,12 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         void OnApplicationQuit()
         {
-            DisconnectBrainpack();
-            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
-            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
-
+            if (mCurrentConnectionState == BrainpackConnectionState.Connected)
+            {
+                DisconnectBrainpack();
+                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
+                PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+            }
         }
 
         /// <summary>

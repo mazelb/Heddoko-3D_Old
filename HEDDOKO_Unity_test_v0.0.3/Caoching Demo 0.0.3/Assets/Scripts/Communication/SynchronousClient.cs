@@ -83,10 +83,7 @@ namespace Assets.Scripts.Communication
             vStopwatch.Start();
             // Connect to a remote device.
             try
-            {
-                // Establish the remote endpoint for the socket.
-                // The name of the 
-                // remote device is "host.contoso.com".
+            { 
                 IPHostEntry vIpHostEntry = Dns.Resolve("localhost");
                 IPAddress vIpAddress = vIpHostEntry.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
                 IPEndPoint vRemoteEndPoint = new IPEndPoint(vIpAddress, 11000);
@@ -95,7 +92,6 @@ namespace Assets.Scripts.Communication
 
                 try
                 {
-
                     vSender.Connect(vRemoteEndPoint); 
                     // Encode the data string into a byte array.
                     byte[] msg = PacketSetting.Encoding.GetBytes(vMsg);
