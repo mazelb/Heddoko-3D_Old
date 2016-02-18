@@ -1,6 +1,6 @@
 ﻿/** 
-* @file AnalysisViewLayoutManager.cs
-* @brief Contains the AnalysisViewLayoutManager class
+* @file GridViewLayoutManager.cs
+* @brief Contains the GridViewLayoutManager class
 * @author Mohammed Haider(mohamed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI.Analysis
     /// <summary>
     /// Manages the layout of an analysis view
     /// </summary>
-    public class AnalysisViewLayoutManager : AbstractView
+    public class GridViewLayoutManager : AbstractView
     {
         public PlayerStreamManager PlayerStreamManager;
         public Button BackButton;

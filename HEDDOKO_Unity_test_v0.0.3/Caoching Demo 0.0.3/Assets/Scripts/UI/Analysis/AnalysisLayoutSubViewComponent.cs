@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 namespace Assets.Scripts.UI.Analysis
 {
     /// <summary>
-    /// A sub view component used by AnalysisViewLayoutManager
+    /// A sub view component used by GridViewLayoutManager
     /// </summary>
     public class AnalysisLayoutSubViewComponent : AbstractView, IPointerEnterHandler, IPointerExitHandler
     {
@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI.Analysis
         private Camera mSubViewCamera;
         public AnalysisSubViewCamControl CameraControl; 
         public float[] Margin = { 0, 0, 0, 0 };
-        public AnalysisViewLayoutManager Parent;
+        public GridViewLayoutManager Parent;
         private Vector2 mAnchorMin = Vector2.zero;
         private Vector2 mAnchorMax = Vector2.zero;
         private RectTransform mRectTransform;
