@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI.Analysis
 
         private LayoutTypeModel mCurrentLayoutType;
         private Dictionary<LayoutType, LayoutTypeModel> mLayoutMapping = new Dictionary<LayoutType, LayoutTypeModel>();
-        private List<AnalysisLayoutSubViewComponent> mSubviewComponents = new List<AnalysisLayoutSubViewComponent>();
+        private List<GridViewCell> mSubviewComponents = new List<GridViewCell>();
         public RectTransform Container
         {
             get
@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI.Analysis
             GameObject vCamLookAtTarget = GameObject.FindGameObjectWithTag("CamLookAtTarget");
             SubViewCameraPool.OriginalTarget = vCamLookAtTarget.transform;
 
-            AnalysisSubViewPool.AnalysisSubviewParent = GetComponent<RectTransform>();
+            GridViewCellPool.GridViewCellParent = GetComponent<RectTransform>();
 
             //Register layouts
             //Starting from the left, add all the layout settings for the subviews
@@ -181,7 +181,7 @@ namespace Assets.Scripts.UI.Analysis
         {
             for (int i = 0; i < mSubviewComponents.Count; i++)
             {
-                AnalysisSubViewPool.ReleaseSubview(mSubviewComponents[i]);
+                GridViewCellPool.ReleaseSubview(mSubviewComponents[i]);
             }
             mSubviewComponents.Clear();
             gameObject.SetActive(false);
@@ -219,7 +219,7 @@ namespace Assets.Scripts.UI.Analysis
             {
                 for (int i = 0; i < vCompareCount; i++)
                 {
-                    AnalysisLayoutSubViewComponent vSubView = AnalysisSubViewPool.GetSubViewFromPool;
+                    GridViewCell vSubView = GridViewCellPool.GetSubViewFromPool;
                     vSubView.Parent = this;
                     mSubviewComponents.Add(vSubView);
                 }
@@ -234,9 +234,9 @@ namespace Assets.Scripts.UI.Analysis
                 {
                     vDif--;
                     //pop it from the list 
-                    AnalysisLayoutSubViewComponent vSubViewComponent = mSubviewComponents[0];
+                    GridViewCell vSubViewCell = mSubviewComponents[0];
                     mSubviewComponents.RemoveAt(0);
-                    AnalysisSubViewPool.ReleaseSubview(vSubViewComponent);
+                    GridViewCellPool.ReleaseSubview(vSubViewCell);
                 }
             }
             //case 3: the number of current subview lists is less than the current count
@@ -247,9 +247,9 @@ namespace Assets.Scripts.UI.Analysis
                 while (vDif > 0)
                 {
                     vDif--;
-                    AnalysisLayoutSubViewComponent vSubViewComponent = AnalysisSubViewPool.GetSubViewFromPool;
-                    vSubViewComponent.Parent = this;
-                    mSubviewComponents.Add(vSubViewComponent);
+                    GridViewCell vSubViewCell = GridViewCellPool.GetSubViewFromPool;
+                    vSubViewCell.Parent = this;
+                    mSubviewComponents.Add(vSubViewCell);
                 }
             }
         }

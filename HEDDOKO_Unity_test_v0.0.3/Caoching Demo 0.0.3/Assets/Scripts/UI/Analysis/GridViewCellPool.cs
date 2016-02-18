@@ -1,6 +1,6 @@
 ﻿/** 
-* @file AnalysisSubViewPool.cs
-* @brief Contains the AnalysisSubViewPool abstract class
+* @file GridViewCellPool.cs
+* @brief Contains the GridViewCellPool abstract class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -18,22 +18,22 @@ namespace Assets.Scripts.UI.Analysis
     /// <summary>
     ///  A pool of anaylsis views
     /// </summary>
-    public static class AnalysisSubViewPool
+    public static class GridViewCellPool
     {
-        private static List<AnalysisLayoutSubViewComponent> sInUseSubViews = new List<AnalysisLayoutSubViewComponent>();
-        private static List<AnalysisLayoutSubViewComponent> sAvailableSubviews = new List<AnalysisLayoutSubViewComponent>();
-        public static RectTransform AnalysisSubviewParent;
+        private static List<GridViewCell> sInUseSubViews = new List<GridViewCell>();
+        private static List<GridViewCell> sAvailableSubviews = new List<GridViewCell>();
+        public static RectTransform GridViewCellParent;
 
         /// <summary>
         /// Returns a camera from the available pool
         /// </summary>
-        public static AnalysisLayoutSubViewComponent GetSubViewFromPool
+        public static GridViewCell GetSubViewFromPool
         {
             get
             {
                 if (sAvailableSubviews.Count != 0)
                 {
-                    AnalysisLayoutSubViewComponent vPooledObject = sAvailableSubviews[0];
+                    GridViewCell vPooledObject = sAvailableSubviews[0];
                     sInUseSubViews.Add(vPooledObject);
                     sAvailableSubviews.RemoveAt(0);
                     vPooledObject.gameObject.SetActive(true);
@@ -45,7 +45,7 @@ namespace Assets.Scripts.UI.Analysis
                 {
                     GameObject vPooledGo = new GameObject();
                     vPooledGo.transform.parent = vPooledGo.transform;
-                    vPooledGo.transform.parent = AnalysisSubviewParent.transform;
+                    vPooledGo.transform.parent = GridViewCellParent.transform;
 
                     vPooledGo.name = "AnalysisSubViewComponent";
                     vPooledGo.AddComponent<GraphicRaycaster>();
@@ -53,8 +53,8 @@ namespace Assets.Scripts.UI.Analysis
                     Color vcolor = v.color;
                     vcolor.a = 0;
                     v.color = vcolor;
-                    AnalysisLayoutSubViewComponent vSubviewComp =
-                        vPooledGo.AddComponent<AnalysisLayoutSubViewComponent>();
+                    GridViewCell vSubviewComp =
+                        vPooledGo.AddComponent<GridViewCell>();
                     vSubviewComp.ControlCanvas = vPooledGo.GetComponent<Canvas>();
                     if (vSubviewComp.ControlCanvas == null)
                     {
@@ -71,7 +71,7 @@ namespace Assets.Scripts.UI.Analysis
             }
         }
 
-        public static void ReleaseSubview(AnalysisLayoutSubViewComponent vSubview)
+        public static void ReleaseSubview(GridViewCell vSubview)
         {
             vSubview.CameraControl.ReleaseButtons();
             sInUseSubViews.Remove(vSubview);
@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI.Analysis
         /// Helper function that will set the button functionality of the camera controls inside the Analysis subview component
         /// </summary>
         /// <param name="vParentSubViewcomponent">the parent of the camera control gui object</param>
-        private static void SetButtonFunctionality(AnalysisLayoutSubViewComponent vParentSubViewcomponent)
+        private static void SetButtonFunctionality(GridViewCell vParentSubViewcomponent)
         {
             Transform vCamCtrlTransformPane = vParentSubViewcomponent.transform.FindChild("Control Cam Button Panel");
             GameObject vCamControlPanel = null;

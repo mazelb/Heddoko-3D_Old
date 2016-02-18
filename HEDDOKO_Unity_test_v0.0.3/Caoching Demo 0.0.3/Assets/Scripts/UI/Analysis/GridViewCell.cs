@@ -1,6 +1,6 @@
 ﻿/** 
-* @file AnalysisLayoutSubViewComponent.cs
-* @brief Contains the AnalysisLayoutSubViewComponent abstract class
+* @file GridViewCell.cs
+* @brief Contains the GridViewCell abstract class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -16,7 +16,7 @@ namespace Assets.Scripts.UI.Analysis
     /// <summary>
     /// A sub view component used by GridViewLayoutManager
     /// </summary>
-    public class AnalysisLayoutSubViewComponent : AbstractView, IPointerEnterHandler, IPointerExitHandler
+    public class GridViewCell : AbstractView, IPointerEnterHandler, IPointerExitHandler
     {
         public Canvas ControlCanvas;
         private Camera mSubViewCamera;
