@@ -20,18 +20,19 @@ namespace Assets.Scripts.Communication
     using System;
     using System.Net;
     using System.Net.Sockets;
-    using System.Threading; 
+    using System.Threading;
 
     // State object for receiving data from remote device.
- 
-        /// <summary>
-        /// Synchrounous socket client 
-        /// </summary>
+
+    /// <summary>
+    /// Synchrounous socket client 
+    /// </summary>
 
     public class SynchronousClient
-    { 
+    {
         private Thread mWorkerThread;
-   
+        private const int sTimeout=10000; 
+
         public SynchronousClient()
         {
             mWorkerThread = new Thread(ThreadWorker);
@@ -39,11 +40,11 @@ namespace Assets.Scripts.Communication
             mWorkerThread.Start();
         }
 
-        public Queue<string> Requests = new Queue<string>(300);
-        private static bool mReceivedMessage =true;
+        public Queue<string> Requests = new Queue<string>(50);
+        private static bool mReceivedMessage = true;
 
         public bool IsDebugging { get; set; }
-       //     private DebugBodyFrameLogger vBodyFrameLogger= new DebugBodyFrameLogger("ClientComm");
+        //     private DebugBodyFrameLogger vBodyFrameLogger= new DebugBodyFrameLogger("ClientComm");
         private void ThreadWorker()
         {
             while (true)
@@ -62,7 +63,7 @@ namespace Assets.Scripts.Communication
                     continue;
                 }
                 else
-                { 
+                {
                     mReceivedMessage = false;
                     string vMsg = Requests.Dequeue();
                     StartClientAndSendData(vMsg);
@@ -75,7 +76,7 @@ namespace Assets.Scripts.Communication
         /// </summary>
         /// <param name="vMsg"></param>
         private void StartClientAndSendData(string vMsg)
-        { 
+        {
             byte[] bytes = new byte[1024];
             mReceivedMessage = false;
             string vLogmessage = "";
@@ -83,45 +84,58 @@ namespace Assets.Scripts.Communication
             vStopwatch.Start();
             // Connect to a remote device.
             try
-            { 
+            {
                 IPHostEntry vIpHostEntry = Dns.Resolve("localhost");
                 IPAddress vIpAddress = vIpHostEntry.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
                 IPEndPoint vRemoteEndPoint = new IPEndPoint(vIpAddress, 11000);
                 // Create a TCP/IP  socket.
                 Socket vSender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+                vSender.ReceiveTimeout = sTimeout;
+                vSender.SendTimeout = sTimeout; 
+             
                 try
                 {
-                    vSender.Connect(vRemoteEndPoint); 
+                    vSender.Connect(vRemoteEndPoint);
                     // Encode the data string into a byte array.
                     byte[] msg = PacketSetting.Encoding.GetBytes(vMsg);
 
                     // Send the data through the socket.
-                      vSender.Send(msg);
+                    vSender.Send(msg);
 
                     // Receive the response from the remote device.
                     vSender.Receive(bytes);
-                
+
                     HeddokoPacket vHPacket = new HeddokoPacket(bytes, PacketSetting.PacketCommandSize);
                     PacketCommandRouter.Instance.Process(vSender, vHPacket);
-                    
+
                     // Release the socket.
                     vSender.Shutdown(SocketShutdown.Both);
                     vSender.Close();
-                 
-                        vMsg = PacketSetting.Encoding.GetString(bytes);
+
+                    // vMsg = PacketSetting.Encoding.GetString(bytes);
+                }
+                catch (TimeoutException)
+                {
+                    string v = "timeout";
+                    vSender.Shutdown(SocketShutdown.Both);
+                    vSender.Close();
                 }
                 catch (ArgumentNullException ane)
                 {
-                     vMsg =  "ArgumentNullException  " +ane;
+                    vMsg = "ArgumentNullException  " + ane;
                 }
                 catch (SocketException se)
                 {
-                    vMsg = "SocketException  " + se;
+                    
+                    vMsg = "SocketException  "+ se.ErrorCode + "\r\n"+se;
+                    vMsg += se.InnerException;
+                    vSender.Close();
                 }
                 catch (Exception e)
                 {
                     vMsg = "Unexpected exception " + e;
+                    vSender.Shutdown(SocketShutdown.Both);
+                    vSender.Close();
                 }
 
             }
@@ -131,7 +145,7 @@ namespace Assets.Scripts.Communication
             }
             mReceivedMessage = true;
             vStopwatch.Stop();
-            
+
             if (IsDebugging)
             {
                 //vBodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds,vMsg);
@@ -143,6 +157,6 @@ namespace Assets.Scripts.Communication
             mIsworking = false;
         }
 
- 
+
     }
 }
