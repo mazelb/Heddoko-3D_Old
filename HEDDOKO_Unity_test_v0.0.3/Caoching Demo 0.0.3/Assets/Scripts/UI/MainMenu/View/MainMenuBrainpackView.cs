@@ -127,7 +127,7 @@ namespace Assets.Scripts.UI.MainMenu.View
 
         public void UnpairButtonEngaged()
         {
-            BrainpackConnectionController.Instance.SetStateToIdle();
+            BrainpackConnectionController.Instance.DisconnectBrainpack();
         }
 
         public void SetWarningBoxMessage(string vMsg)
