@@ -127,6 +127,16 @@ namespace Assets.Scripts.Communication.Controller
 
         }
 
+        /// <summary>
+        /// sets the recording prefix on the brainpack
+        /// </summary>
+        /// <param name="vPrefix"></param>
+        public static void SetRecordingPrefix(string vPrefix)
+        {
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SetRecordingPrefix, vPrefix);
+            PacketCommandRouter.Instance.Process(Instance, vHeddokoPacket);
+        }
+
         private bool Validate(string vComport)
         {
             if (string.IsNullOrEmpty(vComport))
@@ -275,12 +285,14 @@ namespace Assets.Scripts.Communication.Controller
 
                         if (vNewState == BrainpackConnectionState.Idle)
                         {
-                            mCurrentConnectionState = vNewState;
+                            
                             if (DisconnectedStateEvent != null)
                             {
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
                             }
+                          
+                            mCurrentConnectionState = vNewState;
                         }
                         break;
                     }
@@ -323,9 +335,10 @@ namespace Assets.Scripts.Communication.Controller
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             {
                 DisconnectBrainpack();
-                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
-                PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
             }
+
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
 
         /// <summary>
