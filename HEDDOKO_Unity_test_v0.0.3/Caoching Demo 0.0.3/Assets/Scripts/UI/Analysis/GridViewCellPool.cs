@@ -8,9 +8,7 @@
 
 
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
+using UnityEngine; 
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Analysis
