@@ -95,7 +95,7 @@ namespace Assets.Scripts.Cameras
 
             }
             InputHandler();
-            CurrentCam.orthographicSize = mFoV;
+            //CurrentCam.orthographicSize = mFoV;
         }
 
         /// <summary>
