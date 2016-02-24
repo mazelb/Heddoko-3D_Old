@@ -45,6 +45,10 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
         public static KeyCode SwitchToRecordingFromLive = KeyCode.S;
         public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.D;
+        public static KeyCode IsProjectingSubSegmentsXZ = KeyCode.Y;
+        public static KeyCode IsProjectingSubSegmentsXY = KeyCode.U;
+        public static KeyCode IsProjectingSubSegmentsYZ = KeyCode.I;
+
         public static KeyCode SettingsButton = KeyCode.Escape;
   }
 }
