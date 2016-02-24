@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.Loading;
+using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.ModalWindow;
 using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.UI.Settings;
+using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 
 namespace Assets.Scripts.Utils.DatabaseAccess
@@ -18,13 +20,15 @@ namespace Assets.Scripts.Utils.DatabaseAccess
     {
         private DBAccess mDbAccess;
         public GameObject[] GOtoReEnable;
-        public ScrollablePanel ContentPanel; 
+        public ScrollablePanel ContentPanel;
+        public PlayerStreamManager PlayerStreamManager;
 
   
         // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             BodySegment.IsTrackingHeight = false;
+            
             bool vAppSafelyLaunched;
 
 
@@ -110,6 +114,34 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             LoadingBoard.StopLoadingAnimation();
             ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. dbloc ", Application.Quit);
+        }
+
+        private bool ResetTPosButtonEnabled;
+        private int mCounter = 0;
+        public BrainpackComPortText BrainpackComPortText;
+        void OnGUI()
+        {
+            Event e = Event.current;
+            if (!ResetTPosButtonEnabled && Input.anyKeyDown && e.isKey)
+            {
+                if (e.keyCode == KeyCode.Home)
+                {
+                    mCounter++;
+                    if (mCounter == 5)
+                    {
+                        InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+                        Debug.Log("Heddoko code enabled");
+                        BrainpackComPortText.gameObject.SetActive(true);
+                    }
+
+                }
+                else if (e.keyCode != KeyCode.Home)
+                {
+                    mCounter = 0;
+                    Debug.Log("Heddoko code disabled");
+                }
+            }
+            
         }
     }
 }
