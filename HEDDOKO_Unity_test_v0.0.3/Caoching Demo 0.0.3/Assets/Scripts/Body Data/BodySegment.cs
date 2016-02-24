@@ -583,15 +583,15 @@ public class BodySegment
                                     BodySubSegment vUASubsegment, BodySubSegment vLASubsegment, BodySubSegment vTorsoSubSegment, BodySubSegment vHipsSubsegment, bool vIsRight = true)
     {
         //Upper arm
-        Quaternion vUpArmInitQuatY = Quaternion.Euler(0, 0, 0);
-        Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
-        vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
-        vUpArmQuatY = Quaternion.Inverse(vUpArmQuatY);
-
-        //Quaternion vUpArmInitQuatY = Quaternion.Euler(0, (vIsRight) ? vUAInitEuler.z : (vUAInitEuler.z), 0);
-        //Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? vUACurEuler.z : (vUACurEuler.z), 0);
+        //Quaternion vUpArmInitQuatY = Quaternion.Euler(0, 0, 0);
+        //Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
         //vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
         //vUpArmQuatY = Quaternion.Inverse(vUpArmQuatY);
+
+        Quaternion vUpArmInitQuatY = Quaternion.Euler(0, (vIsRight) ? vUAInitEuler.z : (vUAInitEuler.z), 0);
+        Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? vUACurEuler.z : (vUACurEuler.z), 0);
+        vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
+        vUpArmQuatY = Quaternion.Inverse(vUpArmQuatY);
 
         Quaternion vUpArmInitQuatX = Quaternion.Euler(vUAInitEuler.x, 0, 0);
         Quaternion vUpArmQuatX = Quaternion.Euler(vUACurEuler.x, 0, 0);
@@ -603,15 +603,15 @@ public class BodySegment
         vUpArmQuatZ = Quaternion.Inverse(vUpArmQuatZ);
 
         //Lower arm
-        Quaternion vLoArmInitQuatY = Quaternion.Euler(0, 0, 0);
-        Quaternion vLoArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
-        vLoArmQuatY = Quaternion.Inverse(vLoArmInitQuatY) * vLoArmQuatY;
-        vLoArmQuatY = Quaternion.Inverse(vLoArmQuatY);
-
-        //Quaternion vLoArmInitQuatY = Quaternion.Euler(0, (vIsRight) ? vLAInitEuler.z : (vLAInitEuler.z), 0);
-        //Quaternion vLoArmQuatY = Quaternion.Euler(0, (vIsRight) ? vLACurEuler.z : (vLACurEuler.z), 0);
+        //Quaternion vLoArmInitQuatY = Quaternion.Euler(0, 0, 0);
+        //Quaternion vLoArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
         //vLoArmQuatY = Quaternion.Inverse(vLoArmInitQuatY) * vLoArmQuatY;
         //vLoArmQuatY = Quaternion.Inverse(vLoArmQuatY);
+
+        Quaternion vLoArmInitQuatY = Quaternion.Euler(0, (vIsRight) ? vLAInitEuler.z : (vLAInitEuler.z), 0);
+        Quaternion vLoArmQuatY = Quaternion.Euler(0, (vIsRight) ? vLACurEuler.z : (vLACurEuler.z), 0);
+        vLoArmQuatY = Quaternion.Inverse(vLoArmInitQuatY) * vLoArmQuatY;
+        vLoArmQuatY = Quaternion.Inverse(vLoArmQuatY);
 
         Quaternion vLoArmInitQuatX = Quaternion.Euler(vLAInitEuler.x, 0, 0);
         Quaternion vLoArmQuatX = Quaternion.Euler(vLACurEuler.x, 0, 0);
@@ -622,8 +622,8 @@ public class BodySegment
         vLoArmQuatZ = Quaternion.Inverse(vLoArmInitQuatZ) * vLoArmQuatZ;
         vLoArmQuatZ = Quaternion.Inverse(vLoArmQuatZ);
 
-        Quaternion vUpArmQuat = vUpArmQuatY/* * vUpArmQuatX * vUpArmQuatZ*/;
-        Quaternion vLoArmQuat = vLoArmQuatY/* * vLoArmQuatX * vLoArmQuatZ*/;
+        Quaternion vUpArmQuat = vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
+        Quaternion vLoArmQuat = vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
 
         vCurrentAngle += 0.01f;
         
