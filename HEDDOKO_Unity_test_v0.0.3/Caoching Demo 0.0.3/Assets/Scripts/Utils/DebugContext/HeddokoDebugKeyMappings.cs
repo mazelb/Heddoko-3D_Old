@@ -34,7 +34,7 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IsUsingInterpolationForBody = KeyCode.Alpha7;
         public static KeyCode IsUsingFusionForBody = KeyCode.F;
  
-        public static KeyCode IsAdjustingArms = KeyCode.Alpha6;
+        public static KeyCode IsAdjustingSegmentAxis = KeyCode.Alpha6;
         public static KeyCode IsUsingInterpolation = KeyCode.Alpha7;
  
  
@@ -45,9 +45,9 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode HideSegmentFlagPanel = KeyCode.H;
         public static KeyCode SwitchToRecordingFromLive = KeyCode.S;
         public static KeyCode SkipToLiveViewFromRecordingView = KeyCode.D;
-        public static KeyCode IsProjectingSubSegmentsXZ = KeyCode.Y;
-        public static KeyCode IsProjectingSubSegmentsXY = KeyCode.U;
-        public static KeyCode IsProjectingSubSegmentsYZ = KeyCode.I;
+        public static KeyCode IsProjectingXZ = KeyCode.Y;
+        public static KeyCode IsProjectingXY = KeyCode.U;
+        public static KeyCode IsProjectingYZ = KeyCode.I;
 
         public static KeyCode SettingsButton = KeyCode.Escape;
   }

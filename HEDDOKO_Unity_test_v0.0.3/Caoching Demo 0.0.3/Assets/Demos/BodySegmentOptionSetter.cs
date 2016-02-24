@@ -20,7 +20,7 @@ using UnityEngine.UI;
 namespace Assets.Demos
 {
     /// <summary>
-    /// Enables and disables BodySegment options. 
+    /// Enables and disables BodySegment options, options are set through reflection
     /// </summary>
     public class BodySegmentOptionSetter : MonoBehaviour
     {

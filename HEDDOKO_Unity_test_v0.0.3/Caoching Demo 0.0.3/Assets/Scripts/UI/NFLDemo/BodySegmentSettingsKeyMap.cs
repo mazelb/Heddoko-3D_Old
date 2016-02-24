@@ -96,7 +96,7 @@ namespace Assets.Scripts.UI.NFLDemo
             {
                 BodySegment.IsUsingInterpolation = !BodySegment.IsUsingInterpolation;
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingSegmentAxis))
             {
                 BodySegment.IsAdjustingSegmentAxis = !BodySegment.IsAdjustingSegmentAxis;
             }

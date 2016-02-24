@@ -200,7 +200,7 @@ namespace Assets.Demos
                 BodySegment.IsTrackingHips = !BodySegment.IsTrackingHips;
                 TrackHipsTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHips);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingSegmentAxis))
             {
                 BodySegment.IsAdjustingSegmentAxis = !BodySegment.IsAdjustingSegmentAxis;
                 ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingSegmentAxis);
@@ -228,17 +228,17 @@ namespace Assets.Demos
                 FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
             }
 
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsXZ))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingXZ))
             {
                 BodySegment.IsProjectingXZ = !BodySegment.IsProjectingXZ;
                 ProjectionXZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXZ);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsXY))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingXY))
             {
                 BodySegment.IsProjectingXY = !BodySegment.IsProjectingXY;
                 ProjectionXYTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXY);
             }
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsYZ))
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingYZ))
             {
                 BodySegment.IsProjectingYZ = !BodySegment.IsProjectingYZ;
                 ProjectionYZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingYZ);
