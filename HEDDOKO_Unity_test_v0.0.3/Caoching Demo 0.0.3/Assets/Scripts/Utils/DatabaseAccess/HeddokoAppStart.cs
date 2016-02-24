@@ -23,12 +23,12 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         public ScrollablePanel ContentPanel;
         public PlayerStreamManager PlayerStreamManager;
 
-  
+
         // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             BodySegment.IsTrackingHeight = false;
-            
+
             bool vAppSafelyLaunched;
 
 
@@ -39,11 +39,11 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             mDbAccess = new DBAccess();
 
             bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
-/*
-#if UNITY_EDITOR
-            vApplicationSettingsFound = true;
-#endif
-*/
+            /*
+            #if UNITY_EDITOR
+                        vApplicationSettingsFound = true;
+            #endif
+            */
 
             if (vApplicationSettingsFound)
             {
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     {
                         vGet = string.Empty;
                     }
-                   
+
                     BrainpackConnectionController.Instance.BrainpackComPort = vGet;
                     LoadingBoard.StopLoadingAnimation();
                     List<ScrollableContent> vContentList = new List<ScrollableContent>();
@@ -130,7 +130,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     if (mCounter == 5)
                     {
                         InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
-                        Debug.Log("Heddoko code enabled");
+
                         BrainpackComPortText.gameObject.SetActive(true);
                     }
 
@@ -138,10 +138,9 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                 else if (e.keyCode != KeyCode.Home)
                 {
                     mCounter = 0;
-                    Debug.Log("Heddoko code disabled");
                 }
             }
-            
+
         }
     }
 }
