@@ -11,6 +11,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.Loading;
 using Assets.Scripts.UI.Metrics;
+using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -88,6 +89,7 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 TPoseButtons[i].onClick.AddListener(ResetBody);
             }
+            
         }
 
         /// <summary>

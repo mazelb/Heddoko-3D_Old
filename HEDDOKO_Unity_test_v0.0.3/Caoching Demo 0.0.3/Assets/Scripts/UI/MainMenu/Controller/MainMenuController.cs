@@ -20,6 +20,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         //The main menu view
         public MainMenuView MainMenuView;
         public SplashScreen SplashScreen;
+ 
         [SerializeField]
         private MainMenuState mCurrentState = MainMenuState.SplashScreen;
 

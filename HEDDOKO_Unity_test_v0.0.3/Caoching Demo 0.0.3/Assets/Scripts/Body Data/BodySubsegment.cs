@@ -79,7 +79,7 @@ public class BodySubSegment
     */
     internal void InitializeBodySubsegment(BodyStructureMap.SubSegmentTypes vSubsegmentType)
     {
-        GameObject go = new GameObject(EnumUtil.GetName(vSubsegmentType));
+        GameObject go = new GameObject(vSubsegmentType.GetName());
         AssociatedView = go.AddComponent<BodySubsegmentView>();
         AssociatedView.AssociatedSubSegment = this;
         subsegmentType = vSubsegmentType;

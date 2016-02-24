@@ -25,6 +25,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Camera TrainingAndLearningCam;
         public Camera RecordingSelectionCam;
         public Button ExitButton;
+        public Button SettingsButton;
 
 
      

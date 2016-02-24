@@ -7,7 +7,8 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
-using System; 
+using System;
+using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Metrics;
@@ -35,18 +36,18 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         public Transform HeddokoModelHiddenAnchor;
         [SerializeField]
         private Button mBackButton;
-        public Camera TrainingAndLearningCam;  
- 
+        public Camera TrainingAndLearningCam;
+
         public ActivitiesContextController ActivitiesContextController;
 
         public SquatMetricsView SquatMetrics;
-        public NonSquatWrapperView NonSquatMetrics; 
+        public NonSquatWrapperView NonSquatMetrics;
 
 
         private PlayerStreamManager mPlayerStreamManager;
         private bool mIsActive { get; set; }
         public Model2D3DSwitch ModelSwitcher;
-
+        public Button RecordButton;
         public override Button Backbutton
         {
             get { return mBackButton; }
@@ -63,30 +64,38 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             }
         }
 
+        void Awake()
+        {
+            if (RecordButton != null)
+            {
+                BrainpackConnectionController.ConnectedStateEvent += () =>
+                {
+                    RecordButton.interactable = true;
+                };
+                BrainpackConnectionController.DisconnectedStateEvent += () =>
+                {
+                    RecordButton.interactable = false;
+                };
 
+                RecordButton.onClick.AddListener(BrainpackConnectionController.Instance.StartRecording);
+            }
+            
+        }
         /// <summary>
         /// Enables and shows the view
         /// </summary>
         public override void Show()
-        { 
-            gameObject.SetActive(true); 
+        {
+            gameObject.SetActive(true);
             ModelSwitcher.TransformInview3DLocation = Heddoko3DModelEnabledAnchor;
             ModelSwitcher.TransformInview2DLocation = Heddoko2DModelEnabledAnchor;
-            ModelSwitcher.Show(); 
+            ModelSwitcher.Show();
             TrainingAndLearningCam.gameObject.SetActive(true);
-           
             PlayerStreamManager.ChangeState(PlayerStreamManager.BodyPlaybackState.StreamingFromBrainPack);
-            /*            //check if using squats or bike
-                        if (ActivitiesContextController.UsingSquats)
-                        {
-                            NonSquatMetrics.Hide();
-                            SquatMetrics.Show();
-                        }
-                        else
-                        {
-                            SquatMetrics.Hide();
-                            NonSquatMetrics.Show();
-                        }*/
+            if (RecordButton != null)
+            {
+                RecordButton.interactable = BrainpackConnectionController.Instance.ConnectionState == BrainpackConnectionState.Connected;
+            }
 
         }
         /// <summary>
@@ -97,12 +106,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             SquatMetrics.Hide();
             NonSquatMetrics.Hide();
             ModelSwitcher.Hide();
-            TrainingAndLearningCam.gameObject.SetActive(false); 
+            TrainingAndLearningCam.gameObject.SetActive(false);
             PlayerStreamManager.Stop();
             PlayerStreamManager.ResetBody();
             gameObject.SetActive(false);
             mIsActive = false;
- 
+
         }
 
 
