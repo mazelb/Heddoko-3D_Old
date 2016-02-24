@@ -43,6 +43,13 @@ namespace Assets.Demos
         public Button Fusion;
         public Text FusionTxt;
 
+        public Button ProjectionXZ;
+        public Text ProjectionXZTxt;
+        public Button ProjectionXY;
+        public Text ProjectionXYTxt;
+        public Button ProjectionYZ;
+        public Text ProjectionYZTxt;
+        
 
         public Text HideText;
 
@@ -59,11 +66,16 @@ namespace Assets.Demos
                 {
                     TrackHeightTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHeight);
                     TrackHipsTxt.text = ReturnOnOffFromBool(BodySegment.IsTrackingHips);
-                    ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingArms);
+                    ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingSegmentAxis);
                     HipsEstForwardTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateForward);
                     HipsEstUpTxt.text = ReturnOnOffFromBool(BodySegment.IsHipsEstimateUp);
                     InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
                     FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
+
+                    ProjectionXZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXZ);
+                    ProjectionXYTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXY);
+                    ProjectionYZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingYZ);
+
                     mBodySet = true;
                 }
                 InputHandler();
@@ -108,8 +120,8 @@ namespace Assets.Demos
             ArmAdjustment.onClick.AddListener( ()=> { 
                  if (BodyPlayer.CurrentBodyInPlay != null)
                 {
-                    BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
-                    ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingArms);
+                    BodySegment.IsAdjustingSegmentAxis = !BodySegment.IsAdjustingSegmentAxis;
+                    ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingSegmentAxis);
                 }
             }
                 );
@@ -146,6 +158,31 @@ namespace Assets.Demos
                 }
             }
               );
+
+            ProjectionXZ.onClick.AddListener(() => {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodySegment.IsProjectingXZ = !BodySegment.IsProjectingXZ;
+                    ProjectionXZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXZ);
+                }
+            }
+              );
+            ProjectionXY.onClick.AddListener(() => {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodySegment.IsProjectingXY = !BodySegment.IsProjectingXY;
+                    ProjectionXYTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXY);
+                }
+            }
+              );
+            ProjectionYZ.onClick.AddListener(() => {
+                if (BodyPlayer.CurrentBodyInPlay != null)
+                {
+                    BodySegment.IsProjectingYZ = !BodySegment.IsProjectingYZ;
+                    ProjectionYZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingYZ);
+                }
+            }
+              );
         }
         /// <summary>
         /// Handles input from keyboard
@@ -165,8 +202,8 @@ namespace Assets.Demos
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
             {
-                BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
-                ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingArms);
+                BodySegment.IsAdjustingSegmentAxis = !BodySegment.IsAdjustingSegmentAxis;
+                ArmAdjustmentTxt.text = ReturnOnOffFromBool(BodySegment.IsAdjustingSegmentAxis);
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsHipsEstimateForward))
             {
@@ -184,13 +221,27 @@ namespace Assets.Demos
                 InterpolationTxt.text = ReturnOnOffFromBool(BodySegment.IsUsingInterpolation);
             }
  
-            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
- 
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments)) 
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsUsingFusionForBody))
- 
             {
                 BodySegment.IsFusingSubSegments = !BodySegment.IsFusingSubSegments;
                 FusionTxt.text = ReturnOnOffFromBool(BodySegment.IsFusingSubSegments);
+            }
+
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsXZ))
+            {
+                BodySegment.IsProjectingXZ = !BodySegment.IsProjectingXZ;
+                ProjectionXZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXZ);
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsXY))
+            {
+                BodySegment.IsProjectingXY = !BodySegment.IsProjectingXY;
+                ProjectionXYTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingXY);
+            }
+            if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsProjectingSubSegmentsYZ))
+            {
+                BodySegment.IsProjectingYZ = !BodySegment.IsProjectingYZ;
+                ProjectionYZTxt.text = ReturnOnOffFromBool(BodySegment.IsProjectingYZ);
             }
         }
 

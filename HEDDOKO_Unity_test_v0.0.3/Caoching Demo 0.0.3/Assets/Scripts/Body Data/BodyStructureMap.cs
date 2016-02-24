@@ -46,6 +46,16 @@ public class BodyStructureMap
     {
         public Vector3 InitRawEuler;
         public Vector3 CurrRawEuler;
+        public CalibrationStructure CalibrationData;
+    };
+
+    public struct CalibrationStructure
+    {
+        public int HistoryCount;
+        public Vector3 MinRawEuler;
+        public Vector3 MaxRawEuler;
+        public Vector3 AvgRawEulerDiff;
+        public List<Vector3> PrevRawEulers;
     };
 
     //Body Types

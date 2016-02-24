@@ -407,12 +407,12 @@ public class Body
 
             Vector3 vInitialRawEuler = vBody.InitialBodyFrame.FrameData[vKey];
             Vector3 vCurrentRawEuler = vBody.CurrentBodyFrame.FrameData[vKey];
-        //    Vector3 vPreviousRawEuler = vBody.PreviousBodyFrame.FrameData[vKey];
+            //Vector3 vPreviousRawEuler = vBody.PreviousBodyFrame.FrameData[vKey];
 
             BodyStructureMap.TrackingStructure vStruct = new BodyStructureMap.TrackingStructure();
             vStruct.InitRawEuler = vInitialRawEuler;
             vStruct.CurrRawEuler = vCurrentRawEuler;
-         //   vStruct.PrevRawEuler = vPreviousRawEuler;
+            //vStruct.PrevRawEuler = vPreviousRawEuler;
 
             vDic.Add(vKey, vStruct);
         }

@@ -98,7 +98,7 @@ namespace Assets.Scripts.UI.NFLDemo
             }
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsAdjustingArms))
             {
-                BodySegment.IsAdjustingArms = !BodySegment.IsAdjustingArms;
+                BodySegment.IsAdjustingSegmentAxis = !BodySegment.IsAdjustingSegmentAxis;
             }
  
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.IsFusingSubSegments))
