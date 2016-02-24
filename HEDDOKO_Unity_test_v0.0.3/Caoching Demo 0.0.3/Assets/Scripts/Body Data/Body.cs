@@ -11,12 +11,12 @@ using System.Collections.Generic;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
 using System.Linq;
+using Assets.Scripts.Body_Data;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
-using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
+using Assets.Scripts.Communication.Controller; 
 
 /**
 * Body class 
@@ -43,6 +43,8 @@ public class Body
     public BodyFrame CurrentBodyFrame;
     [SerializeField]
     public BodyFrame PreviousBodyFrame;
+
+    [SerializeField] private RenderedBodyComponent mAvatar;
 
     [SerializeField]
     //Initial body Frame
@@ -156,7 +158,8 @@ public class Body
     */
     public void CreateBodyStructure(BodyStructureMap.BodyTypes vBodyType)
     {
-        List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType]; //Get the list of segments from the bodystructuremap 
+        //Get the list of segments from the bodystructuremap 
+        List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType];
         TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
         vTorsoSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_Torso;
 
@@ -311,7 +314,7 @@ public class Body
         //stop the current thread and get ready for a new connection. 
         StopThread();
 
-        BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(1024);
+        BodyFrameBuffer vBuffer1 = new BodyFrameBuffer(24);
         mBodyFrameThread = new BodyFrameThread(vBuffer1, BodyFrameThread.SourceDataType.BrainFrame);
         mBodyFrameThread.Start();
         View.StartUpdating = true;
