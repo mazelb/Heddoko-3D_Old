@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Utils; 
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 
@@ -58,7 +59,7 @@ namespace Assets.Scripts.Communication
         private object mFrameTheadAccessLock = new object();
 
         //On brainpack data retreival, send the data to the bodyframethread
-        private BodyFrameThread mBodyFrameThread; 
+        private BodyFrameThread mBodyFrameThread;
 
         private BodyFrameThread FrameThread
         {
@@ -79,13 +80,13 @@ namespace Assets.Scripts.Communication
             }
         }
 
-       /**
-       * Initialize 
-       * @brief Begins command delegate registration. Please see documentation for HeddokoCommand for further information on what each numerical value 
-       * represents  
-       * @note The document can be found here, you need to have a valid Heddoko sharepoint account in order to access the link. 
-       https://heddoko.sharepoint.com/_layouts/OneNote.aspx?id=%2FSiteAssets%2FTeam%20Site%20Notebook&wd=target%28Data%20structures.one%7CCB02DD1E-F126-43C5-A4F2-10252682A3FA%2F%29onenote:https://heddoko.sharepoint.com/SiteAssets/Team%20Site%20Notebook/Data%20structures.one#section-id={CB02DD1E-F126-43C5-A4F2-10252682A3FA}&end
-       */
+        /**
+        * Initialize 
+        * @brief Begins command delegate registration. Please see documentation for HeddokoCommand for further information on what each numerical value 
+        * represents  
+        * @note The document can be found here, you need to have a valid Heddoko sharepoint account in order to access the link. 
+        https://heddoko.sharepoint.com/_layouts/OneNote.aspx?id=%2FSiteAssets%2FTeam%20Site%20Notebook&wd=target%28Data%20structures.one%7CCB02DD1E-F126-43C5-A4F2-10252682A3FA%2F%29onenote:https://heddoko.sharepoint.com/SiteAssets/Team%20Site%20Notebook/Data%20structures.one#section-id={CB02DD1E-F126-43C5-A4F2-10252682A3FA}&end
+        */
         public void Initialize()
         {
             mCommand.Register(HeddokoCommands.BPConnectionSucess, SuitConnectionSuccess);
@@ -97,7 +98,44 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.ClientError, SocketClientError);
             mCommand.Register(HeddokoCommands.DisconnectBrainpack, DisconnectBrainpackRequest);
             mCommand.Register(HeddokoCommands.DiscoAcknowledged, DisconnectAcknowledged);
+            mCommand.Register(HeddokoCommands.SetRecordingPrefixReq, SetBrainpackRecordingPrefix);
+            mCommand.Register(HeddokoCommands.ShutdownBrainpackReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.ShutdownBrainpackResp, ShutdownBrainpackResp);
+            mCommand.Register(HeddokoCommands.ResetBrainpackReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.ResetBrainpackResp, ResetBrainpackResp);
+            mCommand.Register(HeddokoCommands.GetBrainpackStateReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.GetBrainpackStateResp, GetBrainpackStateResp);
+            mCommand.Register(HeddokoCommands.SetBrainpackTimeReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.SetBrainpackTimeResp, SetBrainpackTimeResp);
+            mCommand.Register(HeddokoCommands.GetResponseMessageReq, RequestResponseMessage);
+            mCommand.Register(HeddokoCommands.GetResponseMessageResp, RerouteResponseMessage);
+            mCommand.Register(HeddokoCommands.GetBrainpackVersionReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.StartRecordingReq, WrapPacketAndSendMessage);
+        }
 
+
+        private void RequestResponseMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            ClientSocket.Requests.Enqueue(vPayload);
+        }
+        private void RerouteResponseMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload); 
+            BrainpackConnectionController.Instance.Output = vPayload;
+            if (!string.IsNullOrEmpty(vPayload))
+            {
+                Action vAction = () =>
+                {
+                    if (BrainpackConnectionController.BrainpackStatusResponse != null)
+                    {
+                        BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
+                    }
+                };
+                OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
+            } 
         }
         /**
         * Process(object vSender, HeddokoPacket vPacket)
@@ -184,7 +222,7 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-             
+
             ClientSocket.Requests.Enqueue(vPayload);
         }
 
@@ -198,7 +236,7 @@ namespace Assets.Scripts.Communication
 
         private void DisconnectAcknowledged(object vSender, object vArg)
         {
-            
+
             //todo:
         }
 
@@ -236,9 +274,7 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            //   ClientSocket.SendMessage(vPayload);
             ClientSocket.Requests.Enqueue(vPayload);
-            // mClientSocket.WriteToServer(vPayload);
         }
 
 
@@ -287,11 +323,97 @@ namespace Assets.Scripts.Communication
             //  AsynchronousSocketListener.Send(vSocket, vPacketBody); 
         }
 
+        private void SetBrainpackRecordingPrefix(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            ClientSocket.Requests.Enqueue(vPayload);
+        }
+
         private void Stop(object vSender, object vArgs)
         {
             ClientSocket.Stop();
 
         }
 
+        /// <summary>
+        /// response received after a state request
+        /// </summary>
+        /// <param name="vVsender"></param>
+        /// <param name="vArgs"></param>
+        private void GetBrainpackStateResp(object vVsender, object vArgs)
+        {
+            //unwrap the message
+
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
+/*
+            Action vAction = () =>
+            {
+                if (BrainpackConnectionController.BrainpackStatusResponse != null)
+                {
+                    BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
+                }
+            };
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+        }
+
+        /// <summary>
+        /// response from the brainpack
+        /// </summary>
+        /// <param name="vVsender"></param>
+        /// <param name="vArgs"></param>
+        private void SetBrainpackTimeResp(object vVsender, object vArgs)
+        {
+          /*  Action vAction = () =>
+            {
+                if (BrainpackConnectionController.BrainpackTimeSetResp != null)
+                {
+                    BrainpackConnectionController.BrainpackTimeSetResp.Invoke();
+                }
+            };
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+        }
+
+        /// <summary>
+        /// Response after the brainpack has been reset
+        /// </summary>
+        /// <param name="vVsender"></param>
+        /// <param name="vArgs"></param>
+        private void ResetBrainpackResp(object vVsender, object vArgs)
+        {
+          /*  Action vAction = () =>
+            {
+                if (BrainpackConnectionController.ResetBrainpackResp != null)
+                {
+                    BrainpackConnectionController.ResetBrainpackResp.Invoke();
+                }
+            };
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+        }
+
+        /// <summary>
+        /// Response to when the brainpack has been shut down
+        /// </summary>
+        /// <param name="vVsender"></param>
+        /// <param name="vVargs"></param>
+        private void ShutdownBrainpackResp(object vVsender, object vVargs)
+        {
+           /* Action vAction = () =>
+            {
+                BrainpackConnectionController.BrainpackShutdown.Invoke();
+            };
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+        }
+
+
+
+
+        private void WrapPacketAndSendMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            ClientSocket.Requests.Enqueue(vPayload);
+        }
     }
 }

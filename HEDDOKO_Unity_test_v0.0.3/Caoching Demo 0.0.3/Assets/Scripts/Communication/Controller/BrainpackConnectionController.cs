@@ -30,11 +30,17 @@ namespace Assets.Scripts.Communication.Controller
     {
         public delegate void BpConnectionControllerDel();
 
+        public delegate void BpConnectionControllerRespDel(string vResponse);
+
         private static BrainpackConnectionController mInstance;
         public static BpConnectionControllerDel ConnectingStateEvent;
         public static BpConnectionControllerDel ConnectedStateEvent;
         public static BpConnectionControllerDel DisconnectedStateEvent;
         public static BpConnectionControllerDel FailedToConnectStateEvent;
+        public static BpConnectionControllerDel BrainpackShutdown;
+        public static BpConnectionControllerDel ResetBrainpackResp;
+        public static BpConnectionControllerRespDel BrainpackStatusResponse;
+        public static BpConnectionControllerDel BrainpackTimeSetResp;
         public OutterThreadToUnityTrigger BrainpackConnectedTrigger = new OutterThreadToUnityTrigger();
         public OutterThreadToUnityTrigger SocketClientErrorTrigger = new OutterThreadToUnityTrigger();
         public string Output = "";
@@ -127,16 +133,12 @@ namespace Assets.Scripts.Communication.Controller
 
         }
 
+ 
         /// <summary>
-        /// sets the recording prefix on the brainpack
+        /// validate the comport input
         /// </summary>
-        /// <param name="vPrefix"></param>
-        public static void SetRecordingPrefix(string vPrefix)
-        {
-            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SetRecordingPrefix, vPrefix);
-            PacketCommandRouter.Instance.Process(Instance, vHeddokoPacket);
-        }
-
+        /// <param name="vComport"></param>
+        /// <returns></returns>
         private bool Validate(string vComport)
         {
             if (string.IsNullOrEmpty(vComport))
@@ -325,6 +327,10 @@ namespace Assets.Scripts.Communication.Controller
         public void Awake()
         {
             Instance.Init();
+            BrainpackShutdown += () =>
+            {
+                ChangeCurrentState(BrainpackConnectionState.Idle);
+            };
         }
 
         /// <summary>
@@ -348,7 +354,13 @@ namespace Assets.Scripts.Communication.Controller
         {
             vTotalTries = 0;
         }
-
+        /// <summary>
+        /// Requests brainpack responses
+        /// </summary>
+        public void RequestBrainpackResponses()
+        {
+            SendCommandToBrainpack(HeddokoCommands.GetResponseMessageReq);
+        }
         /// <summary>
         /// The update function monitors the connected flag and starts to pull data
         /// </summary>
@@ -375,11 +387,13 @@ namespace Assets.Scripts.Communication.Controller
             {
                 HeddokoPacket vRequestBrainpackData = new HeddokoPacket(HeddokoCommands.RequestBPData, "Requesting data");
                 PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
+              
             }
 
 
         }
 
+        
         /// <summary>
         /// Sets the body as being ready to connect to the brainpack, once the brainpack is connected, the body will stream the brainpack
         /// </summary>
@@ -395,6 +409,80 @@ namespace Assets.Scripts.Communication.Controller
         public void DisconnectBodyFromBP()
         {
             PacketCommandRouter.Instance.DisconnectFrameThread();
+        }
+
+        /// <summary>
+        ///  Sends a command to the brainpack to change its recording prefix
+        /// </summary>
+        /// <param name="vRecordingPrefix"></param>
+        public void ChangeRecordingPrefix(string vRecordingPrefix)
+        {
+            if (mCurrentConnectionState == BrainpackConnectionState.Connected)
+            {
+                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.SetRecordingPrefixReq, vRecordingPrefix);
+                PacketCommandRouter.Instance.Process(Instance, vHeddokoPacket);
+            }
+        }
+        /// <summary>
+        /// Sends a command to the brainpack to shut down 
+        /// </summary>
+        public void PowerOffBrainpackCmd()
+        { 
+            SendCommandToBrainpack(HeddokoCommands.ShutdownBrainpackReq);
+            ChangeCurrentState(BrainpackConnectionState.Idle);
+        }
+
+        /// <summary>
+        /// Sends a command to the brainpack to reset 
+        /// </summary>
+        public void ResetBrainpackCmd()
+        {
+            SendCommandToBrainpack(HeddokoCommands.ResetBrainpackReq);
+        }
+        /// <summary>
+        /// Sends a command to the brainpack to retrieve its current version
+        /// </summary>
+        public void GetBrainpackVersCmd()
+        {
+            SendCommandToBrainpack(HeddokoCommands.GetBrainpackVersionReq);
+        }
+
+        /// <summary>
+        /// Sends a command to the brainpack to set its time to the current local time
+        /// </summary>
+        public void SetBrainpackTimeCmd()
+        {
+            SendCommandToBrainpack(HeddokoCommands.SetBrainpackTimeReq);
+        }
+
+        /// <summary>
+        /// Sends a command to the brainpack to retrieve its current state
+        /// </summary>
+        public void GetBrainpackStateCmd()
+        {
+            SendCommandToBrainpack(HeddokoCommands.GetBrainpackStateReq);
+        }
+
+        /// <summary>
+        /// Private helper method that sends a command to the brainpack 
+        /// </summary>
+        /// <param name="vCommand"></param>
+        private void SendCommandToBrainpack(string vCommand)
+        {
+            if (mCurrentConnectionState == BrainpackConnectionState.Connected)
+            {
+                HeddokoPacket vPacket = new HeddokoPacket(vCommand, "");
+                PacketCommandRouter.Instance.Process(this, vPacket);
+            }
+           
+        }
+
+        /// <summary>
+        /// Sends a request to currently connected Brainpack to start recording
+        /// </summary>
+        public void StartRecording()
+        {
+            SendCommandToBrainpack(HeddokoCommands.StartRecordingReq);
         }
     }
 
