@@ -1,28 +1,149 @@
-﻿using System.Windows.Forms;
+﻿/** 
+* @file SettingsView.cs
+* @brief Contains the SettingsView abstract class
+* @author Mohammed Haider (mohammed@heddoko.com)
+* @date February 2016
+* Copyright Heddoko(TM) 2016, all rights reserved
+*/
+
+using Assets.Scripts.Communication.Controller;
+using Kender.uGUI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Settings
 {
-    public class SettingsView : MonoBehaviour {
- 
-        private FolderBrowserDialog folderBrowserDialog1;
-        private string vStoredDirectory;
-        // Use this for initialization
-        void Start () {
-            folderBrowserDialog1 = new FolderBrowserDialog();
-            folderBrowserDialog1.Description =
-                "Select the default recordings directory";
-            folderBrowserDialog1.ShowNewFolderButton = true;
-            // folderBrowserDialog1.RootFolder = Environment.SpecialFolder.ProgramFiles;
+    /// <summary>
+    /// View for a settings panel in scene
+    /// </summary>
+    public class SettingsView : AbstractView
+    {
+        public Button SettingsButton;
+        public RectTransform Panel;
+        public ComboBox BrainpackComboBox;
+        public SetRecordingPrefix SetRecordingPrefix;
+        public Text StatusTextBox;
+
+        public Button GetStateButton;
+        public Button SetBrainpackTimeButton;
+        public Button GetBrainpackVersionButton;
+        public Button ResetBrainpackButton;
+        public Button PowerOffButton;
+        public Button QuitApplicationButton;
+        private float mSetTimer = 10f;
+        private float mTimer;
+        /// <summary>
+        /// Items that are depended on the state of the connection to the brainpack
+        /// </summary>
+        public Selectable[] BrainpackDependentItems;
+
+        private void Awake()
+        {
+            mTimer = mSetTimer;
+            BrainpackConnectionController.ConnectedStateEvent += () => AllowSelectableItemInteraction(true);
+            BrainpackConnectionController.DisconnectedStateEvent += () => AllowSelectableItemInteraction(false);
+            GetStateButton.onClick.AddListener(GetStateCommand);
+            SetBrainpackTimeButton.onClick.AddListener(SetTimeCommand);
+            GetBrainpackVersionButton.onClick.AddListener(GetBrainpackVersionCommand);
+            ResetBrainpackButton.onClick.AddListener(ResetBrainpackCommand);
+            PowerOffButton.onClick.AddListener(PowerOffBrainpackCommand);
+            QuitApplicationButton.onClick.AddListener(Application.Quit);
+            AllowSelectableItemInteraction(false);
+            StatusTextBox.text = "";
         }
- 	
-        // Update is called once per frame
-        void Update () {
-            if (Input.GetKeyDown(KeyCode.O))
+
+        public void UpdateStatusText(string vMsg)
+        {
+            StatusTextBox.text += vMsg + "\n";
+        }
+        /// <summary>
+        /// Sends the command to power off the brainpack
+        /// </summary>
+        private void PowerOffBrainpackCommand()
+        {
+            BrainpackConnectionController.Instance.PowerOffBrainpackCmd();
+        }
+
+        /// <summary>
+        /// Send a command to reset the brainpack
+        /// </summary>
+        private void ResetBrainpackCommand()
+        {
+            BrainpackConnectionController.Instance.ResetBrainpackCmd();
+        }
+
+        /// <summary>
+        /// sends a command to get the brainpack version
+        /// </summary>
+        private void GetBrainpackVersionCommand()
+        {
+            BrainpackConnectionController.Instance.GetBrainpackVersCmd();
+            ResetRequestResponseTimer();
+        }
+
+        /// <summary>
+        /// Sends the command to set the time
+        /// </summary>
+        private void SetTimeCommand()
+        {
+            BrainpackConnectionController.Instance.SetBrainpackTimeCmd();
+        }
+
+        /// <summary>
+        /// sends the command to get the current brainpack state
+        /// </summary>
+        private void GetStateCommand()
+        {
+            BrainpackConnectionController.Instance.GetBrainpackStateCmd();
+            ResetRequestResponseTimer();
+        }
+
+        public override void Hide()
+        {
+            SettingsButton.interactable = true;
+            Panel.gameObject.SetActive(false);
+        }
+
+
+        public override void Show()
+        {
+            SettingsButton.interactable = false;
+            Panel.gameObject.SetActive(true);
+            bool vBPConnected = BrainpackConnectionController.Instance.ConnectionState ==
+                                BrainpackConnectionState.Connected;
+            AllowSelectableItemInteraction(vBPConnected);
+        }
+
+ 
+
+        /// <summary>
+        /// Allows the interaction of the BrainpackDependentItems 
+        /// </summary>
+        /// <param name="vFlag"> </param>
+        private void AllowSelectableItemInteraction(bool vFlag)
+        {
+            foreach (Selectable vBrainpackDependentItem in BrainpackDependentItems)
             {
-  
-                DialogResult vRe= folderBrowserDialog1.ShowDialog();
+                vBrainpackDependentItem.interactable = vFlag;
+            }
+            SetRecordingPrefix.SetInteraction(vFlag);
+        }
+        /// <summary>
+        /// Resets the increment request timer
+        /// </summary>
+        private void ResetRequestResponseTimer()
+        {
+            mTimer = mSetTimer;
+        }
+        private void Update()
+        {
+            if (mTimer > 0)
+            {
+                BrainpackConnectionController.Instance.RequestBrainpackResponses();
+                mTimer -= Time.deltaTime;
             }
         }
+
+       
     }
 }
