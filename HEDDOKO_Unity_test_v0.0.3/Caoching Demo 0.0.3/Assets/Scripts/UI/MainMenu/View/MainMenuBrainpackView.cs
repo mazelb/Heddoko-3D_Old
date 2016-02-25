@@ -62,6 +62,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary> 
         public void OnConnection()
         {
+            Debug.Log("OnConnection");
             PairButton.gameObject.SetActive(false);
             UnpairButton.gameObject.SetActive(true);
             UnpairButton.interactable = false;
@@ -77,6 +78,8 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary> 
         public void OnConnect()
         {
+
+            Debug.Log("OnConnect");
             UnpairButton.interactable = true;
             UnpairButton.gameObject.SetActive(true);
             FadeInFadeOutEffect.enabled = true;
@@ -91,6 +94,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary> 
         public void OnDisconnect()
         {
+            Debug.Log("Disconnect");
             UnpairButton.interactable = false;
             UnpairButton.gameObject.SetActive(false);
             PairButton.gameObject.SetActive(true);
@@ -103,6 +107,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary> 
         public void FailedConnection()
         {
+            Debug.Log("FailedConnection");
             UnpairButton.interactable = false;
             UnpairButton.gameObject.SetActive(false);
             PairButton.gameObject.SetActive(true);
@@ -121,13 +126,18 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary>
         public void PairButtonEngaged()
         {
-            BrainpackConnectionController.Instance.ConnectToBrainpack();
+            
             PairButton.gameObject.SetActive(false);
+            UnpairButton.gameObject.SetActive(true);
+            UnpairButton.interactable = false;
+            Debug.Log("Connect to brainpack");
+            BrainpackConnectionController.Instance.ConnectToBrainpack();
         }
 
         public void UnpairButtonEngaged()
         {
             BrainpackConnectionController.Instance.DisconnectBrainpack();
+            PairButton.gameObject.SetActive(true);
         }
 
         public void SetWarningBoxMessage(string vMsg)

@@ -23,6 +23,9 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         public ScrollablePanel ContentPanel;
         public PlayerStreamManager PlayerStreamManager;
 
+        private bool ResetTPosButtonEnabled;
+        private int mCounter = 0;
+        public BrainpackComPortText BrainpackComPortText;
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
@@ -116,9 +119,6 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. dbloc ", Application.Quit);
         }
 
-        private bool ResetTPosButtonEnabled;
-        private int mCounter = 0;
-        public BrainpackComPortText BrainpackComPortText;
         void OnGUI()
         {
             Event e = Event.current;
@@ -129,7 +129,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     mCounter++;
                     if (mCounter == 5)
                     {
-                        InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+						InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame,PlayerStreamManager.ResetBody);
 
                         BrainpackComPortText.gameObject.SetActive(true);
                     }
@@ -142,5 +142,9 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             }
 
         }
+		void printthings()
+		{
+			Debug.Log ("YES");
+		}
     }
 }

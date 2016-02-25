@@ -175,7 +175,7 @@ namespace Assets.Scripts.Communication.Controller
         {
 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
-            ChangeCurrentState(BrainpackConnectionState.Disconnected);
+            ChangeCurrentState(BrainpackConnectionState.Idle);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
         /// <summary>
@@ -266,7 +266,7 @@ namespace Assets.Scripts.Communication.Controller
                     }
                 case BrainpackConnectionState.Connected:
                     {
-                        if (vNewState == BrainpackConnectionState.Disconnected)
+                        if (vNewState == BrainpackConnectionState.Idle)
                         {
                             if (DisconnectedStateEvent != null)
                             {
@@ -491,7 +491,7 @@ namespace Assets.Scripts.Communication.Controller
         Idle,
         Connecting,
         Connected,
-        Disconnected,
+     //   Disconnected,
         Failure
     }
 }
