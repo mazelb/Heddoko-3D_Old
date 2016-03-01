@@ -10,13 +10,10 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Frames_Pipeline;
 using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
-using Assets.Scripts.Utils;
-using Assets.Scripts.Utils.UnityUtilities;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 using UnityEngine;
-using UnityEngine.Assertions.Comparers;
 
 /**
 * BodyFrameThread class 
@@ -30,14 +27,37 @@ public class BodyFrameThread : ThreadedJob
     private PlaybackState mCurrentPlaybackState = PlaybackState.Pause;
     private PlaybackSettings mPlaybackSettings;
     private List<BodyRawFrame> mRawFrames;
-    private BodyFramesRecording mBodyFramesRecording;
+    private RecordingPlaybackTask mPlaybackTask;
     private bool mContinueWorking;
     private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>(1024, true);
-    private bool mPauseWorker;
+    
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
 
-    //For debug purposes
+    private bool mPausedWorker;
+    /// <summary>
+    /// Paused worker flag
+    /// </summary>
+    private bool PausedWorker
+    {
+        get { return mPausedWorker;}
+        set
+        {
+            mPausedWorker = value;
+            if (mPlaybackTask != null)
+            {
+                mPlaybackTask.IsPaused = mPausedWorker;
+            }
+        }
+    }
+    /// <summary>
+    /// The current playback task
+    /// </summary>
+    public RecordingPlaybackTask PlaybackTask
+    {
+        get { return mPlaybackTask;}
+    }
+
     public bool IsDebugging { get; set; }
 
     public bool ContinueWorking
@@ -88,17 +108,6 @@ public class BodyFrameThread : ThreadedJob
         mDataSourceType = SourceDataType.Recording;
     }
 
-    /** 
-    * @brief Parameterized constructor that takes in a list of rawframes, transforming thus rawdata into bodyframe data when the thread is started 
-    * @param recording 
-    */
-    public BodyFrameThread(BodyFramesRecording vRecording, BodyFrameBuffer vBuffer)
-    {
-        mBodyFramesRecording = vRecording;
-        this.mBuffer = vBuffer;
-        mDataSourceType = SourceDataType.Recording;
-    }
-
     /**
     * @brief Default constructor
     */
@@ -133,10 +142,17 @@ public class BodyFrameThread : ThreadedJob
 
     }
 
-    public void PauseWorker()
+    /// <summary>
+    /// Flips the pause state
+    /// </summary>
+    public void FlipPauseState()
     {
-        mPauseWorker = !mPauseWorker;
+        PausedWorker = !mPausedWorker;
+        mPlaybackTask.IsPaused = PausedWorker;
     }
+
+ 
+
 
     /**
     * ThreadFunction()
@@ -152,11 +168,9 @@ public class BodyFrameThread : ThreadedJob
                 break;
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
-                RecordingTask();
-
-                //   RecordingPlaybackTask();
-
-
+                 RecordingTask();
+              //  mPlaybackTask = new RecordingPlaybackTask(mRawFrames, BodyFrameBuffer);
+                RecordingPlaybackTask();
                 break;
             case SourceDataType.Suit:
                 //todo
@@ -183,9 +197,8 @@ public class BodyFrameThread : ThreadedJob
                 {
                     break;
                 }
-                if (BodyFrameBuffer.IsFull() || mPauseWorker)
+                if (BodyFrameBuffer.IsFull() || mPausedWorker)
                 {
-                    //UnityEngine.Debug.Log("BODY FRAME BUFFER IS FULL !");
                     continue;
                 }
 
@@ -215,62 +228,10 @@ public class BodyFrameThread : ThreadedJob
         }
     }
 
-
     private void RecordingPlaybackTask()
     {
-        // long vStartTime = DateTime.Now.Ticks;
-        float vStartTime = TimeUtility.Time;
-        //frame position
-        int vPosition = 0;
-
-        while (ContinueWorking)
-        {
-            while (true)
-            {
-                if (!ContinueWorking)
-                {
-                    break;
-                }
-                if (BodyFrameBuffer.IsFull() || mPauseWorker)
-                {
-                    //vStartTime = DateTime.Now.Ticks;  //reset the start time
-                    continue;
-                }
-                try
-                {
-
-                    float vDeltaTime = TimeUtility.Time - vStartTime;
-                    float vElapsedTime = vDeltaTime + mBodyFramesRecording.Statistics.AverageSecondsBetweenFrames;
-
-                    vElapsedTime /= mBodyFramesRecording.Statistics.TotalTime;
-                    //  float mPlaybackSpeed = mPlaybackSettings.PlaybackSpeed;
-                    vPosition = (int)(1 * mBodyFramesRecording.Statistics.TotalFrames * vElapsedTime);
-
-                    if (vPosition >= mBodyFramesRecording.Statistics.TotalFrames)
-                    {
-                        mPauseWorker = true;
-                        vPosition = mBodyFramesRecording.Statistics.TotalFrames - 1;
-                        vStartTime = DateTime.Now.Ticks;
-                        break;
-                    }
-
-                    //convert to body frame 
-                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mBodyFramesRecording.RecordingRawFrames[vPosition]);
-                    BodyFrameBuffer.Enqueue(vBodyFrame);
-                }
-                catch (Exception e)
-                {
-                    //ContinueWorking = false;
-                    string vMessage = e.GetBaseException().Message;
-                    vMessage += "\n" + e.Message;
-                    vMessage += "\n" + e.StackTrace;
-                    break;
-                }
-
-            }
-        }
+        mPlaybackTask.Play();
     }
-
 
     /**
     * BrainFrameTask()
@@ -412,6 +373,10 @@ public class BodyFrameThread : ThreadedJob
     {
 
         ContinueWorking = false;
+        if (mPlaybackTask != null)
+        {
+            mPlaybackTask.IsPlaying = false;
+        }
         CloseFile();
     }
 

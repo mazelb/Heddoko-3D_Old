@@ -1,10 +1,13 @@
 ﻿/** 
-* @file View.cs
+* @file AbstractView.cs
 * @brief Contains the AbstractView abstract class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
+
+using Assets.Scripts.UI.AbstractViews.Layouts;
+using Assets.Scripts.UI.Layouts;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
@@ -24,6 +27,9 @@ namespace Assets.Scripts.UI
         /// The view that will be preceeding the current one 
         /// </summary>
         public AbstractView PreviousView;
+
+        private Layout mViewLayout;
+
         public virtual void Hide()
         { }
 

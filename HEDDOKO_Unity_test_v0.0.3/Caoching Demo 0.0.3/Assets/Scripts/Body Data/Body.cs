@@ -16,7 +16,8 @@ using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
-using Assets.Scripts.Communication.Controller; 
+using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 
 /**
 * Body class 
@@ -44,7 +45,7 @@ public class Body
     [SerializeField]
     public BodyFrame PreviousBodyFrame;
 
-    [SerializeField] private RenderedBodyComponent mAvatar;
+    [SerializeField] private RenderedBody mAvatar;
 
     [SerializeField]
     //Initial body Frame
@@ -283,9 +284,10 @@ public class Body
 
         if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
         {
-           // BodyFrame frame = RawFrameConverterManager.BodyFrame.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+            //Setting the first frame as the initial frame
+             BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
 
-           // SetInitialFrame(frame);
+             SetInitialFrame(vBodyFrame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
 
             mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
@@ -455,7 +457,7 @@ public class Body
             View.StartUpdating = false;
         }
         if (mBodyFrameThread != null)
-        {
+        { 
             mBodyFrameThread.StopThread();
         }
 
@@ -468,7 +470,7 @@ public class Body
     {
         if (mBodyFrameThread != null)
         {
-            mBodyFrameThread.PauseWorker();
+            mBodyFrameThread.FlipPauseState();
         }
     }
 }

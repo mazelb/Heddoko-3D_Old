@@ -6,12 +6,12 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+ 
 using System.Collections.Generic;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.Loading;
-using Assets.Scripts.UI.Metrics;
-using Assets.Scripts.Utils.DebugContext;
+using Assets.Scripts.UI.Metrics; 
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -85,11 +85,11 @@ namespace Assets.Scripts.UI.MainMenu
                 //get the first body
                 CurrentBodyInPlay = BodiesManager.Instance.Bodies[0];
             }
+
             for (int i = 0; i < TPoseButtons.Length; i++)
             {
                 TPoseButtons[i].onClick.AddListener(ResetBody);
             }
-            
         }
 
         /// <summary>
@@ -112,11 +112,12 @@ namespace Assets.Scripts.UI.MainMenu
 
 
         /**
-        * Play 
+        * PlayCurrentBody 
         * @brief Will play the recording for the prepped body
         */
-        public void Play()
-        {
+        public void PlayCurrentBody()
+        { 
+            Stop();
             if (CurrentBodyInPlay != null)
             {
                 ChangeState(BodyPlaybackState.PlayingRecording);
@@ -174,20 +175,18 @@ namespace Assets.Scripts.UI.MainMenu
                 ChangeState(BodyPlaybackState.PlayingRecording);
             }
 
-        }
-
+        } 
 
         /**
        * ResetOrientations 
        * @brief will set the Initial Frame
        */
-        public void ResetInitialFrame()
+        private void ResetInitialFrame()
         {
             if (CurrentBodyInPlay != null && CurrentBodyInPlay.CurrentBodyFrame != null)
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
-
-            }
+            } 
         }
 
         /// <summary>
@@ -239,8 +238,8 @@ namespace Assets.Scripts.UI.MainMenu
                     {
                         if (vNewstate == BodyPlaybackState.Waiting)
                         {
+                            ResetBody();
                             Stop();
-                            ResetInitialFrame();
                             mCurrentState = vNewstate;
                             break;
                         }
@@ -254,7 +253,7 @@ namespace Assets.Scripts.UI.MainMenu
                         if (vNewstate == BodyPlaybackState.PlayingRecording)
                         {
                             if (!string.IsNullOrEmpty(mBodyRecordingUUID))
-                            { 
+                            {
                                 CurrentBodyInPlay.PlayRecording(mBodyRecordingUUID);
                             }
                             mCurrentState = vNewstate;
@@ -265,9 +264,10 @@ namespace Assets.Scripts.UI.MainMenu
                 case BodyPlaybackState.StreamingFromBrainPack:
                     {
                         if (vNewstate == BodyPlaybackState.Waiting)
-                        { 
+                        {
+                            ResetBody();
                             Stop();
-                            ResetInitialFrame();
+                            
                             mCurrentState = vNewstate;
                             break;
                         }
@@ -402,6 +402,7 @@ namespace Assets.Scripts.UI.MainMenu
             {
                 //get the recording path from the list of all the scanned file paths
                 mSelectedRecordingPath = BodyRecordingsMgr.Instance.FilePaths[vRecordingIndex];
+
                 LoadingBoard.StartLoadingAnimation();
 
                 //check if the recording doesnt exists 
@@ -413,7 +414,7 @@ namespace Assets.Scripts.UI.MainMenu
 
                 //start play back
                 else
-                { 
+                {
                     LoadingBoard.StopLoadingAnimation();
                     BodyFramesRecording vRecording = mRecordings[mSelectedRecordingPath];
                     CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromRecordingUUID(vRecording.BodyRecordingGuid);
@@ -457,11 +458,8 @@ namespace Assets.Scripts.UI.MainMenu
                 //add it to the current list of recordings
                 mRecordings.Add(mSelectedRecordingPath, vRecording);
                 mBodyRecordingUUID = vRecording.BodyRecordingGuid;
-                //  ChangeState(BodyPlaybackState.PlayingRecording);
-                Play();
-
-
-
+                
+                PlayCurrentBody();
             }
         }
 

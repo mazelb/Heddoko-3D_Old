@@ -9,6 +9,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading; 
 using Assets.Scripts.Utils; 
 
@@ -76,8 +78,9 @@ public class BodyRecordingsMgr
     {
         mDirectoryPath = vDirectoryPath;
         string[] vDatFilePaths = Directory.GetFiles(mDirectoryPath, "*.dat");
-        string[] vCsvFilePaths = Directory.GetFiles(mDirectoryPath, "*.csv");
-
+        string[] vCsvFilePaths = Directory.GetFiles(mDirectoryPath, "*.csv"); 
+        //ignore logindex.dat
+        vDatFilePaths = vDatFilePaths.Where(vInvalid => vInvalid.IndexOf("logindex",StringComparison.OrdinalIgnoreCase) <0).ToArray();
         //combine the two
         mFilePaths = new string[vDatFilePaths.Length + vCsvFilePaths.Length];
         Array.Copy(vDatFilePaths, mFilePaths, vDatFilePaths.Length);

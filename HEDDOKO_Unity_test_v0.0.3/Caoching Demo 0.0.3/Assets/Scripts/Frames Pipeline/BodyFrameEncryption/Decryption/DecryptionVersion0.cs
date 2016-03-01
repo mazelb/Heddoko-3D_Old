@@ -45,7 +45,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
                     }
                    // LoadingBoard.UpdateAnimation();
                 }
-                vStringOut = System.Text.Encoding.Default.GetString(vByteArr);
+                vStringOut += System.Text.Encoding.Default.GetString(vByteArr);
            
             }
 

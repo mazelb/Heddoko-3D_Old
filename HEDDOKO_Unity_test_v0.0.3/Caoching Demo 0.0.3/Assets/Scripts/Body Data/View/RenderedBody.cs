@@ -1,5 +1,5 @@
 ﻿/** 
-* @file RenderedBodyComponent.cs
+* @file RenderedBody.cs
 * @brief The rendering component of a Body
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date February 2016
@@ -7,6 +7,7 @@
 */
 using System;
 using System.Runtime.Serialization;
+using Assets.Scripts.Body_Data.view;
 using UnityEngine;
 
 namespace Assets.Scripts.Body_Data
@@ -14,9 +15,9 @@ namespace Assets.Scripts.Body_Data
     /// <summary>
     /// The class that models the in-scene avatar, referencing it's visual and movement components. 
     /// </summary>
-    public class RenderedBodyComponent: MonoBehaviour
+    public class RenderedBody: MonoBehaviour
     {
-
+        public BodyView AssociatedBodyView;
         public SkinnedMeshRenderer Joints;
         public SkinnedMeshRenderer Torso;
         public SkinnedMeshRenderer Limbs;
@@ -50,7 +51,16 @@ namespace Assets.Scripts.Body_Data
         /// Applies a transformation to the skin based on the body type
         /// </summary>
         /// <param name="vTypes"></param>
-        public void SetBodyType(BodyStructureMap.BodyTypes vType)
+        public void Init(BodyStructureMap.BodyTypes vType)
+        {
+            mCurrentBodyType = vType;
+        }
+
+        /// <summary>
+        /// Updates the current body type to the passed in body type
+        /// </summary>
+        /// <param name="vType"></param>
+        public void UpdateBodyType(BodyStructureMap.BodyTypes vType)
         {
             mCurrentBodyType = vType;
         }
@@ -99,7 +109,15 @@ namespace Assets.Scripts.Body_Data
         private bool ValidateSegmentChange(BodyStructureMap.SegmentTypes vSegment)
         {
             return true;
-        } 
+        }
+
+        /// <summary>
+        /// deactivates the current rendered body and cleans up resources
+        /// </summary>
+        public void Cleanup()
+        {
+            
+        }
 
     }
    
