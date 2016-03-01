@@ -16,7 +16,7 @@ public class UGUITools : MonoBehaviour
    * AnchorsToCorners 
    * @brief Sets the anchors of the UI object to the corners  
    */
-    [MenuItem("uGUI/Anchors to Corners %[")]
+    [MenuItem("Window/AutoAnchors/Anchors to Corners %[")]
     static void AnchorsToCorners()
     {
         RectTransform vRectTransform = Selection.activeTransform as RectTransform;
@@ -37,7 +37,7 @@ public class UGUITools : MonoBehaviour
     * CornersToAnchors 
     * @brief Sets the corners of the Ui object according to its anchors 
     */
-    [MenuItem("uGUI/Corners to Anchors %]")]
+    [MenuItem("Window/AutoAnchors/Corners to Anchors %]")]
     static void CornersToAnchors()
     {
         RectTransform vRectTransform = Selection.activeTransform as RectTransform;
