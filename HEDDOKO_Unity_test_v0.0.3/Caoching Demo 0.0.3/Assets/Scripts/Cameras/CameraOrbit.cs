@@ -24,7 +24,7 @@ public class CameraOrbit : MonoBehaviour {
         var angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
-        //z = distance;
+        //z = Distance;
         z = Vector3.Distance(transform.position, target.position);
 
         // Make the rigid body not change rotation

@@ -1,4 +1,11 @@
-﻿
+﻿/** 
+* @file HeddokoAppStart.cs
+* @brief Contains the HeddokoAppStart class
+* @author Mohammed Haider(mohammed@heddoko.com)
+* @date March 2016
+* Copyright Heddoko(TM) 2016, all rights reserved
+*/
+
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.Communication.Controller;
@@ -142,9 +149,6 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             }
 
         }
-		void printthings()
-		{
-			Debug.Log ("YES");
-		}
+	 
     }
 }
