@@ -24,12 +24,13 @@ namespace Assets.Scripts.UI.Settings
         public SetRecordingPrefix SetRecordingPrefix;
         public Text StatusTextBox;
 
-        public Button GetStateButton;
+        public Button ClearTextButton;
         public Button SetBrainpackTimeButton;
         public Button GetBrainpackVersionButton;
         public Button ResetBrainpackButton;
         public Button PowerOffButton;
         public Button QuitApplicationButton;
+       // public Button ClearStatusText;
         private float mSetTimer = 10f;
         private float mTimer;
         /// <summary>
@@ -40,13 +41,17 @@ namespace Assets.Scripts.UI.Settings
         private void Awake()
         {
             mTimer = mSetTimer;
-            BrainpackConnectionController.ConnectedStateEvent += () => AllowSelectableItemInteraction(true);
-            BrainpackConnectionController.DisconnectedStateEvent += () => AllowSelectableItemInteraction(false);
-            GetStateButton.onClick.AddListener(GetStateCommand);
+            BrainpackConnectionController.Instance.ConnectedStateEvent += () => AllowSelectableItemInteraction(true);
+            BrainpackConnectionController.Instance.DisconnectedStateEvent += () => AllowSelectableItemInteraction(false);
+            
             SetBrainpackTimeButton.onClick.AddListener(SetTimeCommand);
             GetBrainpackVersionButton.onClick.AddListener(GetBrainpackVersionCommand);
             ResetBrainpackButton.onClick.AddListener(ResetBrainpackCommand);
             PowerOffButton.onClick.AddListener(PowerOffBrainpackCommand);
+            ClearTextButton.onClick.AddListener(() =>
+            {
+                StatusTextBox.text = "";
+            });
             QuitApplicationButton.onClick.AddListener(Application.Quit);
             AllowSelectableItemInteraction(false);
             StatusTextBox.text = "";
@@ -69,7 +74,7 @@ namespace Assets.Scripts.UI.Settings
         /// </summary>
         private void ResetBrainpackCommand()
         {
-            BrainpackConnectionController.Instance.ResetBrainpackCmd();
+            BrainpackConnectionController.Instance.InitiateSuitReset();
         }
 
         /// <summary>

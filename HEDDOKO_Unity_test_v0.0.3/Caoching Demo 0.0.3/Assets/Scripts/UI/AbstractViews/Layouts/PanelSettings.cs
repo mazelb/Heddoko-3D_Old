@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.UI.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 using UnityEngine;
 using UnityEngine.UI;
 

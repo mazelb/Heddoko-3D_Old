@@ -22,7 +22,7 @@ public class TouchMove : MonoBehaviour {
 			
 			RaycastHit hit = new RaycastHit();
 			
-			// Cast a ray of distance 100, and check if this
+			// Cast a ray of Distance 100, and check if this
 			// collider is hit.
 			if (GetComponent<Collider>().Raycast (ray, out hit, 100.0f)) {
 				// Log a debug message 

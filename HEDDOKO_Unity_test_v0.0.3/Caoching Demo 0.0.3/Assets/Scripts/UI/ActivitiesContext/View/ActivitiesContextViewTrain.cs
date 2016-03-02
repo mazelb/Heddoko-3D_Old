@@ -68,16 +68,16 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         {
             if (RecordButton != null)
             {
-                BrainpackConnectionController.ConnectedStateEvent += () =>
+                BrainpackConnectionController.Instance.ConnectedStateEvent += () =>
                 {
                     RecordButton.interactable = true;
                 };
-                BrainpackConnectionController.DisconnectedStateEvent += () =>
+                BrainpackConnectionController.Instance.DisconnectedStateEvent += () =>
                 {
                     RecordButton.interactable = false;
                 };
 
-                RecordButton.onClick.AddListener(BrainpackConnectionController.Instance.StartRecording);
+                RecordButton.onClick.AddListener(BrainpackConnectionController.Instance.InitiateSuitRecording);
             }
             
         }

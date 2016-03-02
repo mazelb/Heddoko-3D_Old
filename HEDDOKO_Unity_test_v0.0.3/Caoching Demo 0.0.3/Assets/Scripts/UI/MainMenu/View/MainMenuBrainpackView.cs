@@ -49,10 +49,10 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary> 
         void Start()
         {
-            BrainpackConnectionController.ConnectingStateEvent += OnConnection;
-            BrainpackConnectionController.ConnectedStateEvent += OnConnect;
-            BrainpackConnectionController.DisconnectedStateEvent += OnDisconnect;
-            BrainpackConnectionController.FailedToConnectStateEvent += FailedConnection;
+            BrainpackConnectionController.Instance.ConnectingStateEvent += OnConnection;
+            BrainpackConnectionController.Instance.ConnectedStateEvent += OnConnect;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent += OnDisconnect;
+            BrainpackConnectionController.Instance.FailedToConnectStateEvent += FailedConnection;
             PairButton.onClick.AddListener(PairButtonEngaged);
             UnpairButton.onClick.AddListener(UnpairButtonEngaged);
         }

@@ -97,8 +97,8 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         void OnEnable()
         {
-            BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
-            BrainpackConnectionController.DisconnectedStateEvent += OnBrainpackDisconnectListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent += OnBrainpackDisconnectListener;
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace Assets.Scripts.UI.MainMenu
         /// </summary>
         public void OnDisable()
         {
-            BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
-            BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
 
 

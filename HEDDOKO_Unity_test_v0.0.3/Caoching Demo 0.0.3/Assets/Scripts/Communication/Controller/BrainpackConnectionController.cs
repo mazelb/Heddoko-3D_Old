@@ -26,27 +26,15 @@ namespace Assets.Scripts.Communication.Controller
     /// <summary>
     /// BrainpackConnectionController class that controls the connection to the heddoko body suit
     /// </summary>
-    public class BrainpackConnectionController : MonoBehaviour
+    public class BrainpackConnectionController : AbstractSuitConnection
     {
-        public delegate void BpConnectionControllerDel();
-
-        public delegate void BpConnectionControllerRespDel(string vResponse);
-
-        private static BrainpackConnectionController mInstance;
-        public static BpConnectionControllerDel ConnectingStateEvent;
-        public static BpConnectionControllerDel ConnectedStateEvent;
-        public static BpConnectionControllerDel DisconnectedStateEvent;
-        public static BpConnectionControllerDel FailedToConnectStateEvent;
-        public static BpConnectionControllerDel BrainpackShutdown;
-        public static BpConnectionControllerDel ResetBrainpackResp;
-        public static BpConnectionControllerRespDel BrainpackStatusResponse;
-        public static BpConnectionControllerDel BrainpackTimeSetResp;
+       
         public OutterThreadToUnityTrigger BrainpackConnectedTrigger = new OutterThreadToUnityTrigger();
         public OutterThreadToUnityTrigger SocketClientErrorTrigger = new OutterThreadToUnityTrigger();
         public string Output = "";
-
+        private static BrainpackConnectionController mInstance;
         [SerializeField]
-        private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Idle;
+        private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Disconnected;
         public string BrainpackComPort = "";
 
         [SerializeField]
@@ -121,7 +109,7 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Request to connect to brainpack
         /// </summary>
-        public void ConnectToBrainpack()
+        public override void ConnectToBrainpack()
         {
             //validate the comport
             if (Validate(BrainpackComPort))
@@ -157,7 +145,7 @@ namespace Assets.Scripts.Communication.Controller
         /// </summary>
         public void SetStateToIdle()
         {
-            ChangeCurrentState(BrainpackConnectionState.Idle);
+            ChangeCurrentState(BrainpackConnectionState.Disconnected);
         }
 
         /// <summary>
@@ -175,7 +163,7 @@ namespace Assets.Scripts.Communication.Controller
         {
 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
-            ChangeCurrentState(BrainpackConnectionState.Idle);
+            ChangeCurrentState(BrainpackConnectionState.Disconnected);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
         /// <summary>
@@ -228,7 +216,7 @@ namespace Assets.Scripts.Communication.Controller
         {
             switch (mCurrentConnectionState)
             {
-                case BrainpackConnectionState.Idle:
+                case BrainpackConnectionState.Disconnected:
                     {
                         if (vNewState == BrainpackConnectionState.Connecting)
                         {
@@ -258,6 +246,7 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 ConnectedStateEvent();
+                                StartHeartBeat();
                                 //start pulling data
                             }
 
@@ -266,7 +255,7 @@ namespace Assets.Scripts.Communication.Controller
                     }
                 case BrainpackConnectionState.Connected:
                     {
-                        if (vNewState == BrainpackConnectionState.Idle)
+                        if (vNewState == BrainpackConnectionState.Disconnected)
                         {
                             if (DisconnectedStateEvent != null)
                             {
@@ -285,7 +274,7 @@ namespace Assets.Scripts.Communication.Controller
                             break;
                         }
 
-                        if (vNewState == BrainpackConnectionState.Idle)
+                        if (vNewState == BrainpackConnectionState.Disconnected)
                         {
                             
                             if (DisconnectedStateEvent != null)
@@ -329,15 +318,26 @@ namespace Assets.Scripts.Communication.Controller
             Instance.Init();
             BrainpackShutdown += () =>
             {
-                ChangeCurrentState(BrainpackConnectionState.Idle);
+                ChangeCurrentState(BrainpackConnectionState.Disconnected);
             };
+            
         }
 
+        void OnEnable()
+        {
+            BrainpackStatusResponse += UpdateCurrentSuitState;
+        }
+
+        void OnDisable()
+        {
+            BrainpackStatusResponse -= UpdateCurrentSuitState;
+        }
         /// <summary>
         /// On application quit, stop the socket client
         /// </summary>
         void OnApplicationQuit()
         {
+            StopAllCoroutines();
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             {
                 DisconnectBrainpack();
@@ -345,6 +345,7 @@ namespace Assets.Scripts.Communication.Controller
 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+            
         }
 
         /// <summary>
@@ -387,7 +388,9 @@ namespace Assets.Scripts.Communication.Controller
             {
                 HeddokoPacket vRequestBrainpackData = new HeddokoPacket(HeddokoCommands.RequestBPData, "Requesting data");
                 PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
-              
+                CountdownSinceStateReqSent -= Time.deltaTime;
+
+
             }
 
 
@@ -429,15 +432,22 @@ namespace Assets.Scripts.Communication.Controller
         public void PowerOffBrainpackCmd()
         { 
             SendCommandToBrainpack(HeddokoCommands.ShutdownBrainpackReq);
-            ChangeCurrentState(BrainpackConnectionState.Idle);
+            ChangeCurrentState(BrainpackConnectionState.Disconnected);
         }
 
         /// <summary>
         /// Sends a command to the brainpack to reset 
         /// </summary>
-        public void ResetBrainpackCmd()
+        public override void InitiateSuitReset()
         {
             SendCommandToBrainpack(HeddokoCommands.ResetBrainpackReq);
+            GetBrainpackStateCmd();
+        }
+
+        public override void InitateStopRecordingReq()
+        {
+            SendCommandToBrainpack(HeddokoCommands.StopRecordingReq);
+            GetBrainpackStateCmd();
         }
         /// <summary>
         /// Sends a command to the brainpack to retrieve its current version
@@ -480,19 +490,86 @@ namespace Assets.Scripts.Communication.Controller
         /// <summary>
         /// Sends a request to currently connected Brainpack to start recording
         /// </summary>
-        public void StartRecording()
+        public override void InitiateSuitRecording()
         {
             SendCommandToBrainpack(HeddokoCommands.StartRecordingReq);
+            GetBrainpackStateCmd();
+        }
+
+        
+        /// <summary>
+        /// Starts the HeartBeat subroutine
+        /// </summary>
+        public override void StartHeartBeat()
+        {
+            StartCoroutine(HeartBeatRoutine());
+        }
+
+        public override void UpdateCurrentSuitState(string vMsg)
+        {
+            CurrentSuitState vReceivedState = CurrentSuitState.Undefined;
+            if (Regex.IsMatch(vMsg, "Disconnected", RegexOptions.IgnoreCase))
+            {
+                ChangeCurrentState(BrainpackConnectionState.Disconnected);
+                return;
+            }
+
+            if (Regex.IsMatch(vMsg, "Idle", RegexOptions.IgnoreCase))
+            {
+                vReceivedState= CurrentSuitState.Idle;
+            }
+            else if (Regex.IsMatch(vMsg, "Reset", RegexOptions.IgnoreCase))
+            {
+                vReceivedState = CurrentSuitState.Reset;
+            }
+            else if (Regex.IsMatch(vMsg, "Recording", RegexOptions.IgnoreCase))
+            {
+                vReceivedState = CurrentSuitState.Recording;
+            }
+            else if (Regex.IsMatch(vMsg, "Error", RegexOptions.IgnoreCase))
+            {
+                vReceivedState = CurrentSuitState.Error;
+            }
+
+            if (OnSuitStateUpdate != null)
+            {
+                OnSuitStateUpdate.Invoke(vReceivedState);
+            }
+            
+        }
+
+     
+ 
+
+ 
+
+        /// <summary>
+        /// Heartbeat coroutine
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator HeartBeatRoutine()
+        {
+            float vTimer = 3f;
+            bool vMessageSent = false;
+            while (mCurrentConnectionState == BrainpackConnectionState.Connected)
+            {
+                if (!vMessageSent)
+                {
+                    vMessageSent = true;
+                    GetBrainpackStateCmd();
+                    CountdownSinceStateReqSent = vTimer;
+                    Debug.Log("sending state cmd");
+                }
+                else
+                {
+                    yield return new WaitForSeconds(vTimer);
+                    vMessageSent = false;
+                }
+                yield return null;
+            }   
         }
     }
 
-    public enum BrainpackConnectionState
-    {
-        Idle,
-        Connecting,
-        Connected,
-     //   Disconnected,
-        Failure
-    }
+ 
 }
 

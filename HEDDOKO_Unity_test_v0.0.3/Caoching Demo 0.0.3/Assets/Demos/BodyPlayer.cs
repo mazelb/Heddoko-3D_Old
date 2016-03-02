@@ -71,8 +71,8 @@ namespace Assets.Demos
         public void OnEnable()
         {
             BodySelectedInfo.Instance.BodyRecordingChangedEvent += ListenToBodyRecordingsChange;
-            BrainpackConnectionController.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
-            BrainpackConnectionController.DisconnectedStateEvent += OnBrainpackDisconnectListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent += OnBrainpackConnectSuccessListener;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent += OnBrainpackDisconnectListener;
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace Assets.Demos
         public void OnDisable()
         { 
             // ReSharper disable once DelegateSubtraction
-            BrainpackConnectionController.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent -= OnBrainpackConnectSuccessListener;
             // ReSharper disable once DelegateSubtraction
-            BrainpackConnectionController.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent -= OnBrainpackDisconnectListener;
         }
 
         /**

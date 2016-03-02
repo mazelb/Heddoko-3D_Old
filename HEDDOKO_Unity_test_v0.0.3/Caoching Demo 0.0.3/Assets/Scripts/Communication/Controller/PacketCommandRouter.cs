@@ -95,6 +95,7 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData);
             mCommand.Register(HeddokoCommands.ConnectionAck, ConnectionAcknowledged);
             mCommand.Register(HeddokoCommands.StopHeddokoUnityClient, Stop);
+            mCommand.Register(HeddokoCommands.StopRecordingReq, WrapPacketAndSendMessage);
             mCommand.Register(HeddokoCommands.ClientError, SocketClientError);
             mCommand.Register(HeddokoCommands.DisconnectBrainpack, DisconnectBrainpackRequest);
             mCommand.Register(HeddokoCommands.DiscoAcknowledged, DisconnectAcknowledged);
@@ -120,6 +121,12 @@ namespace Assets.Scripts.Communication
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             ClientSocket.Requests.Enqueue(vPayload);
         }
+     
+        /// <summary>
+        /// Reroute status message responses from the brainpack
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
         private void RerouteResponseMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
@@ -129,9 +136,9 @@ namespace Assets.Scripts.Communication
             {
                 Action vAction = () =>
                 {
-                    if (BrainpackConnectionController.BrainpackStatusResponse != null)
+                    if (BrainpackConnectionController.Instance.BrainpackStatusResponse != null)
                     {
-                        BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
+                        BrainpackConnectionController.Instance.BrainpackStatusResponse.Invoke(vPayload);
                     }
                 };
                 OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
@@ -347,15 +354,23 @@ namespace Assets.Scripts.Communication
 
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
-/*
             Action vAction = () =>
             {
-                if (BrainpackConnectionController.BrainpackStatusResponse != null)
+                if (BrainpackConnectionController.Instance.BrainpackStatusResponse != null)
                 {
-                    BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
+                    BrainpackConnectionController.Instance.BrainpackStatusResponse.Invoke(vPayload);
                 }
             };
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
+            /*
+                        Action vAction = () =>
+                        {
+                            if (BrainpackConnectionController.BrainpackStatusResponse != null)
+                            {
+                                BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
+                            }
+                        };
+                        OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
         }
 
         /// <summary>

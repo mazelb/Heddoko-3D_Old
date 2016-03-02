@@ -28,10 +28,10 @@ namespace Assets.Scripts.UI.Settings
         {
             SettingsView.SettingsButton.onClick.AddListener(SettingsButtonPressed);
             InputHandler.RegisterActions(HeddokoDebugKeyMappings.SettingsButton, SettingsButtonPressed);
-            BrainpackConnectionController.BrainpackStatusResponse += UpdateTextBox;
-            BrainpackConnectionController.BrainpackTimeSetResp += GenericAckMsg;
-            BrainpackConnectionController.ResetBrainpackResp += GenericAckMsg;
-            BrainpackConnectionController.BrainpackShutdown += GenericAckMsg;
+            BrainpackConnectionController.Instance.BrainpackStatusResponse += UpdateTextBox;
+            BrainpackConnectionController.Instance.BrainpackTimeSetResp += GenericAckMsg;
+            BrainpackConnectionController.Instance.ResetBrainpackResp += GenericAckMsg;
+            BrainpackConnectionController.Instance.BrainpackShutdown += GenericAckMsg;
         
 
         }

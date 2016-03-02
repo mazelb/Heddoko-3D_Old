@@ -323,7 +323,7 @@ public class Body
 
         //1 inform the brainpack connection controller to establish a new connection
         //1i: Listen to the event that the brainpack has been disconnected
-        BrainpackConnectionController.DisconnectedStateEvent += BrainPackStreamDisconnectedListener;
+        BrainpackConnectionController.Instance.DisconnectedStateEvent += BrainPackStreamDisconnectedListener;
         bool vRegisteredEvent = false;
         //1ii: check if the controller already is already connected. 
         if (BrainpackConnectionController.Instance.ConnectionState == BrainpackConnectionState.Connected)
@@ -333,8 +333,8 @@ public class Body
         }
         if (!vRegisteredEvent)
         {
-            BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
-            BrainpackConnectionController.ConnectedStateEvent += BrainPackStreamReadyListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent -= BrainPackStreamReadyListener;
+            BrainpackConnectionController.Instance.ConnectedStateEvent += BrainPackStreamReadyListener;
         }
 
         View.Init(this, vBuffer1);
@@ -359,8 +359,8 @@ public class Body
 
     public void UnhookBrainpackListeners()
     {
-        BrainpackConnectionController.ConnectedStateEvent -= BrainPackStreamReadyListener;
-        BrainpackConnectionController.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
+        BrainpackConnectionController.Instance.ConnectedStateEvent -= BrainPackStreamReadyListener;
+        BrainpackConnectionController.Instance.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
     }
 
     /// <summary>

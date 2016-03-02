@@ -78,7 +78,7 @@ namespace Assets.Scripts.UI.Metrics
             vTopAnchorMin.y = vSetTopPos;
             WhiteToRedSubGradient.anchorMin = vTopAnchorMin;
 
-            //The distance from white red to yellow green
+            //The Distance from white red to yellow green
             float vDistWRYG = vTopAnchorMin.y-(1-vSquatAreaStartPrc);
             float vHalfDistanceWRYG = vDistWRYG/2f;
           //  float vRedToGreenRange =   vSetTopPos- (1 - vSquatAreaStartPrc);
@@ -109,7 +109,7 @@ namespace Assets.Scripts.UI.Metrics
             OrangeToYellowSubGradient.anchorMin = vOrangeToYellowMin;
             OrangeToYellowSubGradient.anchorMax = vOrangeToYellowMax;
 
-            //get the distance between vOrangeToYellowMin and the total distance between squat start and squat end
+            //get the Distance between vOrangeToYellowMin and the total Distance between squat start and squat end
             float vDistOToStartEnd = vOrangeToYellowMin.y - (vSquatAreaEndPrc - vSquatAreaStartPrc);
             vDistOToStartEnd *= PerfectSquatResize;
             Vector2 vYellowToGreenMin = YellowToGreenSubGradient.anchorMin;
@@ -217,7 +217,7 @@ namespace Assets.Scripts.UI.Metrics
 
             WhiteToRedSubGradient.anchorMin = vTopAnchorMin;
 
-            //The distance from white red to yellow green
+            //The Distance from white red to yellow green
             float vDistWRYG = vTopAnchorMin.y - (1 - vSquatAreaStartPrc);
             float vHalfDistanceWRYG = vDistWRYG / 2f;
             //  float vRedToGreenRange =   vSetTopPos- (1 - vSquatAreaStartPrc);
@@ -248,7 +248,7 @@ namespace Assets.Scripts.UI.Metrics
             OrangeToYellowSubGradient.anchorMin = vOrangeToYellowMin;
             OrangeToYellowSubGradient.anchorMax = vOrangeToYellowMax;
 
-            //get the distance between vOrangeToYellowMin and the total distance between squat start and squat end
+            //get the Distance between vOrangeToYellowMin and the total Distance between squat start and squat end
             float vDistOToStartEnd = vOrangeToYellowMin.y - (vSquatAreaEndPrc - vSquatAreaStartPrc);
             vDistOToStartEnd *= PerfectSquatResize;
             Vector2 vYellowToGreenMin = YellowToGreenSubGradient.anchorMin;

@@ -40,6 +40,7 @@ namespace Assets.Scripts.UI.Analysis
         private LayoutTypeModel mCurrentLayoutType;
         private Dictionary<LayoutType, LayoutTypeModel> mLayoutMapping = new Dictionary<LayoutType, LayoutTypeModel>();
         private List<GridViewCell> mSubviewComponents = new List<GridViewCell>();
+        private HorizontalLayoutGroup vloay;
         public RectTransform Container
         {
             get
@@ -55,6 +56,7 @@ namespace Assets.Scripts.UI.Analysis
 
         void Awake()
         {
+            HorizontalLayoutGroup dafda;
             BackButton.onClick.AddListener(Back);
             Container = GetComponent<RectTransform>();
             SetContainerRect(Margin);

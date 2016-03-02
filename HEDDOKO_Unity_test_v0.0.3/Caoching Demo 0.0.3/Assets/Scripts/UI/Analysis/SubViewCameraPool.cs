@@ -69,7 +69,7 @@ namespace Assets.Scripts.UI.Analysis
             vSubcamCtrl.Target = OriginalTarget;
             
             vSubcamCtrl.MoveSpeed = 1f;
-            //set the camera to be directly in front of the target's forward by a constant distance
+            //set the camera to be directly in front of the target's forward by a constant Distance
             Vector3 vNewPosition = OriginalTarget.position + (OriginalTarget.forward.normalized * vSubcamCtrl.DistanceFromTarget);
             vSubcamCtrl.SetCameraPos(vNewPosition);
             vSubcamCtrl.LookAtTarget();

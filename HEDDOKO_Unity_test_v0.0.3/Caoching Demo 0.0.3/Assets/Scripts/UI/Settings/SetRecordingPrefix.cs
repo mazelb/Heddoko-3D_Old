@@ -1,6 +1,6 @@
 ﻿/** 
-* @file SettingsPanelController.cs
-* @brief Contains the SettingsPanelController  class
+* @file SetRecordingPrefix.cs
+* @brief Contains the SetRecordingPrefix  class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -13,6 +13,9 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Settings
 {
+    /// <summary>
+    /// a script that validates and checks recording names before they are sent to the brainpack
+    /// </summary>
     public class SetRecordingPrefix : MonoBehaviour
     {
         public InputField RecordingPrefixInputField;
@@ -26,6 +29,11 @@ namespace Assets.Scripts.UI.Settings
             RecordingPrefixInputField.onValueChange.AddListener(ValidateInputField);
             SetRecordingPrefixButton.onClick.AddListener(SetPrefix);
         }
+
+        /// <summary>
+        /// Validate the input field, discards those that have non alphanumeric characters
+        /// </summary>
+        /// <param name="vNewInput"></param>
         public void ValidateInputField(string vNewInput)
         {
             bool vHasSpecialChars = false;

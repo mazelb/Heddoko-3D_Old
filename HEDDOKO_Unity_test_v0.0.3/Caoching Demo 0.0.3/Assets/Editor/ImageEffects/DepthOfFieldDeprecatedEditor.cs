@@ -1,4 +1,4 @@
-using System;
+
 using UnityEditor;
 using UnityEngine;
 
@@ -106,7 +106,7 @@ namespace UnityStandardAssets.ImageEffects
             GUILayout.Label ("Focal Settings", EditorStyles.boldLabel);
 
             if (simpleTweakMode.boolValue) {
-                focalPoint.floatValue = EditorGUILayout.Slider ("Focal distance", focalPoint.floatValue, go.GetComponent<Camera>().nearClipPlane, go.GetComponent<Camera>().farClipPlane);
+                focalPoint.floatValue = EditorGUILayout.Slider ("Focal Distance", focalPoint.floatValue, go.GetComponent<Camera>().nearClipPlane, go.GetComponent<Camera>().farClipPlane);
                 EditorGUILayout.PropertyField (objectFocus, new GUIContent("Transform"));
                 EditorGUILayout.PropertyField (smoothness, new GUIContent("Smoothness"));
                 focalSize.floatValue = EditorGUILayout.Slider ("Focal size", focalSize.floatValue, 0.0f, (go.GetComponent<Camera>().farClipPlane - go.GetComponent<Camera>().nearClipPlane));

@@ -6,8 +6,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using Assets.Scripts.Cameras;
-using Assets.Scripts.UI.PlaybackAndRecording;
+using Assets.Scripts.Cameras; 
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -70,7 +69,7 @@ namespace Assets.Scripts.UI.Analysis
         }
 
         /// <summary>
-        /// Check if the camera has set 
+        /// Check if the camera has been set 
         /// </summary>
         private void CheckCamera()
         {

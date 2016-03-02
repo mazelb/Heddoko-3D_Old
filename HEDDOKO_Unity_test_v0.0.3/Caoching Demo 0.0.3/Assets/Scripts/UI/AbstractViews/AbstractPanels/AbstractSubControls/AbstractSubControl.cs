@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls
 {
- public    class AbstractSubControl : MonoBehaviour
+ public abstract   class AbstractSubControl : MonoBehaviour
     {
     }
 }
