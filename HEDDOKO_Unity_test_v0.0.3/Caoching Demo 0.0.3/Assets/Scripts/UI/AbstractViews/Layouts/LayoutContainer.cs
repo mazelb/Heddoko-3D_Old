@@ -6,13 +6,11 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using System;
 using System.Collections.Generic;
-using Assets.Scripts.UI.AbstractViews.Layouts;
 using Assets.Scripts.UI.AbstractViews.Templates;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.Layouts
+namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
     /// <summary>
     /// The container for a tree of Panel nodes 
@@ -31,6 +29,14 @@ namespace Assets.Scripts.UI.Layouts
             return mRoot == null;
         }
 
+        /// <summary>
+        /// returns the root of the container
+        /// </summary>
+        /// <returns></returns>
+        public PanelNode GetRoot()
+        {
+            return mRoot;
+        }
 
         /// <summary>
         /// Get the panel currently rendering the body. 
@@ -163,18 +169,23 @@ namespace Assets.Scripts.UI.Layouts
         /// <summary>
         /// Adds a root to an empty container. else returns null if there is a root
         /// </summary>
+        /// <param name="vParentRectTransform"></param>
         /// <param name="vTemplate"></param>
         /// <returns></returns>
-        public PanelNode AddRoot(PanelNodeTemplate vTemplate)
+        public PanelNode AddRoot(RectTransform vParentRectTransform ,PanelNodeTemplate vTemplate)
         {
             if (IsEmpty())
-            {
-                GameObject vRootGo = new GameObject();
-                mRoot = vRootGo.AddComponent<PanelNode>();
-                mRoot.Init(null, vTemplate);
+            { 
+                mRoot = PanelNode.CreatePanelNode(null, vTemplate, vParentRectTransform); 
                 return mRoot;
             }
             return null;
+        }
+
+        public PanelNode AddPanelNode(PanelNode vParent, RectTransform vParentRectTransform, PanelNodeTemplate vTemplate)
+        {
+           PanelNode vChild = PanelNode.CreatePanelNode(vParent, vTemplate, vParentRectTransform);
+            return AddPanelNode(vParent, vChild);
         }
 
         /// <summary>

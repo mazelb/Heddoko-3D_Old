@@ -7,7 +7,6 @@
 */
 
 using System.Collections.Generic;
-using Assets.Scripts.UI.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 using UnityEngine;
@@ -72,13 +71,13 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
                 mLayoutElementModifier = vValue;
                 if (vParentHorizontalLayoutGroup is HorizontalLayoutGroup)
                 {
-                    mLayoutElementComponent.flexibleWidth = 0;
-                    mLayoutElementComponent.flexibleHeight = mLayoutElementModifier;
+                    mLayoutElementComponent.preferredWidth = 0;
+                    mLayoutElementComponent.preferredWidth = mLayoutElementModifier;
                 }
                 else if (vParentHorizontalLayoutGroup is VerticalLayoutGroup)
                 {
-                    mLayoutElementComponent.flexibleHeight = 0;
-                    mLayoutElementComponent.flexibleWidth = mLayoutElementModifier;
+                    mLayoutElementComponent.preferredHeight = 0;
+                    mLayoutElementComponent.preferredHeight = mLayoutElementModifier;
                 }
             }
         }

@@ -8,6 +8,8 @@
 
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.UI.AbstractViews;
+using Assets.Scripts.UI.AbstractViews.Layouts;
 using Assets.Scripts.UI.MainMenu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -262,14 +264,6 @@ namespace Assets.Scripts.UI.Analysis
 
     }
 
-    public enum LayoutType
-    {
-        OneLeftByTwoRight,
-        OneRightByTwoLeft,
-        HalfHalfVertical,
-        HalfHalfHorizontal,
-        Single
-    }
 
     /// <summary>
     /// A mapping of a layouttype to an array of margins

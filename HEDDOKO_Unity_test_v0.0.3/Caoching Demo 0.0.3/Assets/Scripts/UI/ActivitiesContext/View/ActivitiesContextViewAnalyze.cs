@@ -5,6 +5,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using Assets.Scripts.UI.AbstractViews;
 using UnityEngine;
 using UnityEngine.UI;
 

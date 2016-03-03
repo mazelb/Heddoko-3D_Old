@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.UI.ActivitiesContext.Controller; 
 using Assets.Scripts.UI.RecordingLoading.View;
 using UnityEngine;

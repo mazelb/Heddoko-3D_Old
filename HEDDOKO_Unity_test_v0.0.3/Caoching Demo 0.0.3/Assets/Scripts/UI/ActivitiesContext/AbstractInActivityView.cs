@@ -4,7 +4,9 @@
 * @author Mohammed Haider(mohamed@heddoko.com) 
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved 
-*/ 
+*/
+
+using Assets.Scripts.UI.AbstractViews;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.ActivitiesContext

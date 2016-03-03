@@ -123,7 +123,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private void AppNotLaunchedThroughLauncher()
         {
             LoadingBoard.StopLoadingAnimation();
-            ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. dbloc ", Application.Quit);
+            ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. ", Application.Quit);
         }
 
         void OnGUI()
@@ -136,9 +136,10 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     mCounter++;
                     if (mCounter == 5)
                     {
-						InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame,PlayerStreamManager.ResetBody);
-
+                        InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+#if UNITY_EDITOR
                         BrainpackComPortText.gameObject.SetActive(true);
+#endif
                     }
 
                 }
@@ -149,6 +150,6 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             }
 
         }
-	 
+
     }
 }

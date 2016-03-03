@@ -7,7 +7,10 @@
 */
 
 
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 
 namespace Assets.Scripts.UI.AbstractViews.Enums
 {
@@ -17,15 +20,96 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
     /// </summary>
     public static class ControlPanelToSubControlValidator
     {
+        private static Dictionary<ControlPanelType, List<SubControlType>> sValidControlToSubControls = new Dictionary<ControlPanelType, List<SubControlType>>();
+        private static bool sIsInitialized;
+
+        /// <summary>
+        /// Initalize rules
+        /// </summary>
+        private static void Init()
+        {
+            List<SubControlType> vRecSubCtrls = new List<SubControlType>();
+            List<SubControlType> vAvatarSubCtrl = new List<SubControlType>();
+            List<SubControlType> vDebugSubCtrl = new List<SubControlType>();
+            List<SubControlType> vSuitSubControls = new List<SubControlType>();
+            List<SubControlType> vTagsSubControls = new List<SubControlType>();
+            List<SubControlType> vCommentsSubControls = new List<SubControlType>();
+            List<SubControlType> vCameraSubControls = new List<SubControlType>();
+
+            sValidControlToSubControls.Add(ControlPanelType.RecordingPlaybackControlPanel, vRecSubCtrls);
+            sValidControlToSubControls.Add(ControlPanelType.RenderedBodyControlPanel, vAvatarSubCtrl);
+            sValidControlToSubControls.Add(ControlPanelType.DebugControlPanel, vDebugSubCtrl);
+            sValidControlToSubControls.Add(ControlPanelType.SuitCommunicationControlPanel, vSuitSubControls);
+            sValidControlToSubControls.Add(ControlPanelType.TagControlPanel, vTagsSubControls);
+            sValidControlToSubControls.Add(ControlPanelType.CommentControlPanel, vCommentsSubControls);
+            sValidControlToSubControls.Add(ControlPanelType.CameraControlPanel, vCameraSubControls);
+
+            //register recordings subcontrols
+            vRecSubCtrls.Add(SubControlType.PlaybackSliderSubcontrol);
+            vRecSubCtrls.Add(SubControlType.RecordingSpeedModifierSubcontrol);
+            vRecSubCtrls.Add(SubControlType.RecordingSelectionSubControl);
+
+            //register avatar subcontrols
+            vAvatarSubCtrl.Add(SubControlType.ResetAvatarSubControl);
+
+            //register suit  subcontrols
+            vSuitSubControls.Add(SubControlType.SuitsCommunicationSubControl);
+            vSuitSubControls.Add(SubControlType.SuitsSelectionSubControl);
+            vSuitSubControls.Add(SubControlType.SuitConnectionSubControl);
+            vSuitSubControls.Add(SubControlType.SuitModificationSubControl);
+            vSuitSubControls.Add(SubControlType.RenderedBodyModifierSubControl);
+            vSuitSubControls.Add(SubControlType.RenderedBodySelectionSubControl);
+
+            //register tag subcontrols
+            vTagsSubControls.Add(SubControlType.TagWidgetSubControl);
+            vTagsSubControls.Add(SubControlType.TagModificationSubControl);
+            vTagsSubControls.Add(SubControlType.TagTextBoxSubControl);
+            vTagsSubControls.Add(SubControlType.AddTagSubControl);
+
+            //register comments subcontrols
+            vCommentsSubControls.Add(SubControlType.CommentTextboxSubControl);
+            vCommentsSubControls.Add(SubControlType.CommentWidgetSubControl);
+            vCommentsSubControls.Add(SubControlType.AddCommentSubControl);
+            vCommentsSubControls.Add(SubControlType.ModifyCommentSubControl);
+        }
+
         /// <summary>
         /// Validates a control panel to subcontrols
         /// </summary>
         /// <param name="vCtrlPanelType"></param>
         /// <param name="vSubCtrlType"></param>
-        /// <returns></returns>
+        /// <returns>the resulting mapping is valid or not</returns>
         public static bool Validate(ControlPanelType vCtrlPanelType, SubControlType vSubCtrlType)
         {
-            return true;
+            if (!sIsInitialized)
+            {
+                sIsInitialized = true;
+                Init();
+            }
+            bool vResult = false;
+
+            List<SubControlType> vTypes = sValidControlToSubControls[vCtrlPanelType];
+            vResult = vTypes.Contains(vSubCtrlType);
+
+            return vResult;
+        }
+
+        /// <summary>
+        ///  Validates a control panel to subcontrols
+        /// </summary>
+        /// <param name="vControlPanel">The Control panel to check</param>
+        /// <param name="vSubControl">The subcontrol to check</param>
+        /// <returns>the resulting mapping is valid or not</returns>
+        public static bool Validate(AbstractControlPanel vControlPanel, AbstractSubControl vSubControl)
+        {
+            if (!sIsInitialized)
+            {
+                sIsInitialized = true;
+                Init();
+            }
+         
+
+            return Validate(vControlPanel.PanelType, vSubControl.ControlType);
         }
     }
 
@@ -62,6 +146,8 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         RenderedBodyModifierSubControl,
         RenderedBodySelectionSubControl,
         ResetAvatarSubControl,
-        AddTagSubControl
+        AddTagSubControl,
+        AddCommentSubControl,
+        ModifyCommentSubControl
     }
 }

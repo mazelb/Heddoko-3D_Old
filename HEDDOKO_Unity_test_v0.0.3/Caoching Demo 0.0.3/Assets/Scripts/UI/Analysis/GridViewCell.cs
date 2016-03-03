@@ -6,7 +6,8 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using Assets.Scripts.Cameras; 
+using Assets.Scripts.Cameras;
+using Assets.Scripts.UI.AbstractViews;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

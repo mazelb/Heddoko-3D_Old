@@ -7,6 +7,7 @@
 */
 
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.UI.AbstractViews;
 using Kender.uGUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,7 @@ namespace Assets.Scripts.UI.Settings
         public Button ResetBrainpackButton;
         public Button PowerOffButton;
         public Button QuitApplicationButton;
+        public Button CloseButton;
        // public Button ClearStatusText;
         private float mSetTimer = 10f;
         private float mTimer;
@@ -140,14 +142,7 @@ namespace Assets.Scripts.UI.Settings
         {
             mTimer = mSetTimer;
         }
-        private void Update()
-        {
-            if (mTimer > 0)
-            {
-                BrainpackConnectionController.Instance.RequestBrainpackResponses();
-                mTimer -= Time.deltaTime;
-            }
-        }
+ 
 
        
     }

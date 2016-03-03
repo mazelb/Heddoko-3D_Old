@@ -8,7 +8,6 @@
 
 
 using Assets.Scripts.Frames_Pipeline;
-using Assets.Scripts.UI.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 using Assets.Scripts.UI.MainMenu;
 using UnityEngine;

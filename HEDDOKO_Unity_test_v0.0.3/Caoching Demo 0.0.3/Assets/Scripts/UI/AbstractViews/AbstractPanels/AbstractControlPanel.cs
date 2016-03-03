@@ -1,15 +1,88 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.UI.AbstractViews.AbstractPanels;
-using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
+﻿
+/* @file AbstractControlPanel.cs
+* @brief Contains the ActivitiesContextViewAnalyze class
+* @author Mohammed Haider(mohamed @heddoko.com)
+* @date December 2015
+* Copyright Heddoko(TM) 2015, all rights reserved
+*/
 
-namespace Assets.Scripts.UI.AbstractPanels
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
+using Assets.Scripts.UI.AbstractViews.Enums;
+using UnityEngine;
+
+namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
 {
-    public class AbstractControlPanel
+    public abstract class AbstractControlPanel : MonoBehaviour, IEquatable<AbstractControlPanel>
     {
         private List<AbstractSubControl> mSubControls;
-        public void UpdateSubControlList(List<AbstractSubControl> vSubcontrols)
+        private ControlPanelType mControlPanelType;
+
+        public ControlPanelType PanelType
         {
-            throw new System.NotImplementedException();
+            get { return mControlPanelType; }
+        }
+
+        /// <summary>
+        /// update the subcontrol list
+        /// </summary>
+        /// <param name="vSubcontrols"></param>
+        /// <returns>List of subcontrols that were succesfully added</returns>
+        public List<AbstractSubControl> UpdateSubControlList(List<AbstractSubControl> vSubcontrols)
+        {
+            List<AbstractSubControl> vABDifference = mSubControls.Except(vSubcontrols).ToList();
+            List<AbstractSubControl> vBADifference = vSubcontrols.Except(mSubControls).ToList();
+            List < AbstractSubControl > vReturn = new List<AbstractSubControl>();
+            //remove the difference between a and b
+            foreach (var vAbsSubCtrl in vABDifference)
+            {
+                mSubControls.Remove(vAbsSubCtrl);
+            }
+            //validate and add in the difference between b and a
+            foreach (var vAbsSubCtrl in vBADifference)
+            {
+                bool vIsValid = ControlPanelToSubControlValidator.Validate(this, vAbsSubCtrl);
+                if (vIsValid)
+                {
+                    mSubControls.Add(vAbsSubCtrl);
+                    vReturn.Add(vAbsSubCtrl);
+                }
+            }
+            return vReturn;
+
+        }
+
+
+        /// <summary>
+        /// remove a subcontrol from the panel
+        /// </summary>
+        /// <param name="vSubControl">the subcontrol to remove</param>
+        /// <returns>succesfull removal</returns>
+        public bool Remove(AbstractSubControl vSubControl)
+        {
+            //verify if the Subcontrol exists first
+            if (mSubControls.Contains(vSubControl))
+            {
+                mSubControls.Remove(vSubControl);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// IEquatable implementation to avoid boxing/unboxing while iterating through a list of AbstractControlPanels
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(AbstractControlPanel other)
+        {
+            if (other != null)
+            {
+                return gameObject.GetInstanceID() == other.gameObject.GetInstanceID();
+            }
+            return false;
         }
     }
 }

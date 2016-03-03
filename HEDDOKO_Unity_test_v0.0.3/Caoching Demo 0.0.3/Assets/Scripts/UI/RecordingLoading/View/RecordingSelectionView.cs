@@ -7,6 +7,7 @@
 */
 
 
+using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.Scene_3d.View;
 using UnityEngine;

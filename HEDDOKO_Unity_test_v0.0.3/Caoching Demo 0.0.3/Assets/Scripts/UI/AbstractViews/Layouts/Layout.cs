@@ -1,6 +1,6 @@
 ﻿/** 
 * @file Layout.cs
-* @brief Contains the Layout   class
+* @brief Contains the Layout class
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -8,8 +8,7 @@
 
 
 using System;
-using Assets.Scripts.UI.Analysis;
-using Assets.Scripts.UI.Layouts;
+using Assets.Scripts.UI.AbstractViews.Templates;
 
 namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
@@ -20,10 +19,23 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
     {
         private Guid mId = new Guid();
         private LayoutContainer mLayoutContainer;
-
-        public Layout(LayoutType vLayoutType)
+        private AbstractView mViewLayout;
+        public Layout(LayoutType vLayoutType, AbstractView vViewLayout)
         {
-            
+            mViewLayout = vViewLayout;
+            mLayoutContainer = LayoutCreationManager.Instance.CreateLayoutContainer(mViewLayout, vLayoutType); 
         }
+    }
+
+
+    public enum LayoutType
+    {
+        OneLeftByTwoRight,
+        OneRightByTwoLeft,
+        HalfHalfVertical,
+        HalfHalfHorizontal,
+        Single,
+        VerticalTSplitBot,
+        VerticalTSplitTop
     }
 }

@@ -23,7 +23,46 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
 
         public RectOffset HorizontalOrVerticalPadding;
         public float PrefferedWidthOrHeight;
+        public float Spacing;
         public HorizontalOrVerticalLayoutGroupType HorizontalOrVerticalLayoutType;
+
+        public PanelNodeTemplate(RectOffset vPadding, float vPrefHeightOrWidthMod, float vSpacing,
+            HorizontalOrVerticalLayoutGroupType vType)
+        {
+            HorizontalOrVerticalPadding = vPadding;
+            PrefferedWidthOrHeight = vPrefHeightOrWidthMod;
+            Spacing = vSpacing;
+            HorizontalOrVerticalLayoutType = vType;
+        }
+
+        /// <summary>
+        /// Because monobehaviours do not like being called by the new keyword, this is a workaround method that attaches a 
+        /// new HorizontalOrVerticalLayoutGroup to the calling PanelNode.
+        /// </summary>
+        /// <param name="vPanelNode"></param>
+        /// <param name="vTemplate"></param>
+        /// <returns></returns>
+        public static HorizontalOrVerticalLayoutGroup AttachHorizontalOrVerticalLayoutGroup(PanelNode vPanelNode, PanelNodeTemplate vTemplate)
+        {
+            if (vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>() != null)
+            {
+                // ReSharper disable once AccessToStaticMemberViaDerivedType
+                GameObject.Destroy(vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>()); 
+            }
+            if (vTemplate.HorizontalOrVerticalLayoutType == HorizontalOrVerticalLayoutGroupType.Horizontal)
+            {
+                vPanelNode.gameObject.AddComponent<HorizontalLayoutGroup>();
+            }
+            else if((vTemplate.HorizontalOrVerticalLayoutType == HorizontalOrVerticalLayoutGroupType.Vertical))
+            {
+                vPanelNode.gameObject.AddComponent<VerticalLayoutGroup>();
+            }
+            else if (vTemplate.HorizontalOrVerticalLayoutType == HorizontalOrVerticalLayoutGroupType.Null)
+            {
+                return null;
+            }
+            return vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>();
+        }
 
         /// <summary>
         /// Because monobehaviours do not like being called by the new keyword, this is a workaround method that attaches a 
@@ -31,24 +70,28 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
         /// </summary>
         /// <param name="vPanelNode"></param>
         /// <returns></returns>
-        public HorizontalOrVerticalLayoutGroup AttachHorizontalOrVerticalLayoutGroup(PanelNode vPanelNode)
+        public static HorizontalOrVerticalLayoutGroup AttachHorizontalOrVerticalLayoutGroup(PanelNode vPanelNode, HorizontalOrVerticalLayoutGroupType vType)
         {
             if (vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>() != null)
             {
-                GameObject.Destroy(vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>()); 
+                // ReSharper disable once AccessToStaticMemberViaDerivedType
+                GameObject.Destroy(vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>());
             }
-            if (HorizontalOrVerticalLayoutType == HorizontalOrVerticalLayoutGroupType.Horizontal)
+            if ( vType == HorizontalOrVerticalLayoutGroupType.Horizontal)
             {
                 vPanelNode.gameObject.AddComponent<HorizontalLayoutGroup>();
             }
-            else if((HorizontalOrVerticalLayoutType == HorizontalOrVerticalLayoutGroupType.Vertical))
+            else if ((vType == HorizontalOrVerticalLayoutGroupType.Vertical))
             {
                 vPanelNode.gameObject.AddComponent<VerticalLayoutGroup>();
+            }
+            else if (vType == HorizontalOrVerticalLayoutGroupType.Null)
+            {
+                return null;
             }
             return vPanelNode.GetComponent<HorizontalOrVerticalLayoutGroup>();
         }
     }
-
     public enum HorizontalOrVerticalLayoutGroupType
     {
         Null,
@@ -56,3 +99,5 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
         Vertical
     }
 }
+
+ 

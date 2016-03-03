@@ -8,6 +8,7 @@
 
 using System.Collections;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 
@@ -26,8 +27,9 @@ namespace Assets.Scripts.UI.Settings
 
         void Awake()
         {
-            SettingsView.SettingsButton.onClick.AddListener(SettingsButtonPressed);
-            InputHandler.RegisterActions(HeddokoDebugKeyMappings.SettingsButton, SettingsButtonPressed);
+            SettingsView.SettingsButton.onClick.AddListener(SwitchEnableState);
+            SettingsView.CloseButton.onClick.AddListener(SwitchEnableState);
+            InputHandler.RegisterActions(HeddokoDebugKeyMappings.SettingsButton, SwitchEnableState);
             BrainpackConnectionController.Instance.BrainpackStatusResponse += UpdateTextBox;
             BrainpackConnectionController.Instance.BrainpackTimeSetResp += GenericAckMsg;
             BrainpackConnectionController.Instance.ResetBrainpackResp += GenericAckMsg;
@@ -50,7 +52,11 @@ namespace Assets.Scripts.UI.Settings
         {
             SettingsView. UpdateStatusText(vMsg); 
         }
-        private void SettingsButtonPressed()
+
+        /// <summary>
+        /// switches between hide and show
+        /// </summary>
+        private void SwitchEnableState()
         {
             if (!mSettingsButtonPressed)
             {
@@ -88,13 +94,12 @@ namespace Assets.Scripts.UI.Settings
             SettingsView.Show();
         }
 
-        public bool flag;
+      
         /// <summary>
         /// Triggered by an in-game event, checks if the mouse was clicked outside the panel
         /// </summary>
         public void CheckIfMouseOutOfBounds()
         {
-           
             bool vMousePointerInBounds = RectTransformUtility.RectangleContainsScreenPoint(
                  SettingsView.Panel.GetComponent<RectTransform>(),
                  Input.mousePosition,

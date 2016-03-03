@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.UI.Layouts;
+﻿using System;
+using Assets.Scripts.UI.Layouts;
 using System.Collections.Generic;
 using Assets.Scripts.UI.AbstractViews.Templates;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
-    public class PanelNode: MonoBehaviour
+    public class PanelNode : MonoBehaviour
     {
         private PanelID mID = new PanelID();
         private PanelNode mParent;
@@ -38,31 +39,56 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         }
 
         /// <summary>
+        /// Unity3d does not like when monobehaviour inheriting objects are created with the new keyword.
+        /// this method allows for the creation of a panel node and returns it
+        /// </summary>
+        /// <param name="vParent"></param>
+        /// <param name="vTemplate"></param>
+        /// <param name="vParentRectTransform"></param>
+        /// <returns></returns>
+        public static PanelNode CreatePanelNode(PanelNode vParent, PanelNodeTemplate vTemplate,
+            RectTransform vParentRectTransform)
+        {
+            GameObject vNewPanelNodeGo = new GameObject();
+            vNewPanelNodeGo.SetActive(false);
+            RectTransform vRect = vNewPanelNodeGo.AddComponent<RectTransform>();
+
+            //set its parent in unity's transform hierarchy
+            vRect.transform.SetParent(vParentRectTransform.transform, false);
+            PanelNode vResult = vNewPanelNodeGo.AddComponent<PanelNode>();
+            vResult.Init(vParent, vTemplate, vParentRectTransform);
+            vNewPanelNodeGo.SetActive(true);
+            return vResult;
+        }
+
+        /// <summary>
         /// Initializes the PanelNode with the passed in template
         /// </summary>
         /// <param name="vParent">The panel nodes' parent</param>
         /// <param name="vTemplate"></param>
-        public void Init(PanelNode vParent, PanelNodeTemplate vTemplate)
+        public void Init(PanelNode vParent, PanelNodeTemplate vTemplate, RectTransform vParentRectTransform)
         {
             this.mParent = vParent;
             RectTransform vRectTransform = GetComponent<RectTransform>();
             if (vRectTransform == null)
             {
                 vRectTransform = this.gameObject.AddComponent<RectTransform>();
-                
+
             }
             Settings = new PanelSettings();
             Settings.RectTransform = vRectTransform;
             Settings.CameraToRenderedBodyPair = new PanelCameraToRenderedBodyPair();
-            Settings.Group = vTemplate.AttachHorizontalOrVerticalLayoutGroup(this);
-            Settings.Group.padding = vTemplate.HorizontalOrVerticalPadding;
+            if (vTemplate.HorizontalOrVerticalLayoutType != HorizontalOrVerticalLayoutGroupType.Null)
+            {
+                Settings.Group = PanelNodeTemplate.AttachHorizontalOrVerticalLayoutGroup(this, vTemplate);
+                Settings.Group.padding = vTemplate.HorizontalOrVerticalPadding;
+            }
+       
             Settings.LayoutElementComponent = gameObject.AddComponent<LayoutElement>();
             if (vParent != null)
             {
-                Settings.ModifyLayoutElement(vTemplate.PrefferedWidthOrHeight,vParent.Settings.Group);
+                Settings.ModifyLayoutElement(vTemplate.PrefferedWidthOrHeight, vParent.Settings.Group);
             }
-        //    Settings.UpdatePanel(vTemplate.Mapping)
-            
 
 
         }
@@ -86,6 +112,15 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         public PanelNode InsertChildAt(PanelNode vChild, int vIdx)
         {
             return null;
+        }
+
+        /// <summary>
+        /// Is the current PanelNode a leaf?
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLeaf()
+        {
+            return Children.Count == 0;
         }
 
         /// <summary>
@@ -120,7 +155,6 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         /// <summary>
         /// Removes a child from the list of children(subsequently all its children are also removed) with an index parameter
         /// </summary>
-        /// <param name="vChild"></param>
         /// <param name="vIdx"></param>
         /// <returns></returns>
         public PanelNode RemoveChildAt(int vIdx)
@@ -130,24 +164,40 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
 
 
         /// <summary>
-        /// Splits the panel in half and copies over the current template over to the new panel
-        /// </summary>
-        /// <returns>the newly created panel's children</returns>
-        public List<PanelNode> SplitPanelInHalf()
-        {
-            return null;
-        }
-        /// <summary>
         /// Splits the panel in half, applies a template to the first half of the panel and a second template to the second half
         /// </summary>
-        /// <param name="vFirstChildTemplate"></param>
-        /// <param name="vSecondChildTemplate"></param>
+        /// <param name="vType">how to split the node panel</param>
+        /// <param name="vFirstChildTemplate">first child template</param>
+        /// <param name="vSecondChildTemplate">second child template</param>
         /// <returns>the newly created panel's children</returns>
-        public List<PanelNode> SplitPanelInHalf(PanelNodeTemplate vFirstChildTemplate,
+        public List<PanelNode> SplitPanelInHalf(HorizontalOrVerticalLayoutGroupType vType, PanelNodeTemplate vFirstChildTemplate,
             PanelNodeTemplate vSecondChildTemplate)
         {
-            return null;
+            if (Children.Count > 0)
+            {
+                throw new InvalidSplitRequested();
+            }
+            List<PanelNode> vPanelNodes = new List<PanelNode>();
+            PanelNode vSecondChild = PanelNode.CreatePanelNode(this, vSecondChildTemplate, Settings.RectTransform);
+            PanelNode vFirstChild = PanelNode.CreatePanelNode(this, vFirstChildTemplate, Settings.RectTransform);
+            //change the current HorizontalOrverticallayout group according to the type
+            PanelNodeTemplate.AttachHorizontalOrVerticalLayoutGroup(this, vType);
+       
+            vPanelNodes.Add(vFirstChild);
+            vPanelNodes.Add(vSecondChild);
+            RemoveAllControlPanels();
+            Children = vPanelNodes;
+            return Children;
         }
+
+        /// <summary>
+        /// removes all currently connected control panels
+        /// </summary>
+        private void RemoveAllControlPanels()
+        {
+            Debug.Log("Remove all currently connected control panels");
+        }
+
         /// <summary>
         /// Cleans up any resources on removal
         /// </summary>
@@ -157,4 +207,9 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             this.Parent = null;
         }
     }
+    /// <summary>
+    /// Panel node splits can only occur on leaf nodes
+    /// </summary>
+    public class InvalidSplitRequested : Exception { }
+
 }

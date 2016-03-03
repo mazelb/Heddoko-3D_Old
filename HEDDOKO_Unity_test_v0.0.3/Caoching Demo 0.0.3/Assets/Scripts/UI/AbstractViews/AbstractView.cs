@@ -7,10 +7,9 @@
 */
 
 using Assets.Scripts.UI.AbstractViews.Layouts;
-using Assets.Scripts.UI.Layouts;
 using UnityEngine;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.UI.AbstractViews
 {
 
     /// <summary>
@@ -18,6 +17,7 @@ namespace Assets.Scripts.UI
     /// </summary>
     public abstract class AbstractView: MonoBehaviour
     {
+        private RectTransform mCurRectTransform;
         /// <summary>
         /// The view the is proceeding the current one
         /// </summary>
@@ -29,6 +29,19 @@ namespace Assets.Scripts.UI
         public AbstractView PreviousView;
 
         private Layout mViewLayout;
+
+        public RectTransform RectTransform
+        {
+            get
+            {
+                if (mCurRectTransform == null)
+                {
+                    mCurRectTransform= gameObject.GetComponent<RectTransform>(); 
+                }
+                return mCurRectTransform;
+            }
+           
+        }
 
         public virtual void Hide()
         { }
