@@ -70,6 +70,32 @@ namespace Assets.Scripts.Body_Data.view
             //Find the 2D representation of the object in the scene 
         }
 
+        /// <summary>
+        /// Assign a transform from the given associate transform
+        /// </summary>
+        /// <param name="vAssociatedTransform"></param>
+        public void AssignTransforms(Transform vAssociatedTransform)
+        {
+            SubSegmentTransforms.Add(vAssociatedTransform);
+            SubsegmentTransform = vAssociatedTransform;
+            mInitialPosition = vAssociatedTransform.localPosition;  
+            
+            try
+            {
+                GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
+                if (v2DGameObject != null)
+                {
+                    // SpriteTransform = v2DGameObject.transform;
+                    mSpriteMover = v2DGameObject.GetComponent<ISpriteMover>();
+                }
+            }
+            catch (UnityException exception)
+            {
+                //exception is thrown if the tag ins't found in the tag manager.
+            }
+            //Find the 2D representation of the object in the scene 
+        }
+
         public void ApplyTransformations(Quaternion vNewOrientation, int vApplyLocal = 0, bool vResetRotation = false)
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)

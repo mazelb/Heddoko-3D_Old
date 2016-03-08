@@ -4,12 +4,9 @@
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date Macrch 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
-*/
-
-using System;
-using System.Collections;
+*/ 
 using Assets.Scripts.Communication.Controller;
-using UnityEngine;
+using Assets.Scripts.UI.AbstractViews.Enums; 
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.AbstractSuitSubControls
@@ -32,6 +29,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
         public ColorBlock InErrorStateBlock;
         public ColorBlock ResetStateBlock;
         public ColorBlock DisconnectedBlock;
+        private static SubControlType sType = SubControlType.SuitStateModifierSubControl;
 
         void Awake()
         {
@@ -143,6 +141,25 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             SuitStateControl.interactable = false;
         }
 
+        public override SubControlType SubControlType
+        {
+            get { return sType; }
+        }
+
+        public override void Disable()
+        {
+           
+        }
+
+        public override void Enable()
+        {
+            
+        }
+
+        private void OnDisable()
+        {
+            mCurrentSuitState = CurrentSuitState.Start;
+        }
     }
 
 

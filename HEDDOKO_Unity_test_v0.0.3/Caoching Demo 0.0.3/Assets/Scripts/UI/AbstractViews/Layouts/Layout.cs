@@ -8,7 +8,10 @@
 
 
 using System;
+using System.Collections.Generic;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.Templates;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
@@ -18,12 +21,32 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
     public class Layout
     {
         private Guid mId = new Guid();
-        private LayoutContainer mLayoutContainer;
-        private AbstractView mViewLayout;
-        public Layout(LayoutType vLayoutType, AbstractView vViewLayout)
+        private LayoutContainerStruct mLayoutContainerStructure;
+        private AbstractView mParentViewLayout;
+        private List<AbstractControlPanel> mControlPanels; 
+        /// <summary>
+        /// Constructor that automatically creates a layout
+        /// </summary>
+        /// <param name="vLayoutType"></param>
+        /// <param name="vParentViewLayout"></param>
+        public Layout(LayoutType vLayoutType, AbstractView vParentViewLayout)
+        { 
+            mParentViewLayout = vParentViewLayout;
+           mLayoutContainerStructure = LayoutCreationManager.Instance.CreateLayoutContainer(mParentViewLayout,  vLayoutType); 
+        }
+
+        /// <summary>
+        /// Constructor takes in the parent view layout
+        /// </summary>
+        /// <param name="vParentViewLayout"></param>
+        public Layout(AbstractView vParentViewLayout)
         {
-            mViewLayout = vViewLayout;
-            mLayoutContainer = LayoutCreationManager.Instance.CreateLayoutContainer(mViewLayout, vLayoutType); 
+            mParentViewLayout = vParentViewLayout;
+        }
+
+        public LayoutContainerStruct ContainerStructure
+        {
+            get { return mLayoutContainerStructure; }
         }
     }
 

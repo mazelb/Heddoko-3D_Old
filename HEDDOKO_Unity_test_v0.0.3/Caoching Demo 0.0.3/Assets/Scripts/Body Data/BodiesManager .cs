@@ -59,8 +59,12 @@ public sealed class BodiesManager : MonoBehaviour
     public void CreateNewBody(string vBodyUUID = "")
     {
         Body vBody = new Body();
-        
-        vBody.InitBody(vBodyUUID, OutterThreadToUnityThreadIntermediary.IsUnityThread(Thread.CurrentThread));
+        if (!string.IsNullOrEmpty(vBodyUUID))
+        {
+            vBody.BodyGuid = vBodyUUID;
+        }
+        bool vIsUnityThead = OutterThreadToUnityThreadIntermediary.InUnityThread();
+        vBody.InitBody(vBodyUUID, vIsUnityThead);
         Bodies.Add(vBody);
     }
 
@@ -71,7 +75,7 @@ public sealed class BodiesManager : MonoBehaviour
     */
     public void AddNewBody(string vBodyUUID)
     {
-        //If the body doesn't exist create a new one otherwise do nothing
+        //If the body doesn't exist create a new one otherwise do nothing 
         if (!BodyExist(vBodyUUID))
         {
             CreateNewBody(vBodyUUID);

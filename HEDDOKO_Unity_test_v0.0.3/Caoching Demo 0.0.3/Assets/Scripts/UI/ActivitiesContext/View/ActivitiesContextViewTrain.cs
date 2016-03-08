@@ -98,6 +98,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
             }
 
         }
+
+        public override void CreateDefaultLayout()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Hides the view
         /// </summary>

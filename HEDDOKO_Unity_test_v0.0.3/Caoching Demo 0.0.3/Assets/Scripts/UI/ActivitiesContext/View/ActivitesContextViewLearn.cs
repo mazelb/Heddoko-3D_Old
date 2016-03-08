@@ -27,6 +27,12 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
         {
             gameObject.SetActive(true);
         }
+
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// Hides the main Activities  learning  view
         /// </summary>

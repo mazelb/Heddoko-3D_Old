@@ -7,7 +7,8 @@
 */
 
 using Assets.Scripts.UI.AbstractViews;
-using Assets.Scripts.UI.ActivitiesContext.Controller; 
+using Assets.Scripts.UI.ActivitiesContext.Controller;
+using Assets.Scripts.UI.Analysis;
 using Assets.Scripts.UI.RecordingLoading.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,11 +32,13 @@ namespace Assets.Scripts.UI.MainMenu.View
 
      
         //The Activities context view controller
-    public ActivitiesContextController ActivitiesContext;
+        public ActivitiesContextController ActivitiesContext;
 
         //The Brainpack/Bluetooth connection view
         public MainMenuBrainpackView BrainpackConnectionView; 
         public RecordingSelectionView RecordingSelectionView;
+        public AbstractView MultiRecordingView;
+        
         /// <summary>
         /// Shows the Main menu view
         /// </summary>
@@ -113,5 +116,9 @@ namespace Assets.Scripts.UI.MainMenu.View
             RecordingSelectionView.Hide();
         }
 
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

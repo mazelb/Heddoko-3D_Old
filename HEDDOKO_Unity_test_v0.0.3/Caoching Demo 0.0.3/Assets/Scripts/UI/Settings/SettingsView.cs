@@ -121,7 +121,11 @@ namespace Assets.Scripts.UI.Settings
             AllowSelectableItemInteraction(vBPConnected);
         }
 
- 
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
+
 
         /// <summary>
         /// Allows the interaction of the BrainpackDependentItems 

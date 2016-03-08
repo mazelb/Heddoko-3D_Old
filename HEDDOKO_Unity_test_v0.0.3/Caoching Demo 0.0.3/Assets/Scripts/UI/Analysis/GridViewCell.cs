@@ -89,6 +89,11 @@ namespace Assets.Scripts.UI.Analysis
         { 
             CameraControl.DisableZoom();
         }
+
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 

@@ -61,6 +61,11 @@ namespace Assets.Scripts.UI.RecordingLoading.View
          //  PlayerManager.StickTorsoToHips(true);
         }
 
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// hides the recording selection view
         /// </summary>

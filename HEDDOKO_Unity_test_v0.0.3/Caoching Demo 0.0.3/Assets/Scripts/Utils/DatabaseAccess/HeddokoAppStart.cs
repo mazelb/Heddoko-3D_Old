@@ -8,7 +8,10 @@
 
 using System;
 using System.Collections.Generic;
+using Assets.Demos;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.UI.AbstractViews.camera;
 using Assets.Scripts.UI.Loading;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.ModalWindow;
@@ -29,14 +32,16 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         public GameObject[] GOtoReEnable;
         public ScrollablePanel ContentPanel;
         public PlayerStreamManager PlayerStreamManager;
-
+        public DebugContextChecker DebugContextChecker;
         private bool ResetTPosButtonEnabled;
-        private int mCounter = 0;
+        private int mHomeTPoseKeyCounter = 0;
+        private int mDebugContextEnablerCounter=0;
         public BrainpackComPortText BrainpackComPortText;
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
         {
+            SetupPools();
             BodySegment.IsTrackingHeight = false;
 
             bool vAppSafelyLaunched;
@@ -49,11 +54,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             mDbAccess = new DBAccess();
 
             bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
-            /*
-            #if UNITY_EDITOR
-                        vApplicationSettingsFound = true;
-            #endif
-            */
+ 
 
             if (vApplicationSettingsFound)
             {
@@ -104,7 +105,22 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         }
 
+        /// <summary>
+        /// Sets up internal pools
+        /// </summary>
+        private void SetupPools()
+        {
+            GameObject vRenderedBodyGroup = GameObject.FindWithTag("RenderedBodyGroup");
+            GameObject vPanelCameraGroup = GameObject.FindWithTag("PanelCameraGroup");
 
+            RenderedBodyPool.ParentGroupTransform = vRenderedBodyGroup.transform;
+            PanelCameraPool.CameraParent = vPanelCameraGroup.transform;
+        }
+
+        void Start()
+        {
+            UniFileBrowser.use.SetPath(ApplicationSettings.PreferedRecordingsFolder);
+        }
         /// <summary>
         /// Enables or disable the array of gameobjects 
         /// </summary>
@@ -113,7 +129,10 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             foreach (var vGo in GOtoReEnable)
             {
-                vGo.SetActive(vFlag);
+                if (vGo != null)
+                {
+                    vGo.SetActive(vFlag);
+                }
             }
         }
 
@@ -133,19 +152,27 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             {
                 if (e.keyCode == KeyCode.Home)
                 {
-                    mCounter++;
-                    if (mCounter == 5)
+                    mHomeTPoseKeyCounter++;
+                    if (mHomeTPoseKeyCounter == 5)
                     {
                         InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
-#if UNITY_EDITOR
-                        BrainpackComPortText.gameObject.SetActive(true);
-#endif
-                    }
-
+                        mHomeTPoseKeyCounter = 0;
+                    } 
                 }
-                else if (e.keyCode != KeyCode.Home)
+                if (e.keyCode == KeyCode.F12)
                 {
-                    mCounter = 0;
+                    mDebugContextEnablerCounter++;
+                    if (mDebugContextEnablerCounter == 5)
+                    {
+                        DebugContextChecker.EnableDebugContext();
+                        BrainpackComPortText.EnableDisable();
+                    }
+                }
+
+                else if (e.keyCode != KeyCode.Home || e.keyCode == KeyCode.F12)
+                {
+                    mHomeTPoseKeyCounter = 0;
+                    mDebugContextEnablerCounter = 0;
                 }
             }
 

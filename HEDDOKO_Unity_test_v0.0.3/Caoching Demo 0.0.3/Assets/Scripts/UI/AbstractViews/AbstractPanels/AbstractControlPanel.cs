@@ -11,18 +11,38 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 using Assets.Scripts.UI.AbstractViews.Enums;
+using Assets.Scripts.UI.AbstractViews.Layouts;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
 {
+    /// <summary>
+    /// An abstract control panel that has a list of abstract sub control panels that change
+    /// the state of the current view
+    /// </summary>
     public abstract class AbstractControlPanel : MonoBehaviour, IEquatable<AbstractControlPanel>
     {
-        private List<AbstractSubControl> mSubControls;
+        protected List<AbstractSubControl> mSubControls = new List<AbstractSubControl>();
         private ControlPanelType mControlPanelType;
-
+        private RectTransform mParent;
+        private RectTransform mCurrentRectTransform;
+        public     PanelNode ParentNode { get; set; }
         public ControlPanelType PanelType
         {
             get { return mControlPanelType; }
+        }
+
+        /// <summary>
+        /// initializes the current abstract control panel
+        /// </summary>
+        /// <param name="vParent"></param>
+        /// <param name="vParentNode"></param>
+        public virtual void Init(RectTransform vParent, PanelNode vParentNode)
+        {
+            this.ParentNode = vParentNode;
+            mParent = vParent;
+            mCurrentRectTransform = GetComponent<RectTransform>();
+            mCurrentRectTransform.transform.SetParent(mParent,false);
         }
 
         /// <summary>
@@ -69,6 +89,15 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// informs current subcontrols that the body has been updated
+        /// </summary>
+        /// <param name="vBody"></param>
+        public virtual void BodyUpdated(Body vBody)
+        {
+          
         }
 
         /// <summary>

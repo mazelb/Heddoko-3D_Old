@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Assets.Scripts.Body_Data.view;
 using UnityEngine;
@@ -15,9 +16,10 @@ namespace Assets.Scripts.Body_Data
     /// <summary>
     /// The class that models the in-scene avatar, referencing it's visual and movement components. 
     /// </summary>
-    public class RenderedBody: MonoBehaviour
+    public class RenderedBody : MonoBehaviour
     {
         public BodyView AssociatedBodyView;
+        public GameObject Root;
         public SkinnedMeshRenderer Joints;
         public SkinnedMeshRenderer Torso;
         public SkinnedMeshRenderer Limbs;
@@ -34,26 +36,53 @@ namespace Assets.Scripts.Body_Data
         public Transform LowerRightLeg;
         public Transform Hips;
         public Transform UpperSpine;
-        
+
 
 
         [SerializeField]
         private BodyStructureMap.BodyTypes mCurrentBodyType;
+        private Dictionary<BodyStructureMap.SubSegmentTypes, Transform> mTransformMapping = new Dictionary<BodyStructureMap.SubSegmentTypes, Transform>(10);
+        private LayerMask mCurrLayerMask;
         /// <summary>
-        /// on awake register transformations
+        /// Getter and setter property: assigns the layer mask to the associated SkinnedMeshes
         /// </summary>
-        void Awake()
+        public LayerMask CurrentLayerMask
         {
-            
+            get { return mCurrLayerMask; }
+            set
+            {
+                mCurrLayerMask = value;
+                Joints.gameObject.layer = mCurrLayerMask;
+                Limbs.gameObject.layer = mCurrLayerMask;
+                Torso.gameObject.layer = mCurrLayerMask;
+                foreach (var vKvPair in mTransformMapping)
+                {
+                    vKvPair.Value.gameObject.layer = mCurrLayerMask;
+                }
+            }
         }
 
+       
+
         /// <summary>
-        /// Applies a transformation to the skin based on the body type
+        /// Applies a transformation to the skin based on the body type, defaulted to full body
         /// </summary>
         /// <param name="vTypes"></param>
-        public void Init(BodyStructureMap.BodyTypes vType)
+        public void Init(BodyStructureMap.BodyTypes vType = BodyStructureMap.BodyTypes.BodyType_FullBody)
         {
             mCurrentBodyType = vType;
+            Debug.Log("create subsegments per body type. Everything is set to fullbody now");
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftCalf, LowerLeftLeg);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftThigh, UpperLeftLeg);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_RightCalf, LowerRightLeg);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_RightThigh, UpperRightLeg);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_UpperSpine, UpperSpine);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_LowerSpine, Hips);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftForeArm, LowerLeftArm);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_LeftUpperArm, UpperLeftArm);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_RightForeArm, LowerRightArm);
+            mTransformMapping.Add(BodyStructureMap.SubSegmentTypes.SubsegmentType_RightUpperArm, UpperRightArm);
+
         }
 
         /// <summary>
@@ -65,30 +94,14 @@ namespace Assets.Scripts.Body_Data
             mCurrentBodyType = vType;
         }
 
-        /// <summary>
-        /// Assign a new rendering layer to the gameobject
-        /// </summary>
-        /// <param name="vNewLayer">layer mask</param>
-        public void AssignLayer(int vNewLayer)
-        {
-            
-        }
-
-        /// <summary>
-        /// Assign a new rendering layer to the gameobject
-        /// </summary>
-        /// <param name="vNewLayer">layer name</param>
-        public void AssignLayer(string vNewLayer)
-        {
-            
-        }
+ 
         /// <summary>
         /// Hides the segment based on the segment passed in
         /// </summary>
         /// <param name="vSegment"></param>
         public void HideSegment(BodyStructureMap.SegmentTypes vSegment)
         {
-            
+
         }
 
         /// <summary>
@@ -98,7 +111,7 @@ namespace Assets.Scripts.Body_Data
         /// <param name="vNewColor"></param>
         public void ChangeSegmentColor(BodyStructureMap.SegmentTypes vSegment, Color32 vNewColor)
         {
-            
+
         }
 
         /// <summary>
@@ -116,11 +129,20 @@ namespace Assets.Scripts.Body_Data
         /// </summary>
         public void Cleanup()
         {
-            
+
         }
 
+        /// <summary>
+        /// get the associated subsegment
+        /// </summary>
+        /// <param name="sstype"></param>
+        /// <returns></returns>
+        public Transform GetSubSegment(BodyStructureMap.SubSegmentTypes sstype)
+        {
+            return mTransformMapping[sstype];
+        }
     }
-   
+
 
     [Serializable]
     public class InvalidSegmentChangeRequestException : Exception

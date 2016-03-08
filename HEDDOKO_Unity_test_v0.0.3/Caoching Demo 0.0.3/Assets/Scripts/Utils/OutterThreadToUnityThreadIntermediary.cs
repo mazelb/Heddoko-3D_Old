@@ -42,14 +42,33 @@ namespace Assets.Scripts.Utils
                 return sInstance;
             }
         }
-        public void Start()
+        /// <summary>
+        /// Unity time
+        /// </summary>
+        public static float UnityTime { get; private set; }
+
+        void Awake()
+        {
+            Instance.Init();
+        }
+
+        /// <summary>
+        /// Initialize parameters
+        /// </summary>
+        private void Init()
         {
             mUnityThread = Thread.CurrentThread;
         }
+     
 
-        public static bool IsUnityThread(Thread vThread)
+        /// <summary>
+        /// checks if the current passed in thread is a unity thread
+        /// </summary>
+        /// <param name="vThread"></param>
+        /// <returns></returns>
+        public static bool InUnityThread( )
         {
-            return vThread.Equals(Instance.mUnityThread);
+            return Instance.mUnityThread.Equals(Thread.CurrentThread);
         }
  
         public static Coroutine HelpStartCoroutine(IEnumerator vCoroutine)
@@ -69,7 +88,8 @@ namespace Assets.Scripts.Utils
                 Action vAction = Queue.Dequeue();
                 if (vAction != null)
                 {
-                    vAction.Invoke();
+                        vAction.Invoke();
+                   
                 }
                 else
                 {
@@ -77,6 +97,7 @@ namespace Assets.Scripts.Utils
                 }
             }
             FrameDeltaTime = Time.deltaTime;
+            UnityTime = Time.time;
         }
 
  

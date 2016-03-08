@@ -48,7 +48,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
             vRecSubCtrls.Add(SubControlType.PlaybackSliderSubcontrol);
             vRecSubCtrls.Add(SubControlType.RecordingSpeedModifierSubcontrol);
             vRecSubCtrls.Add(SubControlType.RecordingSelectionSubControl);
-
+            vRecSubCtrls.Add(SubControlType.RecordingLoadSingleSubControl);
             //register avatar subcontrols
             vAvatarSubCtrl.Add(SubControlType.ResetAvatarSubControl);
 
@@ -109,7 +109,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
             }
          
 
-            return Validate(vControlPanel.PanelType, vSubControl.ControlType);
+            return Validate(vControlPanel.PanelType, vSubControl.SubControlType);
         }
     }
 
@@ -125,12 +125,20 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         CommentControlPanel,
         AnalysisControlPanel,
         MiscClientControlPanel,
-        SettingControlPanel
+        SettingControlPanel,
+        DebugRecordingPanel,
+        LoadingPanel
     }
 
     public enum SubControlType
     {
         PlaybackSubControl,
+        RecordingPlayPause,
+        RecordingForwardSubControl,
+        RecordingRewindSubControl,
+        RecordingProgressSubControl,
+        RecordingPlaySpeedModSubControl,
+        RecordingLoadSingleSubControl,
         TagWidgetSubControl,
         TagModificationSubControl,
         TagTextBoxSubControl,
@@ -143,11 +151,14 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         SuitsSelectionSubControl,
         SuitConnectionSubControl,
         SuitModificationSubControl,
+        SuitStateModifierSubControl,
         RenderedBodyModifierSubControl,
         RenderedBodySelectionSubControl,
         ResetAvatarSubControl,
         AddTagSubControl,
         AddCommentSubControl,
-        ModifyCommentSubControl
+        ModifyCommentSubControl,
+        CameraOrbitSubControl,
+        RecordingPlaybackSpeedDisplay
     }
 }

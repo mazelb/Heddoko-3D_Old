@@ -6,6 +6,7 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 using System;
+using Assets.Scripts.Body_Data;
 using Assets.Scripts.Body_Data.view;
 using UnityEngine; 
 
@@ -23,6 +24,11 @@ public class BodySubSegment
     public SubSegmentOrientationType SubsegmentOrientationType;
     public BodySubsegmentView AssociatedView;
 
+    public BodySubSegment()
+    {
+        
+    }
+   
     /**
     * SubSegmentOrientationType enum
     * @brief The type of subsegment's orientation
@@ -84,4 +90,19 @@ public class BodySubSegment
         AssociatedView.AssociatedSubSegment = this;
         subsegmentType = vSubsegmentType;
     }
+
+   
+
+    /// <summary>
+    /// updates the current transform to the passed in parameter
+    /// </summary>
+    /// <param name="vSubSegmentTransform"></param>
+    public void UpdateSubSegmentTransform(Transform vSubSegmentTransform)
+    {
+        AssociatedView.AssignTransforms(vSubSegmentTransform);
+    }
+
+   
+     
+  
 }

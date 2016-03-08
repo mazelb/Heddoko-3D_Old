@@ -7,8 +7,12 @@
 */
 
 using System.Collections.Generic;
+using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
+using Assets.Scripts.UI.AbstractViews.camera;
+using Assets.Scripts.UI.AbstractViews.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,18 +24,18 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
     public class PanelSettings
     {
         private LayoutElement mLayoutElementComponent;
-        private HorizontalOrVerticalLayoutGroup mLayoutGroup;
-        private RectTransform mRectTransform;
+        private HorizontalOrVerticalLayoutGroup mLayoutGroup; 
         private HashSet<AbstractControlPanel> mControlPanelSet = new HashSet<AbstractControlPanel>();
-        private PanelCameraToRenderedBodyPair mPanelCameraToRenderedBodyPair;
+        private PanelCameraToBodyPair mPanelCameraToBodyPair = new PanelCameraToBodyPair();
         private float mLayoutElementModifier;
+        private AbstractControlPanelBuilder mBuilder = new AbstractControlPanelBuilder();
+        private PanelNode PanelNode;
 
 
-
-        public PanelCameraToRenderedBodyPair CameraToRenderedBodyPair
+        public PanelCameraToBodyPair CameraToBodyPair
         {
-            get { return mPanelCameraToRenderedBodyPair; }
-            set { mPanelCameraToRenderedBodyPair = value; }
+            get { return mPanelCameraToBodyPair; }
+            set { mPanelCameraToBodyPair = value; }
         }
 
         public LayoutElement LayoutElementComponent
@@ -48,8 +52,8 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
 
         public RectTransform RectTransform
         {
-            get { return mRectTransform; }
-            set { mRectTransform = value; }
+            get { return PanelNode.GetComponent<RectTransform>(); }
+        
         }
 
         public HashSet<AbstractControlPanel> ControlPanelSet
@@ -58,7 +62,10 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             set { mControlPanelSet = value; }
         }
 
-
+        public PanelSettings(PanelNode vAssociatedNode  )
+        {
+            PanelNode = vAssociatedNode;
+        }
         /// <summary>
         /// Modify the layout element according to the parent layout group
         /// </summary>
@@ -101,10 +108,68 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
 
         }
 
+        /// <summary>
+        /// Updates the body of the current set of control panels
+        /// </summary>
+        /// <param name="vBody"></param>
+        public void UpdateBodyInControlPanels(Body vBody)
+        {
+            foreach (var vAbsCtrlPanel in ControlPanelSet)
+            {
+                vAbsCtrlPanel.BodyUpdated(vBody);
+            }
+        }
+
+        /// <summary>
+        /// Initialzes the panel with sub control and an optional body
+        /// </summary>
+        /// <param name="vControlPanelTypes"></param> 
+        /// <param name="vNeedRenderedBody"></param>
+        /// <param name="vBody"></param>
+        public void Init(List<ControlPanelType> vControlPanelTypes, bool vNeedRenderedBody, Body vBody = null )
+        {
+            int vLayer;
+            foreach (var controlPanelType in vControlPanelTypes)
+            {
+                AbstractControlPanel vAbstractControlPanel = mBuilder.BuildPanel(controlPanelType);
+          
+                if (!mControlPanelSet.Contains(vAbstractControlPanel))
+                {
+                    mControlPanelSet.Add(vAbstractControlPanel);
+                    vAbstractControlPanel.Init(RectTransform, PanelNode);
+                }
+            }
+            if (vBody != null)
+            {
+                if (vNeedRenderedBody)
+                {
+                    RenderedBody vRendered = RenderedBodyPool.RequestResource(vBody.BodyType);
+                    vBody.UpdateRenderedBody(vRendered);
+                }
+                PanelNode.UpdateBody(vBody);
+            }
+        }
+
+    
         public AbstractControlPanel GetControlPanel(AbstractControlPanel vControlPanel)
         {
             return null;
         }
 
+        /// <summary>
+        /// releases resources back into the pool upon request
+        /// </summary>
+        public void ReleaseResources()
+        { 
+            //unset the camera
+            if (CameraToBodyPair.PanelCamera != null)
+            {
+                PanelCameraPool.Release(CameraToBodyPair.PanelCamera);
+            }
+            if (CameraToBodyPair.Body != null)
+            {
+                CameraToBodyPair.Body.ReleaseRenderedBody();
+            }
+        }
     }
 }

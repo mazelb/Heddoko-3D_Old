@@ -27,6 +27,14 @@ namespace Assets.Scripts.Utils.DebugContext
         string mStringRgx = @"^(?i)com(?-i)\d+";
 
         /// <summary>
+        /// Depending on the current active state, flips to enable or disable
+        /// </summary>
+        public void EnableDisable()
+        {
+            bool vIsActive = gameObject.activeSelf;
+            gameObject.SetActive(!vIsActive);
+        }
+        /// <summary>
         /// Sets the brainpack Controller's comport 
         /// </summary>
         public void SetBPControllerPort(string s)

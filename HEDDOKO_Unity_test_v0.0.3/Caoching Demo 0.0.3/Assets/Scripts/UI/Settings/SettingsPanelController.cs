@@ -110,5 +110,10 @@ namespace Assets.Scripts.UI.Settings
             }
 
         }
+
+        public override void CreateDefaultLayout()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

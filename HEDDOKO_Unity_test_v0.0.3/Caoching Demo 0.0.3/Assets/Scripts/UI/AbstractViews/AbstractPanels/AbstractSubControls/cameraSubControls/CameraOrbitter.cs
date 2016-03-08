@@ -7,8 +7,8 @@
 */
 
 using System;
-using UnityEngine;
-using UnityEngine.UI;
+using Assets.Scripts.UI.AbstractViews.Enums;
+using UnityEngine; 
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cameraSubControls
 {
@@ -37,12 +37,19 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         private double mZ = 0.0;
         private Ray mRay;
         private RaycastHit mRaycastHit;
+        private static SubControlType sType = SubControlType.CameraOrbitSubControl;
+        public bool IsEnabled { get; set; }
+
 
         void Awake()
         {
             Camera = GetComponent<Camera>();
-            string vLayer = LayerMask.LayerToName(Target.gameObject.layer);
-            TargetsLayer = LayerMask.GetMask(vLayer);
+            if (Target != null)
+            {
+                string vLayer = LayerMask.LayerToName(Target.gameObject.layer);
+                TargetsLayer = LayerMask.GetMask(vLayer);
+            }
+          
             CameraOrbitterCentralObserver.Add(this);
 
         }
@@ -63,8 +70,10 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         // Update is called once per frame
         void Update()
         {
-
-            CameraObitterFSM();
+            if (IsEnabled)
+            {
+                CameraObitterFSM();
+            }
         }
          
         /// <summary>
@@ -203,6 +212,22 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
                 vResult = mId.Equals(vOther.mId);
             }
             return vResult;
+        }
+
+        public override SubControlType SubControlType
+        {
+            get { return sType; }
+        }
+        
+
+        public override void Disable()
+        {
+            IsEnabled = false;
+        }
+
+        public override void Enable()
+        {
+            IsEnabled = true;
         }
     }
 }

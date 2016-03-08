@@ -2,7 +2,7 @@
 * @file AbstractSubControl.cs
 * @brief Contains the AbstractSubControl class
 * @author Mohammed Haider(mohamed@heddoko.com)
-* @date Ma 2016
+* @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
@@ -14,17 +14,12 @@ using UnityEngine;
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls
 {
     /// <summary>
-    /// Abstract subcontrol: An abstraction of a panels sub controls
+    /// Abstract subcontrol: An abstraction of a control panels sub controls
     /// </summary>
  public abstract   class AbstractSubControl : MonoBehaviour, IEquatable<AbstractControlPanel>
  {
-     private SubControlType mSubControlType;
-     
 
-     public SubControlType ControlType
-     {
-         get { return mSubControlType; }
-     }
+     public abstract SubControlType SubControlType { get; }
 
      public bool Equals(AbstractControlPanel other)
      {
@@ -34,5 +29,9 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls
          }
          return false;
      }
+
+        public abstract void Disable();
+
+        public abstract void Enable();
  }
 }

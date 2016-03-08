@@ -7,6 +7,10 @@ Project("{E4111CFD-91E9-FB28-5D20-DEB6573A4575}") = "Caoching Demo 0.0.3", "Asse
 EndProject
 Project("{E4111CFD-91E9-FB28-5D20-DEB6573A4575}") = "Caoching Demo 0.0.3", "Assembly-CSharp-Editor.csproj", "{4DF3EC54-B5BD-462D-E185-1C461DDB8EDD}"
 EndProject
+Project("{E4111CFD-91E9-FB28-5D20-DEB6573A4575}") = "Caoching Demo 0.0.3", "Assembly-UnityScript-firstpass.unityproj", "{9A836F9C-46A0-4BE1-8076-8BF8DD00D48D}"
+EndProject
+Project("{E4111CFD-91E9-FB28-5D20-DEB6573A4575}") = "Caoching Demo 0.0.3", "Assembly-UnityScript.unityproj", "{DCE05782-98C9-7398-361E-52993E78CBEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,11 +29,19 @@ Global
 		{4DF3EC54-B5BD-462D-E185-1C461DDB8EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF3EC54-B5BD-462D-E185-1C461DDB8EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF3EC54-B5BD-462D-E185-1C461DDB8EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A836F9C-46A0-4BE1-8076-8BF8DD00D48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A836F9C-46A0-4BE1-8076-8BF8DD00D48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A836F9C-46A0-4BE1-8076-8BF8DD00D48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A836F9C-46A0-4BE1-8076-8BF8DD00D48D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCE05782-98C9-7398-361E-52993E78CBEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCE05782-98C9-7398-361E-52993E78CBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCE05782-98C9-7398-361E-52993E78CBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCE05782-98C9-7398-361E-52993E78CBEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																												GlobalSection(MonoDevelopProperties) = preSolution
+																																																																													GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

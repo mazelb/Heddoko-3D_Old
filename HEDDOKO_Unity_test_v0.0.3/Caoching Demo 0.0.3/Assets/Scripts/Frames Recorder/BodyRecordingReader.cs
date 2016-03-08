@@ -4,15 +4,13 @@
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
 */
-
-using UnityEngine;
-using System;
-using System.Collections;
+ 
+using System; 
 using System.IO;
 using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption;
 using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption;
 using Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Encryption;
-using Assets.Scripts.Utils;
+ 
 
 /**
 * BodyRecordingReader class 

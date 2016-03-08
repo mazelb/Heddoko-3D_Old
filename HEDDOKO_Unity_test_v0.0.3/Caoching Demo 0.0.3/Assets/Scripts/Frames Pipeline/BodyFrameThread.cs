@@ -76,6 +76,10 @@ public class BodyFrameThread : ThreadedJob
             lock (mWorkerThreadLockHandle)
             {
                 mContinueWorking = value;
+                if (mPlaybackTask != null)
+                {
+                    mPlaybackTask.IsWorking = mContinueWorking;
+                }
             }
         }
     }
@@ -107,6 +111,13 @@ public class BodyFrameThread : ThreadedJob
         this.mBuffer = vBuffer;
         mDataSourceType = SourceDataType.Recording;
     }
+    public BodyFrameThread(BodyFramesRecording vFrameRecording, BodyFrameBuffer vBuffer)
+    {
+        this.mRawFrames = mRawFrames;
+        this.mBuffer = vBuffer;
+        mDataSourceType = SourceDataType.Recording;
+        mPlaybackTask = new RecordingPlaybackTask(vFrameRecording, BodyFrameBuffer);
+    }
 
     /**
     * @brief Default constructor
@@ -137,8 +148,9 @@ public class BodyFrameThread : ThreadedJob
 
     public override void Start()
     {
-        ContinueWorking = true;
+        
         base.Start();
+        ContinueWorking = true;
 
     }
 
@@ -168,8 +180,8 @@ public class BodyFrameThread : ThreadedJob
                 break;
             case SourceDataType.Recording:
                 BodyFrameBuffer.AllowOverflow = false;
-                 RecordingTask();
-              //  mPlaybackTask = new RecordingPlaybackTask(mRawFrames, BodyFrameBuffer);
+               //  RecordingTask();
+              
                 RecordingPlaybackTask();
                 break;
             case SourceDataType.Suit:
@@ -375,7 +387,7 @@ public class BodyFrameThread : ThreadedJob
         ContinueWorking = false;
         if (mPlaybackTask != null)
         {
-            mPlaybackTask.IsPlaying = false;
+            mPlaybackTask.IsWorking = false;
         }
         CloseFile();
     }

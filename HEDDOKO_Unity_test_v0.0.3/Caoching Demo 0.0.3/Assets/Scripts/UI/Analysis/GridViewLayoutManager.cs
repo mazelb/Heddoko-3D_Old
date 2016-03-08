@@ -210,6 +210,11 @@ namespace Assets.Scripts.UI.Analysis
             }
         }
 
+        public override void CreateDefaultLayout()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Helper function that validates  the new layout set by render layout
         /// </summary>

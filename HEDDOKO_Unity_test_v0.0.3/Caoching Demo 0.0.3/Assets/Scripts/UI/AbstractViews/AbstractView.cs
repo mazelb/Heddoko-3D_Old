@@ -69,5 +69,9 @@ namespace Assets.Scripts.UI.AbstractViews
             }
         }
 
+        /// <summary>
+        /// Create a default layout for the current abstract view
+        /// </summary>
+        public abstract void CreateDefaultLayout();
     }
 }

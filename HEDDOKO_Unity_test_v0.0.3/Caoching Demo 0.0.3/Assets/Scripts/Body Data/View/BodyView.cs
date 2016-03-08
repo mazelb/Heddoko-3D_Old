@@ -7,8 +7,8 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic; 
-using Assets.Scripts.Utils.DebugContext; 
+using System.Collections.Generic;
+using Assets.Scripts.Utils.DebugContext;
 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -20,19 +20,24 @@ namespace Assets.Scripts.Body_Data.view
 
         //private BodyFrameBuffer mBuffer;
         private BodyFrameBuffer mBuffer;
+        public int BufferCount;
         [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
         [SerializeField]
-        private bool mIsPaused ;
+        private bool mIsPaused;
 
         public bool IsPaused
         {
             get { return mIsPaused; }
-          
+
         }
         [SerializeField]
         private bool mStartUpdating;
+
+
+
+
 
         /// <summary>
         /// Internally set the Body associated to this view. Class property that returns the Body associated with this view.
@@ -65,6 +70,7 @@ namespace Assets.Scripts.Body_Data.view
                 mStartUpdating = value;
             }
         }
+
 
         /// <summary>
         /// Initialize the view with the frame buffer
@@ -152,8 +158,10 @@ namespace Assets.Scripts.Body_Data.view
                 {
                     return;
                 }
+
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
+                    BufferCount = mBuffer.Count;
                     BodyFrame vBodyFrame = mBuffer.Dequeue();
 
                     if (AssociatedBody.InitialBodyFrame == null)
@@ -165,7 +173,7 @@ namespace Assets.Scripts.Body_Data.view
                     UpdateViewTracking(vBodyFrame);
                 }
 
-               // InputHandler();
+                // InputHandler();
             }
         }
 
@@ -175,7 +183,7 @@ namespace Assets.Scripts.Body_Data.view
         private void InputHandler()
         {
             if (Input.GetKeyDown(HeddokoDebugKeyMappings.ResetFrame))
-            { 
+            {
                 ResetInitialFrame();
             }
         }
@@ -185,7 +193,7 @@ namespace Assets.Scripts.Body_Data.view
         /// </summary>
         private void Awake()
         {
- 
+
         }
 
         /// <summary>

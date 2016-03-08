@@ -48,8 +48,8 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         public PanelNode GetPanelOfBody(PanelNode vStartNode, Body vBody)
         {
             PanelNode vEndResult = null;
-            if (vStartNode.Settings.CameraToRenderedBodyPair != null &&
-                vStartNode.Settings.CameraToRenderedBodyPair.Avatar.AssociatedBodyView.AssociatedBody == vBody)
+            if (vStartNode.PanelSettings.CameraToBodyPair != null &&
+                vStartNode.PanelSettings.CameraToBodyPair.Body == vBody)
             {
                 vEndResult = vStartNode;
             }

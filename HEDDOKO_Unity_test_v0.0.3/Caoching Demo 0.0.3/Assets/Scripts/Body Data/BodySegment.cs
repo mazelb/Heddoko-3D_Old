@@ -9,9 +9,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Body_Data.view;
-using Assets.Scripts.Utils;
-using System;
+using Assets.Scripts.Body_Data.view; 
+using Assets.Scripts.Body_Data;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
@@ -810,6 +809,7 @@ public class BodySegment
 
     }
 
+ 
     /// <summary>
     /// MapSubSegments: Perform mapping on the current segments and its respective subsegments.
     /// </summary>
@@ -842,4 +842,19 @@ public class BodySegment
             MapLeftLegSegment(vFilteredDictionary);
         }
     }
+
+    /// <summary>
+    /// Updates subsegments with the passed in RenderedBody
+    /// </summary>
+    /// <param name="vRendered"></param>
+    public void UpdateRenderedSegment(RenderedBody vRendered)
+    {
+        foreach (var vsubSegment in BodySubSegmentsDictionary)
+        {
+            Transform vSubSegmentTransform = vRendered.GetSubSegment((BodyStructureMap.SubSegmentTypes) vsubSegment.Key);
+            vsubSegment.Value.UpdateSubSegmentTransform(vSubSegmentTransform);
+        }
+    }
+
+   
 }

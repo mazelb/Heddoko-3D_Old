@@ -10,8 +10,9 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
-using System.Linq;
+using System.Linq; 
 using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
@@ -45,7 +46,7 @@ public class Body
     [SerializeField]
     public BodyFrame PreviousBodyFrame;
 
-    [SerializeField] private RenderedBody mAvatar;
+
 
     [SerializeField]
     //Initial body Frame
@@ -62,6 +63,8 @@ public class Body
 
     //view associated with this model
     private BodyView mView;
+    [SerializeField]
+    private RenderedBody mRenderedBody;
 
     /**
     * View
@@ -103,6 +106,15 @@ public class Body
         }
     }
 
+    public RenderedBody RenderedBody
+    {
+        get { return mRenderedBody; }
+        private set
+        {
+            mRenderedBody = value; 
+        }
+    }
+
     /**
     * CreateNewBodyUUID()
     * @brief Creates a new body UUID
@@ -125,7 +137,7 @@ public class Body
         }
         else
         {
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(()=>InitBody(vBodyUUID, BodyType));
+            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => InitBody(vBodyUUID, BodyType));
         }
     }
 
@@ -163,7 +175,8 @@ public class Body
         List<BodyStructureMap.SegmentTypes> vSegmentList = BodyStructureMap.Instance.BodyToSegmentMap[vBodyType];
         TorsoAnalysis vTorsoSegmentAnalysis = new TorsoAnalysis();
         vTorsoSegmentAnalysis.SegmentType = BodyStructureMap.SegmentTypes.SegmentType_Torso;
-
+      
+ 
         foreach (BodyStructureMap.SegmentTypes type in vSegmentList)
         {
             BodySegment vSegment = new BodySegment();
@@ -188,7 +201,7 @@ public class Body
                 vLeftArmSegmentAnalysis.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftArmSegmentAnalysis;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftArm, vLeftArmSegmentAnalysis);
-                LeftArmAnalysis= vLeftArmSegmentAnalysis;
+                LeftArmAnalysis = vLeftArmSegmentAnalysis;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightArm)
             {
@@ -206,7 +219,7 @@ public class Body
                 vLeftLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vLeftLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_LeftLeg, vLeftLegAnalysisSegment);
-                LeftLegAnalysis= vLeftLegAnalysisSegment;
+                LeftLegAnalysis = vLeftLegAnalysisSegment;
             }
             if (type == BodyStructureMap.SegmentTypes.SegmentType_RightLeg)
             {
@@ -215,8 +228,9 @@ public class Body
                 vRightLegAnalysisSegment.TorsoAnalysisSegment = vTorsoSegmentAnalysis;
                 vSegment.mCurrentAnalysisSegment = vRightLegAnalysisSegment;
                 AnalysisSegments.Add(BodyStructureMap.SegmentTypes.SegmentType_RightLeg, vRightLegAnalysisSegment);
-                RightLegAnalysis= vRightLegAnalysisSegment;
+                RightLegAnalysis = vRightLegAnalysisSegment;
             }
+
         }
     }
 
@@ -280,21 +294,22 @@ public class Body
 
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
-        BodyFramesRecording bodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
+        BodyFramesRecording vBodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
 
-        if (bodyFramesRec != null && bodyFramesRec.RecordingRawFrames.Count > 0)
+        if (vBodyFramesRec != null && vBodyFramesRec.RecordingRawFrames.Count > 0)
         {
             //Setting the first frame as the initial frame
-             BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(bodyFramesRec.RecordingRawFrames[0]);
+            BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(vBodyFramesRec.RecordingRawFrames[0]);
 
-             SetInitialFrame(vBodyFrame);
+            SetInitialFrame(vBodyFrame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
 
-            mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-
+           // mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+          mBodyFrameThread = new BodyFrameThread(vBodyFramesRec, vBuffer1);
             View.Init(this, vBuffer1);
-            mBodyFrameThread.Start();
             View.StartUpdating = true;
+            mBodyFrameThread.Start();
+            
         }
     }
 
@@ -457,7 +472,7 @@ public class Body
             View.StartUpdating = false;
         }
         if (mBodyFrameThread != null)
-        { 
+        {
             mBodyFrameThread.StopThread();
         }
 
@@ -471,6 +486,31 @@ public class Body
         if (mBodyFrameThread != null)
         {
             mBodyFrameThread.FlipPauseState();
+        }
+    }
+
+    /// <summary>
+    /// Sets the passed in RenderedBody component and updates components with the passed in parameter
+    /// </summary>
+    /// <param name="vRendered"></param>
+    public void UpdateRenderedBody(RenderedBody vRendered)
+    {
+        RenderedBody = vRendered;
+        foreach (var vBodySegment in BodySegments)
+        {
+            vBodySegment.UpdateRenderedSegment(vRendered);
+        }
+        RenderedBody.AssociatedBodyView = View;
+    }
+
+    /// <summary>
+    /// Release the current RenderedBody back into the pool
+    /// </summary>
+    public void ReleaseRenderedBody()
+    {
+        if (RenderedBody != null)
+        {
+            RenderedBodyPool.ReleaseResource(RenderedBody);
         }
     }
 }

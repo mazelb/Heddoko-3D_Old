@@ -29,7 +29,13 @@ namespace Assets.Demos
            vIsDebug = true;
 #endif
             mChildren.SetActive(vIsDebug);
-
+        }
+        public void EnableDebugContext()
+        {
+            bool vIsActive = mChildren.activeSelf;
+            mChildren.SetActive(!vIsActive);
         }
     }
+
+
 }
