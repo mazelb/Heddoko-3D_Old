@@ -243,12 +243,22 @@ namespace Assets.Scripts.Frames_Pipeline
                     }
 
                     vCurrBodyFrame = mConvertedFrames[mCurrentIdx];
+                    int vPreviousIndex = IsRewinding ? mCurrentIdx + 1 : mCurrentIdx - 1;
+                    if (IsRewinding && vPreviousIndex >= mConvertedFrames.Length)
+                    {
+                        vPreviousIndex = mConvertedFrames.Length - 1;
+                    }
+                    if (!IsRewinding && vPreviousIndex < 0)
+                    {
+                        vPreviousIndex =0;
+                    }
+                    vPrevTimeStamp = mConvertedFrames[vPreviousIndex].Timestamp;//vCurrBodyFrame.Timestamp;
                     vRecDeltatime = Math.Abs(vCurrBodyFrame.Timestamp - vPrevTimeStamp);
                     int vSleepTime = (int)((vRecDeltatime / Math.Abs(PlaybackSpeed)) * 1000);
                     Thread.Sleep(vSleepTime);
                     vEnquedBodyFrame = mConvertedFrames[mCurrentIdx];
                     mFrameBuffer.Enqueue(vEnquedBodyFrame);
-                    vPrevTimeStamp = vCurrBodyFrame.Timestamp;
+                    
                     mCurrentIdx += IteratorAdder;
                 }
                 catch (Exception vException)

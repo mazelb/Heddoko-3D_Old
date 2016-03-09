@@ -79,7 +79,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             }
         }
 
-      
+
         public RecordingPlaybackTask PlaybackTask
         {
             get { return mPlaybackTask; }
@@ -229,8 +229,9 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             }
 
             switch (CurrentState)
-            { case PlaybackState.Null:
-                    if (vNewState == PlaybackState.Null 
+            {
+                case PlaybackState.Null:
+                    if (vNewState == PlaybackState.Null
                         || vNewState == PlaybackState.Pause
                         || vNewState == PlaybackState.Play
                         )
@@ -335,10 +336,10 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
         /// </summary>
         public bool ValidatePlaybackTaskForControls()
         {
-         
+
             if (mPlaybackTask == null)
             {
-                
+
                 foreach (var vSubControl in mSubControls)
                 {
                     vSubControl.Disable();
@@ -379,6 +380,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
 
 
 
+
         void Update()
         {
             //update the RecordingProgressSliderSubControl slider value
@@ -390,13 +392,15 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
                 {
                     //check if this a new recording that was loaded. 
                     if (mIsNewRecording)
-                    { 
-                        mIsNewRecording = false; 
+                    {
+                        mIsNewRecording = false;
                         UpdateRecording(mBody.MBodyFrameThread.PlaybackTask);
                     }
 
-                    RecordingProgressSliderSubControl.UpdateCurrentTime(mPlaybackTask.GetCurrentPlaybackIndex);
-
+                    if (CurrentState != PlaybackState.Pause && CurrentState != PlaybackState.Null)
+                    {
+                        RecordingProgressSliderSubControl.UpdateCurrentTime(mPlaybackTask.GetCurrentPlaybackIndex);
+                    }
                 }
 
             }
@@ -505,6 +509,18 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             else
             {
                 ChangeState(PlaybackState.FastForward);
+            }
+        }
+
+        public void Rewind()
+        {
+            if (CurrentState == PlaybackState.Pause)
+            {
+                ChangeState(PlaybackState.StepBackward);
+            }
+            else
+            {
+                ChangeState(PlaybackState.FastBackward);
             }
         }
     }

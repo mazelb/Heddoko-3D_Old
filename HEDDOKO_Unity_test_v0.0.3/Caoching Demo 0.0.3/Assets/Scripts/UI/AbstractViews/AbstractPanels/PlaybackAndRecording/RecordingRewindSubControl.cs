@@ -17,8 +17,8 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
     {
         public Button RewindButton;
         public TextUnicode UnicodeRewindText;
-        public string FontawesomeFastRewindText = "\\uf04a";
-        public string FontawesomeStepRewindText = "\\uf04a";
+        private string FontawesomeFastRewindText = "\\uf04a";
+        private string FontawesomeStepRewindText = "\\uf048";
         private SubControlType mType = SubControlType.RecordingRewindSubControl;
         public PlaybackControlPanel ParentPanel;
         private bool mIsPaused;
@@ -69,14 +69,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             ParentPanel = vParentPanel;
             RewindButton.onClick.AddListener(() =>
             {
-                if (IsPaused)
-                {
-                    ParentPanel.ChangeState(PlaybackState.StepBackward);
-                }
-                else
-                {
-                    ParentPanel.ChangeState(PlaybackState.FastBackward);
-                }
+                ParentPanel.Rewind();
             });
         }
     }

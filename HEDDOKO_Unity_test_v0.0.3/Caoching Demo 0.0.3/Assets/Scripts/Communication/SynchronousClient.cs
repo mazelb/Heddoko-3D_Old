@@ -75,7 +75,7 @@ namespace Assets.Scripts.Communication
         /// Starts a client socket and sends the message data. 
         /// </summary>
         /// <param name="vMsg"></param>
-        private void StartClientAndSendData(string vMsg)
+        public void StartClientAndSendData(string vMsg)
         {
             byte[] bytes = new byte[1024];
             mReceivedMessage = false;
@@ -123,6 +123,7 @@ namespace Assets.Scripts.Communication
                 catch (ArgumentNullException ane)
                 {
                     vMsg = "ArgumentNullException  " + ane;
+                    Debug.Log(vMsg);
                 }
                 catch (SocketException se)
                 {
@@ -130,18 +131,21 @@ namespace Assets.Scripts.Communication
                     vMsg = "SocketException  "+ se.ErrorCode + "\r\n"+se;
                     vMsg += se.InnerException;
                     vSender.Close();
+                    Debug.Log(vMsg);
                 }
                 catch (Exception e)
                 {
                     vMsg = "Unexpected exception " + e;
                     vSender.Shutdown(SocketShutdown.Both);
                     vSender.Close();
+                    Debug.Log(vMsg);
                 }
 
             }
             catch (Exception e)
             {
                 vMsg = "Unexpected exception " + e;
+                Debug.Log(vMsg);
             }
             mReceivedMessage = true;
             vStopwatch.Stop();
@@ -158,5 +162,6 @@ namespace Assets.Scripts.Communication
         }
 
 
+         
     }
 }

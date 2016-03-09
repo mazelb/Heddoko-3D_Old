@@ -41,7 +41,8 @@ namespace Assets.Scripts.UI.MainMenu.Controller
 
             if (MainMenuView.RecordingSelectionView != null)
             {
-                MainMenuView.RecordingSelectionView.BackButton.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
+                // MainMenuView.RecordingSelectionView.pre.onClick.AddListener(() => ChangeState(MainMenuState.MainMenu));
+                MainMenuView.RecordingSelectionView.PreviousView = MainMenuView;
                 MainMenuView.RecordingsSelectionButton.onClick.AddListener(() => ChangeState(MainMenuState.RecordingsSelection));
             }
 
@@ -51,7 +52,7 @@ namespace Assets.Scripts.UI.MainMenu.Controller
         /// changes the state of the main menu
         /// </summary>
         /// <param name="vNewState"></param>
-        private void ChangeState(MainMenuState vNewState)
+        public void ChangeState(MainMenuState vNewState)
         {
             switch (mCurrentState)
             {

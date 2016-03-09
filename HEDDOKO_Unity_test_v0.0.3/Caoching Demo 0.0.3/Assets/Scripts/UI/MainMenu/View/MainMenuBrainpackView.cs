@@ -93,8 +93,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         ///  Display the   Disconnected views
         /// </summary> 
         public void OnDisconnect()
-        {
-            Debug.Log("Disconnect");
+        { 
             UnpairButton.interactable = false;
             UnpairButton.gameObject.SetActive(false);
             PairButton.gameObject.SetActive(true);

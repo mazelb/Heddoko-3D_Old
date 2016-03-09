@@ -163,6 +163,7 @@ namespace Assets.Scripts.Communication.Controller
         {
 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
+        
             ChangeCurrentState(BrainpackConnectionState.Disconnected);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }

@@ -8,8 +8,7 @@
 
 using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.UI.ActivitiesContext.Controller;
-using Assets.Scripts.UI.Analysis;
-using Assets.Scripts.UI.RecordingLoading.View;
+using Assets.Scripts.UI.MainMenu.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +27,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         public Camera RecordingSelectionCam;
         public Button ExitButton;
         public Button SettingsButton;
+        public MainMenuController MainmenuController;
 
 
      
@@ -36,8 +36,8 @@ namespace Assets.Scripts.UI.MainMenu.View
 
         //The Brainpack/Bluetooth connection view
         public MainMenuBrainpackView BrainpackConnectionView; 
-        public RecordingSelectionView RecordingSelectionView;
-        public AbstractView MultiRecordingView;
+        //public RecordingSelectionView RecordingSelectionView;
+        public AbstractView RecordingSelectionView; 
         
         /// <summary>
         /// Shows the Main menu view
@@ -105,7 +105,7 @@ namespace Assets.Scripts.UI.MainMenu.View
         {
             RecordingSelectionView.Show();
             TrainingAndLearningCam.gameObject.SetActive(false);
-            RecordingSelectionCam.gameObject.SetActive(true);
+         //   RecordingSelectionCam.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -113,12 +113,17 @@ namespace Assets.Scripts.UI.MainMenu.View
         /// </summary>
         public void HideRecordingsSelection()
         {
-            RecordingSelectionView.Hide();
+           // RecordingSelectionView.Hide();
         }
 
         public override void CreateDefaultLayout()
         {
-            throw new System.NotImplementedException();
+             
+        }
+
+        public override void Show()
+        {
+            MainmenuController.ChangeState(MainMenuState.MainMenu);
         }
     }
 }

@@ -182,8 +182,7 @@ namespace Assets.Scripts.Communication
         private void RequestAvailableBtDevicesCommand(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket);
-            //ClientSocket.SendMessage(vOutBound);
+            string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket); 
             ClientSocket.Requests.Enqueue(vOutBound);
         }
 
@@ -239,6 +238,7 @@ namespace Assets.Scripts.Communication
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             // AsynchronousClient.SendMessage(vPayload);
             ClientSocket.Requests.Enqueue(vPayload);
+            ClientSocket.StartClientAndSendData(vPayload);
         }
 
         private void DisconnectAcknowledged(object vSender, object vArg)

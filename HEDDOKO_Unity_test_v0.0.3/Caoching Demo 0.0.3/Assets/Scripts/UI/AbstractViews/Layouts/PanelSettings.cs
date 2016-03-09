@@ -24,7 +24,7 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
     public class PanelSettings
     {
         private LayoutElement mLayoutElementComponent;
-        private HorizontalOrVerticalLayoutGroup mLayoutGroup; 
+        private HorizontalOrVerticalLayoutGroup mLayoutGroup;
         private HashSet<AbstractControlPanel> mControlPanelSet = new HashSet<AbstractControlPanel>();
         private PanelCameraToBodyPair mPanelCameraToBodyPair = new PanelCameraToBodyPair();
         private float mLayoutElementModifier;
@@ -53,7 +53,7 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         public RectTransform RectTransform
         {
             get { return PanelNode.GetComponent<RectTransform>(); }
-        
+
         }
 
         public HashSet<AbstractControlPanel> ControlPanelSet
@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             set { mControlPanelSet = value; }
         }
 
-        public PanelSettings(PanelNode vAssociatedNode  )
+        public PanelSettings(PanelNode vAssociatedNode)
         {
             PanelNode = vAssociatedNode;
         }
@@ -126,13 +126,13 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         /// <param name="vControlPanelTypes"></param> 
         /// <param name="vNeedRenderedBody"></param>
         /// <param name="vBody"></param>
-        public void Init(List<ControlPanelType> vControlPanelTypes, bool vNeedRenderedBody, Body vBody = null )
+        public void Init(List<ControlPanelType> vControlPanelTypes, bool vNeedRenderedBody, Body vBody = null)
         {
             int vLayer;
             foreach (var controlPanelType in vControlPanelTypes)
             {
                 AbstractControlPanel vAbstractControlPanel = mBuilder.BuildPanel(controlPanelType);
-          
+
                 if (!mControlPanelSet.Contains(vAbstractControlPanel))
                 {
                     mControlPanelSet.Add(vAbstractControlPanel);
@@ -150,7 +150,22 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             }
         }
 
-    
+        public void RequestResources()
+        {
+            if (CameraToBodyPair.Body != null)
+            {
+                Body vBody = CameraToBodyPair.Body;
+                RenderedBody vRendered = RenderedBodyPool.RequestResource(vBody.BodyType);
+                vBody.UpdateRenderedBody(vRendered);
+                RenderedBody vRenderedBody = vBody.RenderedBody;
+                PanelCameraSettings vPanelCameraSettings = new PanelCameraSettings(vRenderedBody.CurrentLayerMask, this);
+                CameraToBodyPair.PanelCamera = PanelCameraPool.GetPanelCamResource(vPanelCameraSettings);
+               CameraToBodyPair.PanelCamera.SetCameraTarget(vRenderedBody, 10);
+            }
+
+
+        }
+
         public AbstractControlPanel GetControlPanel(AbstractControlPanel vControlPanel)
         {
             return null;
@@ -160,7 +175,7 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         /// releases resources back into the pool upon request
         /// </summary>
         public void ReleaseResources()
-        { 
+        {
             //unset the camera
             if (CameraToBodyPair.PanelCamera != null)
             {

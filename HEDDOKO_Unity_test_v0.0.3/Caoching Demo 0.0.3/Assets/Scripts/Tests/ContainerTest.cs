@@ -13,6 +13,7 @@ using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.UI.AbstractViews.Enums;
 using Assets.Scripts.UI.AbstractViews.Layouts;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Tests
 {
@@ -25,8 +26,10 @@ namespace Assets.Scripts.Tests
         public Layout CurrentLayout;
         private PanelNode[] mPanelNodes;
         public List<List<ControlPanelType>> ControlPanelTypeList = new List<List<ControlPanelType>>(2);
-
-        void Start()
+        public Button BackButton;
+        private Body mLeftNodeBody;
+        private Body mRightNodeBody;
+        void Awake()
         {
             List<ControlPanelType> vLeftSide = new List<ControlPanelType>();
             vLeftSide.Add(ControlPanelType.RecordingPlaybackControlPanel);
@@ -35,28 +38,27 @@ namespace Assets.Scripts.Tests
             ControlPanelTypeList.Add(vLeftSide);
             ControlPanelTypeList.Add(vRightSide);
             TestCreateLayout();
+            BackButton.onClick.AddListener(Hide);
+            
         }
 
         void TestCreateLayout()
         {
-            BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
-            BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
-            Body vBodyLeft = BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");
-            Body vBodyRight = BodiesManager.Instance.GetBodyFromUUID("SingleRec_RightPanelBody");
-            if (CurrentLayout == null)
-            {
-                CurrentLayout = new Layout(LayoutType, this);
-                mPanelNodes = CurrentLayout.ContainerStructure.PanelNodes; 
-            }
-            mPanelNodes[0].name = "Left";
-            mPanelNodes[1].name = "Right";
-            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, vBodyLeft);
-            mPanelNodes[1].PanelSettings.Init(ControlPanelTypeList[1], true, vBodyRight);
+            
         }
 
         public override void CreateDefaultLayout()
         {
-
+            BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
+            BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
+            mLeftNodeBody= BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");
+            mRightNodeBody = BodiesManager.Instance.GetBodyFromUUID("SingleRec_RightPanelBody"); 
+             CurrentLayout = new Layout(LayoutType, this);
+           mPanelNodes = CurrentLayout.ContainerStructure.PanelNodes; 
+            mPanelNodes[0].name = "Left";
+            mPanelNodes[1].name = "Right";
+            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mLeftNodeBody);
+            mPanelNodes[1].PanelSettings.Init(ControlPanelTypeList[1], true, mRightNodeBody);
         }
 
   
@@ -70,7 +72,24 @@ namespace Assets.Scripts.Tests
             {
                 vPanelNodes.PanelSettings.ReleaseResources();
             }
-            base.Hide();
+            gameObject.SetActive(false);
+             PreviousView.Show();
+
+
+        }
+
+        public override void Show()
+        {
+            gameObject.SetActive(true);
+            if (CurrentLayout == null)
+            {
+                CreateDefaultLayout();
+            }
+            else
+            {
+                mPanelNodes[0].PanelSettings.RequestResources();
+                mPanelNodes[1].PanelSettings.RequestResources();
+            }
         }
     }
 

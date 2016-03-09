@@ -6,7 +6,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using System; 
+using System;
 using Assets.Scripts.Utils;
 using UnityEngine;
 
@@ -44,11 +44,11 @@ namespace Assets.Scripts.Tests
             UniFileBrowser.use.SendWindowCloseMessage(HideDisablerPanel);
 
         }
-    
+
         /// <summary>
         /// opens a File browser dialog to select a recording with an optional callback after file is completed loading
         /// </summary>
-        public void OpenFileBrowseDialog(Action<BodyFramesRecording> vCallback =null)
+        public void OpenFileBrowseDialog(Action<BodyFramesRecording> vCallback = null)
         {
             SetTransform();
             DisablerPanel.SetActive(true);
@@ -66,23 +66,21 @@ namespace Assets.Scripts.Tests
         /// <param name="vRecordingSelected"></param>
         private void SelectRecordingFile(string vRecordingSelected)
         {
-            //start load
-            Debug.Log("recording selected " + vRecordingSelected);
             BodyRecordingsMgr.Instance.ScanRecordings(UniFileBrowser.use.filePath);
             BodyRecordingsMgr.Instance.ReadRecordingFile(vRecordingSelected, BodyFramesRecordingCallback);
-            }
+        }
 
         /// <summary>
         /// once loading is completed, this callback is reached. Note: invokes the member callback.
         /// </summary>
         /// <param name="vRecording"></param>
         private void BodyFramesRecordingCallback(BodyFramesRecording vRecording)
-        { 
-            
+        {
+
             if (mRecordingLoadedCallback != null)
             {
 
-                if (!OutterThreadToUnityThreadIntermediary.InUnityThread( ))
+                if (!OutterThreadToUnityThreadIntermediary.InUnityThread())
                 {
                     OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => mRecordingLoadedCallback.Invoke(vRecording));
                 }

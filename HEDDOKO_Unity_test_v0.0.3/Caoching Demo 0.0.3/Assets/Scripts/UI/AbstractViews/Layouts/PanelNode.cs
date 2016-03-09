@@ -1,4 +1,11 @@
-﻿using System;
+﻿/** 
+* @file PanelNode .cs
+* @brief Contains the PanelNode   class
+* @author Mohammed Haider (mohammed@heddoko.com)
+* @date March 2016
+* Copyright Heddoko(TM) 2016, all rights reserved
+*/
+using System;
 using System.Collections;
 using Assets.Scripts.UI.Layouts;
 using System.Collections.Generic;
@@ -10,6 +17,9 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
+    /// <summary>
+    /// A traversable node, representing a panel inside a panel container
+    /// </summary>
     [Serializable]
     public class PanelNode : MonoBehaviour
     {
