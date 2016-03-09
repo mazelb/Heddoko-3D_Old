@@ -49,13 +49,13 @@ namespace Assets.Scripts.Utils
 
         void Awake()
         {
-            Instance.Init();
+           
         }
 
         /// <summary>
         /// Initialize parameters
         /// </summary>
-        private void Init()
+        public void Init()
         {
             mUnityThread = Thread.CurrentThread;
         }

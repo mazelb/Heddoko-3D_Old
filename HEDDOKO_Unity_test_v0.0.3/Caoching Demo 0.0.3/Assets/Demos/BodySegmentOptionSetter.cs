@@ -7,10 +7,12 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
@@ -27,11 +29,10 @@ namespace Assets.Demos
         public Button ResetButton;
         public GameObject DebuggingPanel;
         //prefab of a button
-        public GameObject BodySegmentOptionButtonPref;
+        public GameObject BodySegmentOptionButtonPrefab;
         private Dictionary<string, FieldInfo> mButtonMappings = new Dictionary<string, FieldInfo>();
         public RectTransform ParentPanel;
-        public PlayerStreamManager PlayerStreamManager;
-
+      
         void Awake()
         {
             //Get all the fields marked as public and static 
@@ -55,7 +56,7 @@ namespace Assets.Demos
             var vMappedDictionary = vQuery.ToDictionary(vf => vf.vKey, vf => vf.value2);
             foreach (var vKVPair in mButtonMappings)
             {
-                GameObject vButton = Instantiate(BodySegmentOptionButtonPref);
+                GameObject vButton = Instantiate(BodySegmentOptionButtonPrefab);
                 vButton.transform.SetParent(ParentPanel.transform, false);
                 string vTextualInfo = SplitCamelCase(vKVPair.Key);
                 BodySegmentOptionButton vButtonBSegment = vButton.GetComponent<BodySegmentOptionButton>();
@@ -71,13 +72,7 @@ namespace Assets.Demos
                 vButtonBSegment.AssociatedButton.onClick.AddListener(vAction);
             }
 
-            ResetButton.onClick.AddListener(() =>
-            {
-                if (PlayerStreamManager.CurrentBodyInPlay != null)
-                {
-                    PlayerStreamManager.CurrentBodyInPlay.ResetBodyMetrics();
-                }
-            });
+            ResetButton.onClick.AddListener(ResetBodiesMetrics);
 
             InputHandler.RegisterActions(KeyCode.H,
                 () =>
@@ -88,6 +83,24 @@ namespace Assets.Demos
 
         }
 
+        /// <summary>
+        /// Reset the bodies metrics
+        /// </summary>
+        private void ResetBodiesMetrics()
+        {
+            foreach (var vRenderedBody in RenderedBodyPool.sInUsePool)
+            {
+                try
+                {
+                    vRenderedBody.AssociatedBodyView.AssociatedBody.ResetBodyMetrics();
+                }
+                catch (NullReferenceException vException)
+                {
+                   Debug.Log("Following Rendered body hasn't had a body/view assigned:  "+vRenderedBody.name);
+                }
+               
+            }
+        }
         /// <summary>
         /// Returns on/off based on true/false
         /// </summary>

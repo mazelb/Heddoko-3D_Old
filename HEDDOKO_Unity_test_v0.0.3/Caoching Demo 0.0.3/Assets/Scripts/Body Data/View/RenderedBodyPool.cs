@@ -15,7 +15,7 @@ namespace Assets.Scripts.Body_Data.View
     /// </summary>
    public static class RenderedBodyPool
     {
-        private static List<RenderedBody> sInUsePool  = new List<RenderedBody>(10);
+        public static List<RenderedBody> sInUsePool  = new List<RenderedBody>(10);
         private static List<RenderedBody> sAvailablePool  = new List<RenderedBody>(10);
         public static Transform ParentGroupTransform;
         //available layers that can be used

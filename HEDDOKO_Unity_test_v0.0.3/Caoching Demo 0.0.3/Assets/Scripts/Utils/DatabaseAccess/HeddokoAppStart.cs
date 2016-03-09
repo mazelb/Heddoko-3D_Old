@@ -43,7 +43,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             SetupPools();
             BodySegment.IsTrackingHeight = false;
-
+            OutterThreadToUnityThreadIntermediary.Instance.Init();
             bool vAppSafelyLaunched;
 
 
@@ -169,9 +169,12 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     }
                 }
 
-                else if (e.keyCode != KeyCode.Home || e.keyCode == KeyCode.F12)
+                else if (e.keyCode != KeyCode.Home  )
                 {
-                    mHomeTPoseKeyCounter = 0;
+                    mHomeTPoseKeyCounter = 0; 
+                }
+                else if (  e.keyCode == KeyCode.F12)
+                { 
                     mDebugContextEnablerCounter = 0;
                 }
             }

@@ -8,6 +8,7 @@
 
 
 using System.Collections;
+using System.Security.Policy;
 using Assets.Scripts.Frames_Pipeline;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 using Assets.Scripts.UI.AbstractViews.Layouts;
@@ -521,6 +522,27 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             else
             {
                 ChangeState(PlaybackState.FastBackward);
+            }
+        }
+
+        /// <summary>
+        /// Stops the current player, resets the body
+        /// </summary>
+        public override void ReleaseResources()
+        { 
+            ChangeState(PlaybackState.Pause);
+            if (PlaybackTask != null)
+            {
+               
+                mBody.StopThread();
+                bool vPreInter = BodySegment.IsUsingInterpolation;
+                BodySegment.IsUsingInterpolation = false;
+                mBody.View.ResetInitialFrame();
+                BodySegment.IsUsingInterpolation = vPreInter;
+                foreach (var vSubControl in mSubControls)
+                {
+                    vSubControl.Disable();
+                }
             }
         }
     }

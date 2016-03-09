@@ -113,5 +113,10 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
             }
             return false;
         }
+
+        /// <summary>
+        /// Releases resources used by the current control panel
+        /// </summary>
+        public abstract void ReleaseResources();
     }
 }

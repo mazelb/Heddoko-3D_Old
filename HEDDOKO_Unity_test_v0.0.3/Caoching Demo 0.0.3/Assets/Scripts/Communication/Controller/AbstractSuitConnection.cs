@@ -45,7 +45,8 @@ namespace Assets.Scripts.Communication.Controller
         public abstract void InitiateSuitRecording();
 
         public abstract void InitateStopRecordingReq();
- 
+
+        public abstract void FlushBrainpack();
     }
     public enum BrainpackConnectionState
     {

@@ -19,6 +19,8 @@ namespace Assets.Demos
    public class DebugContextChecker: MonoBehaviour
     {
         [SerializeField] private GameObject mChildren;
+        [SerializeField]
+        private GameObject mSegmentOptions;
         void Awake()
         {
             bool vIsDebug = false;
@@ -34,6 +36,7 @@ namespace Assets.Demos
         {
             bool vIsActive = mChildren.activeSelf;
             mChildren.SetActive(!vIsActive);
+            mSegmentOptions.SetActive(!vIsActive);
         }
     }
 

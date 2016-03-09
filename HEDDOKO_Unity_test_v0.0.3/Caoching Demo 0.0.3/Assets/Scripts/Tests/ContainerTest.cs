@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿ 
 /** 
 * @file ContainerTest.cs
 * @brief Contains the ContainerTest class
@@ -22,12 +22,12 @@ namespace Assets.Scripts.Tests
     /// </summary>
     public class ContainerTest : AbstractView
     {
-        private LayoutType LayoutType = LayoutType.HalfHalfHorizontal;
+        private LayoutType LayoutType = LayoutType.Single;
         public Layout CurrentLayout;
         private PanelNode[] mPanelNodes;
         public List<List<ControlPanelType>> ControlPanelTypeList = new List<List<ControlPanelType>>(2);
         public Button BackButton;
-        private Body mLeftNodeBody;
+        private Body mRootNode;
         private Body mRightNodeBody;
         void Awake()
         {
@@ -49,16 +49,22 @@ namespace Assets.Scripts.Tests
 
         public override void CreateDefaultLayout()
         {
-            BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
-            BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
-            mLeftNodeBody= BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");
-            mRightNodeBody = BodiesManager.Instance.GetBodyFromUUID("SingleRec_RightPanelBody"); 
-             CurrentLayout = new Layout(LayoutType, this);
-           mPanelNodes = CurrentLayout.ContainerStructure.PanelNodes; 
-            mPanelNodes[0].name = "Left";
-            mPanelNodes[1].name = "Right";
-            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mLeftNodeBody);
-            mPanelNodes[1].PanelSettings.Init(ControlPanelTypeList[1], true, mRightNodeBody);
+            BodiesManager.Instance.CreateNewBody("Root");
+            mRootNode = BodiesManager.Instance.GetBodyFromUUID("Root");
+            CurrentLayout = new Layout(LayoutType, this);
+            mPanelNodes = CurrentLayout.ContainerStructure.RenderingPanelNodes;
+            mPanelNodes[0].name = "Main";
+            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mRootNode);
+            //            BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
+            //            BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
+            //            mRootNode= BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");
+            //            mRightNodeBody = BodiesManager.Instance.GetBodyFromUUID("SingleRec_RightPanelBody"); 
+            //             CurrentLayout = new Layout(LayoutType, this);
+            //           mPanelNodes = CurrentLayout.ContainerStructure.RenderingPanelNodes; 
+            //            mPanelNodes[0].name = "Left";
+            //            mPanelNodes[1].name = "Right";
+            //            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mRootNode);
+            //            mPanelNodes[1].PanelSettings.Init(ControlPanelTypeList[1], true, mRightNodeBody);
         }
 
   
@@ -88,10 +94,10 @@ namespace Assets.Scripts.Tests
             else
             {
                 mPanelNodes[0].PanelSettings.RequestResources();
-                mPanelNodes[1].PanelSettings.RequestResources();
+//                mPanelNodes[1].PanelSettings.RequestResources();
             }
         }
     }
 
 }
-#endif
+ 

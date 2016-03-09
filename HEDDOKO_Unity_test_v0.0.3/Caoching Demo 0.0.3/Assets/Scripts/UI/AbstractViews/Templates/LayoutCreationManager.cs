@@ -82,7 +82,7 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
 
             PanelNodeTemplate vBotSplit1 = new PanelNodeTemplate(vFivesBot1, vSplitBotHalf, 5, HorizontalOrVerticalLayoutGroupType.Null);
             PanelNodeTemplate vBotSplit2 = new PanelNodeTemplate(vFivesBot2, vSplitBotHalf, 5, HorizontalOrVerticalLayoutGroupType.Null);
-            PanelNode[] vNodes = vLayoutContainer.PanelNodes = new PanelNode[3];
+            PanelNode[] vNodes = vLayoutContainer.RenderingPanelNodes = new PanelNode[3];
             foreach (PanelNode vNode in vNodes)
             {
                 vNode.Parent = vBotSplitNode;
@@ -132,7 +132,7 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
             PanelNodeTemplate vLeftSideNodeTemplate = new PanelNodeTemplate(vFivePadding, vHalfWidth, 5, HorizontalOrVerticalLayoutGroupType.Null);
             PanelNodeTemplate vRightSideNodeTemplate = new PanelNodeTemplate(vFivePadding, vHalfWidth, 5, HorizontalOrVerticalLayoutGroupType.Null);
 
-            PanelNode[] vPanelNodes = vLayoutContainer.PanelNodes = new PanelNode[2];
+            PanelNode[] vPanelNodes = vLayoutContainer.RenderingPanelNodes = new PanelNode[2];
 
             PanelNode vLeftNode = vLayoutContainer.LayoutContainer.AddPanelNode(vRoot, vRoot.PanelSettings.RectTransform, vLeftSideNodeTemplate);
             PanelNode vRightNode = vLayoutContainer.LayoutContainer.AddPanelNode(vRoot, vRoot.PanelSettings.RectTransform, vRightSideNodeTemplate);
@@ -213,12 +213,12 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
     public class LayoutContainerStruct
     {
         public LayoutContainer LayoutContainer { get; set; }
-        public PanelNode[] PanelNodes { get; set; }
+        public PanelNode[] RenderingPanelNodes { get; set; }
 
-        public LayoutContainerStruct(LayoutContainer vLayoutContainer, PanelNode[] vPanelNodeList)
+        public LayoutContainerStruct(LayoutContainer vLayoutContainer, PanelNode[] vRenderingPanelNodeList)
         {
             LayoutContainer = vLayoutContainer;
-            PanelNodes = vPanelNodeList;
+            RenderingPanelNodes = vRenderingPanelNodeList;
         }
 
     }

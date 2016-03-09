@@ -177,6 +177,10 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
         public void ReleaseResources()
         {
             //unset the camera
+            foreach (var vAbstractControlPanel in ControlPanelSet)
+            {
+                vAbstractControlPanel.ReleaseResources();
+            }
             if (CameraToBodyPair.PanelCamera != null)
             {
                 PanelCameraPool.Release(CameraToBodyPair.PanelCamera);

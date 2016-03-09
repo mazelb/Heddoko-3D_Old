@@ -93,7 +93,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.Controller
                         {
                             CurrentState = ActivitiesContextViewState.Main;
                             ActivitesContextView.Show();
-                            ActivitesContextView.SwitchToMainView();
+                            ActivitesContextView.SwitchToMainView();  
                         }
                     }
                     break;

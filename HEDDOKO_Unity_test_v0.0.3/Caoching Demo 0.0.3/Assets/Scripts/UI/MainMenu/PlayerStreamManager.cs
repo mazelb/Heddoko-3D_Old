@@ -8,6 +8,7 @@
 */
  
 using System.Collections.Generic;
+using Assets.Scripts.Body_Data;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.Loading;
@@ -23,6 +24,7 @@ namespace Assets.Scripts.UI.MainMenu
     public class PlayerStreamManager : MonoBehaviour
     {
         public Body CurrentBodyInPlay { get; set; }
+        public RenderedBody RenderedBody;
         [SerializeField]
         private BodyPlaybackState mCurrentState = BodyPlaybackState.Waiting;
 
@@ -83,7 +85,9 @@ namespace Assets.Scripts.UI.MainMenu
                 }
 
                 //get the first body
-                CurrentBodyInPlay = BodiesManager.Instance.Bodies[0];
+                CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromUUID("BrainpackPlaceholderBody");
+                RenderedBody.Init();
+                CurrentBodyInPlay.UpdateRenderedBody(RenderedBody);
             }
 
             for (int i = 0; i < TPoseButtons.Length; i++)
@@ -186,6 +190,10 @@ namespace Assets.Scripts.UI.MainMenu
             if (CurrentBodyInPlay != null && CurrentBodyInPlay.CurrentBodyFrame != null)
             {
                 CurrentBodyInPlay.View.ResetInitialFrame();
+                if (mCurrentState == BodyPlaybackState.StreamingFromBrainPack)
+                {
+                    BrainpackConnectionController.Instance.FlushBrainpack();
+                } 
             } 
         }
 
@@ -329,7 +337,8 @@ namespace Assets.Scripts.UI.MainMenu
                     //create a new body from the body manager
                     BodiesManager.Instance.CreateNewBody("BrainpackPlaceholderBody");
                 }
-                CurrentBodyInPlay = BodiesManager.Instance.Bodies[0]; //get the first body
+                    CurrentBodyInPlay = BodiesManager.Instance.GetBodyFromUUID("BrainpackPlaceholderBody"); 
+                     CurrentBodyInPlay.UpdateRenderedBody(RenderedBody);
 
             }
             mCanUseBrainpack = true;

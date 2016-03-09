@@ -10,6 +10,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Communication.View;
 using Assets.Scripts.Interfaces;
+using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.MainMenu.View;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
@@ -247,8 +248,7 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 ConnectedStateEvent();
-                                StartHeartBeat();
-                                //start pulling data
+                                StartHeartBeat(); 
                             }
 
                         }
@@ -497,7 +497,10 @@ namespace Assets.Scripts.Communication.Controller
             GetBrainpackStateCmd();
         }
 
-        
+        public override void FlushBrainpack()
+        {
+            SendCommandToBrainpack(HeddokoCommands.ClearBuffer);
+        }
         /// <summary>
         /// Starts the HeartBeat subroutine
         /// </summary>

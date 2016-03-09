@@ -112,6 +112,7 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.GetResponseMessageResp, RerouteResponseMessage);
             mCommand.Register(HeddokoCommands.GetBrainpackVersionReq, WrapPacketAndSendMessage);
             mCommand.Register(HeddokoCommands.StartRecordingReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.ClearBuffer, WrapPacketAndSendMessage);
         }
 
 
@@ -121,7 +122,8 @@ namespace Assets.Scripts.Communication
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             ClientSocket.Requests.Enqueue(vPayload);
         }
-     
+
+ 
         /// <summary>
         /// Reroute status message responses from the brainpack
         /// </summary>
