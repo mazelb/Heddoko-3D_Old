@@ -1,4 +1,5 @@
-﻿/** 
+﻿
+/** 
 * @file BodySegment.cs
 * @brief Contains the BodySegment  class
 * @author Mohammed Haider(mohamed@heddoko.com)
@@ -19,8 +20,9 @@ using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 /// <summary>
 /// BodySegment class: represents one abstracted reprensentation of a body segment.
 /// </summary>
-public class BodySegment
+public partial class BodySegment
 {
+#if !SEGMENTS_DEBUG
     //Segment Type 
     public BodyStructureMap.SegmentTypes SegmentType;
 
@@ -79,6 +81,7 @@ public class BodySegment
     /// <param name="vFrame"></param>
     public void UpdateSensorsData(BodyFrame vFrame)
     {
+    Debug.Log("in segments non active");
         //Update the delta time
         CurrentFrameTime = vFrame.Timestamp;
         DeltaTime = CurrentFrameTime - LastFrameTime;
@@ -857,4 +860,5 @@ public class BodySegment
     }
 
    
+#endif
 }

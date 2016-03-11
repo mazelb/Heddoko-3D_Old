@@ -32,7 +32,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         /// </summary>
         public static void MapResults()
         {
-            DBAccess vDbAccess = new DBAccess();
+            LocalDBAccess vDbAccess = new LocalDBAccess();
             sBrainpackNameToComPort = vDbAccess.GetBrainpackResults();
         }
 
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         /// <returns>the com port</returns>
         public static string GetPreferedComport()
         {
-            DBAccess vDbAccess = new DBAccess();
+            LocalDBAccess vDbAccess = new LocalDBAccess();
             string vValue = "";
             if (sBrainpackNameToComPort.Count == 0)
             {

@@ -21,7 +21,9 @@ public class BodyFrame
     [SerializeField]
     //The frame of data populated to sensors 
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData;
-    
+
+
+    private string mBodyFrameUuid ="";
     //The timestamp of a bodybody frame 
     private float mTimeStamp;
 
@@ -45,6 +47,22 @@ public class BodyFrame
     {
         get { return mTimeStamp; }
         set { mTimeStamp = value; } 
+    }
+
+    /// <summary>
+    /// Body frame uuid
+    /// </summary>
+    public string BodyFrameUuid
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(mBodyFrameUuid))
+            {
+                mBodyFrameUuid = new Guid().ToString();
+            }
+            return mBodyFrameUuid;
+        }
+        
     }
 
     /**

@@ -28,7 +28,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
     /// </summary>
     public class HeddokoAppStart : MonoBehaviour
     {
-        private DBAccess mDbAccess;
+        private LocalDBAccess mDbAccess;
         public GameObject[] GOtoReEnable;
         public ScrollablePanel ContentPanel;
         public PlayerStreamManager PlayerStreamManager;
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             //Start loading animation
             LoadingBoard.StartLoadingAnimation();
 
-            mDbAccess = new DBAccess();
+            mDbAccess = new LocalDBAccess();
 
             bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
  

@@ -17,9 +17,9 @@ using UnityEngine;
 namespace Assets.Scripts.Utils.DatabaseAccess
 {
     /// <summary>
-    /// Provides an interface for accessing settings and com ports found in the launcher.
+    /// Provides a connection to a local database, whose parameters are set in a hard coded settings file
     /// </summary>
-    public class DBAccess
+    public class LocalDBAccess
     {
         private SqliteConnection mDbConnection;
 

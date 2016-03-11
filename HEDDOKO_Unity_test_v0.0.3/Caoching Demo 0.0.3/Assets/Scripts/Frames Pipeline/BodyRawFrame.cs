@@ -15,8 +15,10 @@ using System;
 * Frame structure (single frame):
 * BOIMECH_sensorID_1, Yaw;Pitch;Roll, ... BOIMECH_sensorID_9, Yaw;Pitch;Roll, FLEXCORE_sensorID_1, SensorValue, ... ,FLEXCORE_sensorID_4, SensorValue
 */
-public class BodyRawFrame 
+public class BodyRawFrame
 {
+    private string mBodyRawFrameUuid;
+
     //Maximum frame size in bytes
     public static uint sRawFrameSize = 100;
 
@@ -36,6 +38,18 @@ public class BodyRawFrame
     /// Has the raw frame been decoded ? this is set to true if the original stream is decoded
     /// </summary>
     public bool IsDecoded { get; set; }
+
+    public string BodyRawFrameUuid
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(mBodyRawFrameUuid))
+            {
+                mBodyRawFrameUuid = new Guid().ToString();
+            }
+            return mBodyRawFrameUuid;
+        }
+    }
 
     /// <summary>
     /// overload the array operator
