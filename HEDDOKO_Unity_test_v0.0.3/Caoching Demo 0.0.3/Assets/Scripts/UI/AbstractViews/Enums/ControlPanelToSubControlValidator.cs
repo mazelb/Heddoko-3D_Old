@@ -152,6 +152,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         SuitConnectionSubControl,
         SuitModificationSubControl,
         SuitStateModifierSubControl,
+        SuitsCalibrationSubControl,
         RenderedBodyModifierSubControl,
         RenderedBodySelectionSubControl,
         ResetAvatarSubControl,

@@ -37,7 +37,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             //check current state of the suit
             if (mIsConnectedToSuit)
             {
-                OnStatusUpdate(mCurrentSuitState);
+                OnStatusUpdate(SuitState);
             }
             else
             {
@@ -56,41 +56,41 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             base.OnDisconnect();
         }
 
-        public override void OnStatusUpdate(CurrentSuitState vCurrentSuitState)
+        public override void OnStatusUpdate(SuitState vSuitState)
         {
             //dont change states to the current state
-            if (vCurrentSuitState == mCurrentSuitState)
+            if (vSuitState == SuitState)
             {
                 return;
             }
-            switch (vCurrentSuitState)
+            switch (vSuitState)
             {
-                case CurrentSuitState.Error:
+                case SuitState.Error:
                     SuitStateControl.interactable = true;
                     SuitStateControl.colors = InErrorStateBlock;
                     ControlText.text = mInErrorStateTxt;
                     break;
-                case CurrentSuitState.Idle:
+                case SuitState.Idle:
                     SuitStateControl.interactable = true;
                     SuitStateControl.colors = IdleStateBlock;
                     ControlText.text = mInIdleStateTxt;
                     break;
-                case CurrentSuitState.Reset:
+                case SuitState.Reset:
                     SuitStateControl.interactable = false;
                     SuitStateControl.colors = ResetStateBlock;
                     ControlText.text = mInResetStateTxt;
                     break;
-                case CurrentSuitState.Recording:
+                case SuitState.Recording:
                     SuitStateControl.interactable = true;
                     SuitStateControl.colors = RecordingStateColorBlock;
                     ControlText.text = mInRecordingStateTxt;
                     break;
-                case CurrentSuitState.Undefined:
+                case SuitState.Undefined:
                     //todo
                     break;
 
             }
-            mCurrentSuitState = vCurrentSuitState;
+            SuitState = vSuitState;
         }
         
 
@@ -107,26 +107,26 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
         private void EngageControl()
         {
-            switch (mCurrentSuitState)
+            switch (SuitState)
             {
-                case CurrentSuitState.Error:
+                case SuitState.Error:
                     WaitForStatusResponse();
                     SuitConnection.InitiateSuitReset();
                     break;
-                case CurrentSuitState.Idle:
+                case SuitState.Idle:
                     WaitForStatusResponse();
                     SuitConnection.InitiateSuitRecording();
                     break;
-                case CurrentSuitState.Reset:
+                case SuitState.Reset:
                     SuitStateControl.interactable = false;
                     SuitStateControl.colors = ResetStateBlock;
                     ControlText.text = mInResetStateTxt;
                     break;
-                case CurrentSuitState.Recording:
+                case SuitState.Recording:
                     WaitForStatusResponse();
                     SuitConnection.InitateStopRecordingReq();
                     break;
-                case CurrentSuitState.Undefined:
+                case SuitState.Undefined:
                     //todo
                     break;
             }
@@ -158,7 +158,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
         private void OnDisable()
         {
-            mCurrentSuitState = CurrentSuitState.Start;
+            SuitState = SuitState.Start;
         }
     }
 
