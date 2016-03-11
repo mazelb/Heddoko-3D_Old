@@ -9,7 +9,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
     public abstract class AbstractSuitsSubControl : AbstractSubControl
     {
         internal bool mIsConnectedToSuit;
-        internal CurrentSuitState mCurrentSuitState;
+        internal SuitState SuitState;
         public AbstractSuitConnection SuitConnection;
         
         void OnEnable()
@@ -41,8 +41,8 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
         /// <summary>
         /// On status update
         /// </summary>
-        /// <param name="vCurrentSuitState"></param>
-        public abstract void OnStatusUpdate(CurrentSuitState vCurrentSuitState);
+        /// <param name="vSuitState"></param>
+        public abstract void OnStatusUpdate(SuitState vSuitState);
 
         /// <summary>
         /// on Connection

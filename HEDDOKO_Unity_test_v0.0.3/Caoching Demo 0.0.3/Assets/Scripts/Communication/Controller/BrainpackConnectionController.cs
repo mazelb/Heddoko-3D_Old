@@ -511,7 +511,7 @@ namespace Assets.Scripts.Communication.Controller
 
         public override void UpdateCurrentSuitState(string vMsg)
         {
-            CurrentSuitState vReceivedState = CurrentSuitState.Undefined;
+            SuitState vReceivedState = SuitState.Undefined;
             if (Regex.IsMatch(vMsg, "Disconnected", RegexOptions.IgnoreCase))
             {
                 ChangeCurrentState(BrainpackConnectionState.Disconnected);
@@ -520,19 +520,19 @@ namespace Assets.Scripts.Communication.Controller
 
             if (Regex.IsMatch(vMsg, "Idle", RegexOptions.IgnoreCase))
             {
-                vReceivedState= CurrentSuitState.Idle;
+                vReceivedState= SuitState.Idle;
             }
             else if (Regex.IsMatch(vMsg, "Reset", RegexOptions.IgnoreCase))
             {
-                vReceivedState = CurrentSuitState.Reset;
+                vReceivedState = SuitState.Reset;
             }
             else if (Regex.IsMatch(vMsg, "Recording", RegexOptions.IgnoreCase))
             {
-                vReceivedState = CurrentSuitState.Recording;
+                vReceivedState = SuitState.Recording;
             }
             else if (Regex.IsMatch(vMsg, "Error", RegexOptions.IgnoreCase))
             {
-                vReceivedState = CurrentSuitState.Error;
+                vReceivedState = SuitState.Error;
             }
 
             if (OnSuitStateUpdate != null)

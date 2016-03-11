@@ -19,7 +19,7 @@ namespace Assets.Scripts.Communication.Controller
 
         public delegate void BpConnectionControllerRespDel(string vResponse);
 
-        public delegate void SuitStateHandler(CurrentSuitState vSuitState);
+        public delegate void SuitStateHandler(SuitState vSuitState);
 
         public delegate void TimeOutStateResponse();
 
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Communication.Controller
         Connected,
         Failure
     }
-    public enum CurrentSuitState
+    public enum SuitState
     {
         Start,
         Idle,
