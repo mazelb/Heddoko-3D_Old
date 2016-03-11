@@ -48,7 +48,8 @@ namespace Assets.Scripts.Utils.DebugContext
         public static KeyCode IsProjectingXZ = KeyCode.Y;
         public static KeyCode IsProjectingXY = KeyCode.U;
         public static KeyCode IsProjectingYZ = KeyCode.I;
-
+        public static KeyCode IsAdjustingArms = KeyCode.Semicolon;
+        public static KeyCode IsCalibrating = KeyCode.RightWindows;
         public static KeyCode SettingsButton = KeyCode.Escape;
   }
 }

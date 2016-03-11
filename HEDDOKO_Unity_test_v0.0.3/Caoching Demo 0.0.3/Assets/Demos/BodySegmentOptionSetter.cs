@@ -55,20 +55,27 @@ namespace Assets.Demos
             var vMappedDictionary = vQuery.ToDictionary(vf => vf.vKey, vf => vf.value2);
             foreach (var vKVPair in mButtonMappings)
             {
-                GameObject vButton = Instantiate(BodySegmentOptionButtonPrefab);
-                vButton.transform.SetParent(ParentPanel.transform, false);
-                string vTextualInfo = SplitCamelCase(vKVPair.Key);
-                BodySegmentOptionButton vButtonBSegment = vButton.GetComponent<BodySegmentOptionButton>();
-                vButtonBSegment.TextualInfo.text = vTextualInfo;
+                try
+                {
+                    GameObject vButton = Instantiate(BodySegmentOptionButtonPrefab);
+                    vButton.transform.SetParent(ParentPanel.transform, false);
+                    string vTextualInfo = SplitCamelCase(vKVPair.Key);
+                    BodySegmentOptionButton vButtonBSegment = vButton.GetComponent<BodySegmentOptionButton>();
+                    vButtonBSegment.TextualInfo.text = vTextualInfo;
 
-                bool vVal = (bool)vKVPair.Value.GetValue(null);
-                vButtonBSegment.OnOffText.text = ReturnOnOffFromBool((vVal));
+                    bool vVal = (bool)vKVPair.Value.GetValue(null);
+                    vButtonBSegment.OnOffText.text = ReturnOnOffFromBool((vVal));
 
-                KeyValuePair<string, FieldInfo> vNewKvPair = new KeyValuePair<string, FieldInfo>(vKVPair.Key, vKVPair.Value);
-                UnityAction vAction = () => SetValue(vNewKvPair, vButtonBSegment);
-                KeyCode vKeyCode = (KeyCode)(vMappedDictionary[vKVPair.Key].GetValue(null));
-                InputHandler.RegisterActions(vKeyCode, vAction);
-                vButtonBSegment.AssociatedButton.onClick.AddListener(vAction);
+                    KeyValuePair<string, FieldInfo> vNewKvPair = new KeyValuePair<string, FieldInfo>(vKVPair.Key, vKVPair.Value);
+                    UnityAction vAction = () => SetValue(vNewKvPair, vButtonBSegment);
+                    KeyCode vKeyCode = (KeyCode)(vMappedDictionary[vKVPair.Key].GetValue(null));
+                    InputHandler.RegisterActions(vKeyCode, vAction);
+                    vButtonBSegment.AssociatedButton.onClick.AddListener(vAction);
+                }   
+                catch(KeyNotFoundException e)
+                {
+                    Debug.Log("option "+  vKVPair.Key + " in BodySegment.cs not found in HeddokoDebugKeyMappings. Make sure that you have this  mapped in HeddokoDebugKeyMappings");
+                }
             }
 
             ResetButton.onClick.AddListener(ResetBodiesMetrics);

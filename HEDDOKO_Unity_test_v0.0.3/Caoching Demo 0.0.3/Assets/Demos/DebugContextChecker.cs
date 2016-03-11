@@ -26,17 +26,20 @@ namespace Assets.Demos
             bool vIsDebug = false;
 #if UNITY_EDITOR 
             vIsDebug = true;
+          
 #endif
 #if DEVELOPMENT_BUILD
            vIsDebug = true;
 #endif
             mChildren.SetActive(vIsDebug);
+            mSegmentOptions.SetActive(vIsDebug);
         }
         public void EnableDebugContext()
         {
             bool vIsActive = mChildren.activeSelf;
+            bool vIsSegmentOptionActive = mSegmentOptions.activeSelf;
             mChildren.SetActive(!vIsActive);
-            mSegmentOptions.SetActive(!vIsActive);
+            mSegmentOptions.SetActive(!vIsSegmentOptionActive);
         }
     }
 
