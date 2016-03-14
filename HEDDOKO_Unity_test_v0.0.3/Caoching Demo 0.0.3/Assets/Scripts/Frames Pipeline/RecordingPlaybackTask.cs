@@ -281,7 +281,7 @@ namespace Assets.Scripts.Frames_Pipeline
             mConvertedFrames = new BodyFrame[mRawFrames.Count];
             for (int i = 0; i < mRawFrames.Count; i++)
             {
-                mConvertedFrames[i] = RawFrameConverterManager.ConvertRawFrame(mRawFrames[i]);
+                mConvertedFrames[i] = RawFrameConverter.ConvertRawFrame(mRawFrames[i]);
 
             }
             BodyFrame vFirst = mConvertedFrames[0];

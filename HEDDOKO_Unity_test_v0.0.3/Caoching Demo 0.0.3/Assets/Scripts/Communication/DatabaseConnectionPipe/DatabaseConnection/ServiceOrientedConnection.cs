@@ -6,8 +6,7 @@
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
-using System;
-using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseQueries;
+using System; 
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -28,7 +27,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
         public string DbConnectionUUID { get; private set; }
 
-        public bool Connection(Action vCallback = null)
+        public bool Connect(Action vCallback = null)
         {
             throw new NotImplementedException();
         }
@@ -38,7 +37,12 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             throw new NotImplementedException();
         }
 
-        public bool Query(IDatabaseQuery vQuery, Action vCallback = null)
+        public bool Query(string vQuery, Action vCallback = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CreateRecording(BodyFramesRecording vRecording)
         {
             throw new NotImplementedException();
         }

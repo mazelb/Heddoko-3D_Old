@@ -2,7 +2,7 @@
 * @file RecordingProgressSubControl .cs
 * @brief Contains the RecordingProgressSubControl abstract class
 * @author Mohammed Haider (mohammed@heddoko.com)
-* @date February 2016
+* @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
@@ -106,7 +106,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             if (IsInteractable)
             {
                 ParentPanel.SetPlayPositionAt((int)PlaySlider.value);
-                ParentPanel.ChangeState(PlaybackState.Play);
+                ParentPanel.ChangeState(PlaybackState.Pause);
             }
         }
 

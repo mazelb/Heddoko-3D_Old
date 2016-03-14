@@ -9,6 +9,9 @@
 using Newtonsoft.Json;
 using System.IO;
 using System;
+using System.Text;
+using Newtonsoft.Json.Serialization;
+using UnityEngine;
 
 namespace Assets.Scripts.Utils
 {
@@ -43,12 +46,42 @@ namespace Assets.Scripts.Utils
                 vSerializer.Serialize(vJsonWriter, vObj);
             }
         }
-       /**
-       * JsonFileToObject<T>(string vPath)
-       * @param string vPath the data path where a local json file can be loaded
-       * @brief  From the given file path, return an object of type T from a JSOn file
-       * @return Returns a deserialized Json object of type T
-       */
+        /// <summary>
+        /// Serialize an object to a json string
+        /// </summary>
+        /// <param name="vObj">the object to serialize</param>
+        /// <returns>the json formatted string</returns>
+        public static string SerializeObjToJson(object vObj)
+        { 
+            StringBuilder vStringBuilder = new StringBuilder();
+            StringWriter vStringWriter = new StringWriter(vStringBuilder);
+            JsonSerializer vSerializer = new JsonSerializer();
+            vSerializer.NullValueHandling = NullValueHandling.Ignore;
+            vSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            vSerializer.Formatting = Formatting.Indented; 
+            JsonSerializerSettings vSettings = new JsonSerializerSettings();
+           
+            vSettings.NullValueHandling = NullValueHandling.Ignore;
+            vSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            vSettings.Formatting = Formatting.Indented;
+
+            string vreturn =     JsonConvert.SerializeObject(vObj,Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+
+                });
+ 
+      
+            return vreturn;//vStringBuilder.ToString();
+
+        }
+        /**
+        * JsonFileToObject<T>(string vPath)
+        * @param string vPath the data path where a local json file can be loaded
+        * @brief  From the given file path, return an object of type T from a JSOn file
+        * @return Returns a deserialized Json object of type T
+        */
         public static T JsonFileToObject<T>(string vPath)
         {
             JsonSerializer vDeserializer = new JsonSerializer();
@@ -66,4 +99,6 @@ namespace Assets.Scripts.Utils
     public class NullValuePassedException : Exception
     {
     }
+
+
 }

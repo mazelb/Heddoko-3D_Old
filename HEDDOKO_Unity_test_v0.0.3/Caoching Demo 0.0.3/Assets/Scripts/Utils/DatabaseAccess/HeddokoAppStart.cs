@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Assets.Demos;
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Communication.Controller;
+using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.camera;
 using Assets.Scripts.UI.Loading;
 using Assets.Scripts.UI.MainMenu;
@@ -23,12 +24,13 @@ using UnityEngine;
 namespace Assets.Scripts.Utils.DatabaseAccess
 {
     /// <summary>
-    /// HeddokoAppStart:  This class is the starting point of the application, performing a variety of checks before the application can be
-    /// launched.
+    /// HeddokoAppStart:  This class is the starting point of the application, 
+    /// performing a variety of checks before the application can be launched.
     /// </summary>
     public class HeddokoAppStart : MonoBehaviour
     {
         private LocalDBAccess mDbAccess;
+        private Database mDatabase;
         public GameObject[] GOtoReEnable;
         public ScrollablePanel ContentPanel;
         public PlayerStreamManager PlayerStreamManager;
@@ -42,11 +44,11 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         void Awake()
         {
             SetupPools();
+           // SetupDatabase();
             BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
+
             bool vAppSafelyLaunched;
-
-
             EnableObjects(false);
             //Start loading animation
             LoadingBoard.StartLoadingAnimation();
@@ -145,6 +147,17 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. ", Application.Quit);
         }
 
+        void OnApplicationQuit()
+        {
+          //  mDatabase.CleanUp();
+        }
+
+
+        private void SetupDatabase()
+        {
+            mDatabase = new Database(DatabaseConnectionType.Local);
+            mDatabase.Init();
+        }
         void OnGUI()
         {
             Event e = Event.current;

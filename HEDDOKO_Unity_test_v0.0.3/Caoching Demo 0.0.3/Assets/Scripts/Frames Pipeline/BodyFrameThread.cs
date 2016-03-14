@@ -217,7 +217,7 @@ public class BodyFrameThread : ThreadedJob
                 try
                 {
                     //convert to body frame  : Todo: this can be optimized, we can reduce these calls, but the proposal would induce an additional memory cost
-                    BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
+                    BodyFrame vBodyFrame = RawFrameConverter.ConvertRawFrame(mRawFrames[vBodyFrameIndex]);
                     BodyFrameBuffer.Enqueue(vBodyFrame);
                     vBodyFrameIndex++;
 
@@ -324,7 +324,7 @@ public class BodyFrameThread : ThreadedJob
                         vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
-                BodyFrame vBodyFrame = RawFrameConverterManager.CreateBodyFrame(vPreviouslyValidValues);
+                BodyFrame vBodyFrame = RawFrameConverter.CreateBodyFrame(vPreviouslyValidValues);
                 //Todo: convert the timestamp to a float
                 vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f;//vTimeStamp;
                 BodyFrameBuffer.Enqueue(vBodyFrame);

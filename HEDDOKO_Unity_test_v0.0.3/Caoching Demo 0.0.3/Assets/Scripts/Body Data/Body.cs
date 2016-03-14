@@ -299,7 +299,7 @@ public class Body
         if (vBodyFramesRec != null && vBodyFramesRec.RecordingRawFrames.Count > 0)
         {
             //Setting the first frame as the initial frame
-            BodyFrame vBodyFrame = RawFrameConverterManager.ConvertRawFrame(vBodyFramesRec.RecordingRawFrames[0]);
+            BodyFrame vBodyFrame = RawFrameConverter.ConvertRawFrame(vBodyFramesRec.RecordingRawFrames[0]);
 
             SetInitialFrame(vBodyFrame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();

@@ -7,8 +7,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using System;
-using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseQueries; 
+using System; 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
     /// <summary>
@@ -25,7 +24,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// Connect to the database
         /// </summary>
         /// <param name="vCallback">(optional)Action to invoke on result of the connection</param> 
-        bool Connection(Action vCallback = null);
+        bool Connect(Action  vCallback = null);
 
         /// <summary>
         /// Disconnect from the database
@@ -41,7 +40,12 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vQuery">Query to make to the database </param>
         /// <param name="vCallback">optional callback on results</param>
         /// <returns></returns>
-        bool Query(IDatabaseQuery vQuery, Action vCallback = null);
-
+        bool Query(string  vQuery, Action vCallback = null);
+        /// <summary>
+        /// Creates a recording entry on the database
+        /// </summary>
+        /// <param name="vRecording"></param>
+        /// <returns></returns>
+        bool CreateRecording(BodyFramesRecording vRecording);
     }
 }
