@@ -6,8 +6,7 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection;
-using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseQueries;
+using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection; 
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe
 {
