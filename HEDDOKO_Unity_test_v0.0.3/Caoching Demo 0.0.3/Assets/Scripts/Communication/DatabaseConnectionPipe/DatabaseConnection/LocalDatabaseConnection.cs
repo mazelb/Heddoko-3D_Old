@@ -368,6 +368,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             return vFoundTags;
         }
 
+
         /// <summary>
         /// Attaches a tag to a recording
         /// </summary>
@@ -420,6 +421,37 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             string vGuid = vReader["id"].ToString();
                             string vTitle = vReader["title"].ToString();
                             vFound.Add(new Tag() {TagUid = vGuid,Title = vTitle});
+                        }
+                        vTransaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+            }
+            return vFound;
+        }
+
+        public List<string> GetRecordingGuidFromTagId(string vTagId)
+        {
+            List<string> vFound = new List<string>();
+
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "SELECT T1.id FROM movements AS T1 JOIN taggable AS T2 ON T1.id = T2.movement_id " +
+                                           "WHERE T2.tag_id = @param1";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", vTagId));
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vGuid = vReader["id"].ToString(); 
+                            vFound.Add(vGuid);
                         }
                         vTransaction.Commit();
                     }

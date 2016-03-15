@@ -78,5 +78,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         {
             throw new NotImplementedException();
         }
+
+        public List<string> GetRecordingGuidFromTagId(string vTagId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

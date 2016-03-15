@@ -80,5 +80,12 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// </summary>
         /// <returns></returns>
         List<Tag> LoadAllTags();
+
+        /// <summary>
+        /// Retrieve a list of recording guids that have been tagged 
+        /// </summary>
+        /// <param name="vTagId"></param>
+        /// <returns></returns>
+        List<string> GetRecordingGuidFromTagId(string vTagId);
     }
 }
