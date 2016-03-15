@@ -11,7 +11,7 @@ using Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection;
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe
 {
     /// <summary>
-    /// A database connection 
+    /// A database from which the application connects to
     /// </summary>
     public class Database
     {
@@ -45,11 +45,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe
             get { return mConnection; }
         }
 
-
-        void SetupLocalDb()
-        {
-            
-        }
+ 
 
         /// <summary>
         /// cleans up resources, disconnects database connections

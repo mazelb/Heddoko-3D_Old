@@ -27,12 +27,18 @@ namespace Assets.Scripts.Tests.database
             Debug.Log("create connection to db");
             Database = new Database(DatabaseConnectionType.Local);
             Database.Init();
-            RecordingAddTest();
+            RecordingGetTest();
         }
 
         void RecordingGetTest()
         {
-            Database.Connection.GetRawRecording(RecordingGuid);
+            BodyFramesRecording vRec = Database.Connection.GetRawRecording(RecordingGuid);
+            if (vRec != null)
+            {
+                Debug.Log("<color=green>Success! </color> Found recording GUID "+ vRec.BodyRecordingGuid);
+                Debug.Log("<color=green>Success! </color> Recording length " + vRec.RecordingRawFrames.Count);
+
+            }
         }
 
         void RecordingAddTest()
