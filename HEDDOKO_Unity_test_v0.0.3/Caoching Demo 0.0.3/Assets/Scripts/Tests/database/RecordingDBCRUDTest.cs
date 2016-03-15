@@ -27,7 +27,7 @@ namespace Assets.Scripts.Tests.database
             Debug.Log("create connection to db");
             Database = new Database(DatabaseConnectionType.Local);
             Database.Init();
-            RecordingGetTest();
+            RecordingAddTest();
         }
 
         void RecordingGetTest()

@@ -107,39 +107,36 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             {
                 using (var vTransaction = mDbConnection.BeginTransaction())
                 {
+                  
                     string vDatePattern = @"M/d/yyyy hh:mm:ss tt";
                     string vTimeNowUsEn = DateTime.UtcNow.ToString(vDatePattern);
-                    string vRecordingInsertion = "INSERT INTO " + DBSettings.RecordingsTable +
-                                         " (id,submitted_by,complex_equipment_id,folder_id,title,created_at,updated_at) " +
-                                         "VALUES ('" + vRecording.BodyRecordingGuid + "', '" + vRecording.BodyGuid + "' , '" 
-                                         + vRecording.SuitGuid + "'," + "'DEFAULT','" + vRecording.Title + "' , '" + vTimeNowUsEn 
-                                         + "','" + vTimeNowUsEn + "')";
-                    string vMoveMetaData = Guid.NewGuid().ToString();
-                    string vMovementDatInsert = "INSERT INTO " + DBSettings.RecordingMeta +
-                                                " (id ,movement_id,start_frame,end_frame) ";
-                    string vMovementDatValue = "VALUES('" + vMoveMetaData + "', '" + vRecording.BodyRecordingGuid + "'," +
-                                            0 + "," + (vRecording.RecordingRawFrames.Count - 1) + ")";
+                    
+                    
+
+                   
                     try
                     {
-                        vCmd.CommandText = vRecordingInsertion;
+                        vCmd.CommandText = "INSERT INTO movements (id, complex_equipment_id , profile_id, submitted_by , folder_id,title ,created_at ,updated_at) "
+                                       + " VALUES (@param1, @param2,@param3, @param4, @param5, @param6,@param7, @param8)";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", vRecording.BodyRecordingGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param2", vRecording.SuitGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param3", vRecording.BodyGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param4", vRecording.BodyGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param5", "Default"));
+                        vCmd.Parameters.Add(new SqliteParameter("@param6", vRecording.Title));
+                        vCmd.Parameters.Add(new SqliteParameter("@param7", vTimeNowUsEn));
+                        vCmd.Parameters.Add(new SqliteParameter("@param8", vTimeNowUsEn));
                         vCmd.ExecuteNonQuery();
-                        vCmd.CommandText = vMovementDatInsert + vMovementDatValue;
-                        vCmd.ExecuteNonQuery();
 
-                        string vFrameInsertion = "INSERT INTO " + DBSettings.FramesTable +
-                                                 " (id,movement_id,format_revision,timestamp) ";
-                        string vFrameValue = "VALUES (";
+                        vCmd.CommandText = "INSERT INTO movement_meta (id ,movement_id,start_frame,end_frame) "
+                                       + " VALUES (@param1, @param2,@param3, @param4)";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", Guid.NewGuid().ToString()));
+                        vCmd.Parameters.Add(new SqliteParameter("@param2", vRecording.BodyRecordingGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param3", "0"));
+                        vCmd.Parameters.Add(new SqliteParameter("@param4", (vRecording.RecordingRawFrames.Count - 1)+""));
+                        vCmd.ExecuteNonQuery(); 
 
-                        string vRawDataInsertion = "INSERT INTO " + DBSettings.RawDataTable +
-                                                 " (id ,movement_id,data) ";
-                        string vRawDataValues = "VALUES (";
-
-                        string vInstantDataInsert = "INSERT INTO " + DBSettings.InstantaneousData +
-                                                 " (id ,type,data,movement_id) ";
-                        string vInstantDatVal = "VALUES (";
-
-
-                        //initialize variable to avoid GC punishment
+                        //initialize variable to avoid GC punishes
                         BodyFrame vConvertedFrame = null;
                         BodyRawFrame vRawFrame = null;
                         string vInstantDataJson = "";
@@ -150,25 +147,36 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             {
                                 vRawFrame = vRecording.RecordingRawFrames[i];
                                 vConvertedFrame = RawFrameConverter.ConvertRawFrame(vRawFrame);
-
                                 //+++++++++++++++++++++Frames table insertion +++++++++++++++++++++++++++++++++++++++++++++++
-                                vFrameValue += i + ",'" + vRecording.BodyRecordingGuid + "','" + vRecording.FormatRevision + "',"
-                                          + vConvertedFrame.Timestamp + ")";
-                                vCmd.CommandText = vFrameInsertion + vFrameValue;
+
+                                vCmd.CommandText = "INSERT INTO frames (id,movement_id,format_revision,timestamp) "
+                                        + " VALUES (@param1, @param2,@param3, @param4)";
+
+                                vCmd.Parameters.Add(new SqliteParameter("@param1",i+""));
+                                vCmd.Parameters.Add(new SqliteParameter("@param2", vRecording.BodyRecordingGuid));
+                                vCmd.Parameters.Add(new SqliteParameter("@param3", vRecording.FormatRevision));
+                                vCmd.Parameters.Add(new SqliteParameter("@param4", vConvertedFrame.Timestamp +""));
                                 vCmd.ExecuteNonQuery();
 
                                 //+++++++++++++++++++++raw_data table insertion +++++++++++++++++++++++++++++++++++++++++++++
-                                vJoinedRawFrameData = string.Join(",", vRawFrame.RawFrameData);
-                                vRawDataValues += i + ",'" + vRecording.BodyRecordingGuid + "','" + vJoinedRawFrameData + "')";
-                                vCmd.CommandText = vRawDataInsertion + vRawDataValues;
+                              
+                                vCmd.CommandText = "INSERT INTO raw_data (id ,movement_id,data) "
+                                       + " VALUES (@param1, @param2, @param3)";
+
+                                vCmd.Parameters.Add(new SqliteParameter("@param1", i + ""));
+                                vCmd.Parameters.Add(new SqliteParameter("@param2", vRecording.BodyRecordingGuid));
+                                vCmd.Parameters.Add(new SqliteParameter("@param3", string.Join(",", vRawFrame.RawFrameData))); 
                                 vCmd.ExecuteNonQuery();
-
                                 //+++++++++++++++++++++instantaneous_data table insertion +++++++++++++++++++++
-
                                 vInstantDataJson = JsonUtilities.SerializeObjToJson(vConvertedFrame);
-                                vInstantDatVal += i + "," + "'default'" + ",'" + vInstantDataJson + "','"
-                                          + vRecording.BodyRecordingGuid + "')";
-                                vCmd.CommandText = vInstantDataInsert + vInstantDatVal;
+                                vCmd.CommandText = "INSERT INTO instantaneous_data (id ,type,data,movement_id) "
+                                      + " VALUES (@param1, @param2, @param3,@param4)";
+
+                                vCmd.Parameters.Add(new SqliteParameter("@param1", i + ""));
+                                vCmd.Parameters.Add(new SqliteParameter("@param2", "default"));
+                                vCmd.Parameters.Add(new SqliteParameter("@param3", vInstantDataJson));
+                                vCmd.Parameters.Add(new SqliteParameter("@param4", vRecording.BodyRecordingGuid));
+
                                 vCmd.ExecuteNonQuery();
                             }
                             catch (Exception e)
@@ -176,9 +184,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
                                 Debug.Log(" error " + e);
                             }
-
-                            //+++++++++++++++++++ reset value parameters
-                            vFrameValue = vRawDataValues = vInstantDatVal = "VALUES (";
+ 
                         }
                         vResult = true;
                     }
@@ -211,10 +217,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             {
                 using (var vCmd = mDbConnection.CreateCommand())
                 {
-
                     vCmd.CommandText = "SELECT * FROM " + DBSettings.RecordingsTable +
                                            " WHERE id = '" + vRecordingId + "'";
-
                     try
                     {
                         vDataReader = vCmd.ExecuteReader();
