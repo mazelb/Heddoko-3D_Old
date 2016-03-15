@@ -23,7 +23,7 @@ namespace Assets.Scripts.Frames_Pipeline
         private float mStartRecordingTime;
         private float mEndRecordingTime;
         private int mTotalFrames;
-        private float _mAverageSecondsBetweenFrames;
+        private float mAverageSecondsBetweenFrames;
         /// <summary>
         /// frames per second
         /// </summary>
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Frames_Pipeline
         /// The average time between frames recording
         /// </summary>
         public float AverageSecondsBetweenFrames
-        { get { return _mAverageSecondsBetweenFrames; } }
+        { get { return mAverageSecondsBetweenFrames; } }
         /// <summary>
         /// Initializes fields and properties, setting the RecordingStats attributes
         /// </summary>
@@ -80,7 +80,7 @@ namespace Assets.Scripts.Frames_Pipeline
                     mT1 = mT2;
                 }
           
-                _mAverageSecondsBetweenFrames = vSum / (mTotalFrames - 1);
+                mAverageSecondsBetweenFrames = vSum / (mTotalFrames - 1);
             }
            
         }

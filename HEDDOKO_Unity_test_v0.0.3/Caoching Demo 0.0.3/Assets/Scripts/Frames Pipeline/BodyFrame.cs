@@ -9,24 +9,27 @@
 
 using UnityEngine; 
 using System.Collections.Generic;
-using System; 
-using HeddokoLib.utils; 
+using System;
+using System.Runtime.Serialization;
+using HeddokoLib.utils;
+using Newtonsoft.Json;
 
 /// <summary>
 /// The frame of data that is populated to sensors, and contains the list of sensors to access sensors data
 /// </summary>
-[Serializable]
+[DataContract]
 public class BodyFrame 
 {
-    [SerializeField]
+
     //The frame of data populated to sensors 
+    [JsonProperty]
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData;
-
-
-    private string mBodyFrameUuid ="";
+     
     //The timestamp of a bodybody frame 
+    [JsonProperty]
     private float mTimeStamp;
 
+    [JsonIgnore]
     internal Dictionary<BodyStructureMap.SensorPositions, Vector3> FrameData
     {
         get
@@ -42,28 +45,13 @@ public class BodyFrame
             mFrameData = value;
         }
     }
-
+    [JsonIgnore]
     internal float Timestamp
     {
         get { return mTimeStamp; }
         set { mTimeStamp = value; } 
     }
-
-    /// <summary>
-    /// Body frame uuid
-    /// </summary>
-    public string BodyFrameUuid
-    {
-        get
-        {
-            if (string.IsNullOrEmpty(mBodyFrameUuid))
-            {
-                mBodyFrameUuid = new Guid().ToString();
-            }
-            return mBodyFrameUuid;
-        }
-        
-    }
+ 
 
     /**
     * ToString()

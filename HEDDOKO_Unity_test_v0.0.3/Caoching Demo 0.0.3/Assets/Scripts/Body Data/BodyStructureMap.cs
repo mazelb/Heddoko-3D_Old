@@ -42,6 +42,7 @@ public class BodyStructureMap
     }
     #endregion
 
+
     public struct TrackingStructure
     {
         public Vector3 InitRawEuler;
@@ -146,7 +147,8 @@ public class BodyStructureMap
         {
             vBSm = JsonUtilities.JsonFileToObject<BodyStructureMap>(vPath);
         }
-        catch (FileNotFoundException) //in case the file isn't found, write a new one with generic values
+        //in case the file isn't found, write a new one with generic values
+        catch (FileNotFoundException) 
         {
             CreateBodyToSegmentMap();
             CreateSegmentToSensorPosMap();

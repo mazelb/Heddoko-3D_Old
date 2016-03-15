@@ -31,10 +31,11 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             if (mDbConnection == null)
             {
                 //check if the file exists first. 
-                string vFilePath = Application.persistentDataPath + "/db/" + DBSettings.DbName;
+                string vFilePath = ApplicationSettings.LocalDbPath;
+              
                 if (File.Exists(vFilePath))
                 {
-                    mDbConnection = new SqliteConnection("URI=file:" + Application.persistentDataPath+" /db/" + DBSettings.DbName);
+                    mDbConnection = new SqliteConnection("URI=file:" + vFilePath);
                     mDbConnection.Open();
                     return true;
                 }

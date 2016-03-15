@@ -21,7 +21,7 @@ using Assets.Scripts.Interfaces;
 * BOIMECH_sensorID_1, Yaw;Pitch;Roll, ... BOIMECH_sensorID_9, Yaw;Pitch;Roll, FLEXCORE_sensorID_1, SensorValue, ... ,FLEXCORE_sensorID_4, SensorValue
 */
 
-public class BodyFramesRecording : IFrameStream
+public class BodyFramesRecording  
 {
     //Number of UUIDs (lines) before the beginning of the frames recorded in CSV
     public static uint sNumberOfUUIDs = 3;
@@ -39,8 +39,15 @@ public class BodyFramesRecording : IFrameStream
     // statistics of a recording
     public RecordingStats Statistics = new RecordingStats();
 
-    public bool FromDatFile { get; set; }
+   public bool FromDatFile { get; set; }
 
+ 
+    public string FormatRevision { get; set; }
+    /// <summary>
+    /// The title of the recording
+    /// </summary>
+    public string Title { get; set; }
+  
     /**
     * CreateNewRecordingUUID()
     * @brief Creates a new recording UUID
@@ -73,18 +80,7 @@ public class BodyFramesRecording : IFrameStream
     * @brief Adds a frame to the recording
     * @return Returns the next frame from the Raw Frame Recordings
     */
-
-    public BodyRawFrame GetNextFrame()
-    {
-        BodyRawFrame returnedFrame = RecordingRawFrames[currentRawFrameIndex];
-        currentRawFrameIndex++;
-        if (currentRawFrameIndex >= RecordingRawFrames.Count)
-        {
-            currentRawFrameIndex = RecordingRawFrames.Count - 1;
-        }
-        return returnedFrame;
-    }
-
+ 
     /**
      * PopulateRecordingUUIDs()
      * @param vRecordingLines: The recording content
@@ -135,11 +131,11 @@ public class BodyFramesRecording : IFrameStream
             for (uint i = (sNumberOfUUIDs); i < vRecordingLines.Length; i++)
             {
                 BodyRawFrame vTempRaw = new BodyRawFrame();
-                vTempRaw.IsDecoded = !FromDatFile;
+               // vTempRaw.IsDecoded = !FromDatFile;
                 vTempRaw.BodyRecordingGuid = BodyRecordingGuid;
                 vTempRaw.BodyGuid = BodyGuid;
                 vTempRaw.SuitGuid = SuitGuid;
-
+                vTempRaw.IsDecoded = !FromDatFile;
                 vTempRaw.RawFrameData = vRecordingLines[i].Split(",".ToCharArray(),
                     StringSplitOptions.RemoveEmptyEntries);
                 RecordingRawFrames.Add(vTempRaw);
@@ -151,35 +147,6 @@ public class BodyFramesRecording : IFrameStream
     }
 
  
-    /// <summary>
-    /// A unity friendly function that extracts raw frames data from a given array of recording lines
-    /// </summary>
-    /// <param name="vRecordingsLines"></param>
-    /// <returns></returns>
-    public IEnumerator U3DExtractRawFramesData(string[] vRecordingLines)
-    {
-        //The minimum amount of lines in the recording
-        if (vRecordingLines.Length > sNumberOfUUIDs)
-        {
-            //Get the data line by line and add them as frames 
-            for (uint i = (sNumberOfUUIDs); i < vRecordingLines.Length; i++)
-            {
-                BodyRawFrame vTempRaw = new BodyRawFrame();
-                vTempRaw.IsDecoded = !FromDatFile;
-                vTempRaw.BodyRecordingGuid = BodyRecordingGuid;
-                vTempRaw.BodyGuid = BodyGuid;
-                vTempRaw.SuitGuid = SuitGuid;
-
-                vTempRaw.RawFrameData = vRecordingLines[i].Split(",".ToCharArray(),
-                    StringSplitOptions.RemoveEmptyEntries);
-                RecordingRawFrames.Add(vTempRaw);
-                yield return null;
-            }
-            //analyze statistics of a current recording
-            Statistics.InitAndAnalyze(this);
-        }
-
-    }
     //    //Send each line to a BodyFrameStream
     //    //Each line start by sending Frame start "S"
     //    //Send the frame data 

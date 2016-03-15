@@ -9,6 +9,7 @@
 
 
 using Assets.Scripts.Utils;
+using Assets.Scripts.Utils.DatabaseAccess;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.Settings
@@ -31,18 +32,18 @@ namespace Assets.Scripts.UI.Settings
             get
             {
 #if UNITY_EDITOR
-                return Application.dataPath+"/Resources/Recordings";
+                return Application.dataPath + "/Resources/Recordings";
 #endif
                 return sPreferedRecordingsFolder;
             }
             set
             {
                 if (string.IsNullOrEmpty(value))
-                { 
+                {
                     sPreferedRecordingsFolder = FilePathReferences.RecordingsDirectory;
                     value = sPreferedRecordingsFolder.Replace("\\", "/");
                 }
-               
+
                 value = value.Replace("\\", "/");
                 sPreferedRecordingsFolder = value;
             }
@@ -81,6 +82,16 @@ namespace Assets.Scripts.UI.Settings
             set { sAppLaunchedSafely = value; }
         }
 
-        
+        public static string LocalDbPath
+        {
+            get
+            {
+                string vLocalDbPath = Application.persistentDataPath + "/db/" + DBSettings.DbName;
+                #if UNITY_EDITOR
+                    vLocalDbPath = "Assets" + "/db/" + DBSettings.DbName;
+                #endif
+                return vLocalDbPath;
+            }
+        }
     }
 }
