@@ -11,7 +11,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading; 
+using System.Threading;
+using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.Utils; 
 
 /**
@@ -25,7 +26,6 @@ public class BodyRecordingsMgr
     // ReSharper disable once InconsistentNaming
     private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr();  
     public delegate void StopActionDelegate();
-
     public event StopActionDelegate StopActionEvent;
 
     // Explicit static constructor to tell C# compiler
@@ -47,6 +47,7 @@ public class BodyRecordingsMgr
     }
     #endregion
 
+    
     //Scanned files 
     private string[] mFilePaths;
 
@@ -68,6 +69,7 @@ public class BodyRecordingsMgr
         get { return mFilePaths; }
     }
 
+    
     /**
     * ScanRecordings()
     * @param vDirectoryPath: The path in which the function will scan
