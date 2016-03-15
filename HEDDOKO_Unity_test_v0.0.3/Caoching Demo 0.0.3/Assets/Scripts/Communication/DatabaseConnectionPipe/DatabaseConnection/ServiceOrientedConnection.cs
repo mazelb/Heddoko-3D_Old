@@ -6,7 +6,9 @@
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
-using System; 
+using System;
+using System.Collections.Generic;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -48,6 +50,31 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         }
 
         public BodyFramesRecording GetRawRecording(string vRecordingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tag GetTagById(string vUid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewTag(Tag vTag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Tag> GetTagsOfRecording(string vRecGuid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTagToRecording(BodyFramesRecording vRec, Tag vTag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Tag> LoadAllTags()
         {
             throw new NotImplementedException();
         }

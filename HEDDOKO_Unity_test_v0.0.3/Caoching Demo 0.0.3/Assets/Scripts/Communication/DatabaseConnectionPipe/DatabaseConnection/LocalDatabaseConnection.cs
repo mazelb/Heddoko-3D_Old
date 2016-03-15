@@ -9,7 +9,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Assets.Scripts.Frames_Pipeline.BodyFrameConversion; 
+using System.Windows.Forms;
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
+using Assets.Scripts.UI;
 using Assets.Scripts.UI.Settings;
 using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.DatabaseAccess;
@@ -109,9 +111,6 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
                     string vDatePattern = @"M/d/yyyy hh:mm:ss tt";
                     string vTimeNowUsEn = DateTime.UtcNow.ToString(vDatePattern);
-
-
-
 
                     try
                     {
@@ -255,7 +254,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             vRawFrame.BodyRecordingGuid = vRecordingId;
                             vRawFrame.BodyGuid = vBodyGuid;
                             vRawFrame.SuitGuid = vSuitGuid;
-                            
+
                             vRawFrame.RawFrameData = vTemp.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                             vRawFrames.Add(vRawFrame);
                         }
@@ -279,5 +278,159 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             return vBodyFramesRecording;
         }
 
+        /// <summary>
+        /// Locates a tag by the unique identifier passed in from the database
+        /// </summary>
+        /// <param name="vUid"></param>
+        /// <returns></returns>
+        public Tag GetTagById(string vUid)
+        {
+            Tag vOutput = null;
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                try
+                {
+                    vOutput = new Tag();
+                    vCmd.CommandText = "SELECT * from tags " +
+                                               "WHERE id = '" + vUid + "'";
+                    SqliteDataReader vReader = vCmd.ExecuteReader();
+                    while (vReader.Read())
+                    {
+                        vOutput.TagUid = vUid;
+                        vOutput.Title = vReader["title"].ToString();
+                    }
+                }
+                catch (Exception vExc)
+                {
+
+                }
+            }
+            return vOutput;
+        }
+
+        public void AddNewTag(Tag vTag)
+        {
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "INSERT OR IGNORE INTO tags(id, title) " +
+                                           "VALUES(@param1, @param2)";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", vTag.TagUid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param2", vTag.Title));
+                        vCmd.ExecuteNonQuery();
+                        vTransaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// returns a list of tags of a recording
+        /// </summary>
+        /// <param name="vRecGuid"></param>
+        /// <returns></returns>
+        public List<Tag> GetTagsOfRecording(string vRecGuid)
+        {
+            List<Tag> vFoundTags = new List<Tag>();
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "SELECT * FROM tags AS T1 JOIN " +
+                                  " taggable AS T2 ON T1.id = T2.tag_id where T2.movement_id = @param1";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", vRecGuid));
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vGuid = vReader["id"].ToString();
+                            string vTitle = vReader["title"].ToString();
+                            Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
+                            vFoundTags.Add(vTag);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+            }
+            return vFoundTags;
+        }
+
+        /// <summary>
+        /// Attaches a tag to a recording
+        /// </summary>
+        /// <param name="vRec"></param>
+        /// <param name="vTag"></param>
+        public void AddTagToRecording(BodyFramesRecording vRec, Tag vTag)
+        {
+            AddNewTag(vTag);
+
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "INSERT OR IGNORE INTO taggable(tag_id, movement_id, taggable_type) " +
+                                          "VALUES(@param1, @param2, @param3)";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", vTag.TagUid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param2", vRec.BodyRecordingGuid));
+                        vCmd.Parameters.Add(new SqliteParameter("@param3", "recording"));
+
+                        vCmd.ExecuteNonQuery();
+                        vTransaction.Commit();
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+            }
+
+        }
+
+        public List<Tag> LoadAllTags()
+        {
+            List<Tag> vFound = new List<Tag>();
+
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "SELECT * FROM tags";
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vGuid = vReader["id"].ToString();
+                            string vTitle = vReader["title"].ToString();
+                            vFound.Add(new Tag() {TagUid = vGuid,Title = vTitle});
+                        }
+                        vTransaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+            }
+            return vFound;
+        }
     }
 }

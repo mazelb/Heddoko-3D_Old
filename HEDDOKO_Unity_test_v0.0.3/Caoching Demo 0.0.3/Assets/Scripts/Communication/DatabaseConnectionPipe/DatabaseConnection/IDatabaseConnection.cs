@@ -7,7 +7,10 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using System; 
+using System;
+using System.Collections.Generic;
+using Assets.Scripts.UI;
+
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
     /// <summary>
@@ -54,5 +57,28 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vRecordingId">the recording id</param>
         /// <returns></returns>
         BodyFramesRecording GetRawRecording(string vRecordingId);
+
+        Tag GetTagById(string vUid);
+        void AddNewTag(Tag vTag);
+
+        /// <summary>
+        /// Get a list of tags current attached to this recording
+        /// </summary>
+        /// <param name="vRecGuid">the recording guid from which to retrieve the tag from</param>
+        /// <returns></returns>
+        List<Tag> GetTagsOfRecording(string vRecGuid);
+
+        /// <summary>
+        /// Attaches a tag to a recording
+        /// </summary>
+        /// <param name="vRec">the recording to add a tag to</param>
+        /// <param name="vTag">the tag to attach</param>
+        void AddTagToRecording(BodyFramesRecording vRec, Tag vTag);
+
+        /// <summary>
+        /// Loads all tags from the database. 
+        /// </summary>
+        /// <returns></returns>
+        List<Tag> LoadAllTags();
     }
 }

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Frames_Pipeline; 
 using Assets.Scripts.Interfaces;
+using Assets.Scripts.UI;
 
 /**
 * BodyFramesRecording class 
@@ -41,7 +42,10 @@ public class BodyFramesRecording
 
    public bool FromDatFile { get; set; }
 
- 
+    /// <summary>
+    /// tags attached to this recording
+    /// </summary>
+    public List<Tag> Tags = new List<Tag>(); 
     public string FormatRevision { get; set; }
     /// <summary>
     /// The title of the recording
@@ -165,6 +169,15 @@ public class BodyFramesRecording
     //    //Send Frame End: "E"
     //}
 
-
-
+    /// <summary>
+    /// Adds a tag to the recording
+    /// </summary>
+    /// <param name="vTag"></param>
+    public void AddTag(Tag vTag)
+    {
+        if (!Tags.Contains(vTag))
+        {
+            Tags.Add(vTag);
+        }
+    }
 }

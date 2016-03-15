@@ -18,6 +18,7 @@ using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.ModalWindow;
 using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.UI.Settings;
+using Assets.Scripts.UI.Tagging;
 using Assets.Scripts.Utils.DebugContext;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         void Awake()
         {
             SetupPools();
-           // SetupDatabase();
+           SetupDatabase();
             BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
 
@@ -149,7 +150,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         void OnApplicationQuit()
         {
-          //  mDatabase.CleanUp();
+            mDatabase.CleanUp();
         }
 
 
@@ -157,6 +158,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             mDatabase = new Database(DatabaseConnectionType.Local);
             mDatabase.Init();
+            TaggingManager.Instance.SetDatabase(mDatabase);
         }
         void OnGUI()
         {

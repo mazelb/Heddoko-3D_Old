@@ -142,7 +142,7 @@ public class BodyRecordingsMgr
                 if (vTempReader.ReadFile(vTempReader.FilePath) > 0)
                 {
                     string vVersion = vTempReader.CrytoManager.GetCrytpoVersion;
-                    AddNewRecording(vTempReader.GetRecordingLines(), vTempReader.IsFromDatFile,vVersion, vCallbackAction);
+                    AddNewRecording(vTempReader.GetRecordingLines(), vTempReader.FilePath,vTempReader.IsFromDatFile,vVersion, vCallbackAction);
                 }
                 StopActionEvent -= vTempReader.Stop;
             }
@@ -225,9 +225,10 @@ public class BodyRecordingsMgr
     /// <param name="vRecordingLines">the lines of recordings</param>
     /// <param name="vrxFromDatFile">was the source received from a dat file?</param>
     /// <param name="vCallbackAction">the callback action with a BodyFramesRecording parameter</param>
-    public void AddNewRecording(string[] vRecordingLines, bool vrxFromDatFile,string vVersion, Action<BodyFramesRecording> vCallbackAction)
+    public void AddNewRecording(string[] vRecordingLines,string vTitle, bool vrxFromDatFile,string vVersion, Action<BodyFramesRecording> vCallbackAction)
     {
         BodyFramesRecording vTempRecording = new BodyFramesRecording {FromDatFile = vrxFromDatFile};
+        vTempRecording.Title = vTitle;
         vTempRecording.ExtractRecordingUUIDs(vRecordingLines);
         vTempRecording.FormatRevision = vrxFromDatFile ? vVersion : "0";
         //If recording already exists, do nothing
