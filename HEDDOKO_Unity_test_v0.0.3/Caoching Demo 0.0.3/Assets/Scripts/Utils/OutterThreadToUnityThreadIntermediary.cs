@@ -38,7 +38,7 @@ namespace Assets.Scripts.Utils
                         vGo.name = "Non unity thread to unity thread helper";
                         sInstance = vGo.AddComponent<OutterThreadToUnityThreadIntermediary>();
                     }
-                }
+                } 
                 return sInstance;
             }
         }
