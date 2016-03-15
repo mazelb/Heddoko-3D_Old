@@ -52,28 +52,16 @@ namespace Assets.Scripts.Utils
         /// <param name="vObj">the object to serialize</param>
         /// <returns>the json formatted string</returns>
         public static string SerializeObjToJson(object vObj)
-        { 
-            StringBuilder vStringBuilder = new StringBuilder();
-            StringWriter vStringWriter = new StringWriter(vStringBuilder);
-            JsonSerializer vSerializer = new JsonSerializer();
-            vSerializer.NullValueHandling = NullValueHandling.Ignore;
-            vSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-            vSerializer.Formatting = Formatting.Indented; 
-            JsonSerializerSettings vSettings = new JsonSerializerSettings();
-           
-            vSettings.NullValueHandling = NullValueHandling.Ignore;
-            vSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-            vSettings.Formatting = Formatting.Indented;
-
-            string vreturn =     JsonConvert.SerializeObject(vObj,Formatting.Indented,
+        {
+             string vJsonString = JsonConvert.SerializeObject(vObj, Formatting.Indented,
                 new JsonSerializerSettings()
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 
                 });
- 
-      
-            return vreturn;//vStringBuilder.ToString();
+
+
+            return vJsonString;//vStringBuilder.ToString();
 
         }
         /**

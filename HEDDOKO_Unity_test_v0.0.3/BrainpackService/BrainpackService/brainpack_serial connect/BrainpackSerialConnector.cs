@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Ports;
+using System.IO.Ports; 
+using System.Text.RegularExpressions;
 using System.Threading;
 using BrainpackService.bluetooth_connector.BrainpackInterfaces;
-using BrainpackService.bluetooth_connector.DebugContext;
 using BrainpackService.Tools_and_Utilities;
+using BrainpackService.Tools_and_Utilities.Debugging;
 using HeddokoLib.adt;
+
 
 
 namespace BrainpackService.brainpack_serial_connect
@@ -15,20 +15,24 @@ namespace BrainpackService.brainpack_serial_connect
     public class BrainpackSerialConnector : IBrainpackConnection
     {
         private Thread mWorkerThread;
-        private bool mIsWorking { get; set; }
-        //public FileStream dataFile;
-        //public DataTable analysisData;
+        private bool IsWorking { get; set; } 
         private string mPortName;
-        private string mNextLine;
+        private object mResponseBufferLock = new object();
+        private object mLatestStateLock = new object();
+        //in milliseconds
+        private const int gSerialPortTimeout = 15000;
         private static BrainpackSerialConnector sInstance;
-        private object mSerialPortLock = new object();
-        private object mLineLock = new object();
-        bool mMessageSent = false;
-        private DebugBodyFrameLogger mBodyFrameLogger = new DebugBodyFrameLogger("BPService");
-        SerialPort mSerialport { get; set; } = new SerialPort();
+        private readonly object mSerialPortLock = new object();
+         private bool mSerialIsBeingProbed = false;
+        string mBpStateSearchPattern = "(?i)Reset(?-i)|(?i)Idle(?-i)|(?i)Recording(?-i)|(?i)Error(?-i)"; 
+         private bool mIsRecording;
+        private string mLatestState { get; set; }
+        SerialPort Serialport { get; set; } = new SerialPort();
 
-        CircularQueue<string> OutboundBuffer { get; set; } = new CircularQueue<string>(10, true);
-
+        CircularQueue<string> OutboundBuffer { get; } = new CircularQueue<string>(10, true);
+        CircularQueue<string> ResponseBuffer { get; } = new CircularQueue<string>(50, true);
+        //private CircularQueue<string> mStateBuffer { get; } = new CircularQueue<string>(10, true);
+        
         public static BrainpackSerialConnector Instance
         {
             get
@@ -62,33 +66,35 @@ namespace BrainpackService.brainpack_serial_connect
                     if (vNewPort != mPortName)
                     {
                         Stop();
-                        mSerialport = new SerialPort();
-                        mSerialport.ReadTimeout = 30000;//30second timeout
-                        mSerialport.WriteTimeout = 30000;
+                        CloseSerialPort();
+                        Serialport = new SerialPort();
+                        Serialport.ReadTimeout = gSerialPortTimeout;
+                        Serialport.WriteTimeout = gSerialPortTimeout;
                         mPortName = vNewPort;
-                        mSerialport.PortName = mPortName;
-                        mSerialport.NewLine = "\r\n";
+                        Serialport.PortName = mPortName;
+                        Serialport.NewLine = "\r\n";
                         mWorkerThread = new Thread(ThreadedFunction);
-                        this.mSerialport.BaudRate = 115200;
-                        mSerialport.Open();
+                        Serialport.BaudRate = 115200;
+                        Serialport.Open();
                         Start();
                     }
-                    if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
-                    { 
-                        mWorkerThread = new Thread(ThreadedFunction);
-                        this.mSerialport.BaudRate = 115200;
-                        mSerialport.Open();
-                        Start(); 
-                    }
+                    if (vNewPort == mPortName && Serialport != null && !Serialport.IsOpen)
+                    {
 
-                    /*       //check if the port isn't already opened
-                           else if (vNewPort == mPortName && mSerialport != null && !mSerialport.IsOpen)
-                           {
-                               mWorkerThread = new Thread(ThreadedFunction);
-                               this.mSerialport.BaudRate = 115200;
-                               mSerialport.Open();
-                               Start();
-                           } */
+
+                        CloseSerialPort();
+                        mWorkerThread = new Thread(ThreadedFunction);
+                        Serialport = new SerialPort();
+                        Serialport.ReadTimeout = gSerialPortTimeout;
+                        Serialport.WriteTimeout = gSerialPortTimeout;
+                        mPortName = vNewPort;
+                        Serialport.PortName = mPortName;
+                        Serialport.NewLine = "\r\n";
+                        mWorkerThread = new Thread(ThreadedFunction);
+                        Serialport.BaudRate = 115200;
+                        Serialport.Open();
+                        Start();
+                    }
 
                     else
                     {
@@ -98,13 +104,29 @@ namespace BrainpackService.brainpack_serial_connect
                 }
             }
 
-            catch (Exception e)
+            catch (Exception vE)
             {
-                BrainpackEventLogManager.InvokeEventLogError("Could not open serial port " + mSerialport + "\n Error:" + e.StackTrace + "\n" + e.ToString());
+                BrainpackEventLogManager.InvokeEventLogError("Could not open serial port " + Serialport + "\n Error:" + vE.StackTrace + "\n" + vE.ToString());
             }
 
         }
+        /// <summary>
+        /// Safely closes the serial port
+        /// </summary>
+        public void CloseSerialPort()
+        {
+            if (Serialport.IsOpen)
+            {
+                try
+                {
+                    Serialport.Close();
+                }
+                catch
+                {
 
+                }
+            }
+        }
         /// <summary>
         /// pulls data from the brainpack
         /// </summary>
@@ -113,89 +135,83 @@ namespace BrainpackService.brainpack_serial_connect
 
             while (true)
             {
-                Stopwatch vStopwatch = new Stopwatch();
-                vStopwatch.Start();
-                
                 lock (mSerialPortLock)
                 {
-                    if (mSerialport.IsOpen)
+                    if (Serialport.IsOpen)
                     {
                         try
                         {
-                            if (!mMessageSent)
+                            if (mSerialIsBeingProbed)
                             {
-                                string line = mSerialport.ReadLine();
-                                //
-                                if (line.Length != 176)
+                                return;
+                            }
+                            string vReadLine = Serialport.ReadLine();
+ 
+                            DebugLogger.Instance.LogMessage(LogType.BrainpackFrame, vReadLine);
+                            if (vReadLine.Length != 176 && vReadLine.Length <= 25 && vReadLine.Length >0)
+                            {
+                                string vTemp = vReadLine;
+                               
+                                lock (mLatestStateLock)
                                 {
-                                    lock (mLineLock)
+                                    //check for matches and check if a state is set to idle or Recording
+                                    foreach (var vMatch in Regex.Matches(vReadLine, mBpStateSearchPattern))
                                     {
-                                        mNextLine = "";
+
+                                        string vState = vMatch.ToString();
+                                        
+                                        string vIdlePattern = @"(?i)Idle(?-i)";
+                                        string vRecPattern = @"(?i)Recording(?-i)";
+                                        if (Regex.IsMatch(vState, vIdlePattern, RegexOptions.IgnoreCase))
+                                        {
+                                            mIsRecording = false;
+                                        }
+                                        else if (Regex.IsMatch(vState, vRecPattern, RegexOptions.IgnoreCase))
+                                        {
+                                            mIsRecording = true;
+                                        }
+                                        mLatestState = vState;
+                                        vTemp= vTemp.Replace(vState, "");
+                                        DebugLogger.Instance.LogMessage(LogType.BrainpackResponse, vReadLine);
+
                                     }
-                                    BrainpackEventLogManager.InvokeEventLogMessage("Is less than 176 chars");
-                                   // continue;
-                                }
-                                OutboundBuffer.Enqueue(line);
-                                lock (mLineLock)
-                                {
-                                    mNextLine = line;
 
                                 }
+
+                                if (vTemp.Length > 10 || vTemp.Contains("ack") || vTemp.Contains("Ack"))
+                                {
+                                    ResponseBuffer.Enqueue(vReadLine);
+                                   
+                                }
+                            }
+                            else
+                            {
+                                OutboundBuffer.Enqueue(vReadLine);
                                 
+
                             }
 
                         }
                         catch (IOException vIoException)
                         {
                             BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
-                            mNextLine = "";
+
                         }
                         catch (NullReferenceException vNullReferenceException)
                         {
                             BrainpackEventLogManager.InvokeEventLogError(vNullReferenceException + "\r\n" + vNullReferenceException.StackTrace);
                         }
-                        catch (TimeoutException vTimeout)
+                        catch (TimeoutException)
                         {
-                           /* try
+                            lock (mLatestStateLock)
                             {
-                                var vResult = QuestionBrainpack(); //ask the brainpack if it's still alive
-
-                                if (!vResult)
-                                {
-                                    lock (mLineLock)
-                                    {
-                                        mNextLine = "";
-
-                                    }
-                                    
-                                    mSerialport.Close();
-                                }
+                                mLatestState = "Timeout";
                             }
-                            catch (IOException vIoException)
-                            {
-                                BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
-                                lock (mLineLock)
-                                {
-                                    mNextLine = "";
-
-                                }
-                            }
-                            catch (InvalidOperationException vInvalidOperationException)
-                            {
-                                BrainpackEventLogManager.InvokeEventLogError(vInvalidOperationException + "\r\n" + vInvalidOperationException.StackTrace);
-                                lock (mLineLock)
-                                {
-                                    mNextLine = "";
-
-                                }
-                            }*/
+                            continue;
                         }
                     }
                 }
-                vStopwatch.Stop();
-                
-                //mBodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds,mNextLine);
-                if (!mIsWorking)
+                if (!IsWorking)
                 {
                     Stop();
                     break;
@@ -203,75 +219,82 @@ namespace BrainpackService.brainpack_serial_connect
             }
         }
 
-        private void SerialConnectionLost()
-        {
 
-        }
 
         public void SendCommandToBrainpack(string vMsg)
         {
-            lock (mSerialPortLock)
+
+            try
             {
-                mSerialport.Write(vMsg + "\r\n");
+                Serialport.Write(vMsg + "\r\n");
+                DebugLogger.Instance.LogMessage(LogType.BrainpackCommand, vMsg);
             }
+            catch (Exception)
+            {
+
+            }
+
         }
 
-        private void WriteLine(string vLine)
+        /// <summary>
+        /// Send a message to the brainpack to request its current state
+        /// </summary>
+        private void GetState()
         {
-            
+            SendCommandToBrainpack("GetState");
+        }
+
+        /// <summary>
+        /// Get the most up to date state
+        /// </summary>
+        /// <returns></returns>
+        public string GetLatestState()
+        {
+            string vTemp = "";
+            lock (mLatestStateLock)
+            {
+                vTemp= mLatestState  ;
+            }
+            return vTemp; 
+        }
+
+
+        /// <summary>
+        /// Probes the brainpack and checks if it recording. only valid if the brainpack 
+        /// is connected
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRecording()
+        {
+            return mIsRecording;
         }
         public void Start()
         {
-            if (!mIsWorking)
+            if (!IsWorking)
             {
-                mIsWorking = true;
+                IsWorking = true;
                 mWorkerThread.Start();
             }
 
         }
 
-        private bool QuestionBrainpack()
-        {
-            bool vResult = true;
-            mMessageSent = true;
-            try
-            {
-                //SendCommandToBrainpack("?");
-                SendCommandToBrainpack("GetState");
-                lock (mSerialPortLock)
-                {
-                    if (mSerialport.IsOpen)
-                    {
-                        string line = mSerialport.ReadLine();
-                    }
-                }
-            }
-            catch (IOException vException)
-            {
-                vResult = false;
-            }
-            catch (TimeoutException vException)
-            {
-                vResult = false;
-            }
-
-            mMessageSent = false;
-            return vResult;
-        }
         /// <summary>
         /// Stop the connection
         /// </summary>
         public void Stop()
         {
-            mNextLine = "";
-            mIsWorking = false;
+            IsWorking = false;
             OutboundBuffer.Clear();
             if (IsConnected)
             {
                 lock (mSerialPortLock)
                 {
-                    mSerialport.Close();
+                    Serialport.Close();
                 }
+            }
+            lock (mLatestStateLock)
+            {
+                 mLatestState = "";
             }
         }
 
@@ -282,24 +305,9 @@ namespace BrainpackService.brainpack_serial_connect
         {
             get
             {
-                if (mSerialport != null)
+                if (Serialport != null)
                 {
-                    return mSerialport.IsOpen;
-                    bool vResult = true;
-                    if (!mSerialport.IsOpen)
-                    {
-                        return false;
-                    }
-                    //try to send a message to the serial port
-                    /*vResult = QuestionBrainpack();
-                    if (!vResult)
-                    {
-                        lock (mSerialPortLock)
-                        {
-                            mSerialport.Close();
-                        }
-                    }*/
-                   // return vResult;
+                    return Serialport.IsOpen;
                 }
                 return false;
             }
@@ -307,21 +315,43 @@ namespace BrainpackService.brainpack_serial_connect
 
         public string GetNextFrame()
         {
-         /*   string vReturnMsg = "";
-            lock (mLineLock)
+            //reset the stop watch 
+            if (OutboundBuffer.Count == 0)
             {
-                vReturnMsg =mNextLine ;
-
+                return "";
             }
-            return vReturnMsg;*/
-          if (OutboundBuffer.Count == 0)
-               {
-                   return "";
-               }
-               else
-               {
-                   return OutboundBuffer.Dequeue();
-               }  
+            else
+            {
+                return OutboundBuffer.Dequeue();
+            }
+        }
+        /// <summary>
+        /// Flushes the current brainpack buffers
+        /// </summary>
+        public void Clear()
+        {
+            if (Serialport != null &&Serialport.IsOpen)
+            {
+                Serialport.DiscardInBuffer(); 
+                Serialport.DiscardOutBuffer();
+            }
+            OutboundBuffer.Clear();
+        }
+
+        /// <summary>
+        /// From the response queue, return the response received by the brainpack
+        /// </summary>
+        /// <returns></returns>
+        public string GetResponse()
+        {
+            string vReturn = "";
+
+            if (ResponseBuffer.Count > 0)
+            {
+                vReturn = ResponseBuffer.Dequeue();
+            }
+
+            return vReturn;
         }
     }
 }

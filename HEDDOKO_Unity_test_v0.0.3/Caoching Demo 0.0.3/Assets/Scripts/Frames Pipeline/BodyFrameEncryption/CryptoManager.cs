@@ -29,6 +29,13 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption
         }
 
         /// <summary>
+        /// Get Crypto version
+        /// </summary>
+        public string GetCrytpoVersion
+        {
+            get { return mFrameDecryptor.CryptoRevision; }
+        }
+        /// <summary>
         /// returns a decrypted string from a provided file path
         /// </summary>
         /// <param name="vFilepath"></param>

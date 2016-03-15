@@ -26,7 +26,7 @@ public class BodyFrame
     private Dictionary<BodyStructureMap.SensorPositions, Vector3> mFrameData;
      
     //The timestamp of a bodybody frame 
- [JsonProperty]
+    [JsonProperty]
     private float mTimeStamp;
 
     [JsonIgnore]

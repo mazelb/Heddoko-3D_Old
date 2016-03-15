@@ -39,14 +39,15 @@ public class BodyFramesRecording
     // statistics of a recording
     public RecordingStats Statistics = new RecordingStats();
 
-    public bool FromDatFile { get; set; }
+   public bool FromDatFile { get; set; }
 
+ 
     public string FormatRevision { get; set; }
     /// <summary>
     /// The title of the recording
     /// </summary>
     public string Title { get; set; }
-
+  
     /**
     * CreateNewRecordingUUID()
     * @brief Creates a new recording UUID
@@ -130,11 +131,11 @@ public class BodyFramesRecording
             for (uint i = (sNumberOfUUIDs); i < vRecordingLines.Length; i++)
             {
                 BodyRawFrame vTempRaw = new BodyRawFrame();
-                vTempRaw.IsDecoded = !FromDatFile;
+               // vTempRaw.IsDecoded = !FromDatFile;
                 vTempRaw.BodyRecordingGuid = BodyRecordingGuid;
                 vTempRaw.BodyGuid = BodyGuid;
                 vTempRaw.SuitGuid = SuitGuid;
-
+                vTempRaw.IsDecoded = !FromDatFile;
                 vTempRaw.RawFrameData = vRecordingLines[i].Split(",".ToCharArray(),
                     StringSplitOptions.RemoveEmptyEntries);
                 RecordingRawFrames.Add(vTempRaw);

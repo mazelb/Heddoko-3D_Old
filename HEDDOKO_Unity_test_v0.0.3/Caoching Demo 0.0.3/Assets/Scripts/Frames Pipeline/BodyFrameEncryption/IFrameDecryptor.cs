@@ -17,6 +17,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption
     /// </summary>
     public interface IFrameDecryptor
     {
+        string CryptoRevision { get; }
         string Decrypt(string vFilePath);
 
         /// <summary>

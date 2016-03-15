@@ -46,5 +46,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         {
             throw new NotImplementedException();
         }
+
+        public BodyFramesRecording GetRawRecording(string vRecordingId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -23,6 +23,11 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Decryption
     {
         public bool StopDecryption { get; set; }
 
+        public string CryptoRevision
+        {
+            get { return "1"; }
+        }
+
         public string Decrypt(string vFilepath)
         {
             string vStringOut = Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n" + Guid.NewGuid() + "\r\n";

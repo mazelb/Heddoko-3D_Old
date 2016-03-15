@@ -31,6 +31,9 @@ public class BodyRecordingReader
     private string[] mFileLines;
 
     private CryptoManager mCryptoManager;
+
+   
+
     public string FilePath { get { return mFilePath; } }
 
     /// <summary>
@@ -38,8 +41,15 @@ public class BodyRecordingReader
     /// </summary>
     public bool IsFromDatFile { get; private set; }
 
-   
+    internal CryptoManager CrytoManager
+    {
+        get { return mCryptoManager; }
+    }
 
+    /// <summary>
+    /// A body recording reader with a path to default reading from
+    /// </summary>
+    /// <param name="vFilepath"></param>
     public BodyRecordingReader(string vFilepath)
     {
         mCryptoManager = new CryptoManager(new DecryptionVersion0(), new EncryptionVersion0());

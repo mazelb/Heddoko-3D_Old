@@ -14,5 +14,6 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption.Encryption
      /// </summary>
     internal class EncryptionVersion0 : IFrameEncryptor
     {
+         public string CryptoRevision { get; private set; }
     }
 }

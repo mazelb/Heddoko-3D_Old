@@ -47,5 +47,12 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vRecording"></param>
         /// <returns></returns>
         bool CreateRecording(BodyFramesRecording vRecording);
+
+        /// <summary>
+        /// get a recording based on the id passed in
+        /// </summary>
+        /// <param name="vRecordingId">the recording id</param>
+        /// <returns></returns>
+        BodyFramesRecording GetRawRecording(string vRecordingId);
     }
 }

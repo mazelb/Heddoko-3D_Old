@@ -12,6 +12,6 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameEncryption
     /// </summary>
     public   interface IFrameEncryptor
     {
-         
+           string CryptoRevision { get; }
     }
 }
