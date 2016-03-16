@@ -47,6 +47,8 @@ namespace Assets.Scripts.Utils
         /// </summary>
         public static float UnityTime { get; private set; }
 
+        public string ApplicationPath { get; set; }
+
         void Awake()
         {
            
@@ -58,6 +60,7 @@ namespace Assets.Scripts.Utils
         public void Init()
         {
             mUnityThread = Thread.CurrentThread;
+            ApplicationPath = Application.dataPath;
         }
      
 

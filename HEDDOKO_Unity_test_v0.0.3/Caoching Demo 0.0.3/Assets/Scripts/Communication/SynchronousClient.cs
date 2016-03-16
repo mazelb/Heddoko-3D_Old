@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Assets.Scripts.Utils.DebugContext.logging;
 //using Assets.Scripts.Utils.Debugging;
 using HeddokoLib.networking;
 using Debug = UnityEngine.Debug;
@@ -38,14 +39,15 @@ namespace Assets.Scripts.Communication
             mWorkerThread = new Thread(ThreadWorker);
             mIsworking = true;
             mWorkerThread.Start();
+            string vLogMessage = "Synchronous Client instantiated, current timeout is set to " + sTimeout;
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSettings,vLogMessage);
         }
 
         public Queue<string> Requests = new Queue<string>(50);
         private static bool mReceivedMessage = true;
 
-        public bool IsDebugging { get; set; }
-        //     private DebugBodyFrameLogger vBodyFrameLogger= new DebugBodyFrameLogger("ClientComm");
-        private void ThreadWorker()
+      
+         private void ThreadWorker()
         {
             while (true)
             {
@@ -114,24 +116,35 @@ namespace Assets.Scripts.Communication
 
                     // vMsg = PacketSetting.Encoding.GetString(bytes);
                 }
-                catch (TimeoutException)
-                {
-                    string v = "timeout";
+                catch (TimeoutException vE)
+                { 
                     vSender.Shutdown(SocketShutdown.Both);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message); 
+                    vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+
                     vSender.Close();
                 }
-                catch (ArgumentNullException ane)
+                catch (ArgumentNullException vE)
                 {
-                    vMsg = "ArgumentNullException  " + ane;
+                    vMsg = "ArgumentNullException  " + vE;
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+                    vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+
                     Debug.Log(vMsg);
                 }
-                catch (SocketException se)
+                catch (SocketException vE)
                 {
                     
-                    vMsg = "SocketException  "+ se.ErrorCode + "\r\n"+se;
-                    vMsg += se.InnerException;
+                    vMsg = "SocketException  "+ vE.ErrorCode + "\r\n"+ vE;
+                    vMsg += vE.InnerException;
                     vSender.Close();
                     Debug.Log(vMsg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+                    vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+
                 }
                 catch (Exception e)
                 {
@@ -139,21 +152,27 @@ namespace Assets.Scripts.Communication
                     vSender.Shutdown(SocketShutdown.Both);
                     vSender.Close();
                     Debug.Log(vMsg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+                    vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+
                 }
 
             }
             catch (Exception e)
             {
                 vMsg = "Unexpected exception " + e;
+                DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+                vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
                 Debug.Log(vMsg);
             }
             mReceivedMessage = true;
             vStopwatch.Stop();
+            vMsg = "time taken from start send message to end " + vStopwatch.ElapsedMilliseconds + " ms";
+        //    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vMsg);
 
-            if (IsDebugging)
-            {
-                //vBodyFrameLogger.WriteLog(vStopwatch.Elapsed.TotalMilliseconds,vMsg);
-            }
+
         }
         private bool mIsworking;
         public void Stop()

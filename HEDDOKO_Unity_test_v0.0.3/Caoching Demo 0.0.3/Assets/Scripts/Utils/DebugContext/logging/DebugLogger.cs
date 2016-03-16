@@ -10,10 +10,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq; 
+using System.Linq;
 using System.Threading;
+using UnityEngine;
 
-namespace BrainpackService.Tools_and_Utilities.Debugging
+namespace Assets.Scripts.Utils.DebugContext.logging
 {
     /// <summary>
     /// 
@@ -23,13 +24,13 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
         public static DebugLogSettings Settings = new DebugLogSettings();
         private static DebugLogger sInstance;
         private static object mInstanceLock = new object();
-        DebugSettingsFileMonitor mFileMonitor = new DebugSettingsFileMonitor();
+       // DebugSettingsFileMonitor mFileMonitor = new DebugSettingsFileMonitor();
 
         private string mLogDirPath;
 
         private Queue<Log> mMessageQueue = new Queue<Log>();
         private Dictionary<LogType, Func<bool>> sSettingsRegistry = new Dictionary<LogType, Func<bool>>();
-         private Dictionary<LogType, OutputLogPath> mLogTypeToLogpathType = new Dictionary<LogType, OutputLogPath>();
+        private Dictionary<LogType, OutputLogPath> mLogTypeToLogpathType = new Dictionary<LogType, OutputLogPath>();
 
         private bool mContinueWorking;
         public static DebugLogger Instance
@@ -64,7 +65,7 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             catch (Exception e)
             {
 
-                BrainpackEventLogManager.InvokeEventLogMessage(e.Message);
+                Debug.Log("<color=red>Fatal error:</color> " +e);
             }
 
         }
@@ -91,35 +92,59 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             });
 
             sSettingsRegistry.Add(LogType.ApplicationResponse, () =>
-           {
-               if (Settings.LogAll || Settings.LogAllApplicationContext)
-                   return true;
-               return Settings.ApplicationResponseLog;
-           });
+            {
+                if (Settings.LogAll || Settings.LogAllApplicationContext)
+                    return true;
+                return Settings.ApplicationResponseLog;
+            });
 
             sSettingsRegistry.Add(LogType.BrainpackCommand, () =>
-           {
-               if (Settings.LogAll || Settings.LogAllBrainpackContext)
-                   return true;
-               return Settings.BrainpackCommandLog;
-           });
+            {
+                if (Settings.LogAll || Settings.LogAllBrainpackContext)
+                    return true;
+                return Settings.BrainpackCommandLog;
+            });
             sSettingsRegistry.Add(LogType.BrainpackFrame, () =>
-           {
-               if (Settings.LogAll || Settings.LogAllBrainpackContext)
-                   return true;
-               return Settings.BrainpackFrameData;
-           });
+            {
+                if (Settings.LogAll || Settings.LogAllBrainpackContext)
+                    return true;
+                return Settings.BrainpackFrameData;
+            });
             sSettingsRegistry.Add(LogType.BrainpackResponse, () =>
-           {
-               if (Settings.LogAll || Settings.LogAllBrainpackContext)
-                   return true;
-               return Settings.BrainpackResponseLog;
-           });
+            {
+                if (Settings.LogAll || Settings.LogAllBrainpackContext)
+                    return true;
+                return Settings.BrainpackResponseLog;
+            });
+            sSettingsRegistry.Add(LogType.SocketClientSend, () =>
+            {
+                if (Settings.LogAll )
+                    return true;
+                return Settings.SocketClientLogging;
+            });
+            sSettingsRegistry.Add(LogType.SocketClientSettings, () =>
+            {
+                if (Settings.LogAll)
+                    return true;
+                return Settings.SocketClientLogging;
+            });
+            sSettingsRegistry.Add(LogType.SocketClientReceive, () =>
+            {
+                if (Settings.LogAll)
+                    return true;
+                return Settings.SocketClientLogging;
+            });
+            sSettingsRegistry.Add(LogType.SocketClientError, () =>
+            {
+                if (Settings.LogAll)
+                    return true;
+                return Settings.SocketClientLogging;
+            });
         }
 
         private void RegisterPaths()
         {
-            var vLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
+            var vLocation = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath; 
             string vDirPath = Path.GetDirectoryName(vLocation);
             Instance.mLogDirPath = vDirPath + "\\logs";
 
@@ -130,6 +155,11 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             mLogTypeToLogpathType.Add(LogType.BrainpackCommand, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackResponse, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackFrame, OutputLogPath.BrainpackFrames);
+            mLogTypeToLogpathType.Add(LogType.SocketClientReceive, OutputLogPath.SocketClientLog);
+            mLogTypeToLogpathType.Add(LogType.SocketClientSend, OutputLogPath.SocketClientLog);
+            mLogTypeToLogpathType.Add(LogType.SocketClientSettings, OutputLogPath.SocketClientLog);
+            mLogTypeToLogpathType.Add(LogType.SocketClientError, OutputLogPath.SocketClientLog);
+
 
 
         }
@@ -139,13 +169,13 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             mContinueWorking = true;
             Thread vThread = new Thread(Instance.WorkerTask);
             vThread.Start();
-            mFileMonitor.Start();
+           // mFileMonitor.Start();
         }
 
         public void Stop()
         {
             mContinueWorking = false;
-            mFileMonitor.Stop();
+        //    mFileMonitor.Stop();
         }
         private void WorkerTask()
         {
@@ -190,7 +220,7 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
                 else
                 {
                     int vCount = vFound.Length;
-                    vCurrentFilePath = mLogDirPath + "\\" + vLogType + vCount + "_" + vTodaysDate + ".csv";
+                    vCurrentFilePath = mLogDirPath + "\\" + vLogType.ToString() + vCount + "_" + vTodaysDate + ".csv";
                     FileStream vFs = File.Create(vCurrentFilePath);
                     vFs.Close();
                 }
@@ -203,7 +233,7 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             }
             catch (Exception e)
             {
-                BrainpackEventLogManager.InvokeEventLogMessage("Failed to write to log type" + vLog + "\n" + e.Message);
+                Debug.Log("<color=red>Failed to write to log type:</color> " + vLog  +" "+e); 
             }
         }
     }
@@ -216,6 +246,10 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
         ApplicationCommand = 4,
         ApplicationResponse = 5,
         ApplicationFrame = 6,
+        SocketClientSend =7,
+        SocketClientReceive = 8,
+        SocketClientError = 9,
+        SocketClientSettings =10
     }
 
     public enum OutputLogPath
@@ -223,7 +257,8 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
         ApplicationLog,
         BrainpackMsgLog,
         BrainpackFrames,
-        ApplicationFrames
+        ApplicationFrames,
+        SocketClientLog
     }
 
     public struct Log

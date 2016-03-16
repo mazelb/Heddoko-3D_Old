@@ -30,8 +30,7 @@ namespace Assets.Scripts.Utils.DebugContext
             {
                 
                 mIsDebugging = !mIsDebugging;
-                PacketCommandRouter.Instance.ClientSocket.IsDebugging = mIsDebugging;
-                Body vCurrentBody = StreamManager.CurrentBodyInPlay;
+                 Body vCurrentBody = StreamManager.CurrentBodyInPlay;
                 if (vCurrentBody != null)
                 {
                    // vCurrentBody.View.IsDebugging = mIsDebugging;

@@ -126,7 +126,7 @@ namespace BrainpackService
             AsynchronousSocketListener.StopService();
             BrainpackEventLogManager.DeRegisterEventLogMessage(WriteEventLogMessage); 
             BrainpackSerialConnector.Instance.Stop();
-         
+            DebugLogger.Instance.Stop();
         }
 
 

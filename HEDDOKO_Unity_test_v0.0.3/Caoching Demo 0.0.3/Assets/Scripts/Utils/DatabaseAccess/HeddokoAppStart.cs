@@ -20,6 +20,7 @@ using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.UI.Settings;
 using Assets.Scripts.UI.Tagging;
 using Assets.Scripts.Utils.DebugContext;
+using Assets.Scripts.Utils.DebugContext.logging;
 using UnityEngine;
 
 namespace Assets.Scripts.Utils.DatabaseAccess
@@ -43,12 +44,12 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
-        {
-            SetupPools();
-           SetupDatabase();
+        { 
             BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
-
+            SetupPools();
+            SetupDatabase();
+            SetupLoggers();
             bool vAppSafelyLaunched;
             EnableObjects(false);
             //Start loading animation
@@ -108,6 +109,11 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         }
 
+        private void SetupLoggers()
+        {
+            DebugLogger.Instance.Start();
+        }
+
         /// <summary>
         /// Sets up internal pools
         /// </summary>
@@ -151,6 +157,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         void OnApplicationQuit()
         {
             mDatabase.CleanUp();
+            DebugLogger.Instance.Stop();
         }
 
 

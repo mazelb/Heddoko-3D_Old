@@ -21,8 +21,7 @@ namespace Assets.Scripts.UI.AbstractViews.camera
         private Guid mId = new Guid();
         private Camera mPanelRenderingCamera;
         private PanelCameraSettings mSettings;
-        private CameraOrbitter mCameraOrbitter;
-        private CameraVerticalPosition mCameraVerticalPosition;
+        private CameraOrbitter mCameraOrbitter; 
 
         /// <summary>
         /// the camera rendering a panel
