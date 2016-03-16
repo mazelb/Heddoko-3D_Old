@@ -78,7 +78,7 @@ namespace HeddokoLib.networking
         * @note will not invoke a CommandDelegate if the packet contains an invalid command
         * @return bool that indicates that the command delegate was succesfully invoked
         */
-        public bool Process(object vSender, HeddokoPacket vPacket)
+        public bool  Process(object vSender, HeddokoPacket vPacket)
         {
             if (mCommands.ContainsKey(vPacket.Command))
             {

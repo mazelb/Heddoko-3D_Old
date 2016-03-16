@@ -24,8 +24,39 @@ namespace HeddokoLib.utils
         public static string UseRecordingForBody = "0x12";
         public static string UseBrainpackForBody = "0x13";
         public static string StartSceneWithBrainpackConnect = "0x14";
+        public static string DisconnectBrainpack = "0x15";
+        public static string DiscoAcknowledged = "0x16";
+
+        #region brainpack changes request
+        public static string SetBrainpackTimeReq = "0x17";
+        public static string SetRecordingPrefixReq = "0x18";
+        public static string ShutdownBrainpackReq = "0x19";
+        public static string ResetBrainpackReq = "0x20";
+        public static string GetBrainpackVersionReq = "0x21";
+        public static string GetBrainpackStateReq = "0x22";
+        #endregion
+
+        #region  brainpack changes responses
+        public static string SetBrainpackTimeResp = "0x23";
+        public static string SetRecordingPrefixResp = "0x24";
+        public static string ShutdownBrainpackResp = "0x25";
+        public static string ResetBrainpackResp = "0x26";
+        public static string GetBrainpackVersionResp = "0x26";
+        public static string GetBrainpackStateResp = "0x27";
+        #endregion
+        public static string StartRecordingReq = "0x28";
+        public static string StartRecordingResp = "0x29";
         public static string StopHeddokoUnityClient = "9x99";
+
+        public static string GenericAckMessage = "0x30";
+        public static string MessagePacket= "0x31";
+        public static string GetResponseMessageReq = "0x32";
+        public static string GetResponseMessageResp = "0x33";
+        public static string StopRecordingReq = "0x34";
+        public static string StopRecordingResp = "0x35";
+        public static string ClearBuffer = "0x36";
         public static string ClientError = "9x00";
+     
 
         public static string ExtractCommandFromBytes(int vStartIndex, int vLength, byte[] vData)
         {
