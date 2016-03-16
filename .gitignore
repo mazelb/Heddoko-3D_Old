@@ -26,3 +26,4 @@ Temp
 *.sdf
 *.sdf
 !HEDDOKO_Unity_test_v0.0.3/BrainpackService/BrainpackService/BrainpackService.csproj
+!HEDDOKO_Unity_test_v0.0.3/BrainpackService/*

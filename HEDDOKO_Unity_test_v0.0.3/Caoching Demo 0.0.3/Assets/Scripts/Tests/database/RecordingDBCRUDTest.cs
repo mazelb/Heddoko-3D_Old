@@ -6,11 +6,9 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-
-using System;
+ 
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+ 
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI;
 using Assets.Scripts.UI.Settings;
@@ -113,7 +111,10 @@ namespace Assets.Scripts.Tests.database
 
         void OnApplicationQuit()
         {
-            Database.CleanUp();
+            if (Database != null)
+            {
+                Database.CleanUp();
+            }
 
         }
     }
