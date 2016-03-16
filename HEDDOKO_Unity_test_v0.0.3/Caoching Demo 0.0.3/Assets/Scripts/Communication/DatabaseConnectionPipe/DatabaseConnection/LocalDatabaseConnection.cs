@@ -464,5 +464,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             }
             return vFound;
         }
+
+        public bool UpdateRecordingFolder(string vRecordingUid, string vFolderUid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

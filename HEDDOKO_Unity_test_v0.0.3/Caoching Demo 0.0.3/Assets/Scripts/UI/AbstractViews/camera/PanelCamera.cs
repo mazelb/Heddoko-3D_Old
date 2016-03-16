@@ -22,6 +22,7 @@ namespace Assets.Scripts.UI.AbstractViews.camera
         private Camera mPanelRenderingCamera;
         private PanelCameraSettings mSettings;
         private CameraOrbitter mCameraOrbitter;
+        private CameraVerticalPosition mCameraVerticalPosition;
 
         /// <summary>
         /// the camera rendering a panel
@@ -112,6 +113,21 @@ namespace Assets.Scripts.UI.AbstractViews.camera
             Orbitter.Target = vTarget;
             Orbitter.TargetsLayer = 1<< vBody.CurrentLayerMask.value;
             Orbitter.Enable();
+            #region TODO: REMOVE AFTER FIXING BODYSEGMENT.CS
+            if (mCameraOrbitter == null)
+            {
+                mCameraVerticalPosition = PanelRenderingCamera.gameObject.AddComponent<CameraVerticalPosition>();
+                mCameraVerticalPosition.Target = vTarget;
+            }
+            else
+            {
+                if (!mCameraVerticalPosition.isActiveAndEnabled)
+                {
+                    mCameraVerticalPosition.enabled = true;
+                }
+            }
+            #endregion
+
         }
     }
 }

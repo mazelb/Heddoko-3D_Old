@@ -83,5 +83,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         {
             throw new NotImplementedException();
         }
+
+        public bool UpdateRecordingFolder(string vRecordingUid, string vFolderUid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

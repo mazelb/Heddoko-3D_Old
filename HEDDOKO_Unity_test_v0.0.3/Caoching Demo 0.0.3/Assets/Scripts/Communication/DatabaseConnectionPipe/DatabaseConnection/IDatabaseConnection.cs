@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
+using JetBrains.Annotations;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -87,5 +88,13 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vTagId"></param>
         /// <returns></returns>
         List<string> GetRecordingGuidFromTagId(string vTagId);
+
+        /// <summary>
+        /// Update the the folder a recording is in 
+        /// </summary>
+        /// <param name="vRecordingUid"></param>
+        /// <param name="vFolderUid"></param>
+        /// <returns></returns>
+        bool UpdateRecordingFolder(string vRecordingUid, string vFolderUid);
     }
 }

@@ -11,7 +11,7 @@ using System.Net.Sockets;
 using System.Threading;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
-using UnityEngine;
+ 
 
 
 namespace Assets.Scripts.Communication
@@ -21,7 +21,8 @@ namespace Assets.Scripts.Communication
     * @brief SocketClient class: a socket connection to the windows Brainpack service
  
     */
-    // 
+
+    [Obsolete("Not used anymore,instead Synchronous client is used. ", true)]
     public class SocketClient
     {
         private TcpClient mSocket;
