@@ -8,6 +8,7 @@
 */
 
 
+using Assets.Scripts.Utils.DebugContext.logging;
 using UnityEngine;
 
 namespace Assets.Demos
@@ -40,6 +41,7 @@ namespace Assets.Demos
             bool vIsSegmentOptionActive = mSegmentOptions.activeSelf;
             mChildren.SetActive(!vIsActive);
             mSegmentOptions.SetActive(!vIsSegmentOptionActive);
+            DebugLogger.Settings.LogAll = true;
         }
     }
 

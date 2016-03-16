@@ -39,12 +39,12 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         public DebugContextChecker DebugContextChecker;
         private bool ResetTPosButtonEnabled;
         private int mHomeTPoseKeyCounter = 0;
-        private int mDebugContextEnablerCounter=0;
+        private int mDebugContextEnablerCounter = 0;
         public BrainpackComPortText BrainpackComPortText;
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
-        { 
+        {
             BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
             SetupPools();
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             mDbAccess = new LocalDBAccess();
 
             bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
- 
+
 
             if (vApplicationSettingsFound)
             {
@@ -112,6 +112,11 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private void SetupLoggers()
         {
             DebugLogger.Instance.Start();
+
+#if !DEBUG
+                DebugLogger.Settings.AllFalse();
+#endif
+ 
         }
 
         /// <summary>
@@ -179,7 +184,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     {
                         InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
                         mHomeTPoseKeyCounter = 0;
-                    } 
+                    }
                 }
                 if (e.keyCode == KeyCode.F12)
                 {
@@ -191,12 +196,12 @@ namespace Assets.Scripts.Utils.DatabaseAccess
                     }
                 }
 
-                else if (e.keyCode != KeyCode.Home  )
+                else if (e.keyCode != KeyCode.Home)
                 {
-                    mHomeTPoseKeyCounter = 0; 
+                    mHomeTPoseKeyCounter = 0;
                 }
-                else if (  e.keyCode == KeyCode.F12)
-                { 
+                else if (e.keyCode == KeyCode.F12)
+                {
                     mDebugContextEnablerCounter = 0;
                 }
             }
