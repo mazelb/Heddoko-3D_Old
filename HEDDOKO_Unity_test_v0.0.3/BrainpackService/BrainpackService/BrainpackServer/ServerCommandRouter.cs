@@ -137,10 +137,11 @@ namespace BrainpackService.BrainpackServer
         private void StopRecording(object vSender, object vArgs)
         {
             bool vIsRecording = BrainpackSerialConnector.Instance.IsRecording();
+            DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, "Req to stop recording");
             if (vIsRecording)
             {
-                BrainpackSerialConnector.Instance.SendCommandToBrainpack("Stop command sent");
-                Thread.Sleep(75);
+                BrainpackSerialConnector.Instance.SendCommandToBrainpack("Record");
+                Thread.Sleep(50);
             }
             string vResponse = !BrainpackSerialConnector.Instance.IsRecording()
                 ? "Idle"
