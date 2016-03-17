@@ -113,9 +113,9 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             DebugLogger.Instance.Start();
 
-#if !DEBUG
-                DebugLogger.Settings.AllFalse();
-#endif
+            #if !DEBUG
+            DebugLogger.Settings.AllFalse();
+            #endif
  
         }
 
@@ -161,15 +161,15 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         void OnApplicationQuit()
         {
-            mDatabase.CleanUp();
+           // mDatabase.CleanUp();
             DebugLogger.Instance.Stop();
         }
 
 
         private void SetupDatabase()
         {
-            mDatabase = new Database(DatabaseConnectionType.Local);
-            mDatabase.Init();
+          //  mDatabase = new Database(DatabaseConnectionType.Local);
+        //    mDatabase.Init();
             TaggingManager.Instance.SetDatabase(mDatabase);
         }
         void OnGUI()

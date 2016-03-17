@@ -1,6 +1,7 @@
-﻿ 
+﻿
+using System;
 using System.Collections.Generic;
- 
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +10,7 @@ namespace Assets.Scripts.Utils.DebugContext
     /// <summary>
     /// Class that handles inputs and their respective actions
     /// </summary>
-   public  class InputHandler: MonoBehaviour
+    public class InputHandler : MonoBehaviour
     {
         public static Dictionary<KeyCode, List<UnityAction>> KeyBindActionMaps = new Dictionary<KeyCode, List<UnityAction>>();
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Utils.DebugContext
             else
             {
                 List<UnityAction> vNewActionList = KeyBindActionMaps[vKeyCode];
-                vNewActionList.Add(vAction);    
+                vNewActionList.Add(vAction);
             }
 
         }
@@ -37,10 +38,10 @@ namespace Assets.Scripts.Utils.DebugContext
         void OnGUI()
         {
             var vEvent = Event.current;
-             
+
             if (vEvent.isKey && vEvent.type == EventType.KeyDown)
             {
-               if(KeyBindActionMaps.ContainsKey(vEvent.keyCode)) 
+                if (KeyBindActionMaps.ContainsKey(vEvent.keyCode))
                 {
                     foreach (var vUnityAction in KeyBindActionMaps[vEvent.keyCode])
                     {
@@ -51,5 +52,21 @@ namespace Assets.Scripts.Utils.DebugContext
 
         }
 
+        /// <summary>
+        ///  Removes an action from the given keybind
+        /// </summary>
+        /// <param name="vKeycode"></param>
+        /// <param name="switchCamera"></param>
+        public static void RemoveKeybinding(KeyCode vKeycode, UnityAction vAction)
+        {
+            if (KeyBindActionMaps.ContainsKey(vKeycode))
+            {
+                if (KeyBindActionMaps[vKeycode].Contains(vAction))
+                {
+                    KeyBindActionMaps[vKeycode].Remove(vAction);
+                }
+            }
+
+        }
     }
 }

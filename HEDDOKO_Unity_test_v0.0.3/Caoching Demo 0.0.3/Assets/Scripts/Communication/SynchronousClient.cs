@@ -103,6 +103,7 @@ namespace Assets.Scripts.Communication
 
                     // Send the data through the socket.
                     vSender.Send(msg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, "Sending... "+vMsg);
 
                     // Receive the response from the remote device.
                     vSender.Receive(bytes);

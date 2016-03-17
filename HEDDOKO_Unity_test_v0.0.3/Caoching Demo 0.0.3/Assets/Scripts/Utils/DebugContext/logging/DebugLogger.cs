@@ -58,7 +58,9 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                 {
                     Log vLog = new Log();
                     vLog.LogType = vType;
-                    vLog.Message = vMsg;
+                    string vLogmsg = DateTime.Now.ToString("HH:mm:ss.fff tt") + " , " + ((int)vLog.LogType) + " , " +
+                                     vMsg;
+                    vLog.Message = vLogmsg;
                     Instance.mMessageQueue.Enqueue(vLog);
                 }
             }
@@ -144,10 +146,10 @@ namespace Assets.Scripts.Utils.DebugContext.logging
 
         private void RegisterPaths()
         {
-            var vLocation = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath; 
-            string vDirPath = Path.GetDirectoryName(vLocation);
-            Instance.mLogDirPath = vDirPath + "\\logs";
-
+            /*var vLocation = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath; 
+            string vDirPath = Path.GetDirectoryName(vLocation);*/
+           string vms =  Instance.mLogDirPath = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath + "\\Application_logs";
+            Debug.Log(vms);
 
             mLogTypeToLogpathType.Add(LogType.ApplicationCommand, OutputLogPath.ApplicationLog);
             mLogTypeToLogpathType.Add(LogType.ApplicationResponse, OutputLogPath.ApplicationLog);

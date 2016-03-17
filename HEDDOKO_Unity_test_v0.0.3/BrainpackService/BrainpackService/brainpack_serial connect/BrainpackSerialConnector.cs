@@ -106,7 +106,7 @@ namespace BrainpackService.brainpack_serial_connect
 
             catch (Exception vE)
             {
-                BrainpackEventLogManager.InvokeEventLogError("Could not open serial port " + Serialport + "\n Error:" + vE.StackTrace + "\n" + vE.ToString());
+                DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException, vE.StackTrace);
             }
 
         }
@@ -121,9 +121,9 @@ namespace BrainpackService.brainpack_serial_connect
                 {
                     Serialport.Close();
                 }
-                catch
+                catch(Exception vE)
                 {
-
+                    DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException, vE.StackTrace);
                 }
             }
         }
@@ -146,12 +146,12 @@ namespace BrainpackService.brainpack_serial_connect
                                 return;
                             }
                             string vReadLine = Serialport.ReadLine();
- 
+
                             DebugLogger.Instance.LogMessage(LogType.BrainpackFrame, vReadLine);
-                            if (vReadLine.Length != 176 && vReadLine.Length <= 25 && vReadLine.Length >0)
+                            if (vReadLine.Length != 176 && vReadLine.Length <= 25 && vReadLine.Length > 0)
                             {
                                 string vTemp = vReadLine;
-                               
+
                                 lock (mLatestStateLock)
                                 {
                                     //check for matches and check if a state is set to idle or Recording
@@ -159,7 +159,7 @@ namespace BrainpackService.brainpack_serial_connect
                                     {
 
                                         string vState = vMatch.ToString();
-                                        
+
                                         string vIdlePattern = @"(?i)Idle(?-i)";
                                         string vRecPattern = @"(?i)Recording(?-i)";
                                         if (Regex.IsMatch(vState, vIdlePattern, RegexOptions.IgnoreCase))
@@ -171,7 +171,7 @@ namespace BrainpackService.brainpack_serial_connect
                                             mIsRecording = true;
                                         }
                                         mLatestState = vState;
-                                        vTemp= vTemp.Replace(vState, "");
+                                        vTemp = vTemp.Replace(vState, "");
                                         DebugLogger.Instance.LogMessage(LogType.BrainpackResponse, vReadLine);
 
                                     }
@@ -181,33 +181,46 @@ namespace BrainpackService.brainpack_serial_connect
                                 if (vTemp.Length > 10 || vTemp.Contains("ack") || vTemp.Contains("Ack"))
                                 {
                                     ResponseBuffer.Enqueue(vReadLine);
-                                   
+
                                 }
                             }
                             else
                             {
                                 OutboundBuffer.Enqueue(vReadLine);
-                                
+
 
                             }
 
                         }
                         catch (IOException vIoException)
                         {
-                            BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
+                            DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException,
+                                vIoException.StackTrace);
+
+                            //BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
 
                         }
                         catch (NullReferenceException vNullReferenceException)
                         {
-                            BrainpackEventLogManager.InvokeEventLogError(vNullReferenceException + "\r\n" + vNullReferenceException.StackTrace);
+                            DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException,
+                                vNullReferenceException.StackTrace);
+
+                            //BrainpackEventLogManager.InvokeEventLogError(vNullReferenceException + "\r\n" + vNullReferenceException.StackTrace);
                         }
-                        catch (TimeoutException)
+                        catch (TimeoutException vE)
                         {
                             lock (mLatestStateLock)
                             {
                                 mLatestState = "Timeout";
                             }
+                            DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException, vE.StackTrace);
+
                             continue;
+                        }
+                        catch (Exception vE)
+                        {
+                            DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException, vE.StackTrace);
+
                         }
                     }
                 }
@@ -229,8 +242,9 @@ namespace BrainpackService.brainpack_serial_connect
                 Serialport.Write(vMsg + "\r\n");
                 DebugLogger.Instance.LogMessage(LogType.BrainpackCommand, vMsg);
             }
-            catch (Exception)
+            catch (Exception vE)
             {
+                DebugLogger.Instance.LogMessage(LogType.BrainpackCommand, vMsg);
 
             }
 

@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq; 
+using System.Linq;
 using System.Threading;
 
 namespace BrainpackService.Tools_and_Utilities.Debugging
@@ -29,7 +29,7 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
 
         private Queue<Log> mMessageQueue = new Queue<Log>();
         private Dictionary<LogType, Func<bool>> sSettingsRegistry = new Dictionary<LogType, Func<bool>>();
-         private Dictionary<LogType, OutputLogPath> mLogTypeToLogpathType = new Dictionary<LogType, OutputLogPath>();
+        private Dictionary<LogType, OutputLogPath> mLogTypeToLogpathType = new Dictionary<LogType, OutputLogPath>();
 
         private bool mContinueWorking;
         public static DebugLogger Instance
@@ -57,7 +57,9 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
                 {
                     Log vLog = new Log();
                     vLog.LogType = vType;
-                    vLog.Message = vMsg;
+                    string vLogmsg = DateTime.Now.ToString("HH:mm:ss.fff tt") + " , " + ((int)vLog.LogType) + " , " +
+                                     vMsg;
+                    vLog.Message = vLogmsg;
                     Instance.mMessageQueue.Enqueue(vLog);
                 }
             }
@@ -115,6 +117,22 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
                    return true;
                return Settings.BrainpackResponseLog;
            });
+            sSettingsRegistry.Add(LogType.ServerSocketException, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.BrainpackSerialPortException, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
         }
 
         private void RegisterPaths()
@@ -130,6 +148,8 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
             mLogTypeToLogpathType.Add(LogType.BrainpackCommand, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackResponse, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackFrame, OutputLogPath.BrainpackFrames);
+            mLogTypeToLogpathType.Add(LogType.BrainpackSerialPortException, OutputLogPath.ExceptionLogs);
+            mLogTypeToLogpathType.Add(LogType.ServerSocketException, OutputLogPath.ExceptionLogs);
 
 
         }
@@ -198,7 +218,7 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
                 //append to the file
                 FileStream vFile = new FileStream(vCurrentFilePath, FileMode.Append, FileAccess.Write);
                 StreamWriter vStreamWriter = new StreamWriter(vFile);
-                vStreamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " , " + ((int)vLog.LogType) + " , " + vLog.Message);
+                vStreamWriter.WriteLine(vLog.Message);
                 vStreamWriter.Close();
             }
             catch (Exception e)
@@ -216,6 +236,8 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
         ApplicationCommand = 4,
         ApplicationResponse = 5,
         ApplicationFrame = 6,
+        ServerSocketException =7,
+        BrainpackSerialPortException = 8
     }
 
     public enum OutputLogPath
@@ -223,7 +245,8 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
         ApplicationLog,
         BrainpackMsgLog,
         BrainpackFrames,
-        ApplicationFrames
+        ApplicationFrames,
+        ExceptionLogs
     }
 
     public struct Log

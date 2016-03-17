@@ -90,6 +90,7 @@ namespace Assets.Scripts.UI.Settings
                 #if UNITY_EDITOR
                     vLocalDbPath = "Assets" + "/db/" + DBSettings.DbName;
                 #endif
+                Debug.LogError(vLocalDbPath  );
                 return vLocalDbPath;
             }
         }

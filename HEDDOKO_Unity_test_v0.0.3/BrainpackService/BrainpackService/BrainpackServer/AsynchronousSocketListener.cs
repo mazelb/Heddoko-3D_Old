@@ -67,7 +67,9 @@ namespace BrainpackService.BrainpackServer
             }
             catch (Exception e)
             {
-                BrainpackEventLogManager.InvokeNetworkingException(e.StackTrace);
+                DebugLogger.Instance.LogMessage(LogType.ServerSocketException, e.StackTrace);
+
+                //BrainpackEventLogManager.InvokeNetworkingException(e.StackTrace);
             }
 
         }
@@ -145,7 +147,8 @@ namespace BrainpackService.BrainpackServer
             }
             catch (SocketException vSocketException)
             {
-                DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, vSocketException.ToString());
+                DebugLogger.Instance.LogMessage(LogType.ServerSocketException, vSocketException.StackTrace);
+                //DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, vSocketException.ToString());
             }
         }
 
@@ -167,7 +170,8 @@ namespace BrainpackService.BrainpackServer
             }
             catch (Exception e)
             {
-                BrainpackEventLogManager.InvokeNetworkingException(e.StackTrace);
+               // BrainpackEventLogManager.InvokeNetworkingException(e.StackTrace);
+                DebugLogger.Instance.LogMessage(LogType.ServerSocketException, e.StackTrace);
             }
         }
 

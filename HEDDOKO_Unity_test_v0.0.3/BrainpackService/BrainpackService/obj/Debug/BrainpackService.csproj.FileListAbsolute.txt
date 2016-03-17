@@ -69,3 +69,4 @@ E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.cs
 E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.exe
 E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.pdb
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\HeddokoLib.pdb
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csprojResolveAssemblyReference.cache

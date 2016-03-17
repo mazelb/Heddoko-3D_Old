@@ -26,11 +26,12 @@ namespace Assets.Scripts.UI
         public override void CreateDefaultLayout()
         {
 
-            var config = new List<int>() { 6,2 };
+            
             var mNameConfig = new List<string>()
             {
                 "DASHBOARD","MOVEMENT","MOVEMENT TESTS","MY ACCOUNT","SETTINGS","HELP"
             };
+            var config = new List<int>() { mNameConfig.Count };
             mNodes = GenerateTreeNodes(config, vIsExpanded: true);
             for(int i = 0 ; i < mNodes.Count; i ++)
             {
@@ -38,13 +39,7 @@ namespace Assets.Scripts.UI
             }
             Tree.Start();
             Tree.Nodes = mNodes;
-            //var vTest_Item = new TreeViewItem("added");
-           // var vTest_node = new TreeNode<TreeViewItem>(vTest_Item);
-            //mNodes.Add(vTest_node);
-
-
-           // mNodes[1].IsVisible = false;
-          //  mNodes[2].Nodes[1].IsVisible = false;
+ 
 
         }
 

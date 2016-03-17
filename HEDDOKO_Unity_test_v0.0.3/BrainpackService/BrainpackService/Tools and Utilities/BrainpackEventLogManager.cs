@@ -71,7 +71,10 @@ namespace BrainpackService.Tools_and_Utilities
 
        public static void InvokeNetworkingException(string vMsg)
        {
-           
-       }
+            if (EventLogHandling != null)
+            {
+                EventLogHandling(vMsg);
+            }
+        }
     }
 }

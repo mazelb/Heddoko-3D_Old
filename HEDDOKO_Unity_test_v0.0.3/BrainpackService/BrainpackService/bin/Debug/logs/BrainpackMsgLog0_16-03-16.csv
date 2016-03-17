@@ -1,423 +1,307 @@
-11:55:18.686 , 1 , GetState
-11:55:18.733 , 2 , Idle
-11:55:21.834 , 1 , GetState
-11:55:21.864 , 2 , Idle
-11:55:24.892 , 1 , GetState
-11:55:24.902 , 2 , Idle
-11:55:27.922 , 1 , GetState
-11:55:27.948 , 2 , Idle
-11:55:30.227 , 1 , Record
-11:55:30.233 , 1 , GetState
-11:55:30.271 , 2 , Idle
-11:55:30.970 , 1 , GetState
-11:55:30.997 , 2 , Recording
-11:55:34.012 , 1 , GetState
-11:55:34.040 , 2 , Recording
-11:55:37.051 , 1 , GetState
-11:55:37.088 , 2 , Recording
-11:55:40.090 , 1 , GetState
-11:55:40.121 , 2 , Recording
-11:55:43.139 , 1 , GetState
-11:55:43.181 , 2 , Recording
-11:55:46.184 , 1 , GetState
-11:55:46.218 , 2 , Recording
-11:55:49.242 , 1 , GetState
-11:55:49.288 , 2 , Recording
-11:55:52.291 , 1 , GetState
-11:55:52.332 , 2 , Recording
-11:55:55.329 , 1 , GetState
-11:55:55.371 , 2 , Recording
-11:55:58.403 , 1 , GetState
-11:55:58.417 , 2 , Recording
-13:19:08.353 , 1 , GetState
-13:19:08.384 , 2 , Idle
-13:19:11.386 , 1 , GetState
-13:19:11.412 , 2 , Idle
-13:29:16.381 , 1 , GetState
-13:29:16.423 , 2 , Idle
-13:29:19.428 , 1 , GetState
-13:29:19.456 , 2 , Idle
-14:47:15.073 , 1 , GetState
-14:47:15.111 , 2 , Idle
-14:47:18.119 , 1 , GetState
-14:47:18.152 , 2 , Idle
-14:47:18.785 , 1 , Record
-14:47:18.792 , 1 , GetState
-14:47:18.826 , 2 , Idle
-14:47:21.156 , 1 , GetState
-14:47:21.188 , 2 , Recording
-14:47:24.237 , 1 , GetState
-14:47:24.264 , 2 , Recording
-14:47:27.369 , 1 , GetState
-14:47:27.380 , 2 , Recording
-14:47:27.899 , 1 , Stop command sent
-14:47:27.978 , 1 , GetState
-14:47:28.000 , 2 , Recording
-14:47:30.372 , 1 , GetState
-14:47:30.404 , 2 , Recording
-14:47:33.423 , 1 , GetState
-14:47:33.456 , 2 , Recording
-14:47:36.468 , 1 , GetState
-14:47:36.510 , 2 , Recording
-14:47:39.541 , 1 , GetState
-14:47:39.591 , 2 , Recording
-14:47:42.599 , 1 , GetState
-14:47:42.640 , 2 , Recording
-14:47:45.671 , 1 , GetState
-14:47:45.714 , 2 , Recording
-14:47:48.762 , 1 , GetState
-14:47:48.818 , 2 , Recording
-14:47:51.833 , 1 , GetState
-14:47:51.867 , 2 , Recording
-14:47:54.889 , 1 , GetState
-14:47:54.922 , 2 , Recording
-14:47:57.954 , 1 , GetState
-14:47:57.991 , 2 , Recording
-14:48:01.017 , 1 , GetState
-14:48:01.065 , 2 , Recording
-14:48:04.087 , 1 , GetState
-14:48:04.117 , 2 , Recording
-14:48:07.152 , 1 , GetState
-14:48:07.197 , 2 , Recording
-14:48:10.212 , 1 , GetState
-14:48:10.244 , 2 , Recording
-14:48:13.300 , 1 , GetState
-14:48:13.344 , 2 , Recording
-14:48:16.351 , 1 , GetState
-14:48:16.376 , 2 , Recording
-14:48:19.398 , 1 , GetState
-14:48:19.430 , 2 , Recording
-14:48:22.445 , 1 , GetState
-14:48:22.486 , 2 , Recording
-14:48:25.492 , 1 , GetState
-14:48:25.528 , 2 , Recording
-14:50:55.142 , 1 , GetState
-14:50:55.210 , 2 , Recording
-14:50:58.196 , 1 , GetState
-14:50:58.230 , 2 , Recording
-14:51:01.292 , 1 , GetState
-14:51:01.321 , 2 , Recording
-14:51:04.370 , 1 , GetState
-14:51:04.398 , 2 , Recording
-14:51:07.434 , 1 , GetState
-14:51:07.465 , 2 , Recording
-14:51:10.516 , 1 , GetState
-14:51:10.549 , 2 , Recording
-14:51:13.579 , 1 , GetState
-14:51:13.628 , 2 , Recording
-14:51:16.637 , 1 , GetState
-14:51:16.685 , 2 , Recording
-14:51:19.699 , 1 , GetState
-14:51:19.740 , 2 , Recording
-14:51:22.769 , 1 , GetState
-14:51:22.815 , 2 , Recording
-14:51:25.840 , 1 , GetState
-14:51:25.872 , 2 , Recording
-14:51:28.925 , 1 , GetState
-14:51:28.954 , 2 , Recording
-14:51:31.976 , 1 , GetState
-14:51:32.006 , 2 , Recording
-14:51:35.032 , 1 , GetState
-14:51:35.080 , 2 , Recording
-14:51:38.116 , 1 , GetState
-14:51:38.150 , 2 , Recording
-14:51:41.180 , 1 , GetState
-14:51:41.218 , 2 , Recording
-14:51:44.247 , 1 , GetState
-14:51:44.296 , 2 , Recording
-14:51:47.310 , 1 , GetState
-14:51:47.350 , 2 , Recording
-14:51:50.371 , 1 , GetState
-14:51:50.622 , 2 , Recording
-14:52:06.570 , 1 , GetState
-14:52:31.617 , 1 , Stop command sent
-14:53:01.004 , 1 , GetState
-14:53:01.434 , 2 , Recording
-14:53:02.208 , 1 , GetState
-14:53:03.731 , 1 , GetState
-14:53:05.118 , 2 , Recording
-14:53:05.157 , 1 , GetState
-14:53:05.576 , 2 , Recording
-14:53:05.617 , 2 , Recording
-14:53:05.657 , 2 , Recording
-14:53:06.200 , 1 , GetState
-14:53:06.209 , 2 , Recording
-14:53:06.691 , 1 , GetState
-14:53:06.700 , 2 , Recording
-14:53:07.165 , 1 , GetState
-14:53:07.175 , 2 , Recording
-14:53:07.677 , 1 , GetState
-14:53:07.686 , 2 , Recording
-14:53:08.138 , 1 , GetState
-14:53:08.148 , 2 , Recording
-14:53:08.672 , 1 , GetState
-14:53:08.682 , 2 , Recording
-14:53:09.148 , 1 , GetState
-14:53:09.155 , 2 , Recording
-14:53:09.629 , 1 , GetState
-14:53:09.638 , 2 , Recording
-14:53:10.119 , 1 , GetState
-14:53:10.126 , 2 , Recording
-14:53:10.616 , 1 , GetState
-14:53:10.625 , 2 , Recording
-14:53:11.065 , 1 , GetState
-14:53:11.075 , 2 , Recording
-14:53:11.570 , 1 , GetState
-14:53:11.580 , 2 , Recording
-14:53:12.000 , 1 , GetState
-14:53:12.007 , 2 , Recording
-14:53:12.524 , 1 , GetState
-14:53:12.531 , 2 , Recording
-14:53:13.031 , 1 , GetState
-14:53:13.041 , 2 , Recording
-14:53:13.481 , 1 , GetState
-14:53:13.489 , 2 , Recording
-14:53:13.992 , 1 , GetState
-14:53:14.008 , 2 , Recording
-14:53:14.547 , 1 , GetState
-14:53:14.555 , 2 , Recording
-14:53:14.988 , 1 , GetState
-14:53:15.002 , 2 , Recording
-14:53:15.331 , 1 , GetState
-14:53:15.343 , 2 , Recording
-14:53:15.859 , 1 , GetState
-14:53:15.871 , 2 , Recording
-14:53:16.735 , 1 , GetState
-14:53:16.749 , 2 , Recording
-14:53:17.385 , 1 , GetState
-14:53:17.396 , 2 , Recording
-14:53:17.971 , 1 , GetState
-14:53:17.979 , 2 , Recording
-14:53:18.747 , 1 , GetState
-14:53:18.771 , 2 , Recording
-14:53:21.811 , 1 , GetState
-14:53:21.851 , 2 , Recording
-14:53:24.870 , 1 , GetState
-14:53:24.912 , 2 , Recording
-14:53:27.957 , 1 , GetState
-14:53:27.986 , 2 , Recording
-14:53:31.038 , 1 , GetState
-14:53:31.083 , 2 , Recording
-14:54:44.616 , 1 , GetState
-14:54:44.666 , 2 , Recording
-14:54:47.688 , 1 , GetState
-14:54:47.728 , 2 , Recording
-14:54:50.758 , 1 , GetState
-14:54:50.810 , 2 , Recording
-14:54:55.305 , 1 , Record
-14:55:13.189 , 1 , GetState
-14:55:13.203 , 2 , Idle
-14:55:13.644 , 1 , GetState
-14:55:14.111 , 1 , GetState
-14:55:14.117 , 2 , Idle
-14:55:14.121 , 2 , Idle
-14:55:14.677 , 1 , GetState
-14:55:14.685 , 2 , Idle
-14:55:15.109 , 1 , GetState
-14:55:15.114 , 2 , Idle
-14:55:15.521 , 1 , GetState
-14:55:15.525 , 2 , Idle
-14:55:15.970 , 1 , GetState
-14:55:15.975 , 2 , Idle
-14:55:16.445 , 1 , GetState
-14:55:16.449 , 2 , Idle
-14:55:16.847 , 1 , GetState
-14:55:16.852 , 2 , Idle
-14:55:16.964 , 1 , Record
-14:55:16.971 , 1 , GetState
-14:55:16.978 , 2 , Idle
-14:55:18.128 , 1 , GetState
-14:55:18.157 , 2 , Recording
-14:55:21.847 , 1 , Record
-14:55:21.950 , 1 , GetState
-14:55:21.955 , 2 , Recording
-14:55:22.125 , 1 , GetState
-14:55:22.131 , 2 , Idle
-14:55:24.199 , 1 , GetState
-14:55:24.230 , 2 , Idle
-14:55:27.245 , 1 , GetState
-14:55:27.275 , 2 , Idle
-14:55:30.285 , 1 , GetState
-14:55:30.316 , 2 , Idle
-14:55:33.324 , 1 , GetState
-14:55:33.360 , 2 , Idle
-14:55:36.373 , 1 , GetState
-14:55:36.405 , 2 , Idle
-14:59:01.261 , 1 , GetState
-14:59:01.298 , 2 , Idle
-14:59:04.297 , 1 , GetState
-14:59:04.332 , 2 , Idle
-14:59:04.973 , 1 , Record
-14:59:04.981 , 1 , GetState
-14:59:05.012 , 2 , Idle
-14:59:07.341 , 1 , GetState
-14:59:07.372 , 2 , Recording
-14:59:10.418 , 1 , GetState
-14:59:10.465 , 2 , Recording
-14:59:13.477 , 1 , GetState
-14:59:13.522 , 2 , Recording
-14:59:16.534 , 1 , GetState
-14:59:16.577 , 2 , Recording
-14:59:19.598 , 1 , GetState
-14:59:19.652 , 2 , Recording
-14:59:22.662 , 1 , GetState
-14:59:22.693 , 2 , Recording
-14:59:25.736 , 1 , GetState
-14:59:25.781 , 2 , Recording
-14:59:28.789 , 1 , GetState
-14:59:28.810 , 2 , Recording
-14:59:31.839 , 1 , GetState
-14:59:31.894 , 2 , Recording
-14:59:34.889 , 1 , GetState
-14:59:34.921 , 2 , Recording
-14:59:37.949 , 1 , GetState
-14:59:37.971 , 2 , Recording
-14:59:41.017 , 1 , GetState
-14:59:41.061 , 2 , Recording
-14:59:44.061 , 1 , GetState
-14:59:44.088 , 2 , Recording
-14:59:47.145 , 1 , GetState
-14:59:47.191 , 2 , Recording
-14:59:50.222 , 1 , GetState
-14:59:50.255 , 2 , Recording
-14:59:53.279 , 1 , GetState
-14:59:53.321 , 2 , Recording
-14:59:56.365 , 1 , GetState
-14:59:56.409 , 2 , Recording
-14:59:59.408 , 1 , GetState
-14:59:59.445 , 2 , Recording
-15:00:02.464 , 1 , GetState
-15:00:02.494 , 2 , Recording
-15:00:05.528 , 1 , GetState
-15:00:05.557 , 2 , Recording
-15:00:08.587 , 1 , GetState
-15:00:08.628 , 2 , Recording
-15:00:11.652 , 1 , GetState
-15:00:11.689 , 2 , Recording
-15:00:14.699 , 1 , GetState
-15:00:14.736 , 2 , Recording
-15:00:17.744 , 1 , GetState
-15:00:17.774 , 2 , Recording
-15:00:20.820 , 1 , GetState
-15:00:20.869 , 2 , Recording
-15:00:23.894 , 1 , GetState
-15:00:23.938 , 2 , Recording
-15:00:26.955 , 1 , GetState
-15:00:26.984 , 2 , Recording
-15:00:30.031 , 1 , GetState
-15:00:30.076 , 2 , Recording
-15:00:33.083 , 1 , GetState
-15:00:33.104 , 2 , Recording
-15:00:36.143 , 1 , GetState
-15:00:36.177 , 2 , Recording
-15:00:39.202 , 1 , GetState
-15:00:39.227 , 2 , Recording
-15:00:42.274 , 1 , GetState
-15:00:42.301 , 2 , Recording
-15:00:45.334 , 1 , GetState
-15:00:45.378 , 2 , Recording
-15:00:48.391 , 1 , GetState
-15:00:48.430 , 2 , Recording
-15:00:51.455 , 1 , GetState
-15:00:51.481 , 2 , Recording
-15:00:54.526 , 1 , GetState
-15:00:54.557 , 2 , Recording
-15:00:57.597 , 1 , GetState
-15:00:57.627 , 2 , Recording
-15:01:00.663 , 1 , GetState
-15:01:00.714 , 2 , Recording
-15:01:03.721 , 1 , GetState
-15:01:04.767 , 2 , Recording
-15:01:06.827 , 1 , GetState
-15:01:06.834 , 2 , Recording
-15:01:09.836 , 1 , GetState
-15:01:09.871 , 2 , Recording
-15:01:12.898 , 1 , GetState
-15:01:12.934 , 2 , Recording
-15:01:15.944 , 1 , GetState
-15:01:15.982 , 2 , Recording
-15:01:19.006 , 1 , GetState
-15:01:19.036 , 2 , Recording
-15:01:22.055 , 1 , GetState
-15:01:22.406 , 2 , Recording
-15:01:25.118 , 1 , GetState
-15:01:25.176 , 2 , Recording
-15:01:28.171 , 1 , GetState
-15:01:28.212 , 2 , Recording
-15:01:31.236 , 1 , GetState
-15:01:31.285 , 2 , Recording
-15:01:34.296 , 1 , GetState
-15:01:34.336 , 2 , Recording
-15:01:37.352 , 1 , GetState
-15:01:37.404 , 2 , Recording
-15:01:40.425 , 1 , GetState
-15:01:40.470 , 2 , Recording
-15:01:43.484 , 1 , GetState
-15:01:43.519 , 2 , Recording
-15:01:46.543 , 1 , GetState
-15:01:46.573 , 2 , Recording
-15:01:49.605 , 1 , GetState
-15:01:49.629 , 2 , Recording
-15:01:52.655 , 1 , GetState
-15:01:52.680 , 2 , Recording
-15:01:55.727 , 1 , GetState
-15:01:55.756 , 2 , Recording
-15:01:58.798 , 1 , GetState
-15:01:58.836 , 2 , Recording
-15:02:01.845 , 1 , GetState
-15:02:01.890 , 2 , Recording
-15:02:04.895 , 1 , GetState
-15:02:04.942 , 2 , Recording
-15:02:07.949 , 1 , GetState
-15:02:08.013 , 2 , Recording
-15:02:11.034 , 1 , GetState
-15:02:11.062 , 2 , Recording
-15:02:14.091 , 1 , GetState
-15:02:14.119 , 2 , Recording
-15:02:17.152 , 1 , GetState
-15:02:17.199 , 2 , Recording
-15:02:20.207 , 1 , GetState
-15:02:20.246 , 2 , Recording
-15:02:23.278 , 1 , GetState
-15:02:23.309 , 2 , Recording
-15:02:26.351 , 1 , GetState
-15:02:26.377 , 2 , Recording
-15:02:29.409 , 1 , GetState
-15:02:29.434 , 2 , Recording
-15:02:32.459 , 1 , GetState
-15:02:32.502 , 2 , Recording
-15:02:35.513 , 1 , GetState
-15:02:35.552 , 2 , Recording
-15:02:38.572 , 1 , GetState
-15:02:38.620 , 2 , Recording
-15:02:41.653 , 1 , GetState
-15:02:41.701 , 2 , Recording
-15:02:44.712 , 1 , GetState
-15:02:44.746 , 2 , Recording
-15:02:47.765 , 1 , GetState
-15:02:47.808 , 2 , Recording
-15:02:50.837 , 1 , GetState
-15:02:50.883 , 2 , Recording
-15:02:53.906 , 1 , GetState
-15:02:53.949 , 2 , Recording
-15:02:56.971 , 1 , GetState
-15:02:56.998 , 2 , Recording
-15:03:00.019 , 1 , GetState
-15:03:00.050 , 2 , Recording
-15:03:03.063 , 1 , GetState
-15:03:03.947 , 2 , Recording
-15:03:06.125 , 1 , GetState
-15:03:09.206 , 1 , GetState
-15:03:09.243 , 2 , Recording
-15:03:12.284 , 1 , GetState
-15:03:12.307 , 2 , Recording
-15:03:18.213 , 1 , Record
-15:03:19.871 , 1 , GetState
-15:03:19.882 , 2 , Idle
-15:03:20.243 , 1 , GetState
-15:03:20.249 , 2 , Idle
-15:03:20.740 , 1 , GetState
-15:03:20.752 , 2 , Idle
-15:03:21.404 , 1 , GetState
-15:03:21.454 , 2 , Idle
-15:03:23.328 , 1 , Power
+16:04:42.399 PM , 1 , GetState
+16:04:42.439 PM , 2 , Idle
+16:04:45.436 PM , 1 , GetState
+16:04:45.470 PM , 2 , Idle
+16:04:46.302 PM , 1 , Record
+16:04:46.303 PM , 1 , GetState
+16:04:46.344 PM , 2 , Idle
+16:04:48.473 PM , 1 , GetState
+16:04:48.504 PM , 2 , Recording
+16:04:51.546 PM , 1 , GetState
+16:04:51.582 PM , 2 , Recording
+16:04:54.603 PM , 1 , GetState
+16:04:54.646 PM , 2 , Recording
+16:04:57.647 PM , 1 , GetState
+16:04:57.671 PM , 2 , Recording
+16:05:00.699 PM , 1 , GetState
+16:05:00.723 PM , 2 , Recording
+16:05:03.746 PM , 1 , GetState
+16:05:03.778 PM , 2 , Recording
+16:05:06.808 PM , 1 , GetState
+16:05:06.830 PM , 2 , Recording
+16:05:09.858 PM , 1 , GetState
+16:05:09.906 PM , 2 , Recording
+16:05:12.913 PM , 1 , GetState
+16:05:12.935 PM , 2 , Recording
+16:05:15.990 PM , 1 , GetState
+16:05:16.010 PM , 2 , Recording
+16:05:19.039 PM , 1 , GetState
+16:05:19.065 PM , 2 , Recording
+16:05:22.094 PM , 1 , GetState
+16:05:22.116 PM , 2 , Recording
+16:05:25.172 PM , 1 , GetState
+16:05:25.201 PM , 2 , Recording
+16:05:28.218 PM , 1 , GetState
+16:05:28.257 PM , 2 , Recording
+16:05:31.271 PM , 1 , GetState
+16:05:31.306 PM , 2 , Recording
+16:05:34.348 PM , 1 , GetState
+16:05:34.382 PM , 2 , Recording
+16:05:37.422 PM , 1 , GetState
+16:05:37.466 PM , 2 , Recording
+16:05:40.493 PM , 1 , GetState
+16:05:40.526 PM , 2 , Recording
+16:05:43.556 PM , 1 , GetState
+16:05:43.912 PM , 2 , Recording
+16:05:46.615 PM , 1 , GetState
+16:05:46.666 PM , 2 , Recording
+16:05:49.661 PM , 1 , GetState
+16:05:49.690 PM , 2 , Recording
+16:05:52.729 PM , 1 , GetState
+16:05:52.771 PM , 2 , Recording
+16:05:55.785 PM , 1 , GetState
+16:05:55.826 PM , 2 , Recording
+16:05:58.874 PM , 1 , GetState
+16:05:58.893 PM , 2 , Recording
+16:06:01.949 PM , 1 , GetState
+16:06:01.970 PM , 2 , Recording
+16:06:04.996 PM , 1 , GetState
+16:06:05.049 PM , 2 , Recording
+16:06:08.049 PM , 1 , GetState
+16:06:08.075 PM , 2 , Recording
+16:06:11.103 PM , 1 , GetState
+16:06:11.149 PM , 2 , Recording
+16:06:14.158 PM , 1 , GetState
+16:06:14.202 PM , 2 , Recording
+16:06:17.214 PM , 1 , GetState
+16:06:17.248 PM , 2 , Recording
+16:06:20.262 PM , 1 , GetState
+16:06:20.305 PM , 2 , Recording
+16:06:23.327 PM , 1 , GetState
+16:06:24.042 PM , 2 , Recording
+16:06:26.398 PM , 1 , GetState
+16:06:27.212 PM , 2 , Recording
+16:06:29.458 PM , 1 , GetState
+16:06:30.350 PM , 2 , Recording
+16:06:32.514 PM , 1 , GetState
+16:06:32.551 PM , 2 , Recording
+16:06:35.574 PM , 1 , GetState
+16:06:35.594 PM , 2 , Recording
+16:06:38.641 PM , 1 , GetState
+16:06:38.671 PM , 2 , Recording
+16:06:41.690 PM , 1 , GetState
+16:06:41.726 PM , 2 , Recording
+16:06:44.733 PM , 1 , GetState
+16:06:44.774 PM , 2 , Recording
+16:06:47.802 PM , 1 , GetState
+16:06:47.825 PM , 2 , Recording
+16:06:50.865 PM , 1 , GetState
+16:06:50.904 PM , 2 , Recording
+16:06:53.928 PM , 1 , GetState
+16:06:53.952 PM , 2 , Recording
+16:06:56.982 PM , 1 , GetState
+16:06:57.022 PM , 2 , Recording
+16:07:00.039 PM , 1 , GetState
+16:07:00.078 PM , 2 , Recording
+16:07:03.095 PM , 1 , GetState
+16:07:03.119 PM , 2 , Recording
+16:07:06.148 PM , 1 , GetState
+16:07:06.202 PM , 2 , Recording
+16:07:09.201 PM , 1 , GetState
+16:07:09.246 PM , 2 , Recording
+16:07:12.264 PM , 1 , GetState
+16:07:12.304 PM , 2 , Recording
+16:07:15.319 PM , 1 , GetState
+16:07:15.346 PM , 2 , Recording
+16:07:18.366 PM , 1 , GetState
+16:07:18.399 PM , 2 , Recording
+16:07:21.424 PM , 1 , GetState
+16:07:21.461 PM , 2 , Recording
+16:07:24.478 PM , 1 , GetState
+16:07:24.496 PM , 2 , Recording
+16:07:27.543 PM , 1 , GetState
+16:07:27.577 PM , 2 , Recording
+16:07:30.605 PM , 1 , GetState
+16:07:30.647 PM , 2 , Recording
+16:07:33.666 PM , 1 , GetState
+16:07:33.708 PM , 2 , Recording
+16:07:36.724 PM , 1 , GetState
+16:07:36.749 PM , 2 , Recording
+16:07:39.776 PM , 1 , GetState
+16:07:39.815 PM , 2 , Recording
+16:07:42.820 PM , 1 , GetState
+16:07:42.860 PM , 2 , Recording
+16:07:45.876 PM , 1 , GetState
+16:07:45.897 PM , 2 , Recording
+16:07:48.937 PM , 1 , GetState
+16:07:48.963 PM , 2 , Recording
+16:07:52.035 PM , 2 , Recording
+16:07:51.996 PM , 1 , GetState
+16:07:55.111 PM , 2 , Recording
+16:07:55.064 PM , 1 , GetState
+16:07:58.128 PM , 1 , GetState
+16:07:58.159 PM , 2 , Recording
+16:08:01.223 PM , 2 , Recording
+16:08:01.192 PM , 1 , GetState
+16:08:04.276 PM , 2 , Recording
+16:08:04.257 PM , 1 , GetState
+16:08:07.343 PM , 2 , Recording
+16:08:07.319 PM , 1 , GetState
+16:08:10.417 PM , 2 , Recording
+16:08:10.376 PM , 1 , GetState
+16:08:13.462 PM , 2 , Recording
+16:08:13.424 PM , 1 , GetState
+16:08:16.508 PM , 2 , Recording
+16:08:16.470 PM , 1 , GetState
+16:08:19.562 PM , 2 , Recording
+16:08:19.523 PM , 1 , GetState
+16:08:22.619 PM , 2 , Recording
+16:08:22.580 PM , 1 , GetState
+16:08:25.670 PM , 2 , Recording
+16:08:25.633 PM , 1 , GetState
+16:08:28.749 PM , 2 , Recording
+16:08:28.711 PM , 1 , GetState
+16:08:31.830 PM , 2 , Recording
+16:08:31.788 PM , 1 , GetState
+16:08:34.848 PM , 1 , GetState
+16:08:34.870 PM , 2 , Recording
+16:08:37.941 PM , 2 , Recording
+16:08:37.907 PM , 1 , GetState
+16:08:41.006 PM , 2 , Recording
+16:08:40.985 PM , 1 , GetState
+16:08:44.078 PM , 2 , Recording
+16:08:44.045 PM , 1 , GetState
+16:08:47.156 PM , 2 , Recording
+16:08:47.117 PM , 1 , GetState
+16:08:50.210 PM , 2 , Recording
+16:08:50.184 PM , 1 , GetState
+16:08:53.257 PM , 2 , Recording
+16:08:53.233 PM , 1 , GetState
+16:08:56.328 PM , 2 , Recording
+16:08:56.302 PM , 1 , GetState
+16:08:59.380 PM , 2 , Recording
+16:08:59.350 PM , 1 , GetState
+16:09:02.394 PM , 1 , GetState
+16:09:02.441 PM , 2 , Recording
+16:09:05.484 PM , 2 , Recording
+16:09:05.444 PM , 1 , GetState
+16:09:08.487 PM , 1 , GetState
+16:09:08.926 PM , 2 , Recording
+16:09:11.529 PM , 1 , GetState
+16:09:12.680 PM , 2 , Recording
+16:09:14.586 PM , 1 , GetState
+16:09:17.645 PM , 1 , GetState
+16:09:20.730 PM , 2 , Recording
+16:09:20.704 PM , 1 , GetState
+16:09:23.802 PM , 2 , Recording
+16:09:23.771 PM , 1 , GetState
+16:09:26.859 PM , 2 , Recording
+16:09:26.837 PM , 1 , GetState
+16:09:29.940 PM , 2 , Recording
+16:09:29.899 PM , 1 , GetState
+16:09:32.986 PM , 2 , Recording
+16:09:32.965 PM , 1 , GetState
+16:09:36.060 PM , 2 , Recording
+16:09:36.021 PM , 1 , GetState
+16:09:39.105 PM , 2 , Recording
+16:09:39.076 PM , 1 , GetState
+16:09:42.127 PM , 1 , GetState
+16:09:42.163 PM , 2 , Recording
+16:09:45.239 PM , 2 , Recording
+16:09:45.191 PM , 1 , GetState
+16:09:48.240 PM , 1 , GetState
+16:09:48.282 PM , 2 , Recording
+16:09:51.361 PM , 2 , Recording
+16:09:51.323 PM , 1 , GetState
+16:09:54.437 PM , 2 , Recording
+16:09:54.402 PM , 1 , GetState
+16:09:57.541 PM , 2 , Recording
+16:09:57.462 PM , 1 , GetState
+16:10:00.530 PM , 2 , Recording
+16:10:00.505 PM , 1 , GetState
+16:10:03.591 PM , 2 , Recording
+16:10:03.545 PM , 1 , GetState
+16:10:06.586 PM , 1 , GetState
+16:10:06.613 PM , 2 , Recording
+16:10:09.641 PM , 1 , GetState
+16:10:09.686 PM , 2 , Recording
+16:10:12.681 PM , 1 , GetState
+16:10:13.184 PM , 2 , Recording
+16:10:15.751 PM , 1 , GetState
+16:10:18.797 PM , 1 , GetState
+16:10:21.850 PM , 1 , GetState
+16:10:24.897 PM , 1 , GetState
+16:10:24.915 PM , 2 , Recording
+16:10:27.953 PM , 1 , GetState
+16:10:27.987 PM , 2 , Recording
+16:10:31.005 PM , 1 , GetState
+16:10:31.038 PM , 2 , Recording
+16:10:34.056 PM , 1 , GetState
+16:10:34.088 PM , 2 , Recording
+16:10:37.142 PM , 1 , GetState
+16:10:37.190 PM , 2 , Recording
+16:10:40.218 PM , 1 , GetState
+16:10:40.240 PM , 2 , Recording
+16:10:43.273 PM , 1 , GetState
+16:10:43.309 PM , 2 , Recording
+16:10:46.340 PM , 1 , GetState
+16:10:46.368 PM , 2 , Recording
+16:10:49.405 PM , 1 , GetState
+16:10:49.433 PM , 2 , Recording
+16:10:52.452 PM , 1 , GetState
+16:10:52.508 PM , 2 , Recording
+16:10:55.498 PM , 1 , GetState
+16:10:55.535 PM , 2 , Recording
+16:10:58.559 PM , 1 , GetState
+16:10:59.544 PM , 2 , Recording
+16:11:01.626 PM , 1 , GetState
+16:11:02.550 PM , 2 , Recording
+16:11:04.686 PM , 1 , GetState
+16:11:05.910 PM , 2 , Recording
+16:11:07.759 PM , 1 , GetState
+16:11:07.787 PM , 2 , Recording
+16:11:10.801 PM , 1 , GetState
+16:11:10.839 PM , 2 , Recording
+16:11:13.859 PM , 1 , GetState
+16:11:13.888 PM , 2 , Recording
+16:11:16.920 PM , 1 , GetState
+16:11:16.947 PM , 2 , Recording
+16:11:19.987 PM , 1 , GetState
+16:11:20.033 PM , 2 , Recording
+16:11:23.063 PM , 1 , GetState
+16:11:23.095 PM , 2 , Recording
+16:11:26.125 PM , 1 , GetState
+16:11:26.148 PM , 2 , Recording
+16:19:15.182 PM , 1 , GetState
+16:19:15.215 PM , 2 , Error
+16:19:18.221 PM , 1 , GetState
+16:19:18.259 PM , 2 , Error
+16:19:19.945 PM , 1 , Reset
+16:19:19.945 PM , 1 , GetState
+16:19:19.984 PM , 2 , Reset
+16:19:21.258 PM , 1 , GetState
+16:19:21.293 PM , 2 , Reset
+16:19:24.309 PM , 1 , GetState
+16:19:24.338 PM , 2 , Reset
+16:19:27.346 PM , 1 , GetState
+16:19:27.375 PM , 2 , Reset
+16:19:30.381 PM , 1 , GetState
+16:19:30.412 PM , 2 , Reset
+16:19:33.430 PM , 1 , GetState
+16:19:33.494 PM , 2 , Reset
+16:19:36.479 PM , 1 , GetState
+16:19:36.517 PM , 2 , Reset
+16:19:39.531 PM , 1 , GetState
+16:19:39.559 PM , 2 , Reset
+16:19:42.569 PM , 1 , GetState
+16:19:42.598 PM , 2 , Idle
+16:19:44.045 PM , 1 , Record
+16:19:44.045 PM , 1 , GetState
+16:19:44.088 PM , 2 , Idle
+16:19:45.603 PM , 1 , GetState
+16:19:45.631 PM , 2 , Recording
+16:19:48.653 PM , 1 , GetState
+16:19:48.699 PM , 2 , Recording
+16:19:51.714 PM , 1 , GetState
+16:19:51.747 PM , 2 , Recording
+16:19:54.780 PM , 1 , GetState
+16:19:54.808 PM , 2 , Recording
+16:19:57.838 PM , 1 , GetState
+16:19:57.866 PM , 2 , Recording
+16:20:00.895 PM , 1 , GetState
+16:20:00.935 PM , 2 , Recording
+16:20:03.956 PM , 1 , GetState
+16:20:04.002 PM , 2 , Recording
+16:20:07.014 PM , 1 , GetState
+16:20:07.049 PM , 2 , Recording
+16:20:08.595 PM , 1 , Power

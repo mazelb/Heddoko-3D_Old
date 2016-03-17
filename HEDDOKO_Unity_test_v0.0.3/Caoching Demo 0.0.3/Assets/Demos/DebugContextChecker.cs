@@ -20,6 +20,7 @@ namespace Assets.Demos
    public class DebugContextChecker: MonoBehaviour
     {
         [SerializeField] private GameObject mChildren;
+        [SerializeField] private GameObject[] mDebuggingItems;
         [SerializeField]
         private GameObject mSegmentOptions;
         void Awake()
@@ -34,14 +35,22 @@ namespace Assets.Demos
 #endif
             mChildren.SetActive(vIsDebug);
             mSegmentOptions.SetActive(vIsDebug);
+            foreach (var vDebuggingItems in mDebuggingItems)
+            {
+                vDebuggingItems.SetActive(vIsDebug);
+            }
         }
         public void EnableDebugContext()
-        {
+        { 
             bool vIsActive = mChildren.activeSelf;
             bool vIsSegmentOptionActive = mSegmentOptions.activeSelf;
             mChildren.SetActive(!vIsActive);
             mSegmentOptions.SetActive(!vIsSegmentOptionActive);
             DebugLogger.Settings.LogAll = true;
+            foreach (var vDebuggingItems in mDebuggingItems)
+            {
+                vDebuggingItems.SetActive(true);
+            }
         }
     }
 

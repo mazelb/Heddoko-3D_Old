@@ -311,3 +311,6 @@ System.Net.Sockets.SocketException: A connection attempt failed because the conn
   at Assets.Scripts.Communication.SynchronousClient.StartClientAndSendData (System.String vMsg) [0x000a8] in E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\Caoching Demo 0.0.3\Assets\Scripts\Communication\SynchronousClient.cs:108 
 14:55:01.368 , 9 , time taken from start until this exception 10004 ms
 14:58:59.542 , 10 , Synchronous Client instantiated, current timeout is set to 10000
+16:02:44.755 , 10 , Synchronous Client instantiated, current timeout is set to 10000
+16:04:40.277 , 10 , Synchronous Client instantiated, current timeout is set to 10000
+16:19:11.912 , 10 , Synchronous Client instantiated, current timeout is set to 10000
