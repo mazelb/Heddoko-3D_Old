@@ -19,8 +19,8 @@ namespace Assets.Scripts.Body_Data.View
         private static List<RenderedBody> sAvailablePool  = new List<RenderedBody>(10);
         public static Transform ParentGroupTransform;
         //available layers that can be used
-        private static Stack<LayerMask> sAvailableLayers = new Stack<LayerMask>(8);
-        private static Stack<LayerMask> sInUseLayers = new Stack<LayerMask>(8);
+        private static List<LayerMask> sAvailableLayers = new List<LayerMask>(8);
+        private static List<LayerMask> sInUseLayers = new List<LayerMask>(8);
         private static bool sInitiated;
       
         /// <summary>
@@ -48,8 +48,9 @@ namespace Assets.Scripts.Body_Data.View
                 vPooledBody.gameObject.SetActive(true);
                 sAvailablePool.RemoveAt(0);
                 sInUsePool.Add(vPooledBody);
-                int vLayer = sAvailableLayers.Pop();
-                sInUseLayers.Push(vLayer);
+                int vLayer = sAvailableLayers[0];
+                sAvailableLayers.RemoveAt(0);//.Pop();
+                sInUseLayers.Add(vLayer);
                 vPooledBody.CurrentLayerMask =vLayer;
             }
             else
@@ -62,9 +63,9 @@ namespace Assets.Scripts.Body_Data.View
                 vPooledBody.Init(vBodyTypes);
                 vPooledBody.gameObject.SetActive(true); 
                 vNew.transform.SetParent(ParentGroupTransform);
-                sInUsePool.Add(vPooledBody);
-                int vLayer = sAvailableLayers.Pop();
-                sInUseLayers.Push(vLayer);
+                int vLayer = sAvailableLayers[0];
+                sAvailableLayers.RemoveAt(0); 
+                sInUseLayers.Add(vLayer);
                 vPooledBody.CurrentLayerMask = vLayer;
             }
             return vPooledBody;
@@ -76,11 +77,14 @@ namespace Assets.Scripts.Body_Data.View
         /// <param name="vRenderedBody"></param>
         public static void ReleaseResource(RenderedBody vRenderedBody)
         {
+            Debug.Log("in rendered body pool");
             vRenderedBody.Cleanup();
             sInUsePool.Remove(vRenderedBody);
             sAvailablePool.Add(vRenderedBody);
-            int vLayer = sInUseLayers.Pop();
-            sAvailableLayers.Push(vLayer); 
+           
+            int vLayer = sInUseLayers[0];
+            sInUseLayers.RemoveAt(0);
+            sAvailableLayers.Add(vLayer); 
         }
 
         /// <summary>
@@ -90,10 +94,10 @@ namespace Assets.Scripts.Body_Data.View
         {
             for (int i = 6; i >= 0; i--)
             {
-                sAvailableLayers.Push(LayerMask.NameToLayer("RenderedBody"+i));
+                sAvailableLayers.Add(LayerMask.NameToLayer("RenderedBody"+i));
             }
             //default model
-            sAvailableLayers.Push(LayerMask.NameToLayer("model")); 
+            sAvailableLayers.Add(LayerMask.NameToLayer("model")); 
         }
 
     }

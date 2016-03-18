@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+ 
 using UnityEngine.EventSystems;
-using System.Collections;
+ 
 
 namespace UIWidgets {
 	/// <summary>
@@ -21,8 +21,8 @@ namespace UIWidgets {
 		/// <param name="eventData">Event data.</param>
 		public void OnPointerUp (PointerEventData eventData)
 		{
-			
-		}
+           
+        }
 		#endregion
 
 		#region IPointerDownHandler implementation
@@ -32,8 +32,8 @@ namespace UIWidgets {
 		/// <param name="eventData">Event data.</param>
 		public void OnPointerDown (PointerEventData eventData)
 		{
-			
-		}
+             
+        }
 		#endregion
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace UIWidgets {
 		/// <param name="eventData">Event data.</param>
 		public void OnPointerClick(PointerEventData eventData)
 		{
-			OnClick.Invoke();
-		}
+			OnClick.Invoke(); 
+        }
 	}
 }

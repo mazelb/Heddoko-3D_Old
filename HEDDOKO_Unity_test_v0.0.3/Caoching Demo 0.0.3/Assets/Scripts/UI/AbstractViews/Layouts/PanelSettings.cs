@@ -188,6 +188,7 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             if (CameraToBodyPair.Body != null)
             {
                 CameraToBodyPair.Body.ReleaseRenderedBody();
+                Debug.Log("RELEASING BODY");
             }
         }
     }

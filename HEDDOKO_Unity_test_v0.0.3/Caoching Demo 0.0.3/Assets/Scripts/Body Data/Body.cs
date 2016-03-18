@@ -511,6 +511,7 @@ public class Body
         if (RenderedBody != null)
         {
             RenderedBodyPool.ReleaseResource(RenderedBody);
+            Debug.Log("rELEASE ReleaseRenderedBody ");
         }
     }
 }

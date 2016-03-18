@@ -288,7 +288,7 @@
             <summary>Tcp Router Response. Only used when Photon is setup as TCP router! Routing is ok.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.StatusCode.TcpRouterResponseNodeIdUnknown">
-            <summary>Tcp Router Response. Only used when Photon is setup as TCP router! Routing node unknown. Check client connect values.</summary>
+            <summary>Tcp Router Response. Only used when Photon is setup as TCP router! Routing vNode unknown. Check client connect values.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.StatusCode.TcpRouterResponseEndpointUnknown">
             <summary>Tcp Router Response. Only used when Photon is setup as TCP router! Routing endpoint unknown.</summary>

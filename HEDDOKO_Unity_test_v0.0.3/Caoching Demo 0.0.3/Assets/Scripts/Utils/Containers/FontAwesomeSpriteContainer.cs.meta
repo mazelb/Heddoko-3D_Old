@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: 8cf973fbefd735c45ab645ae8d113f72
-timeCreated: 1457043994
+guid: e18ba958d4b77a046af2dab1a00c9f22
+timeCreated: 1458245000
 licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Spri: {fileID: 2800000, guid: 569c36777b050a5448146bb6affef9b3, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

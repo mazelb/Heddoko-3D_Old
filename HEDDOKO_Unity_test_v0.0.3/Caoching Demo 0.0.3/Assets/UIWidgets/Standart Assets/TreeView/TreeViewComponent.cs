@@ -33,12 +33,12 @@ namespace UIWidgets {
 		/// <summary>
 		/// Sets the data.
 		/// </summary>
-		/// <param name="newNode">Node.</param>
-		/// <param name="depth">Depth.</param>
-		public override void SetData(TreeNode<TreeViewItem> newNode, int depth)
+		/// <param name="vNode">Node.</param>
+		/// <param name="vDepth">Depth.</param>
+		public override void SetData(TreeNode<TreeViewItem> vNode, int vDepth)
 		{
-			Node = newNode;
-			base.SetData(Node, depth);
+			Node = vNode;
+			base.SetData(Node, vDepth);
 
 			Item = (Node==null) ? null : Node.Item;
 		}
