@@ -22,6 +22,9 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         public Text CreatedAtDescription;
         public Text Tag;
 
+        /// <summary>
+        /// The gameobject that can be resized
+        /// </summary>
         public override GameObject[] ResizableGameObjects
         {
             get { return new GameObject[] {MovementTitle.gameObject, CreatedAtDescription.gameObject ,Tag.gameObject}; }

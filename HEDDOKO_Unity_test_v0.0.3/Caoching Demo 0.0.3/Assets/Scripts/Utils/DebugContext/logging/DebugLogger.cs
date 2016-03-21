@@ -235,6 +235,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             }
             catch (Exception e)
             {
+                string vMessage = vLog.LogType.ToString() + " " + vLog.Message;
                 Debug.Log("<color=red>Failed to write to log type:</color> " + vLog  +" "+e); 
             }
         }

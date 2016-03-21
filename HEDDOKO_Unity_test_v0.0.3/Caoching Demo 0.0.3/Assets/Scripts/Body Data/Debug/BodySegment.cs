@@ -78,15 +78,31 @@ public partial class BodySegment
     Vector3 vRLAAxisRightTPose = new Vector3(0f, 0f, 0f);
     Vector3 vRLAAxisRightZombie = new Vector3(0f, 0f, 0f);
     Vector3 vRLAAxisUpZombie = new Vector3(0f, 0f, 0f);
-    Quaternion vRAQuatRights = Quaternion.identity;
-    Quaternion vRAQuatUps = Quaternion.identity;
+    Vector3 vRLAAxisUpZombieSum = new Vector3(0f, 0f, 0f);
+    Vector3 vRLAAxisRightZombieSum = new Vector3(0f, 0f, 0f);
 
     Vector3 vLLAAxisRightTPose = new Vector3(0f, 0f, 0f);
     Vector3 vLLAAxisRightZombie = new Vector3(0f, 0f, 0f);
+    Vector3 vLLAAxisRightZombieSum = new Vector3(0f, 0f, 0f);
     Vector3 vLLAAxisUpZombie = new Vector3(0f, 0f, 0f);
-    Quaternion vLAQuatRights = Quaternion.identity;
-    Quaternion vLAQuatUps = Quaternion.identity;
+    Vector3 vLLAAxisUpZombieSum = new Vector3(0f, 0f, 0f);
+    Vector3 vRUAAxisRightZombie = new Vector3(0f, 0f, 0f);
+    Vector3 vRUAAxisUpZombie = new Vector3(0f, 0f, 0f);
+    Vector3 vLUAAxisRightZombie = new Vector3(0f, 0f, 0f);
+    Vector3 vLUAAxisUpZombie = new Vector3(0f, 0f, 0f);
 
+    //Right lower arm
+    Quaternion vRLAQuatRights = Quaternion.identity;
+    Quaternion vRLAQuatUps = Quaternion.identity;
+    //Right uper arm
+    Quaternion vRUAQuatRights = Quaternion.identity;
+    Quaternion vRUAQuatUps = Quaternion.identity;
+    //Left lower arm
+    Quaternion vLLAQuatRights = Quaternion.identity;
+    Quaternion vLLAQuatUps = Quaternion.identity;
+    //Left uper arm
+    Quaternion vLUAQuatRights = Quaternion.identity;
+    Quaternion vLUAQuatUps = Quaternion.identity;
     ////////************  6th try  ////************
     public Quaternion vUpArmQuatSaved= Quaternion.identity;
     public Quaternion vLoArmQuatSaved = Quaternion.identity;
@@ -607,12 +623,41 @@ public partial class BodySegment
     public void MapArmsOrientations(Vector3 vUAInitEuler, Vector3 vUACurEuler, Vector3 vLAInitEuler, Vector3 vLACurEuler, Vector3 vTorsoInitEuler, Vector3 vTorsoCurEuler,
                                     BodySubSegment vUASubsegment, BodySubSegment vLASubsegment, BodySubSegment vTorsoSubSegment, BodySubSegment vHipsSubsegment, bool vIsRight = true)
     {
+        ////Upper arm
+        //Quaternion vUpArmInitQuatY = Quaternion.Euler(0, -vUAInitEuler.z, 0);
+        //Quaternion vUpArmQuatY = Quaternion.Euler(0,  -vUACurEuler.z, 0);
+        //vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
+        
+
+        //Quaternion vUpArmInitQuatX = Quaternion.Euler(vUAInitEuler.x, 0, 0);
+        //Quaternion vUpArmQuatX = Quaternion.Euler(vUACurEuler.x, 0, 0);
+        //vUpArmQuatX = Quaternion.Inverse(vUpArmInitQuatX) * vUpArmQuatX;
+
+        //Quaternion vUpArmInitQuatZ = Quaternion.Euler(0, 0, -vUAInitEuler.y);
+        //Quaternion vUpArmQuatZ = Quaternion.Euler(0, 0, -vUACurEuler.y);
+        //vUpArmQuatZ = Quaternion.Inverse(vUpArmInitQuatZ) * vUpArmQuatZ;
+       
+
+        ////Lower arm
+        //Quaternion vLoArmInitQuatY = Quaternion.Euler(0, -vLAInitEuler.z, 0);
+        //Quaternion vLoArmQuatY = Quaternion.Euler(0, -vLACurEuler.z, 0);
+        //vLoArmQuatY = Quaternion.Inverse(vLoArmInitQuatY) * vLoArmQuatY;
+        
+
+        //Quaternion vLoArmInitQuatX = Quaternion.Euler(vLAInitEuler.x, 0, 0);
+        //Quaternion vLoArmQuatX = Quaternion.Euler(vLACurEuler.x, 0, 0);
+        //vLoArmQuatX = Quaternion.Inverse(vLoArmInitQuatX) * vLoArmQuatX;
+
+        //Quaternion vLoArmInitQuatZ = Quaternion.Euler(0, 0, -vLAInitEuler.y);
+        //Quaternion vLoArmQuatZ = Quaternion.Euler(0, 0, -vLACurEuler.y);
+        //vLoArmQuatZ = Quaternion.Inverse(vLoArmInitQuatZ) * vLoArmQuatZ;
+
         //Upper arm
         //Quaternion vUpArmInitQuatY = Quaternion.Euler(0, 0, 0);
         //Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
         //vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
         //vUpArmQuatY = Quaternion.Inverse(vUpArmQuatY);
-		
+
         Quaternion vUpArmInitQuatY = Quaternion.Euler(0, (vIsRight) ? vUAInitEuler.z : (vUAInitEuler.z), 0);
         Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? vUACurEuler.z : (vUACurEuler.z), 0);
         vUpArmQuatY = Quaternion.Inverse(vUpArmInitQuatY) * vUpArmQuatY;
@@ -620,13 +665,13 @@ public partial class BodySegment
 
         Quaternion vUpArmInitQuatX = Quaternion.Euler(vUAInitEuler.x, 0, 0);
         Quaternion vUpArmQuatX = Quaternion.Euler(vUACurEuler.x, 0, 0);
-        vUpArmQuatX = Quaternion.Inverse(vUpArmInitQuatX) * vUpArmQuatX;
+        vUpArmQuatX = vUpArmQuatX*Quaternion.Inverse(vUpArmInitQuatX) ;
 
         Quaternion vUpArmInitQuatZ = Quaternion.Euler(0, 0, (vIsRight) ? vUAInitEuler.y : (vUAInitEuler.y));
         Quaternion vUpArmQuatZ = Quaternion.Euler(0, 0, (vIsRight) ? vUACurEuler.y : (vUACurEuler.y));
         vUpArmQuatZ = Quaternion.Inverse(vUpArmInitQuatZ) * vUpArmQuatZ;
         vUpArmQuatZ = Quaternion.Inverse(vUpArmQuatZ);
-		
+
         //Lower arm
         //Quaternion vLoArmInitQuatY = Quaternion.Euler(0, 0, 0);
         //Quaternion vLoArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);
@@ -647,9 +692,27 @@ public partial class BodySegment
         vLoArmQuatZ = Quaternion.Inverse(vLoArmInitQuatZ) * vLoArmQuatZ;
         vLoArmQuatZ = Quaternion.Inverse(vLoArmQuatZ);
 
+        //if (IsCalibrating)
+        //{
+        //    if (vIsRight)
+        //    {
+        //        vLoArmQuatZ = vLoArmQuatZ * Quaternion.Inverse(vRLAQuatUps) ;
+        //        vUpArmQuatZ = vUpArmQuatZ * Quaternion.Inverse(vRUAQuatUps) ;
+        //        Debug.Log(vRLAQuatUps + "right");
+        //    }
+        //    else
+        //    {
+        //        vLoArmQuatZ = vLoArmQuatZ * Quaternion.Inverse(vLLAQuatUps);
+        //        vUpArmQuatZ = vUpArmQuatZ * Quaternion.Inverse(vLUAQuatUps);
+        //        Debug.Log(vLLAQuatUps+ "Left");
+        //    }
+        //}
+
         Quaternion vUpArmQuat = vUpArmQuatY * vUpArmQuatX * vUpArmQuatZ;
         Quaternion vLoArmQuat = vLoArmQuatY * vLoArmQuatX * vLoArmQuatZ;
-
+        //Quaternion vUpArmQuat = vUpArmQuatY * vUpArmQuatZ * vUpArmQuatX;
+        //Quaternion vLoArmQuat = vLoArmQuatY * vLoArmQuatZ * vLoArmQuatX;
+        //Debug.Log(vUpArmQuat1 + ":" + vUpArmQuat + "-" + vLoArmQuat1 + ":" + vLoArmQuat);
         vCurrentAngle += 0.01f;
 		 
        //Get necessary Axis info
@@ -663,7 +726,7 @@ public partial class BodySegment
         Vector3 vUANewForward = Vector3.forward;
         Vector3 vLANewForward = Vector3.forward;
 		
-       vUAAxisUp = vUpArmQuat * Vector3.up;
+        vUAAxisUp = vUpArmQuat * Vector3.up;
         vUAAxisRight = vUpArmQuat * Vector3.right;
         vUAAxisForward = vUpArmQuat * Vector3.forward;
 		
@@ -676,56 +739,7 @@ public partial class BodySegment
         {
             Quaternion vLoArmQuatNew;
             Quaternion vUpArmQuatNew;
-
-            //////---***********6th try  ************
-            //// calculate the axis of rotation between two consequtive frames
-
-            //Quaternion vDiffCalibrateUp2 = Quaternion.Inverse(vUpArmQuatSaved1) * vUpArmQuat;
-            //Quaternion vDiffCalibrateLo2 = Quaternion.Inverse(vLoArmQuatSaved1) * vLoArmQuat;
-
-
-            //float angleUp = 0.0F;
-            //Vector3 axisUp = Vector3.zero;
-            //vDiffCalibrateUp2.ToAngleAxis(out angleUp, out axisUp);
-            //axisUp = axisUp.normalized;
-
-            //float angleLo = 0.0F;
-            //Vector3 axisLo = Vector3.zero;
-            //vDiffCalibrateLo2.ToAngleAxis(out angleLo, out axisLo);
-            //axisLo = axisLo.normalized;
-
-            ////Debug.Log("6th" + " ;" + axisLo + " ;" + axisUp);
-
-            //////****** write *******
-            //int vFileNameIncrement = 10;
-            ////Make sure we have a directory to write to.
-            //string vDataPath = "../RecordMar9";
-            //if (!Directory.Exists(vDataPath))
-            //{
-            //    Directory.CreateDirectory(vDataPath);
-            //}
-            //string mRecordingFileNameR = string.Format("{0}/{1}_{2}.csv", vDataPath, "6th_ElbowRight", vFileNameIncrement);
-            //string mRecordingFileNameL = string.Format("{0}/{1}_{2}.csv", vDataPath, "6th_ElbowLeft", vFileNameIncrement);
-            //StreamWriter writeRightArm = new StreamWriter(mRecordingFileNameR, true);
-            //StreamWriter writeLeftArm = new StreamWriter(mRecordingFileNameL, true);
-
-            //if (vIsRight)
-            //{
-            //    writeRightArm.WriteLine(angleLo + "," + axisLo.x + "," + axisLo.y + "," + axisLo.z + "," + angleUp + "," + axisUp.x + "," + axisUp.y + "," + axisUp.z);
-            //}
-            //else
-            //{
-            //    writeLeftArm.WriteLine(angleLo + "," + axisLo.x + "," + axisLo.y + "," + axisLo.z + "," + angleUp + "," + axisUp.x + "," + axisUp.y + "," + axisUp.z);
-            //}
-
-            //writeRightArm.Close();
-            //writeLeftArm.Close();
-
-            ////save data for next frame
-            //vUpArmQuatSaved1 = vUpArmQuat;
-            //vLoArmQuatSaved1 = vLoArmQuat;
-
-            /////// ********** 7th try ****** cross product of rights is the rotation axis in 1st and last frame
+            //lisa recording
             if (vIsRight)
             {
                 counterR++;
@@ -734,231 +748,214 @@ public partial class BodySegment
             {
                 counterL++;
             }
-            ////Debug.Log(counterR+ ";" + counterL);
-            //if (counterR< 330 && counterR>220) //end of the desired movement counter<150 && counter>140 -for right arm only
-            //{
-            //    vUAAxisRight = vUpArmQuat * Vector3.right;
-            //    vLAAxisRight = vLoArmQuat * Vector3.right;
-            //    vUAAxisUp = vUpArmQuat * Vector3.up;
-            //    vLAAxisUp = vLoArmQuat * Vector3.up;
-            //    ////Initial frame right axis -....
-            //    Vector3 vUAAxisRightInit = Vector3.right;
-            //    Vector3 vLAAxisRightInit = Vector3.right;
-
-            //    //    find the rotation axis with sensor coordinates - current and initial frame right axis cross product is the rotation axis
-            //     vRotAxisUp = Vector3.Cross(vUAAxisRightInit,- vUAAxisRight).normalized; //rot axis btw start and end of movement
-            //     vRotAxisLo = Vector3.Cross(vLAAxisRightInit, -vLAAxisRight).normalized;
-            //     vRotAngleUp = Vector3.Angle(vUAAxisRightInit, -vUAAxisRight);
-            //     vRotAngleLo = Vector3.Angle(vLAAxisRightInit, -vLAAxisRight); // felxion angle
-            //     //Debug.Log(counterR+"vRotAxisUp" + vRotAxisUp + "vRotAxisLo" + vRotAxisLo + "LoArmUp" + vLAAxisUp + "UpperUp" + vUAAxisUp + "vRotAngleLo" + vRotAngleLo + "vRotAngleUp" + vRotAngleUp);
-
-            //     vAlignAngleLo = Vector3.Angle(vRotAxisUp, Vector3.up); 
-            //     vAlignAxisLo = Vector3.Cross(vRotAxisUp, Vector3.up).normalized;
-            //     vAlignAngleUp = Vector3.Angle(vRotAxisLo,Vector3.up);
-            //     vAlignAxisUp = Vector3.Cross(vRotAxisLo, Vector3.up);
-
-            //     vQuatAllignUp = Quaternion.AngleAxis(vAlignAngleUp,vAlignAxisUp);
-            //     vQuatAllignLo = Quaternion.AngleAxis(vAlignAngleLo, vAlignAxisLo);
-
-            //    //////   ***write * ******to chek the amounts
-            //    //int vFileNameIncrement7 = 7;
-            //    ////Make sure we have a directory to write to.
-            //    //string vDataPath7 = "../RecordFati2";
-            //    //if (!Directory.Exists(vDataPath7))
-            //    //{
-            //    //    Directory.CreateDirectory(vDataPath7);
-            //    //}
-            //    //string mRecordingFileNameR7 = string.Format("{0}/{1}_{2}.csv", vDataPath7, "_RightArm", vFileNameIncrement7);
-            //    //string mRecordingFileNameL7 = string.Format("{0}/{1}_{2}.csv", vDataPath7, "_LeftArm", vFileNameIncrement7);
-            //    //StreamWriter writeRightArm7 = new StreamWriter(mRecordingFileNameR7, true);
-            //    //StreamWriter writeLeftArm7 = new StreamWriter(mRecordingFileNameL7, true);
-
-            //    //if (vIsRight)
-            //    //{
-            //    //    writeRightArm7.WriteLine(angleLo + "," + vRotAxisLo.x + "," + vRotAxisLo.y + "," + vRotAxisLo.z + "," + angleUp + "," + vRotAxisUp.x + "," + vRotAxisUp.y + "," + vRotAxisUp.z);
-            //    //}
-
-            //    //else
-            //    //{
-            //    //    writeLeftArm7.WriteLine(angleLo + "," + vRotAxisLo.x + "," + vRotAxisLo.y + "," + vRotAxisLo.z + "," + angleUp + "," + vRotAxisUp.x + "," + vRotAxisUp.y + "," + vRotAxisUp.z);
-            //    //}
-            //    //writeRightArm7.Close();
-            //    //writeLeftArm7.Close();
-            //}   
-            //else if(counterR>150)
-            //{
-            //    vUpArmQuatNew = vQuatAllignUp * vUpArmQuat;
-            //    vLoArmQuatNew = vQuatAllignLo * vLoArmQuat;
-            //    //vLoArmQuat = vLoArmQuatNew;
-            //    //vUpArmQuat = vUpArmQuatNew;
-            //}
-
-            ///// ********** 8th  try ****** from T-Pose to zombie pose (90 degree rotation of the upper arm to front)
-
             vUAAxisRight = vUpArmQuat * Vector3.right;
             vLAAxisRight = vLoArmQuat * Vector3.right;
             vUAAxisUp = vUpArmQuat * Vector3.up;
             vLAAxisUp = vLoArmQuat * Vector3.up;
+
             if (vIsRight)
             {
-                //if (counterR < 35) //T-pose-horizontal shoulder movement
-                //{
-                //    Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                //}
-                //if (counterR < 202 && counterR > 195)
-                //{
-                //    Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                //}
-
-                if (counterR < 20) //T-pose-horizontal elbow movement
+                if (counterR < 200) //T-pose-horizontal elbow movement
                 {
-                    Debug.Log( "Right"+counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                    vRLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal =(1,0,0)
+                    //Debug.Log( "Right"+counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
+                    vRLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal =(1,0,0)                    
                 }
-                if (counterR < 297 && counterR > 293) // zombie pose-horizontal elbow movement (90 degree rotation frames)
+                if (counterR < 590 && counterR > 460) // zombie pose-horizontal elbow movement (90 degree rotation frames) -TO DO : average the up axis
                 {
                     Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
                     vRLAAxisRightZombie = vLAAxisRight; //right direction in zombie pose: the ideal is (0,0,1)
                     vRLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose ideal is (1,0,0) we suppose ideal movement around up initial axis at T-pose
+                    // Upper arm
+                    vRUAAxisRightZombie = vUAAxisRight; 
+                    vRUAAxisUpZombie = vUAAxisUp;
+
+                    vRLAAxisRightZombieSum += vLAAxisRight;
+                    vRLAAxisUpZombieSum += vRLAAxisUpZombie;
                 }
-                vRAQuatRights = Quaternion.FromToRotation(vRLAAxisRightZombie, Vector3.forward);
-                vRAQuatUps = Quaternion.FromToRotation(vRLAAxisUpZombie, Vector3.up);
-                Debug.Log("Right" + counterR + ";" + vRAQuatRights + ";" + vRAQuatUps);
-                if (counterR > 296) // apply calibration from now on// this may mess up T-pose at first, TODO: fix it!
+                //right lower arm
+                vRLAQuatRights = Quaternion.FromToRotation(vRLAAxisRightZombie, Vector3.forward);
+                vRLAQuatUps = Quaternion.FromToRotation(vRLAAxisUpZombie, Vector3.up);
+                //right uper arm
+                vRUAQuatRights = Quaternion.FromToRotation(vRUAAxisRightZombie, Vector3.forward);
+                vRUAQuatUps = Quaternion.FromToRotation(vRUAAxisUpZombie, Vector3.up);
+
+                Debug.Log("Right" + counterR + ";" + Vector3.Cross(vRLAAxisRightTPose, vRLAAxisRightZombie) + ";" + vRLAQuatRights + ";" + vRLAQuatUps);
+                if (counterR > 590) // apply calibration from now on//
                 {
-                    vLoArmQuat = vRAQuatUps * vLoArmQuat;
-                    //if (IsFusingSubSegments)// apply 
-                    //{
-                    //    vLoArmQuat = vRAQuatRights * vLoArmQuat;
-                    //}
+                    vLoArmQuat = Quaternion.Inverse(vRLAQuatUps) * vLoArmQuat * vRLAQuatUps;
+                    vUpArmQuat = Quaternion.Inverse(vRUAQuatUps)* vUpArmQuat* vRUAQuatUps;
                 }
-                //if (counter < 35) //T-pose-horizontal shoulder
-                //{
-                //    Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                //}
-                //if (counterR < 202 && counterR > 195)
-                //{
-                //    Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                //}
             }
 
-            else //left arm
+            else //left arm -TODO Averaging the mialigned value
             {
-             
-                if (counterL < 20) //T-pose-horizontal elbow
+                if (counterL < 390) //T-pose-horizontal elbow
                 {
-                    Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+                    //Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
                     vLLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal(1,0,0)
                 }
-                if (counterL < 297 && counterR > 293)
+                if (counterL < 590  && counterL > 475)
                 {
-                    Debug.Log("Left" + counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
-                    vLLAAxisRightZombie = vLAAxisRight; //right direction in zombie pose the ideal is (0,0,1)
+                   Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+                    vLLAAxisRightZombie = vLAAxisRight;
+                    //right direction in zombie pose the ideal is (0,0,1)
+                    //vLLAAxisRightZombie.x = -vLLAAxisRightZombie.x;
                     vLLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose ideal is (1,0,0) we suppose ideal movement around up initial axis at t-pose
+                    // Upper arm
+                    vLUAAxisRightZombie = vUAAxisRight;
+                    vLUAAxisUpZombie = vUAAxisUp;
+
+                    vLLAAxisRightZombieSum += vLAAxisRight;
+                    vLLAAxisUpZombieSum += vLLAAxisUpZombie;
                 }
-                vLAQuatRights = Quaternion.FromToRotation(vLLAAxisRightZombie, Vector3.forward);
-                vLAQuatUps = Quaternion.FromToRotation(vLLAAxisUpZombie, Vector3.up);
+                //left lower arm
+                vLLAQuatRights = Quaternion.FromToRotation(vLLAAxisRightZombie, Vector3.forward);
+                vLLAQuatUps = (Quaternion.FromToRotation(vLLAAxisUpZombie, Vector3.up));
+                //left upper arm
+                vLUAQuatRights = Quaternion.FromToRotation(vLUAAxisRightZombie, Vector3.forward);
+                vLUAQuatUps = (Quaternion.FromToRotation(vLUAAxisUpZombie, Vector3.up));
                 //Debug.Log(counterL + ";" + vLAQuatRights + ";" + vLAQuatUps);
-                if (counterL > 296)
+                //Debug.Log(counterL + ";" + Vector3.Cross(vLLAAxisRightTPose, vLLAAxisRightZombie) + ";" + vLLAAxisUpZombie);
+                if (counterL > 590)
                 {
-                    vLoArmQuat = vLAQuatUps * vLoArmQuat;
+                    vLoArmQuat = Quaternion.Inverse(vLLAQuatUps) * vLoArmQuat * vLLAQuatUps;
+                    vUpArmQuat = Quaternion.Inverse(vLUAQuatUps) * vUpArmQuat * vLUAQuatUps;
                 }
             }
+            ///// ********** 8th  try ****** from T-Pose to zombie pose (90 degree rotation of the upper arm to front)
+            //if (vIsRight)
+            //{
+            //    counterR++;
+            //}
+            //else
+            //{
+            //    counterL++;
+            //}
+            //vUAAxisRight = vUpArmQuat * Vector3.right;
+            //vLAAxisRight = vLoArmQuat * Vector3.right;
+            //vUAAxisUp = vUpArmQuat * Vector3.up;
+            //vLAAxisUp = vLoArmQuat * Vector3.up;
+
+            //if (vIsRight)
+            //{
+            //    if (counterR < 20) //T-pose-horizontal elbow movement
+            //    {
+            //        //Debug.Log( "Right"+counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vRLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal =(1,0,0)                    
+            //    }
+
+            //    if (counterR < 297 && counterR > 293) // zombie pose-horizontal elbow movement (90 degree rotation frames)
+            //    {
+            //        Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vRLAAxisRightZombie = vLAAxisRight; //right direction in zombie pose: the ideal is (0,0,1)
+            //        vRLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose ideal is (1,0,0) we suppose ideal movement around up initial axis at T-pose
+            //        vRLAAxisRightZombieSum += vLAAxisRight;
+            //        vRLAAxisUpZombieSum += vRLAAxisUpZombie;
+            //    }
+
+            //    vRAQuatRights = Quaternion.FromToRotation(vRLAAxisRightZombie, Vector3.forward);
+            //    vRAQuatUps = Quaternion.FromToRotation(vRLAAxisUpZombie, Vector3.up);
+
+            //    Debug.Log("Right" + counterR + ";" + Vector3.Cross(vRLAAxisRightTPose, vRLAAxisRightZombie) + ";" + vRAQuatRights + ";" + vRAQuatUps);
+            //    if (counterR > 296) // apply calibration from now on// this may mess up T-pose at first, TODO: fix it!
+            //    {
+            //        vLoArmQuat = vRAQuatUps * vLoArmQuat;
+            //    }
+
+            //}
+
+            //else //left arm
+            //{
+
+            //    if (counterL < 20) //T-pose-horizontal elbow
+            //    {
+            //        Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vLLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal(1,0,0)
+
+            //    }
+            //    if (counterL < 297 && counterL > 293)
+            //    {
+            //        Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vLLAAxisRightZombie = vLAAxisRight;
+            //        //right direction in zombie pose the ideal is (0,0,1)
+            //        //vLLAAxisRightZombie.x = -vLLAAxisRightZombie.x;
+            //        vLLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose ideal is (1,0,0) we suppose ideal movement around up initial axis at t-pose
+            //                                       // vLLAAxisUpZombie.x = -vLLAAxisUpZombie.x;
+            //        vLLAAxisRightZombieSum += vLAAxisRight;
+            //        vLLAAxisUpZombieSum += vLLAAxisUpZombie;
+            //    }
+
+            //    vLAQuatRights = Quaternion.FromToRotation(vLLAAxisRightZombie, Vector3.forward);
+            //    vLAQuatUps = (Quaternion.FromToRotation(vLLAAxisUpZombie, Vector3.up));
+            //    //Debug.Log(counterL + ";" + vLAQuatRights + ";" + vLAQuatUps);
+            //    Debug.Log(counterL + ";" + Vector3.Cross(vLLAAxisRightTPose, vLLAAxisRightZombie) + ";" + vLLAAxisUpZombie);
+            //    if (counterL > 296)
+            //    {
+            //        vLoArmQuat = vLAQuatUps * vLoArmQuat;
+            //    }
+            //}
+
+            //if (vIsRight)
+            //{
+            //    if (counterR < 35) //T-pose-horizontal shoulder movement
+            //    {
+            //        vRLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal =(1,0,0) 
+            //    }
+            //    Debug.Log(counterR + ";beforeif" + vUAAxisRight + ";" + vLAAxisRight + ";" + vUAAxisUp + ";" + vLAAxisUp);
+            //    if (counterR < 202 && counterR > 195)
+            //    {
+            //        Debug.Log(counterR + ";" + vUAAxisRight + ";" + vLAAxisRight + ";" + vUAAxisUp + ";" + vLAAxisUp);
+            //        vRLAAxisRightZombie = vLAAxisRight; //right direction in zombie pose: the ideal is (0,0,1)
+            //        vRLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose, ideal is (1,0,0) we suppose ideal movement around up initial axis at T-pose
+            //        vRLAAxisRightZombieSum += vLAAxisRight;
+            //        vRLAAxisUpZombieSum += vRLAAxisUpZombie;
+            //    }
+
+            //    //vRLAAxisUpZombie = vRLAAxisUpZombieSum / 3;
+            //    //vRLAAxisRightZombie = vRLAAxisRightZombieSum / 3;
+
+            //    vRAQuatRights = Quaternion.FromToRotation(vRLAAxisRightZombie, Vector3.forward);
+            //    vRAQuatUps = Quaternion.FromToRotation(vRLAAxisUpZombie, Vector3.up);
+
+            //    //Debug.Log("Right" + counterR + ";" + Vector3.Cross(vRLAAxisRightTPose, vRLAAxisRightZombie) + ";" + vRAQuatRights + ";" + vRAQuatUps);
+            //    if (counterR > 201) // apply calibration from now on// this may mess up T-pose at first, TODO: fix it!
+            //    {
+            //        vLoArmQuat = vRAQuatUps * vLoArmQuat;
+            //    }
+            //}
+            //else //left arm
+            //{
+            //    if (counterL < 35) //T-pose-horizontal shoulder
+            //    {
+            //        //Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vLLAAxisRightTPose = vLAAxisRight; //right direction in T-pose ,it is ideal(1,0,0)
+            //    }
+
+            //    if (counterL < 202 && counterL > 195)
+            //    {
+            //        //Debug.Log("Left" + counterL + ";" + vUAAxisRight + ";" + vLAAxisRight);
+            //        vLLAAxisRightZombie = vLAAxisRight;
+            //        //right direction in zombie pose the ideal is (0,0,1)
+            //        //vLLAAxisRightZombie.x = -vLLAAxisRightZombie.x;
+            //        vLLAAxisUpZombie = vLAAxisUp;  //up direction in zombie pose ideal is (1,0,0) we suppose ideal movement around up initial axis at t-pose
+            //                                       // vLLAAxisUpZombie.x = -vLLAAxisUpZombie.x;
+            //        vLLAAxisRightZombieSum += vLAAxisRight;
+            //        vLLAAxisUpZombieSum += vLLAAxisUpZombie;
+            //    }
+
+            //    //vLLAAxisUpZombie = vLLAAxisUpZombieSum / 3;
+            //    //vLLAAxisRightZombie = vLLAAxisRightZombieSum / 3;
+
+            //    vLAQuatRights = Quaternion.FromToRotation(vLLAAxisRightZombie, Vector3.forward);
+            //    vLAQuatUps = (Quaternion.FromToRotation(vLLAAxisUpZombie, Vector3.up));
+            //    //Debug.Log(counterL + ";" + vLAQuatRights + ";" + vLAQuatUps);
+            //    Debug.Log(counterL + ";" + Vector3.Cross(vLLAAxisRightTPose, vLLAAxisRightZombie) + ";" + vLLAAxisUpZombie);
+            //    if (counterL > 201)
+            //    {
+            //        vLoArmQuat = vLAQuatUps * vLoArmQuat;
+            //    }
+            //}           
         }
-
-        /////////////////////////// Arms Fusion ////////////////////////   
-        //{
-
-        //    /////////// Step1: keeping lower arm in the plane with upper arm .Up axis as the normal /////////////                                                              
-        //    Vector3 vLAAxisRightProjected = Vector3.ProjectOnPlane(vLAAxisRight, vUAAxisUp); //projected on palne with upper arm up axis as the normal
-        //    float vCopmAngle = Vector3.Angle(vLAAxisRight, vLAAxisRightProjected);
-        //    Vector3 vRotAxis = Vector3.Cross(vLAAxisRight, vLAAxisRightProjected);
-        //    Quaternion vQuatRot = Quaternion.AngleAxis(vCopmAngle, vRotAxis);
-        //    //QuatRotL = Quaternion.identity; //to cancel step1
-
-        //    ///////////// Step2: Omit rotation of lower arm  //////////////
-        //    Vector3 vLAAxisUp1 = (vQuatRot * vLoArmQuat) * Vector3.up;
-        //    float vCopmAngleLARot = Vector3.Angle(vLAAxisUp1, vUAAxisUp);
-        //    Vector3 vRotAxisLARot = Vector3.Cross(vLAAxisUp1, vUAAxisUp);
-        //    Quaternion vQuatLARot = Quaternion.AngleAxis(vCopmAngleLARot, vRotAxisLARot);
-
-        //    ////////////// Step3: Fix arm flexion angle /////////////
-        //    //Current lower arm right axis
-        //    Vector3 vLoArmRightAxisCurr = (vQuatLARot * vQuatRot * vLoArmQuat) * Vector3.right;
-        //    //Current angle of  lower arm and upper arm right axes      
-        //    float vCopmAngleCurr = Vector3.Angle(vLoArmRightAxisCurr, vUAAxisRight);
-        //    //Initial angle of  lower arm and upper arm right axes 
-        //    float vCopmAngleInit = Vector3.Angle(vLAAxisRight, vUAAxisRight);
-        //    float vMeanAngle = (vCopmAngleCurr + vCopmAngleInit) / 2; //To Do: check using this angle for creating the quaternion
-        //    Vector3 vRotAxis180Init = Vector3.Cross(vLoArmRightAxisCurr, vUAAxisRight);
-        //    Quaternion vQuatRot180Init = Quaternion.AngleAxis(vCopmAngleCurr - vCopmAngleInit, vRotAxis180Init);
-
-        //    ////////////// Step4: Arm 180 degree constraint /////////////
-        //    Vector3 vLoArmRightAxis180 = (vQuatRot180Init * vQuatLARot * vQuatRot * vLoArmQuat) * Vector3.right; //right lower arm axis in world
-        //    float vCopmAngle180 = Vector3.Angle(vLoArmRightAxis180, vUAAxisRight);
-        //    //Setting the limit of arm flexion to 160 degree
-        //    vCopmAngle180 = vCopmAngle180 > 90 ? vCopmAngle180 - 200 : vCopmAngle180; // To Do: fix it later for 90 degree, it may jump @90 deg //if (vCopmAngle180>90) {vCopmAngle180 = 180 - vCopmAngle180;}      
-        //    Vector3 vRotAxis180 = Vector3.Cross(vLoArmRightAxis180, vUAAxisRight);
-        //    Quaternion vQuatRot180 = Quaternion.identity;
-
-        //    bool Is180;
-        //    if (vIsRight)
-        //    {
-        //        Is180 = (Vector3.Dot(vUAAxisForward, vLoArmRightAxis180) < 0 ? true : false);
-        //    }
-        //    else
-        //    {
-        //        Is180 = (Vector3.Dot(vUAAxisForward, vLoArmRightAxis180) > 0 ? true : false);
-        //    }
-
-        //    if (Is180) // When arm is bended backwards
-        //    {
-        //        vQuatRot180 = Quaternion.AngleAxis(vCopmAngle180, vRotAxis180);
-        //    }
-
-        //    /////////////// Step5: Rotate Upper arm within lower arm ////////////////// 
-        //    //To Do: check for the cases that we already have upper arm rotation
-        //    //difference between current and initial rotaion of lower arm
-        //    Vector3 vLoArmUpAxisInit = vLAAxisUp;
-        //    Vector3 vLoArmUpAxisCurr = vQuatRot180 * vQuatLARot * vQuatRot * vLoArmQuat * Vector3.up;
-        //    float vCompAngleUARot = Vector3.Angle(vLoArmUpAxisInit, vLoArmUpAxisCurr);
-        //    Vector3 vAxisUARot = vUpArmQuat * Vector3.right;
-        //    Quaternion vQuatUARot = Quaternion.AngleAxis(-vCompAngleUARot, vAxisUARot);
-
-        //    //////////// Update and apply results ////////////
-        //    Quaternion vNewUpArmQuat = Quaternion.identity;
-        //    Quaternion vNewLoArmQuat = Quaternion.identity;
-
-        //    if (IsUsingInterpolation)
-        //    {
-        //        vNewUpArmQuat = Quaternion.Slerp(vUASubsegment.SubsegmentOrientation, vQuatUARot * vUpArmQuat, InterpolationSpeed);
-
-        //        if (IsAdjustingArms)
-        //        {
-        //            vNewLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, vQuatUARot * vQuatRot180 * vQuatRot180Init * vQuatLARot * vQuatRot * vLoArmQuat * vLoArmQuatX, InterpolationSpeed);
-        //        }
-        //        else
-        //        {   
-        //            vNewLoArmQuat = Quaternion.Slerp(vLASubsegment.SubsegmentOrientation, vQuatUARot * vQuatRot180 * vQuatRot180Init * vQuatLARot * vQuatRot * vLoArmQuat, InterpolationSpeed);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        vNewUpArmQuat = vQuatUARot *  vUpArmQuat;
-
-        //        if (IsAdjustingArms)
-        //        {
-        //            vNewLoArmQuat = vQuatUARot *  vQuatRot180 * vQuatRot180Init * vQuatLARot * vQuatRot * vLoArmQuat * vLoArmQuatX;
-        //        }
-        //        else
-        //        {
-        //            vNewLoArmQuat = vQuatUARot * vQuatRot180 * vQuatRot180Init * vQuatLARot * vQuatRot * vLoArmQuat;
-        //        }
-        //    }
-
-        //    vUASubsegment.UpdateSubsegmentOrientation(vNewUpArmQuat, 1, true);
-        //    vLASubsegment.UpdateSubsegmentOrientation(vNewLoArmQuat, 1, true);
-        //}
 
         if (IsProjectingXY)
         {
