@@ -230,7 +230,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                 //append to the file
                 FileStream vFile = new FileStream(vCurrentFilePath, FileMode.Append, FileAccess.Write);
                 StreamWriter vStreamWriter = new StreamWriter(vFile);
-                vStreamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " , " + ((int)vLog.LogType) + " , " + vLog.Message);
+                vStreamWriter.WriteLine(((int)vLog.LogType) + " , " + vLog.Message);
                 vStreamWriter.Close();
             }
             catch (Exception e)
