@@ -29,6 +29,7 @@ namespace UIWidgets {
 		/// </summary>
 		[SerializeField]
 		public Text Text;
+ 
 
 		/// <summary>
 		/// Set icon native size.

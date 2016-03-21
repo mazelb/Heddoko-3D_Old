@@ -42,8 +42,7 @@ namespace UIWidgets
 		public virtual void OnPointerDown(PointerEventData eventData)
 		{
 			onPointerDown.Invoke(eventData);
-            Debug.Log("pointer down");
-        }
+         }
 
 		/// <summary>
 		/// Raises the pointer up event.
@@ -52,8 +51,7 @@ namespace UIWidgets
 		public virtual void OnPointerUp(PointerEventData eventData)
 		{
 			onPointerUp.Invoke(eventData);
-            Debug.Log("pointer up");
-        }
+         }
 
 		/// <summary>
 		/// Raises the pointer enter event.
@@ -62,8 +60,7 @@ namespace UIWidgets
 		public virtual void OnPointerEnter(PointerEventData eventData)
 		{
 			onPointerEnter.Invoke(eventData);
-            Debug.Log("pointer enter");
-		}
+ 		}
 
 		/// <summary>
 		/// Raises the pointer exit event.
@@ -72,7 +69,6 @@ namespace UIWidgets
 		public virtual void OnPointerExit(PointerEventData eventData)
 		{
 			onPointerExit.Invoke(eventData);
-             Debug.Log("pointer exit");
-        }
+         }
 	}
 }

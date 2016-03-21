@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 569c36777b050a5448146bb6affef9b3
-timeCreated: 1458241638
+timeCreated: 1458335239
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -1157,7 +1157,7 @@ TextureImporter:
         serializedVersion: 2
         x: 6606
         y: 3934
-        width: 80
+        width: 118
         height: 120
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -1239,16 +1239,6 @@ TextureImporter:
         y: 3930
         width: 164
         height: 152
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_67
-      rect:
-        serializedVersion: 2
-        x: 6694
-        y: 3970
-        width: 28
-        height: 48
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1507,17 +1497,7 @@ TextureImporter:
         serializedVersion: 2
         x: 5214
         y: 3714
-        width: 68
-        height: 152
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_112
-      rect:
-        serializedVersion: 2
-        x: 5298
-        y: 3714
-        width: 68
+        width: 161
         height: 152
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -1855,10 +1835,10 @@ TextureImporter:
     - name: fontawesome_regular_128_171
       rect:
         serializedVersion: 2
-        x: 2538
-        y: 3522
-        width: 92
-        height: 152
+        x: 2509
+        y: 3492
+        width: 145
+        height: 182
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1877,18 +1857,8 @@ TextureImporter:
         serializedVersion: 2
         x: 2886
         y: 3514
-        width: 131
+        width: 180
         height: 132
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_174
-      rect:
-        serializedVersion: 2
-        x: 2970
-        y: 3522
-        width: 92
-        height: 100
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2159,16 +2129,6 @@ TextureImporter:
         y: 3510
         width: 156
         height: 153
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_206
-      rect:
-        serializedVersion: 2
-        x: 2514
-        y: 3498
-        width: 140
-        height: 16
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5092,23 +5052,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_592
-      rect:
-        serializedVersion: 2
-        x: 3094
-        y: 2210
-        width: 32
-        height: 36
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_593
       rect:
         serializedVersion: 2
-        x: 3098
-        y: 2110
-        width: 84
-        height: 108
+        x: 3006
+        y: 2072
+        width: 176
+        height: 174
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5212,16 +5162,6 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_604
-      rect:
-        serializedVersion: 2
-        x: 5066
-        y: 2178
-        width: 152
-        height: 40
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_605
       rect:
         serializedVersion: 2
@@ -5266,9 +5206,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 6006
-        y: 2166
+        y: 2091
         width: 172
-        height: 68
+        height: 143
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5315,10 +5255,10 @@ TextureImporter:
     - name: fontawesome_regular_128_614
       rect:
         serializedVersion: 2
-        x: 7014
-        y: 2158
-        width: 60
-        height: 88
+        x: 7004
+        y: 2064
+        width: 136
+        height: 182
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5336,9 +5276,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7390
-        y: 2118
+        y: 2091
         width: 192
-        height: 116
+        height: 143
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5372,173 +5312,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_620
-      rect:
-        serializedVersion: 2
-        x: 3018
-        y: 2066
-        width: 76
-        height: 136
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_621
-      rect:
-        serializedVersion: 2
-        x: 5066
-        y: 2130
-        width: 152
-        height: 40
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_622
-      rect:
-        serializedVersion: 2
-        x: 6006
-        y: 2130
-        width: 28
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_623
-      rect:
-        serializedVersion: 2
-        x: 6042
-        y: 2130
-        width: 28
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_624
-      rect:
-        serializedVersion: 2
-        x: 6078
-        y: 2130
-        width: 28
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_625
-      rect:
-        serializedVersion: 2
-        x: 6114
-        y: 2130
-        width: 28
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_626
-      rect:
-        serializedVersion: 2
-        x: 6150
-        y: 2130
-        width: 28
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_627
-      rect:
-        serializedVersion: 2
-        x: 7002
-        y: 2118
-        width: 56
-        height: 48
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_628
-      rect:
-        serializedVersion: 2
-        x: 7078
-        y: 2142
-        width: 56
-        height: 52
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_629
       rect:
         serializedVersion: 2
         x: 5066
         y: 2078
         width: 152
-        height: 44
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_630
-      rect:
-        serializedVersion: 2
-        x: 6022
-        y: 2094
-        width: 32
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_631
-      rect:
-        serializedVersion: 2
-        x: 6058
-        y: 2094
-        width: 32
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_632
-      rect:
-        serializedVersion: 2
-        x: 6094
-        y: 2094
-        width: 32
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_633
-      rect:
-        serializedVersion: 2
-        x: 6130
-        y: 2094
-        width: 32
-        height: 28
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_634
-      rect:
-        serializedVersion: 2
-        x: 7026
-        y: 2066
-        width: 48
-        height: 60
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_635
-      rect:
-        serializedVersion: 2
-        x: 7082
-        y: 2082
-        width: 56
-        height: 52
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_636
-      rect:
-        serializedVersion: 2
-        x: 7467
-        y: 2094
-        width: 39
-        height: 28
+        height: 146
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5697,18 +5477,8 @@ TextureImporter:
         serializedVersion: 2
         x: 3338
         y: 1858
-        width: 128
-        height: 152
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_653
-      rect:
-        serializedVersion: 2
-        x: 3422
-        y: 1946
-        width: 80
-        height: 76
+        width: 171
+        height: 167
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5817,17 +5587,7 @@ TextureImporter:
         serializedVersion: 2
         x: 5634
         y: 1870
-        width: 96
-        height: 140
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_665
-      rect:
-        serializedVersion: 2
-        x: 5670
-        y: 1870
-        width: 100
+        width: 139
         height: 140
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -5872,33 +5632,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_670
-      rect:
-        serializedVersion: 2
-        x: 6546
-        y: 1914
-        width: 92
-        height: 96
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_671
-      rect:
-        serializedVersion: 2
-        x: 6558
-        y: 1874
-        width: 120
-        height: 124
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_672
       rect:
         serializedVersion: 2
-        x: 6590
+        x: 6548
         y: 1858
-        width: 104
-        height: 108
+        width: 146
+        height: 150
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -5972,26 +5712,6 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_680
-      rect:
-        serializedVersion: 2
-        x: 3426
-        y: 1882
-        width: 80
-        height: 56
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_681
-      rect:
-        serializedVersion: 2
-        x: 6630
-        y: 1858
-        width: 68
-        height: 68
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_682
       rect:
         serializedVersion: 2
@@ -6046,9 +5766,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1054
-        y: 1702
+        y: 1648
         width: 176
-        height: 99
+        height: 153
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -6316,9 +6036,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 6106
-        y: 1686
+        y: 1636
         width: 224
-        height: 120
+        height: 170
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -6402,16 +6122,6 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_723
-      rect:
-        serializedVersion: 2
-        x: 1074
-        y: 1646
-        width: 136
-        height: 100
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_724
       rect:
         serializedVersion: 2
@@ -6429,26 +6139,6 @@ TextureImporter:
         y: 1662
         width: 176
         height: 40
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_726
-      rect:
-        serializedVersion: 2
-        x: 6146
-        y: 1632
-        width: 40
-        height: 46
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_727
-      rect:
-        serializedVersion: 2
-        x: 6218
-        y: 1642
-        width: 36
-        height: 36
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -6522,33 +6212,13 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_735
-      rect:
-        serializedVersion: 2
-        x: 1550
-        y: 1462
-        width: 92
-        height: 108
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_736
       rect:
         serializedVersion: 2
-        x: 1586
+        x: 1553
         y: 1430
-        width: 140
+        width: 211
         height: 176
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_737
-      rect:
-        serializedVersion: 2
-        x: 1674
-        y: 1462
-        width: 88
-        height: 108
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -6677,17 +6347,7 @@ TextureImporter:
         serializedVersion: 2
         x: 4066
         y: 1454
-        width: 88
-        height: 104
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_751
-      rect:
-        serializedVersion: 2
-        x: 4154
-        y: 1454
-        width: 104
+        width: 185
         height: 104
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -6717,17 +6377,7 @@ TextureImporter:
         serializedVersion: 2
         x: 4690
         y: 1450
-        width: 108
-        height: 132
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_755
-      rect:
-        serializedVersion: 2
-        x: 4774
-        y: 1450
-        width: 104
+        width: 190
         height: 132
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -6758,17 +6408,7 @@ TextureImporter:
         x: 5362
         y: 1430
         width: 112
-        height: 88
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_759
-      rect:
-        serializedVersion: 2
-        x: 5374
-        y: 1514
-        width: 88
-        height: 92
+        height: 178
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -6882,16 +6522,6 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: fontawesome_regular_128_771
-      rect:
-        serializedVersion: 2
-        x: 7606
-        y: 1470
-        width: 116
-        height: 136
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: fontawesome_regular_128_772
       rect:
         serializedVersion: 2
@@ -6918,7 +6548,7 @@ TextureImporter:
         x: 7578
         y: 1430
         width: 172
-        height: 48
+        height: 174
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
