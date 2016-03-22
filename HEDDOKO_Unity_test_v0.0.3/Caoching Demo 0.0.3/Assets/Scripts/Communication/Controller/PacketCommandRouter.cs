@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.Utils; 
+using Assets.Scripts.Utils;
+using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 
@@ -429,8 +430,14 @@ namespace Assets.Scripts.Communication
         private void WrapPacketAndSendMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSend,"from application: "+vHeddokoPacket.Command );
+            
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
             ClientSocket.Requests.Enqueue(vPayload);
         }
+
+    
+
+
     }
 }

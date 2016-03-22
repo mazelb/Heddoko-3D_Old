@@ -22,7 +22,7 @@ namespace BrainpackService.brainpack_serial_connect
         //in milliseconds
         private const int gSerialPortTimeout = 15000;
         private static BrainpackSerialConnector sInstance;
-        private readonly object mSerialPortLock = new object();
+     //   private readonly object mSerialPortLock = new object();
          private bool mSerialIsBeingProbed = false;
         string mBpStateSearchPattern = "(?i)Reset(?-i)|(?i)Idle(?-i)|(?i)Recording(?-i)|(?i)Error(?-i)"; 
          private bool mIsRecording;
@@ -51,7 +51,6 @@ namespace BrainpackService.brainpack_serial_connect
         public void Initialize(string vBrainpackName)
         {
             SerialPortOpen(vBrainpackName);
-
         }
         /// <summary>
         /// Try to set the serial port
@@ -240,6 +239,7 @@ namespace BrainpackService.brainpack_serial_connect
             try
             {
                 Serialport.Write(vMsg + "\r\n");
+          
                 DebugLogger.Instance.LogMessage(LogType.BrainpackCommand, vMsg);
             }
             catch (Exception vE)
