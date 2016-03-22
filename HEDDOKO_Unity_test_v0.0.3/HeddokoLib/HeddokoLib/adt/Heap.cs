@@ -45,12 +45,21 @@ namespace HeddokoLib.adt
         /// <returns>The first vItem</returns>
         public T RemoveFirstItem()
         {
-            T vFirstItems = mItems[0];
+            T vFirstItem = mItems[0];
             mCurrentItemCount--;
-            mItems[0] = mItems[mCurrentItemCount];
-            mItems[0].HeapIndex = 0;
-            SortDown((mItems[0]));
-            return vFirstItems;
+            //get the last item , place it at the front
+            T vLastItem = mItems[mCurrentItemCount];
+            //remove the last item first
+            mItems.Remove(vLastItem);
+            if (mCurrentItemCount > 1)
+            {
+                //Place it at the front
+                mItems[0] = vLastItem;
+                mItems[0].HeapIndex = 0;
+                //bubble down
+                SortDown((mItems[0]));
+            }
+            return vFirstItem;
         }
 
         /// <summary>
@@ -143,6 +152,7 @@ namespace HeddokoLib.adt
         }
 
     }
+
 
     public interface IHeapItem<T> : IComparable
     {

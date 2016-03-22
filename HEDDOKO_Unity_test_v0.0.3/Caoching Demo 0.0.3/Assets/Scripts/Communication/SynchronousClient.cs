@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Assets.Scripts.Utils.DebugContext.logging;
+ 
 //using Assets.Scripts.Utils.Debugging;
 using HeddokoLib.networking;
 using Debug = UnityEngine.Debug;
@@ -32,7 +33,7 @@ namespace Assets.Scripts.Communication
     public class SynchronousClient
     {
         private Thread mWorkerThread;
-        private const int sTimeout=10000; 
+        private const int sTimeout = 10000;
 
         public SynchronousClient()
         {
@@ -40,14 +41,15 @@ namespace Assets.Scripts.Communication
             mIsworking = true;
             mWorkerThread.Start();
             string vLogMessage = "Synchronous Client instantiated, current timeout is set to " + sTimeout;
-            DebugLogger.Instance.LogMessage(LogType.SocketClientSettings,vLogMessage);
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vLogMessage);
         }
 
-        public Queue<string> Requests = new Queue<string>(50);
+        //public Queue<string> Requests = new Queue<string>(50);
+        private Heap<PriorityMessage> mPriorityMessages = new Heap<PriorityMessage>(); 
         private static bool mReceivedMessage = true;
 
-      
-         private void ThreadWorker()
+
+        private void ThreadWorker()
         {
             while (true)
             {
@@ -55,7 +57,7 @@ namespace Assets.Scripts.Communication
                 {
                     break;
                 }
-                if (Requests.Count == 0)
+                if (mPriorityMessages.Count == 0)
                 {
                     continue;
                 }
@@ -67,11 +69,17 @@ namespace Assets.Scripts.Communication
                 else
                 {
                     mReceivedMessage = false;
-                    string vMsg = Requests.Dequeue();
+                   // string vMsg = Requests.Dequeue();
+                    PriorityMessage vMsg = mPriorityMessages.RemoveFirstItem();
                     StartClientAndSendData(vMsg);
                 }
 
             }
+        }
+
+        public void AddMessage(PriorityMessage vMsg)
+        {
+            mPriorityMessages.Add(vMsg);
         }
         /// <summary>
         /// Starts a client socket and sends the message data. 
@@ -93,8 +101,8 @@ namespace Assets.Scripts.Communication
                 // Create a TCP/IP  socket.
                 Socket vSender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 vSender.ReceiveTimeout = sTimeout;
-                vSender.SendTimeout = sTimeout; 
-             
+                vSender.SendTimeout = sTimeout;
+
                 try
                 {
                     vSender.Connect(vRemoteEndPoint);
@@ -103,7 +111,7 @@ namespace Assets.Scripts.Communication
 
                     // Send the data through the socket.
                     vSender.Send(msg);
-                    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, "Sending... "+vMsg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, "Sending... " + vMsg);
 
                     // Receive the response from the remote device.
                     vSender.Receive(bytes);
@@ -118,9 +126,9 @@ namespace Assets.Scripts.Communication
                     // vMsg = PacketSetting.Encoding.GetString(bytes);
                 }
                 catch (TimeoutException vE)
-                { 
+                {
                     vSender.Shutdown(SocketShutdown.Both);
-                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message); 
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
                     vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
 
@@ -137,8 +145,8 @@ namespace Assets.Scripts.Communication
                 }
                 catch (SocketException vE)
                 {
-                    
-                    vMsg = "SocketException  "+ vE.ErrorCode + "\r\n"+ vE;
+
+                    vMsg = "SocketException  " + vE.ErrorCode + "\r\n" + vE;
                     vMsg += vE.InnerException;
                     vSender.Close();
                     Debug.Log(vMsg);
@@ -171,7 +179,107 @@ namespace Assets.Scripts.Communication
             mReceivedMessage = true;
             vStopwatch.Stop();
             vMsg = "time taken from start send message to end " + vStopwatch.ElapsedMilliseconds + " ms";
-        //    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vMsg);
+            //    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vMsg);
+
+
+        }
+
+        public void StartClientAndSendData(PriorityMessage vMsg)
+        {
+            byte[] bytes = new byte[1024];
+            mReceivedMessage = false;
+            string vLogmessage = "";
+            Stopwatch vStopwatch = new Stopwatch();
+            vStopwatch.Start();
+            string vLogMessage = "";
+            // Connect to a remote device.
+            try
+            {
+                IPHostEntry vIpHostEntry = Dns.Resolve("localhost");
+                IPAddress vIpAddress = vIpHostEntry.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
+                IPEndPoint vRemoteEndPoint = new IPEndPoint(vIpAddress, 11000);
+                // Create a TCP/IP  socket.
+                Socket vSender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                vSender.ReceiveTimeout = sTimeout;
+                vSender.SendTimeout = sTimeout;
+
+                try
+                {
+                    vSender.Connect(vRemoteEndPoint);
+                    // Encode the data string into a byte array.
+                    byte[] msg = PacketSetting.Encoding.GetBytes(vMsg.MessagePayload);
+
+                    // Send the data through the socket.
+                    vSender.Send(msg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, "Sending... " + vMsg);
+
+                    // Receive the response from the remote device.
+                    vSender.Receive(bytes);
+
+                    HeddokoPacket vHPacket = new HeddokoPacket(bytes, PacketSetting.PacketCommandSize);
+                    PacketCommandRouter.Instance.Process(vSender, vHPacket);
+
+                    // Release the socket.
+                    vSender.Shutdown(SocketShutdown.Both);
+                    vSender.Close();
+
+                    // vMsg = PacketSetting.Encoding.GetString(bytes);
+                }
+                catch (TimeoutException vE)
+                {
+                    vSender.Shutdown(SocketShutdown.Both);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
+                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+
+                    vSender.Close();
+                }
+                catch (ArgumentNullException vE)
+                {
+                    vLogMessage = "ArgumentNullException  " + vE;
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+
+                    Debug.Log(vMsg);
+                }
+                catch (SocketException vE)
+                {
+
+                    vLogMessage = "SocketException  " + vE.ErrorCode + "\r\n" + vE;
+                    vLogMessage += vE.InnerException;
+                    vSender.Close();
+                    Debug.Log(vMsg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+
+                }
+                catch (Exception e)
+                {
+                    vLogMessage = "Unexpected exception " + e;
+                    vSender.Shutdown(SocketShutdown.Both);
+                    vSender.Close();
+                    Debug.Log(vMsg);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                vLogMessage = "Unexpected exception " + e;
+                DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                Debug.Log(vMsg);
+            }
+            mReceivedMessage = true;
+            vStopwatch.Stop();
+            vLogMessage = "time taken from start send message to end " + vStopwatch.ElapsedMilliseconds + " ms";
+            //    DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vMsg);
 
 
         }
@@ -182,6 +290,45 @@ namespace Assets.Scripts.Communication
         }
 
 
-         
+
+    }
+    /// <summary>
+    ///  A priority message
+    /// </summary>
+    public class PriorityMessage : IHeapItem<PriorityMessage>
+    {
+        public Priority Priority { get; set; }
+        public string MessagePayload;
+
+        public int CompareTo(object vObj)
+        {
+
+            PriorityMessage vOtherMessage = (PriorityMessage)vObj;
+            return CompareTo(vOtherMessage);
+
+        }
+
+        /// <summary>
+        /// Compare one message against another based on their priority
+        /// </summary>
+        /// <param name="vMessage"></param>
+        /// <returns></returns>
+        public int CompareTo(PriorityMessage vMessage)
+        {
+            int vComparison = 0;
+
+            vComparison = Priority.CompareTo(vMessage.Priority); 
+            return vComparison;
+        }
+
+        public int HeapIndex { get; set; }
+    }
+
+    public enum Priority
+    {
+        Urgent = 0,
+        High = 1,
+        Medium = 2,
+        Low = 3
     }
 }

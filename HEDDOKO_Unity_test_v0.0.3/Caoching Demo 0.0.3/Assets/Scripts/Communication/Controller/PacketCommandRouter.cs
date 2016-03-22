@@ -91,40 +91,35 @@ namespace Assets.Scripts.Communication
         public void Initialize()
         {
             mCommand.Register(HeddokoCommands.BPConnectionSucess, SuitConnectionSuccess);
-            mCommand.Register(HeddokoCommands.RequestToConnectToBP, BrainpackDeviceConnectionRequest);
+            mCommand.Register(HeddokoCommands.RequestToConnectToBP, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.SendBPData, ReRouteRawFrameData);
-            mCommand.Register(HeddokoCommands.RequestBPData, RequestBrainPackData);
+            mCommand.Register(HeddokoCommands.RequestBPData, SendLowPriorityMessage);
             mCommand.Register(HeddokoCommands.ConnectionAck, ConnectionAcknowledged);
             mCommand.Register(HeddokoCommands.StopHeddokoUnityClient, Stop);
-            mCommand.Register(HeddokoCommands.StopRecordingReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.StopRecordingReq, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.ClientError, SocketClientError);
-            mCommand.Register(HeddokoCommands.DisconnectBrainpack, DisconnectBrainpackRequest);
+            mCommand.Register(HeddokoCommands.DisconnectBrainpack, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.DiscoAcknowledged, DisconnectAcknowledged);
-            mCommand.Register(HeddokoCommands.SetRecordingPrefixReq, SetBrainpackRecordingPrefix);
-            mCommand.Register(HeddokoCommands.ShutdownBrainpackReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.SetRecordingPrefixReq, SendMediumPriorityMessage);
+            mCommand.Register(HeddokoCommands.ShutdownBrainpackReq, SendUrgentPriorityMessage);
             mCommand.Register(HeddokoCommands.ShutdownBrainpackResp, ShutdownBrainpackResp);
-            mCommand.Register(HeddokoCommands.ResetBrainpackReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.ResetBrainpackReq, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.ResetBrainpackResp, ResetBrainpackResp);
-            mCommand.Register(HeddokoCommands.GetBrainpackStateReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.GetBrainpackStateReq, SendMediumPriorityMessage);
             mCommand.Register(HeddokoCommands.GetBrainpackStateResp, GetBrainpackStateResp);
-            mCommand.Register(HeddokoCommands.SetBrainpackTimeReq, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.SetBrainpackTimeReq, SendMediumPriorityMessage);
             mCommand.Register(HeddokoCommands.SetBrainpackTimeResp, SetBrainpackTimeResp);
-            mCommand.Register(HeddokoCommands.GetResponseMessageReq, RequestResponseMessage);
+            mCommand.Register(HeddokoCommands.GetResponseMessageReq, SendMediumPriorityMessage);
             mCommand.Register(HeddokoCommands.GetResponseMessageResp, RerouteResponseMessage);
-            mCommand.Register(HeddokoCommands.GetBrainpackVersionReq, WrapPacketAndSendMessage);
-            mCommand.Register(HeddokoCommands.StartRecordingReq, WrapPacketAndSendMessage);
-            mCommand.Register(HeddokoCommands.ClearBuffer, WrapPacketAndSendMessage);
+            mCommand.Register(HeddokoCommands.GetBrainpackVersionReq, SendMediumPriorityMessage);
+            mCommand.Register(HeddokoCommands.StartRecordingReq, SendHighPriorityMessage);
+            mCommand.Register(HeddokoCommands.ClearBuffer, SendMediumPriorityMessage);
         }
 
 
-        private void RequestResponseMessage(object vSender, object vArgs)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.Requests.Enqueue(vPayload);
-        }
 
- 
+
+
         /// <summary>
         /// Reroute status message responses from the brainpack
         /// </summary>
@@ -133,7 +128,7 @@ namespace Assets.Scripts.Communication
         private void RerouteResponseMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload); 
+            string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
             BrainpackConnectionController.Instance.Output = vPayload;
             if (!string.IsNullOrEmpty(vPayload))
             {
@@ -145,7 +140,7 @@ namespace Assets.Scripts.Communication
                     }
                 };
                 OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
-            } 
+            }
         }
         /**
         * Process(object vSender, HeddokoPacket vPacket)
@@ -176,17 +171,6 @@ namespace Assets.Scripts.Communication
         public void DisconnectFrameThread()
         {
             FrameThread = null;
-        }
-        /**
-       * RequestAvailableBtDevicesCommand(object vSender, object vArgs) 
-       * @brief Request a list of available bluetooth devices from the server
-       * @param  object vSender: not used  object vArgs: not used
-       */
-        private void RequestAvailableBtDevicesCommand(object vSender, object vArgs)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vOutBound = HeddokoPacket.Wrap(vHeddokoPacket); 
-            ClientSocket.Requests.Enqueue(vOutBound);
         }
 
         /// <summary>
@@ -222,27 +206,8 @@ namespace Assets.Scripts.Communication
                 }
             }
         }
-        /**
-       * BlueDeviceConnectionRequest(object vSender, object vArgs) 
-       * @brief The sender requests a connection to a bluetooth device
-       * @param vSender: the sender, vArgs: the bluetooth device address
-       */
-        private void BrainpackDeviceConnectionRequest(object vSender, object vArgs)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
 
-            ClientSocket.Requests.Enqueue(vPayload);
-        }
 
-        private void DisconnectBrainpackRequest(object vSender, object vArg)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArg;
-            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            // AsynchronousClient.SendMessage(vPayload);
-            ClientSocket.Requests.Enqueue(vPayload);
-            ClientSocket.StartClientAndSendData(vPayload);
-        }
 
         private void DisconnectAcknowledged(object vSender, object vArg)
         {
@@ -279,12 +244,6 @@ namespace Assets.Scripts.Communication
                 FrameThread.InboundSuitBuffer.Enqueue(vHeddokoPacket);
             }
             //todo send to buffer to be processed
-        }
-        private void RequestBrainPackData(object vSender, object vArgs)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.Requests.Enqueue(vPayload);
         }
 
 
@@ -333,12 +292,6 @@ namespace Assets.Scripts.Communication
             //  AsynchronousSocketListener.Send(vSocket, vPacketBody); 
         }
 
-        private void SetBrainpackRecordingPrefix(object vSender, object vArgs)
-        {
-            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.Requests.Enqueue(vPayload);
-        }
 
         private void Stop(object vSender, object vArgs)
         {
@@ -383,14 +336,14 @@ namespace Assets.Scripts.Communication
         /// <param name="vArgs"></param>
         private void SetBrainpackTimeResp(object vVsender, object vArgs)
         {
-          /*  Action vAction = () =>
-            {
-                if (BrainpackConnectionController.BrainpackTimeSetResp != null)
-                {
-                    BrainpackConnectionController.BrainpackTimeSetResp.Invoke();
-                }
-            };
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+            /*  Action vAction = () =>
+              {
+                  if (BrainpackConnectionController.BrainpackTimeSetResp != null)
+                  {
+                      BrainpackConnectionController.BrainpackTimeSetResp.Invoke();
+                  }
+              };
+              OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
         }
 
         /// <summary>
@@ -400,14 +353,14 @@ namespace Assets.Scripts.Communication
         /// <param name="vArgs"></param>
         private void ResetBrainpackResp(object vVsender, object vArgs)
         {
-          /*  Action vAction = () =>
-            {
-                if (BrainpackConnectionController.ResetBrainpackResp != null)
-                {
-                    BrainpackConnectionController.ResetBrainpackResp.Invoke();
-                }
-            };
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+            /*  Action vAction = () =>
+              {
+                  if (BrainpackConnectionController.ResetBrainpackResp != null)
+                  {
+                      BrainpackConnectionController.ResetBrainpackResp.Invoke();
+                  }
+              };
+              OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
         }
 
         /// <summary>
@@ -417,26 +370,53 @@ namespace Assets.Scripts.Communication
         /// <param name="vVargs"></param>
         private void ShutdownBrainpackResp(object vVsender, object vVargs)
         {
-           /* Action vAction = () =>
-            {
-                BrainpackConnectionController.BrainpackShutdown.Invoke();
-            };
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+            /* Action vAction = () =>
+             {
+                 BrainpackConnectionController.BrainpackShutdown.Invoke();
+             };
+             OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
         }
 
 
 
 
-        private void WrapPacketAndSendMessage(object vSender, object vArgs)
+        private void SendHighPriorityMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
-            DebugLogger.Instance.LogMessage(LogType.SocketClientSend,"from application: "+vHeddokoPacket.Command );
-            
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSend, "from application: " + vHeddokoPacket.Command);
             string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
-            ClientSocket.Requests.Enqueue(vPayload);
+            PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.High, MessagePayload = vPayload };
+            ClientSocket.AddMessage(vMessage);
         }
 
-    
+        private void SendUrgentPriorityMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSend, "from application: " + vHeddokoPacket.Command);
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.Urgent, MessagePayload = vPayload };
+            ClientSocket.AddMessage(vMessage);
+        }
+
+        private void SendLowPriorityMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSend, "from application: " + vHeddokoPacket.Command);
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.Low, MessagePayload = vPayload };
+            ClientSocket.AddMessage(vMessage);
+        }
+
+        private void SendMediumPriorityMessage(object vSender, object vArgs)
+        {
+            HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
+            DebugLogger.Instance.LogMessage(LogType.SocketClientSend, "from application: " + vHeddokoPacket.Command);
+            string vPayload = HeddokoPacket.Wrap(vHeddokoPacket);
+            PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.Medium, MessagePayload = vPayload };
+            ClientSocket.AddMessage(vMessage);
+
+        }
+
 
 
     }

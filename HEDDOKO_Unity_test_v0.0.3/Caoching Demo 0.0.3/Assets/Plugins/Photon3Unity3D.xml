@@ -6,7 +6,7 @@
     <members>
         <member name="T:ExitGames.Client.Photon.Hashtable">
             <summary>
-            This is a substitute for the Hashtable class, missing in: Win8RT and Windows Phone. It uses a Dictionary&lt;object,object&gt; as base.
+            This is a substitute for the Hashtable class, missing in: Win8RT and Windows Phone. It uses a Dictionary&lt;object,vObject&gt; as base.
             </summary>
             <remarks>
             Please be aware that this class might act differently than the Hashtable equivalent.
@@ -1481,7 +1481,7 @@
             <summary>
             Serialize creates a byte-array from the given object and returns it.
             </summary>
-            <param name="obj">The object to serialize</param>
+            <param name="vObj">The object to serialize</param>
             <returns>The serialized byte-array</returns>
         </member>
         <member name="M:EvLeftLegMultiplieritGames.Client.Photon.Protocol.Deserialize(System.Byte[])">
