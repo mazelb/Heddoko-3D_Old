@@ -21,10 +21,7 @@ public class Heap<T> where T : IHeapItem<T>
     {
         get { return mCurrentItemCount; }
     }
-
-
-
-
+    
 
     /// <summary>
     /// Add an vItem to the heap

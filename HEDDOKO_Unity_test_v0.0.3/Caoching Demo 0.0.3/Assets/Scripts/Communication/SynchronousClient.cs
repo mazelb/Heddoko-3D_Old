@@ -318,7 +318,7 @@ namespace Assets.Scripts.Communication
             int vComparison = 0;
 
             vComparison = Priority.CompareTo(vMessage.Priority); 
-            return vComparison;
+            return -vComparison;
         }
 
         public int HeapIndex { get; set; }
