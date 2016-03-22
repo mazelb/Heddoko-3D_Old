@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Linq; 
 using System.Threading;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         public static DebugLogSettings Settings = new DebugLogSettings();
         private static DebugLogger sInstance;
         private static object mInstanceLock = new object();
-       // DebugSettingsFileMonitor mFileMonitor = new DebugSettingsFileMonitor();
+        // DebugSettingsFileMonitor mFileMonitor = new DebugSettingsFileMonitor();
 
         private string mLogDirPath;
 
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             catch (Exception e)
             {
 
-                Debug.Log("<color=red>Fatal error:</color> " +e);
+                Debug.Log("<color=red>Fatal error:</color> " + e);
             }
 
         }
@@ -120,7 +120,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             });
             sSettingsRegistry.Add(LogType.SocketClientSend, () =>
             {
-                if (Settings.LogAll )
+                if (Settings.LogAll)
                     return true;
                 return Settings.SocketClientLogging;
             });
@@ -142,13 +142,14 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                     return true;
                 return Settings.SocketClientLogging;
             });
+            sSettingsRegistry.Add(LogType.UnitTest, () => { return true; });
         }
 
         private void RegisterPaths()
         {
             /*var vLocation = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath; 
             string vDirPath = Path.GetDirectoryName(vLocation);*/
-           string vms =  Instance.mLogDirPath = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath + "\\Application_logs";
+            string vms = Instance.mLogDirPath = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath + "\\Application_logs";
             Debug.Log(vms);
 
             mLogTypeToLogpathType.Add(LogType.ApplicationCommand, OutputLogPath.ApplicationLog);
@@ -161,6 +162,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             mLogTypeToLogpathType.Add(LogType.SocketClientSend, OutputLogPath.SocketClientLog);
             mLogTypeToLogpathType.Add(LogType.SocketClientSettings, OutputLogPath.SocketClientLog);
             mLogTypeToLogpathType.Add(LogType.SocketClientError, OutputLogPath.SocketClientLog);
+            mLogTypeToLogpathType.Add(LogType.UnitTest, OutputLogPath.UnitTestPriorityQueue);
 
 
 
@@ -171,13 +173,13 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             mContinueWorking = true;
             Thread vThread = new Thread(Instance.WorkerTask);
             vThread.Start();
-           // mFileMonitor.Start();
+            // mFileMonitor.Start();
         }
 
         public void Stop()
         {
             mContinueWorking = false;
-        //    mFileMonitor.Stop();
+            //    mFileMonitor.Stop();
         }
         private void WorkerTask()
         {
@@ -236,7 +238,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             catch (Exception e)
             {
                 string vMessage = vLog.LogType.ToString() + " " + vLog.Message;
-                Debug.Log("<color=red>Failed to write to log type:</color> " + vLog  +" "+e); 
+                Debug.Log("<color=red>Failed to write to log type:</color> " + vLog + " " + e);
             }
         }
     }
@@ -249,10 +251,11 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         ApplicationCommand = 4,
         ApplicationResponse = 5,
         ApplicationFrame = 6,
-        SocketClientSend =7,
+        SocketClientSend = 7,
         SocketClientReceive = 8,
         SocketClientError = 9,
-        SocketClientSettings =10
+        SocketClientSettings = 10,
+        UnitTest = 11
     }
 
     public enum OutputLogPath
@@ -261,7 +264,8 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         BrainpackMsgLog,
         BrainpackFrames,
         ApplicationFrames,
-        SocketClientLog
+        SocketClientLog,
+        UnitTestPriorityQueue
     }
 
     public struct Log

@@ -359,7 +359,7 @@
             Not all of the many StatusCode values will apply to your game. Example: If you don't use encryption, 
             the respective status changes are never made.
             
-            The values are all part of the StatusCode enumeration and described value-by-value.
+            The values are all part of the StatusCode enumeration and described vItem-by-vItem.
             </remarks>
             <param name="statusCode">A code to identify the situation.</param>
         </member>
@@ -400,7 +400,7 @@
             <summary>this variant does only create outvGoing commands and increments . incoming ones are created from a DataInputStream</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.NCommand.#ctor(ExitGames.Client.Photon.EnetPeer,System.Byte[],System.Int32@)">
-            <summary>reads the command values (commandHeader and command-values) from incoming bytestream and populates the incoming command*</summary>
+            <summary>reads the command values (commandHeader and command-vItems) from incoming bytestream and populates the incoming command*</summary>
         </member>
         <member name="T:ExitGames.Client.Photon.SimulationItem">
             <summary>
@@ -800,7 +800,7 @@
             </summary>
             <param name="customOpCode">Operations are handled by their byte\-typed code. 
             The codes of the "LoadBalancong" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the vItem is any serializable datatype.</param>
             <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                        operation is not guaranteed to reach the server.</param>
             <returns>If operation could be enqueued for sending</returns>
@@ -817,7 +817,7 @@
             This is explained in more detail as "<see cref="!:Operations" text="Custom Operations"/>".
             <param name="customOpCode">Operations are handled by their byte\-typed code. The codes of the
                                        "LoadBalancing" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the vItem is any serializable datatype.</param>
             <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                        operation is not guaranteed to reach the server.</param>
             <param name="channelId">The channel in which this operation should be sent.</param>
@@ -834,7 +834,7 @@
              </summary>
              <param name="customOpCode">Operations are handled by their byte\-typed code. The codes of the
                                         "LoadBalancing" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-             <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+             <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the vItem is any serializable datatype.</param>
              <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                         operation is not guaranteed to reach the server.</param>
              <param name="channelId">The channel in which this operation should be sent.</param>
@@ -1138,7 +1138,7 @@
              differs from the original.
             
              The approximation adds RoundtripTime / 2 and uses this.LocalTimeInMilliSeconds to calculate
-             in-between values (this property returns a new value per tick).
+             in-between values (this property returns a new vItem per tick).
             
              The value sent by Photon equals Environment.TickCount in the logic layer.
              </remarks>
@@ -1301,7 +1301,7 @@
             <summary>An optional string sent by the server to provide readable feedback in error-cases. Might be null.</summary>
         </member>
         <member name="F:EvLeftLegMultiplieritGames.Client.Photon.OperationResponse.Parameters">
-            <summary>A Dictionary of values returned by an operation, using byte-typed keys per value.</summary>
+            <summary>A Dictionary of values returned by an operation, using byte-typed keys per vItem.</summary>
         </member>
         <member name="M:EvLeftLegMultiplieritGames.Client.Photon.OperationResponse.ToString">
             <summary>ToString() override.</summary>
@@ -1501,7 +1501,7 @@
             Serializes a short typed value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
-            <param name="value">The short value to be serialized</param>
+            <param name="vItem">The short value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
             <param name="targetOffset">The offset in the byte-array</param>
         </member>
@@ -1510,7 +1510,7 @@
             Serializes an int typed value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
-            <param name="value">The int value to be serialized</param>
+            <param name="vItem">The int value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
             <param name="targetOffset">The offset in the byte-array</param>
         </member>
@@ -1519,17 +1519,17 @@
             Serializes an float typed value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
-            <param name="value">The float value to be serialized</param>
+            <param name="vItem">The float value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
             <param name="targetOffset">The offset in the byte-array</param>
         </member>
         <member name="M:EvLeftLegMultiplieritGames.Client.Photon.Protocol.Deserialize(System.Int16@,System.Byte[],System.Int32@)">
             <summary>
             Deserialize fills the given short typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
+            The result is placed in a variable (value). There is no need to return a vItem because the parameter vItem is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
-            <param name="value">The short value to deserialized into</param>
+            <param name="vItem">The short value to deserialized into</param>
             <param name="source">The byte-array to deserialize from</param>
             <param name="offset">The offset in the byte-array</param>
         </member>
@@ -1541,20 +1541,20 @@
         <member name="M:EvLeftLegMultiplieritGames.Client.Photon.Protocol.Deserialize(System.Int32@,System.Byte[],System.Int32@)">
             <summary>
             Deserialize fills the given int typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
+            The result is placed in a variable (value). There is no need to return a vItem because the parameter vItem is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
-            <param name="value">The int value to deserialize into</param>
+            <param name="vItem">The int value to deserialize into</param>
             <param name="source">The byte-array to deserialize from</param>
             <param name="offset">The offset in the byte-array</param>
         </member>
         <member name="M:EvLeftLegMultiplieritGames.Client.Photon.Protocol.Deserialize(System.Single@,System.Byte[],System.Int32@)">
             <summary>
             Deserialize fills the given float typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
+            The result is placed in a variable (value). There is no need to return a vItem because the parameter vItem is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
-            <param name="value">The float value to deserialize</param>
+            <param name="vItem">The float value to deserialize</param>
             <param name="source">The byte-array to deserialize from</param>
             <param name="offset">The offset in the byte-array</param>
         </member>

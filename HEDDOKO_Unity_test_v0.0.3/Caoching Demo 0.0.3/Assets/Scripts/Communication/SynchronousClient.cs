@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Assets.Scripts.Utils.DebugContext.logging;
- 
+
 //using Assets.Scripts.Utils.Debugging;
 using HeddokoLib.networking;
 using Debug = UnityEngine.Debug;
@@ -34,6 +34,7 @@ namespace Assets.Scripts.Communication
     {
         private Thread mWorkerThread;
         private const int sTimeout = 10000;
+        private Semaphore mSemaphore = new Semaphore(1,1);
 
         public SynchronousClient()
         {
@@ -44,8 +45,7 @@ namespace Assets.Scripts.Communication
             DebugLogger.Instance.LogMessage(LogType.SocketClientSettings, vLogMessage);
         }
 
-        //public Queue<string> Requests = new Queue<string>(50);
-        private Heap<PriorityMessage> mPriorityMessages = new Heap<PriorityMessage>(); 
+        private PriorityQueue<PriorityMessage> mPriorityMessages = new PriorityQueue<PriorityMessage>();
         private static bool mReceivedMessage = true;
 
 
@@ -69,9 +69,12 @@ namespace Assets.Scripts.Communication
                 else
                 {
                     mReceivedMessage = false;
-                   // string vMsg = Requests.Dequeue();
+                    mSemaphore.WaitOne();
                     PriorityMessage vMsg = mPriorityMessages.RemoveFirstItem();
+                    mSemaphore.Release();
                     StartClientAndSendData(vMsg);
+                   
+
                 }
 
             }
@@ -79,7 +82,9 @@ namespace Assets.Scripts.Communication
 
         public void AddMessage(PriorityMessage vMsg)
         {
+            mSemaphore.WaitOne();
             mPriorityMessages.Add(vMsg);
+            mSemaphore.Release();
         }
         /// <summary>
         /// Starts a client socket and sends the message data. 
@@ -295,14 +300,13 @@ namespace Assets.Scripts.Communication
     /// <summary>
     ///  A priority message
     /// </summary>
-    public class PriorityMessage : IHeapItem<PriorityMessage>
+    public class PriorityMessage : IPriorityQueueItem<PriorityMessage>
     {
         public Priority Priority { get; set; }
         public string MessagePayload;
 
         public int CompareTo(object vObj)
         {
-
             PriorityMessage vOtherMessage = (PriorityMessage)vObj;
             return CompareTo(vOtherMessage);
 
@@ -315,13 +319,23 @@ namespace Assets.Scripts.Communication
         /// <returns></returns>
         public int CompareTo(PriorityMessage vMessage)
         {
-            int vComparison = 0;
+            int vCompareA = (int)Priority;
+            int vCompareB = (int)vMessage.Priority;
+            int vComparison = vCompareA.CompareTo(vCompareB);
 
-            vComparison = Priority.CompareTo(vMessage.Priority); 
-            return -vComparison;
+            return vComparison;
         }
 
         public int HeapIndex { get; set; }
+
+        public override string ToString()
+        {
+            string vReturn = "";
+            vReturn += "Priority: " + EnumUtil.GetName(Priority) + " PriorityValue: " + (int)Priority + " HeapIndex: " +
+                       HeapIndex ;
+            return vReturn;
+            ;
+        }
     }
 
     public enum Priority

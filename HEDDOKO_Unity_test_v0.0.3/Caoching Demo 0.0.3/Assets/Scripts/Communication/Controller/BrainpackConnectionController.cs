@@ -561,8 +561,7 @@ namespace Assets.Scripts.Communication.Controller
                 {
                     vMessageSent = true;
                     GetBrainpackStateCmd();
-                    CountdownSinceStateReqSent = vTimer;
-                    Debug.Log("sending state cmd");
+                    CountdownSinceStateReqSent = vTimer; 
                 }
                 else
                 {
