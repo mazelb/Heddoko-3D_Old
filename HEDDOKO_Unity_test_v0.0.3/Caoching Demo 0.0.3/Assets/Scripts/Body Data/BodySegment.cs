@@ -858,7 +858,18 @@ public partial class BodySegment
             vsubSegment.Value.UpdateSubSegmentTransform(vSubSegmentTransform);
         }
     }
+    /// <summary>
+    /// Releases 3d resources used by the BodySegment
+    /// </summary>
+    public void ReleaseResources()
+    {
+        foreach (var vBodySubSegment in BodySubSegmentsDictionary)
+        {
+            vBodySubSegment.Value.ReleaseResources();
+        }
+    }
 
-   
 #endif
+
+
 }

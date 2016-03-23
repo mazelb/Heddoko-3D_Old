@@ -504,14 +504,17 @@ public class Body
     }
 
     /// <summary>
-    /// Release the current RenderedBody back into the pool
+    /// Release 3d resources used by the body.
     /// </summary>
-    public void ReleaseRenderedBody()
+    public void ReleaseResources()
     {
         if (RenderedBody != null)
         {
             RenderedBodyPool.ReleaseResource(RenderedBody);
-            Debug.Log("rELEASE ReleaseRenderedBody ");
+        }
+        for (int i = 0; i < BodySegments.Count; i++)
+        {
+            BodySegments[i].ReleaseResources();
         }
     }
 }

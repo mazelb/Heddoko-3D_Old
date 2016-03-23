@@ -102,7 +102,11 @@ public class BodySubSegment
         AssociatedView.AssignTransforms(vSubSegmentTransform);
     }
 
-   
-     
-  
+    /// <summary>
+    /// Releases resources used by the sub segment
+    /// </summary>
+    internal void ReleaseResources()
+    {
+        AssociatedView.Clear();
+    }
 }
