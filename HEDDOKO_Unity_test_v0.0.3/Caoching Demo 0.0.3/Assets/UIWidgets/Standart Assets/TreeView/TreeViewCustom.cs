@@ -387,10 +387,10 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// [Not supported for TreeView] Add the specified item.
+		/// [Not supported for TreeView] Add the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
-		/// <returns>Index of added item.</returns>
+		/// <returns>Index of added vItem.</returns>
 		[Obsolete("Not supported for TreeView", true)]
 		public int Add(TItem item)
 		{
@@ -398,7 +398,7 @@ namespace UIWidgets {
 		}
 		
 		/// <summary>
-		/// [Not supported for TreeView] Remove the specified item.
+		/// [Not supported for TreeView] Remove the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
 		/// <returns>Index of removed TItem.</returns>
@@ -409,9 +409,9 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// [Not supported for TreeView] Remove item by specifieitemsex.
+		/// [Not supported for TreeView] Remove vItem by specifieitemsex.
 		/// </summary>
-		/// <returns>Index of removed item.</returns>
+		/// <returns>Index of removed vItem.</returns>
 		/// <param name="index">Index.</param>
 		public override void Remove(int index)
 		{
@@ -419,11 +419,11 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// [Not supported for TreeView] Set the specified item.
+		/// [Not supported for TreeView] Set the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
 		/// <param name="allowDuplicate">If set to <c>true</c> allow duplicate.</param>
-		/// <returns>Index of item.</returns>
+		/// <returns>Index of vItem.</returns>
 		[Obsolete("Not supported for TreeView", true)]
 		public int Set(TItem item, bool allowDuplicate=true)
 		{
@@ -434,7 +434,7 @@ namespace UIWidgets {
 		/// Removes first elements that match the conditions defined by the specified predicate.
 		/// </summary>
 		/// <param name="match">Match.</param>
-		/// <returns>true if item is successfully removed; otherwise, false.</returns>
+		/// <returns>true if vItem is successfully removed; otherwise, false.</returns>
 		public bool Remove(Predicate<TreeNode<TItem>> match)
 		{
 			var index = FindIndex(nodes, match);
@@ -496,11 +496,11 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// Sets component data with specified item.
+		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="component">Component.</param>
-		/// <param name="item">Item.</param>
-		protected override void SetData(TComponent component, ListNode<TItem> item)
+		/// <param name="vComponenent">Component.</param>
+		/// <param name="vItem">Item.</param>
+		protected override void SetData(TComponent vComponenent, ListNode<TItem> vItem)
 		{
 
 		}

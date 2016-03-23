@@ -38,17 +38,17 @@ namespace UIWidgetsSamples {
 		}
 
 		/// <summary>
-		/// Sets component data with specified item.
+		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="component">Component.</param>
-		/// <param name="item">Item.</param>
-		protected override void SetData(TileViewComponentSample component, TileViewItemSample item)
+		/// <param name="vComponenent">Component.</param>
+		/// <param name="vItem">Item.</param>
+		protected override void SetData(TileViewComponentSample vComponenent, TileViewItemSample vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 
 		/// <summary>
-		/// Set highlights colors of specified component.
+		/// Set highlights colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void HighlightColoring(TileViewComponentSample component)
@@ -62,7 +62,7 @@ namespace UIWidgetsSamples {
 		}
 
 		/// <summary>
-		/// Set select colors of specified component.
+		/// Set select colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void SelectColoring(TileViewComponentSample component)
@@ -76,7 +76,7 @@ namespace UIWidgetsSamples {
 		}
 
 		/// <summary>
-		/// Set default colors of specified component.
+		/// Set default colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void DefaultColoring(TileViewComponentSample component)

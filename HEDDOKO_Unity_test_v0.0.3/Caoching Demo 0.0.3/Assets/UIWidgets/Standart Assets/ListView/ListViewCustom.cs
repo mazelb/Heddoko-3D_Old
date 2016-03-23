@@ -81,7 +81,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// The default item.
+		/// The default vItem.
 		/// </summary>
 		[SerializeField]
 		public TComponent DefaultItem;
@@ -101,9 +101,9 @@ namespace UIWidgets
 		Dictionary<int,UnityAction<PointerEventData>> callbacksExit = new Dictionary<int,UnityAction<PointerEventData>>();
 
 		/// <summary>
-		/// Gets the selected item.
+		/// Gets the selected vItem.
 		/// </summary>
-		/// <value>The selected item.</value>
+		/// <value>The selected vItem.</value>
 		public TItem SelectedItem {
 			get {
 				if (SelectedIndex==-1)
@@ -235,7 +235,7 @@ namespace UIWidgets
 		Color selectedColor = Color.black;
 		
 		/// <summary>
-		/// Background color of selected item.
+		/// Background color of selected vItem.
 		/// </summary>
 		public Color SelectedBackgroundColor {
 			get {
@@ -248,7 +248,7 @@ namespace UIWidgets
 		}
 		
 		/// <summary>
-		/// Text color of selected item.
+		/// Text color of selected vItem.
 		/// </summary>
 		public Color SelectedColor {
 			get {
@@ -299,14 +299,14 @@ namespace UIWidgets
 		/// The height of the DefaultItem.
 		/// </summary>
 		[SerializeField]
-		[Tooltip("Minimal height of item")]
+		[Tooltip("Minimal height of vItem")]
 		protected float itemHeight;
 
 		/// <summary>
 		/// The width of the DefaultItem.
 		/// </summary>
 		[SerializeField]
-		[Tooltip("Minimal width of item")]
+		[Tooltip("Minimal width of vItem")]
 		protected float itemWidth;
 
 		/// <summary>
@@ -436,7 +436,7 @@ namespace UIWidgets
 
 			if (DefaultItem==null)
 			{
-				throw new NullReferenceException(String.Format("DefaultItem is null. Set component of type {0} to DefaultItem.", typeof(TComponent).FullName));
+				throw new NullReferenceException(String.Format("DefaultItem is null. Set vComponenent of type {0} to DefaultItem.", typeof(TComponent).FullName));
 			}
 			DefaultItem.gameObject.SetActive(true);
 
@@ -481,9 +481,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Gets the item.
+		/// Gets the vItem.
 		/// </summary>
-		/// <returns>The item.</returns>
+		/// <returns>The vItem.</returns>
 		/// <param name="index">Index.</param>
 		protected TItem GetDataItem(int index)
 		{
@@ -491,7 +491,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Calculates the size of the item.
+		/// Calculates the size of the vItem.
 		/// </summary>
 		protected virtual void CalculateItemSize()
 		{
@@ -656,10 +656,10 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Add the specified item.
+		/// Add the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
-		/// <returns>Index of added item.</returns>
+		/// <returns>Index of added vItem.</returns>
 		public virtual int Add(TItem item)
 		{
 			if (item==null)
@@ -673,7 +673,7 @@ namespace UIWidgets
 		}
 		
 		/// <summary>
-		/// Remove the specified item.
+		/// Remove the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
 		/// <returns>Index of removed TItem.</returns>
@@ -691,9 +691,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Remove item by specifieitemsex.
+		/// Remove vItem by specifieitemsex.
 		/// </summary>
-		/// <returns>Index of removed item.</returns>
+		/// <returns>Index of removed vItem.</returns>
 		/// <param name="index">Index.</param>
 		public virtual void Remove(int index)
 		{
@@ -739,7 +739,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Scrolls to item with specifid index.
+		/// Scrolls to vItem with specifid index.
 		/// </summary>
 		/// <param name="index">Index.</param>
 		protected override void ScrollTo(int index)
@@ -763,9 +763,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Gets the item position.
+		/// Gets the vItem position.
 		/// </summary>
-		/// <returns>The item position.</returns>
+		/// <returns>The vItem position.</returns>
 		/// <param name="index">Index.</param>
 		protected virtual float GetItemPosition(int index)
 		{
@@ -773,9 +773,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Gets the item position bottom.
+		/// Gets the vItem position bottom.
 		/// </summary>
-		/// <returns>The item position bottom.</returns>
+		/// <returns>The vItem position bottom.</returns>
 		/// <param name="index">Index.</param>
 		protected virtual float GetItemPositionBottom(int index)
 		{
@@ -838,11 +838,11 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set the specified item.
+		/// Set the specified vItem.
 		/// </summary>
 		/// <param name="item">Item.</param>
 		/// <param name="allowDuplicate">If set to <c>true</c> allow duplicate.</param>
-		/// <returns>Index of item.</returns>
+		/// <returns>Index of vItem.</returns>
 		public int Set(TItem item, bool allowDuplicate=true)
 		{
 			int index;
@@ -864,11 +864,11 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Sets component data with specified item.
+		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="component">Component.</param>
-		/// <param name="item">Item.</param>
-		protected virtual void SetData(TComponent component, TItem item)
+		/// <param name="vComponenent">Component.</param>
+		/// <param name="vItem">Item.</param>
+		protected virtual void SetData(TComponent vComponenent, TItem vItem)
 		{
 		}
 
@@ -938,9 +938,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Gets the size of the item.
+		/// Gets the size of the vItem.
 		/// </summary>
-		/// <returns>The item size.</returns>
+		/// <returns>The vItem size.</returns>
 		protected float GetItemSize()
 		{
 			return (IsHorizontal())
@@ -1005,7 +1005,7 @@ namespace UIWidgets
 			{
 				//do nothing
 			}
-			// optimization on +-1 item scroll
+			// optimization on +-1 vItem scroll
 			else if (oldTopHiddenItems==(topHiddenItems + 1))
 			{
 				var bottomComponent = components[components.Count - 1];
@@ -1057,7 +1057,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Compare components by component index.
+		/// Compare components by vComponenent index.
 		/// </summary>
 		/// <returns>A signed integer that indicates the relative values of x and y.</returns>
 		/// <param name="x">The x coordinate.</param>
@@ -1215,9 +1215,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Determines if item exists with the specified index.
+		/// Determines if vItem exists with the specified index.
 		/// </summary>
-		/// <returns><c>true</c> if item exists with the specified index; otherwise, <c>false</c>.</returns>
+		/// <returns><c>true</c> if vItem exists with the specified index; otherwise, <c>false</c>.</returns>
 		/// <param name="index">Index.</param>
 		public override bool IsValid(int index)
 		{
@@ -1225,7 +1225,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Coloring the specified component.
+		/// Coloring the specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void Coloring(ListViewItem component)
@@ -1245,7 +1245,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set highlights colors of specified component.
+		/// Set highlights colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void HighlightColoring(ListViewItem component)
@@ -1258,7 +1258,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set highlights colors of specified component.
+		/// Set highlights colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected virtual void HighlightColoring(TComponent component)
@@ -1267,7 +1267,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set select colors of specified component.
+		/// Set select colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected virtual void SelectColoring(ListViewItem component)
@@ -1281,7 +1281,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set select colors of specified component.
+		/// Set select colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected virtual void SelectColoring(TComponent component)
@@ -1290,7 +1290,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set default colors of specified component.
+		/// Set default colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected virtual void DefaultColoring(ListViewItem component)
@@ -1304,7 +1304,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Set default colors of specified component.
+		/// Set default colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected virtual void DefaultColoring(TComponent component)
@@ -1339,7 +1339,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Calls specified function with each component.
+		/// Calls specified function with each vComponenent.
 		/// </summary>
 		/// <param name="func">Func.</param>
 		public override void ForEachComponent(Action<ListViewItem> func)

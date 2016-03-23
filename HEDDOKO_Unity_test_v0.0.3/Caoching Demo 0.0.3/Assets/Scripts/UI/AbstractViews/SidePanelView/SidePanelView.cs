@@ -47,7 +47,7 @@ namespace Assets.Scripts.UI.AbstractViews.SidePanelView
         ObservableList<TreeNode<ISideViewPanelItem>> CreateData()
         {
             var vNodes = new ObservableList<TreeNode<ISideViewPanelItem>>();
-            vNodes.Add(Node(new SideViewPanelItem("DASHBOARD", mSpriteContainer[190], null)));
+            vNodes.Add(Node(new SideViewPanelItem("DASHBOARD", mSpriteContainer[11], null)));
 
             var vSubMovementNodes = CreateSubMovementList();
             vNodes.Add(Node(new SideViewPanelItem("MOVEMENTS", mSpriteContainer[69], null), vSubMovementNodes));

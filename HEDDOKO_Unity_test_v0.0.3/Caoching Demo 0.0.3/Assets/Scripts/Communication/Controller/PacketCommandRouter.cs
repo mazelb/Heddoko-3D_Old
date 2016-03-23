@@ -378,7 +378,11 @@ namespace Assets.Scripts.Communication
         }
 
 
-
+        /// <summary>
+        /// Sends a high priority message
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
 
         private void SendHighPriorityMessage(object vSender, object vArgs)
         {
@@ -388,7 +392,11 @@ namespace Assets.Scripts.Communication
             PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.High, MessagePayload = vPayload };
             ClientSocket.AddMessage(vMessage);
         }
-
+        /// <summary>
+        /// Sends a Urgent priority message
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
         private void SendUrgentPriorityMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
@@ -397,7 +405,11 @@ namespace Assets.Scripts.Communication
             PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.Urgent, MessagePayload = vPayload };
             ClientSocket.AddMessage(vMessage);
         }
-
+        /// <summary>
+        /// Sends a Low priority message
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
         private void SendLowPriorityMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
@@ -406,7 +418,11 @@ namespace Assets.Scripts.Communication
             PriorityMessage vMessage = new PriorityMessage() { Priority = Priority.Low, MessagePayload = vPayload };
             ClientSocket.AddMessage(vMessage);
         }
-
+        /// <summary>
+        /// Sends a Medium priority message
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vArgs"></param>
         private void SendMediumPriorityMessage(object vSender, object vArgs)
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;

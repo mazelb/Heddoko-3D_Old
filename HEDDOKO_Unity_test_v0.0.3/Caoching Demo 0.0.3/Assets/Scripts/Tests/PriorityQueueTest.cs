@@ -8,6 +8,7 @@
 using System;
 using Assets.Scripts.Communication;
 using Assets.Scripts.Utils.DebugContext.logging;
+using HeddokoLib.adt;
 using UnityEngine;
 using LogType = Assets.Scripts.Utils.DebugContext.logging.LogType;
 using Random = UnityEngine.Random;

@@ -224,20 +224,17 @@ namespace UIWidgets
         {
             if (!AllowResize)
             {
-                Debug.Log("Allow resize false");
-
+ 
                 return;
             }
             if (processDrag || ProcessCellReorder)
             {
-                Debug.Log("processDrag || ProcessCellReorder");
-
+ 
                 return;
             }
             if ((CursorTexture == null) || (!Input.mousePresent))
             {
-                Debug.Log("(CursorTexture==null) || (!Input.mousePresent)");
-
+ 
                 return;
             }
 

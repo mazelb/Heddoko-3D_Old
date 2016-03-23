@@ -8,17 +8,17 @@ namespace UIWidgets {
 	public class TreeView : TreeViewCustom<TreeViewComponent,TreeViewItem> {
 
 		/// <summary>
-		/// Sets component data with specified item.
+		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="component">Component.</param>
-		/// <param name="item">Item.</param>
-		protected override void SetData(TreeViewComponent component, ListNode<TreeViewItem> item)
+		/// <param name="vComponenent">Component.</param>
+		/// <param name="vItem">Item.</param>
+		protected override void SetData(TreeViewComponent vComponenent, ListNode<TreeViewItem> vItem)
 		{
-			component.SetData(item.Node, item.Depth);
+			vComponenent.SetData(vItem.Node, vItem.Depth);
 		}
 		
 		/// <summary>
-		/// Set highlights colors of specified component.
+		/// Set highlights colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void HighlightColoring(TreeViewComponent component)
@@ -28,7 +28,7 @@ namespace UIWidgets {
 		}
 		
 		/// <summary>
-		/// Set select colors of specified component.
+		/// Set select colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void SelectColoring(TreeViewComponent component)
@@ -38,7 +38,7 @@ namespace UIWidgets {
 		}
 		
 		/// <summary>
-		/// Set default colors of specified component.
+		/// Set default colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void DefaultColoring(TreeViewComponent component)

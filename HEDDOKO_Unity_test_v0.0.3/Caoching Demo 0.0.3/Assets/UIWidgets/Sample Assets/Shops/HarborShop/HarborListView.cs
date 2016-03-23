@@ -4,9 +4,9 @@ using UIWidgets;
 
 namespace UIWidgetsSamples.Shops {
 	public class HarborListView : ListViewCustom<HarborListViewComponent,HarborOrderLine> {
-		protected override void SetData(HarborListViewComponent component, HarborOrderLine item)
+		protected override void SetData(HarborListViewComponent vComponenent, HarborOrderLine vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 		
 		protected override void HighlightColoring(HarborListViewComponent component)

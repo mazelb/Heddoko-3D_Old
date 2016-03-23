@@ -4,11 +4,10 @@ using System.Linq;
 using System;
 
 namespace UIWidgets {
-
-	[System.Serializable]
-	/// <summary>
-	/// ListViewIcons item description.
-	/// </summary>
+    /// <summary>
+    /// ListViewIcons vItem description.
+    /// </summary>
+    [System.Serializable]
 	public class ListViewIconsItemDescription {
 		/// <summary>
 		/// The icon.
@@ -71,17 +70,17 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// Sets component data with specified item.
+		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="component">Component.</param>
-		/// <param name="item">Item.</param>
-		protected override void SetData(ListViewIconsItemComponent component, ListViewIconsItemDescription item)
+		/// <param name="vComponenent">Component.</param>
+		/// <param name="vItem">Item.</param>
+		protected override void SetData(ListViewIconsItemComponent vComponenent, ListViewIconsItemDescription vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 
 		/// <summary>
-		/// Set highlights colors of specified component.
+		/// Set highlights colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void HighlightColoring(ListViewIconsItemComponent component)
@@ -91,7 +90,7 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// Set select colors of specified component.
+		/// Set select colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void SelectColoring(ListViewIconsItemComponent component)
@@ -101,7 +100,7 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// Set default colors of specified component.
+		/// Set default colors of specified vComponenent.
 		/// </summary>
 		/// <param name="component">Component.</param>
 		protected override void DefaultColoring(ListViewIconsItemComponent component)

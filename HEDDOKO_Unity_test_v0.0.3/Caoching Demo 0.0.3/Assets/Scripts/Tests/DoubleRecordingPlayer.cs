@@ -49,8 +49,6 @@ namespace Assets.Scripts.Tests
 
         public override void CreateDefaultLayout()
         {
-             
-
             BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
             BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
             mRootNode = BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");

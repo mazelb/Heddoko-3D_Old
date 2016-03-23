@@ -404,14 +404,14 @@
         </member>
         <member name="T:ExitGames.Client.Photon.SimulationItem">
             <summary>
-            A simulation item is an action that can be queued to simulate network lag.
+            A simulation vItem is an action that can be queued to simulate network lag.
             </summary>
         </member>
         <member name="F:ExitGames.Client.Photon.SimulationItem.stopw">
             <summary>With this, the actual delay can be measured, compared to the intended lag.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.SimulationItem.TimeToExecute">
-            <summary>Timestamp after which this item must be executed.</summary>
+            <summary>Timestamp after which this vItem must be executed.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.SimulationItem.ActionToExecute">
             <summary>Action to execute when the lag-time passed.</summary>
@@ -1088,7 +1088,7 @@
             of it.
             Default: 100.
             Example: If command is received, OnStatusChanged will be called when the respective command queue
-            has 100, 200, 300 ... items.
+            has 100, 200, 300 ... vItems.
             </summary>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.SentCountAllowance">

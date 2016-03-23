@@ -94,14 +94,14 @@ namespace UIWidgetsSamples {
 			DataSource.Add(item);
 		}
 
-		protected override void SetData(SteamSpyComponent component, SteamSpyItem item)
+		protected override void SetData(SteamSpyComponent vComponenent, SteamSpyItem vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 		
 		protected override void HighlightColoring(SteamSpyComponent component)
 		{
-			//base.HighlightColoring(component);
+			//base.HighlightColoring(vComponenent);
 
 			component.Name.color = HighlightedColor;
 			component.ScoreRank.color = HighlightedColor;
@@ -113,7 +113,7 @@ namespace UIWidgetsSamples {
 		
 		protected override void SelectColoring(SteamSpyComponent component)
 		{
-			//base.SelectColoring(component);
+			//base.SelectColoring(vComponenent);
 
 			component.Name.color = SelectedColor;
 			component.ScoreRank.color = SelectedColor;
@@ -125,7 +125,7 @@ namespace UIWidgetsSamples {
 		
 		protected override void DefaultColoring(SteamSpyComponent component)
 		{
-			//base.DefaultColoring(component);
+			//base.DefaultColoring(vComponenent);
 
 			component.Name.color = DefaultColor;
 			component.ScoreRank.color = DefaultColor;

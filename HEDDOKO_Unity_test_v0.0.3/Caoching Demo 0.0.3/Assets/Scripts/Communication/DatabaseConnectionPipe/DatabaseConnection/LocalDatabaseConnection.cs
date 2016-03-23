@@ -28,16 +28,22 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
     {
         private SqliteConnection mDbConnection;
 
-        public bool Equals([NotNull] IDatabaseConnection other)
+        public string DbConnectionUUID { get; private set; }
+        public LocalDatabaseConnection()
         {
-            if (other == null) throw new ArgumentNullException("other");
-            throw new NotImplementedException();
+            DbConnectionUUID = Guid.NewGuid().ToString();
         }
 
-        public Guid UUID { get; private set; }
+        
+        public bool Equals([NotNull] IDatabaseConnection other)
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+            return other.DbConnectionUUID.CompareTo(DbConnectionUUID) == 0;
 
-        public string DbConnectionUUID { get; private set; }
-
+        }
         public bool Connect(Action vCallback = null)
         {
             bool vReturn = false;

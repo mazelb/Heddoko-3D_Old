@@ -62,9 +62,9 @@ namespace UIWidgetsSamples {
 			DataSource.Comparison = itemsComparison;
 		}
 
-		protected override void SetData(ListViewCustomSampleComponent component, ListViewCustomSampleItemDescription item)
+		protected override void SetData(ListViewCustomSampleComponent vComponenent, ListViewCustomSampleItemDescription vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 
 		protected override void HighlightColoring(ListViewCustomSampleComponent component)

@@ -18,24 +18,7 @@ namespace Assets.Scripts.Frames_Pipeline
     /// </summary>
     public class RecordingPlaybackTask
     {
-        public float PlaybackSpeed
-        {
-            get { return mPlaybackSpeed; }
-            set
-            {
-                IteratorAdder = Math.Sign(value) * 1;
-                IsRewinding = IteratorAdder < 1;
-                //check if playback speed is 0, then set pause to true
-                if (mPlaybackSpeed == 0)
-                {
-                    IsPaused = true;
-                    return;
-                }
-
-                mPlaybackSpeed = value;
-
-            }
-        }
+      
 
         public bool IsWorking;
         public bool IsPaused { get; set; }
@@ -66,7 +49,24 @@ namespace Assets.Scripts.Frames_Pipeline
         /// the index iterator changes the local position of the converted frame data
         /// </summary>
         private int mIteratorAdder = 1;
+        public float PlaybackSpeed
+        {
+            get { return mPlaybackSpeed; }
+            set
+            {
+                IteratorAdder = Math.Sign(value) * 1;
+                IsRewinding = IteratorAdder < 1;
+                //check if playback speed is 0, then set pause to true
+                if (mPlaybackSpeed == 0)
+                {
+                    IsPaused = true;
+                    return;
+                }
 
+                mPlaybackSpeed = value;
+
+            }
+        }
         /// <summary>
         /// Sets the current playback state to rewinding. 
         /// </summary>

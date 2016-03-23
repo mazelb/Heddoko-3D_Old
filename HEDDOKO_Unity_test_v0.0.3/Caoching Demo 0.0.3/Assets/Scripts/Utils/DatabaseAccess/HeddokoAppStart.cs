@@ -168,8 +168,8 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         private void SetupDatabase()
         {
-          //  mDatabase = new Database(DatabaseConnectionType.Local);
-        //    mDatabase.Init();
+            mDatabase = new Database(DatabaseConnectionType.Local);
+          mDatabase.Init();
             TaggingManager.Instance.SetDatabase(mDatabase);
         }
         void OnGUI()

@@ -466,7 +466,6 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
         /// A new recording has been selected
         /// </summary>
         /// <param name="vNewBodyFramesRecording"></param>
-
         public void NewRecordingSelected(BodyFramesRecording vNewBodyFramesRecording)
         {
             if (mBody != null)
@@ -496,6 +495,8 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
                 yield return null;
             }
             mPlaybackTask = mBody.MBodyFrameThread.PlaybackTask;
+             
+
         }
 
         /// <summary>

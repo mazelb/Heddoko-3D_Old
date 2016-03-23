@@ -78,8 +78,8 @@ namespace Assets.Scripts.Body_Data.view
         {
             SubSegmentTransforms.Add(vAssociatedTransform);
             SubsegmentTransform = vAssociatedTransform;
-            mInitialPosition = vAssociatedTransform.localPosition;  
-            
+            mInitialPosition = vAssociatedTransform.localPosition;
+
             try
             {
                 GameObject v2DGameObject = GameObject.FindGameObjectWithTag(gameObject.name + "2D");
@@ -100,7 +100,7 @@ namespace Assets.Scripts.Body_Data.view
         {
             foreach (Transform vObjTransform in SubSegmentTransforms)
             {
-                if(vResetRotation)
+                if (vResetRotation)
                 {
                     vObjTransform.localRotation = mInitialRotation;
                     vObjTransform.rotation = mInitialRotation;
@@ -125,7 +125,7 @@ namespace Assets.Scripts.Body_Data.view
             if (mSpriteMover != null)
             {
                 mSpriteMover.ApplyTransformations();
-            }           
+            }
         }
 
 
@@ -236,6 +236,15 @@ namespace Assets.Scripts.Body_Data.view
                 vObjTransform.rotation = Quaternion.identity;
                 vObjTransform.localRotation = Quaternion.identity;
             }
+        }
+
+        /// <summary>
+        /// clears out transforms 
+        /// </summary>
+        internal void Clear()
+        {
+            SubsegmentTransform = null;
+            SubSegmentTransforms = new List<Transform>();
         }
     }
 }

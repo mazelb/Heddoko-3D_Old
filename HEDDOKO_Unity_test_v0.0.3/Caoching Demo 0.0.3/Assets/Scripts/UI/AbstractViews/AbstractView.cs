@@ -43,14 +43,25 @@ namespace Assets.Scripts.UI.AbstractViews
            
         }
 
+        /// <summary>
+        /// Hides the view 
+        /// </summary>
         public virtual void Hide()
-        { }
+        {
+            
+        }
 
+        /// <summary>
+        /// Shows the view
+        /// </summary>
         public virtual void Show()
         {
             
         }
 
+        /// <summary>
+        /// Hides the view, and brings the previous view into view
+        /// </summary>
         public virtual void Back()
         {
             Hide();

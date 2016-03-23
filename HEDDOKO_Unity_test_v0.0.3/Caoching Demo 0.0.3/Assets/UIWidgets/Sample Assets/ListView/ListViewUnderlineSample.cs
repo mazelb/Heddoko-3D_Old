@@ -37,9 +37,9 @@ namespace UIWidgetsSamples {
 			DataSource.Comparison = itemsComparison;
 		}
 		
-		protected override void SetData(ListViewUnderlineSampleComponent component, ListViewUnderlineSampleItemDescription item)
+		protected override void SetData(ListViewUnderlineSampleComponent vComponenent, ListViewUnderlineSampleItemDescription vItem)
 		{
-			component.SetData(item);
+			vComponenent.SetData(vItem);
 		}
 		
 		protected override void HighlightColoring(ListViewUnderlineSampleComponent component)
