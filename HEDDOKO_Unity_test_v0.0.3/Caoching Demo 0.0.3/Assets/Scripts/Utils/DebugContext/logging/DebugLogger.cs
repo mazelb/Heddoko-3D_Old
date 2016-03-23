@@ -155,6 +155,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             mLogTypeToLogpathType.Add(LogType.ApplicationCommand, OutputLogPath.ApplicationLog);
             mLogTypeToLogpathType.Add(LogType.ApplicationResponse, OutputLogPath.ApplicationLog);
             mLogTypeToLogpathType.Add(LogType.ApplicationFrame, OutputLogPath.ApplicationFrames);
+            mLogTypeToLogpathType.Add(LogType.FileConversionException, OutputLogPath.ApplicationLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackCommand, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackResponse, OutputLogPath.BrainpackMsgLog);
             mLogTypeToLogpathType.Add(LogType.BrainpackFrame, OutputLogPath.BrainpackFrames);
@@ -255,7 +256,8 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         SocketClientReceive = 8,
         SocketClientError = 9,
         SocketClientSettings = 10,
-        UnitTest = 11
+        UnitTest = 11,
+        FileConversionException =12
     }
 
     public enum OutputLogPath

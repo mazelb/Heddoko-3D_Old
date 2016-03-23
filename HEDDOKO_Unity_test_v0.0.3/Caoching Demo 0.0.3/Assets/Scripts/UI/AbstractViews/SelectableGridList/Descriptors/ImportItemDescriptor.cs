@@ -7,6 +7,7 @@
 */
 
 using System;
+using Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
@@ -26,6 +27,18 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
         [SerializeField]
         private DateTime mCreatedAtTime;
 
+        [SerializeField] public int RecordingDuration;
+
+        public string RecordingDurationToString
+        {
+            get
+            {
+                string vTime = RecordingProgressSubControl.FormatSecondsToTimeString(RecordingDuration);
+                return vTime;
+            }
+        }
+
+        public bool IsMarkedForDeletion;
         public DateTime CreatedAtTime
         {
             get
@@ -53,6 +66,6 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
             }
         }
 
-
+        public string FilePath { get; set; }
     }
 }

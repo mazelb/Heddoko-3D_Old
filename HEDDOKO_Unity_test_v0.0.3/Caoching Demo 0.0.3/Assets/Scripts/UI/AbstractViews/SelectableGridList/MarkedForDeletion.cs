@@ -6,9 +6,10 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
+using System; 
+using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using Assets.Scripts.Utils.Containers;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine; 
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
@@ -16,14 +17,15 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
     /// <summary>
     ///  Represents an item that is marked for deletion
     /// </summary>
-    public class MarkedForDeletion : MonoBehaviour 
+    public class MarkedForDeletion : MonoBehaviour
     {
         public FontAwesomeSpriteContainer Container;
         public Image MarkedForDeletionIcon;
         public Button Button;
         public Color MarkedForDeletionColor;
         public Color UnmarkedForDeletionColor;
-  private bool mMarkForDeletion;
+        [NonSerialized]
+        private bool mMarkForDeletion;
 
         /// <summary>
         /// Getter and setter. Setter changes the state of 
@@ -36,8 +38,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
                 return mMarkForDeletion;
             }
             set
-            {
-                Debug.Log("Set called");
+            { 
                 Color vCurrent = MarkedForDeletionIcon.color;
                 mMarkForDeletion = value;
                 if (mMarkForDeletion)
@@ -51,15 +52,24 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
                 MarkedForDeletionIcon.color = vCurrent;
             }
         }
+ 
+        public ImportItemDescriptor Item { get; set; }
+
         void Awake()
         {
             MarkedForDeletionIcon.sprite = Container.GetSpriteAt(21); 
-            IsMarkedForDeletion = false;
             Button = GetComponent<Button>();
-            Button.onClick.AddListener(()=> { IsMarkedForDeletion = !IsMarkedForDeletion; });
+            Button.onClick.AddListener(() =>
+            {
+                IsMarkedForDeletion = !IsMarkedForDeletion;
+                if (Item != null)
+                {
+                    Item.IsMarkedForDeletion = mMarkForDeletion;
+                }
+            });
         }
 
 
-   
+
     }
 }

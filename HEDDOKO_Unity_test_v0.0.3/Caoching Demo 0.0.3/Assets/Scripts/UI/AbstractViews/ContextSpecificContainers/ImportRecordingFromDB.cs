@@ -11,6 +11,7 @@ using System.IO;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = System.Random;
 
 
@@ -22,7 +23,9 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
     public class ImportRecordingFromDB : AbstractView
     {
         public ImportViewSelectableGridList GridList;
-
+        public Button OpenFolderButton;
+        private FolderScanner mFolderScanner = new FolderScanner();
+        //private ImportToDatabase6+++++++++++++++++++++++++
         public int NumberOfItems = 200;
 
         private Random gen = new Random();
@@ -34,39 +37,15 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
         }
         void Awake()
         {
-            GridList.Initialize();
-            string vPath = "Assets/Resources/english-words.dict";
-            string vFileContent = "";
-            string[] vDictionaryContent= new string[1];
-            
-              using (StreamReader vStreamReader = new StreamReader(File.OpenRead(vPath)))
-              {
-                  vFileContent = vStreamReader.ReadToEnd();
-                  vDictionaryContent = vFileContent.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
-              }
-            List<ImportItemDescriptor> vItemList = new List<ImportItemDescriptor>();
-            for (int i = 0; i < NumberOfItems; i++)
-            {
-                int vRand = gen.Next(0, NumberOfItems);
-                ImportItemDescriptor vItem = new ImportItemDescriptor();
-                vItem.MovementTitle = vDictionaryContent[vRand];
-                vItem.CreatedAtTime = RandomDay();
-               
-                vItemList.Add(vItem);
-            }
-            ImportItemDescriptor vTodayItem = new ImportItemDescriptor();
-            vTodayItem.MovementTitle = "0a_Todays_recording";
-            vTodayItem.CreatedAtTime = DateTime.Now;
-            ImportItemDescriptor vYesterdayItem = new ImportItemDescriptor();
-            vYesterdayItem.MovementTitle = "0b_Yesterdays_recording";
-            vYesterdayItem.CreatedAtTime = DateTime.Now.AddDays(-1);
-            vItemList.Add(vTodayItem);
-            vItemList.Add(vYesterdayItem);
-            GridList.LoadData(vItemList); 
+            CreateDefaultLayout();
         }
+
+     
 
         public override void CreateDefaultLayout()
         {
+            GridList.Initialize();
+            OpenFolderButton.onClick.AddListener(OpenSelectFolderDialog);
 
         }
 
@@ -80,6 +59,24 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
             gameObject.SetActive(true);
         }
 
+        public void OpenSelectFolderDialog()
+        {
+            mFolderScanner.DirectoryScanCompleted += OnScanCompletion;
+            // to work around uni file to only filter folders , add a nonsensical file extension
+            UniFileBrowser.use.filterFileExtensions = new[] { "som3rAN66Ddhum3cks2Tension38F" };
+            UniFileBrowser.use.filterFiles = true;
+            UniFileBrowser.use.showVolumes = true;
+            UniFileBrowser.use.volumesAreSeparate = true;
+            UniFileBrowser.use.OpenFolderWindow(true, mFolderScanner.ScanDirectory);
+        }
+
+        private void OnScanCompletion(List<ImportItemDescriptor> vDescriptors)
+        {
+            mFolderScanner.DirectoryScanCompleted -= OnScanCompletion;
+            GridList.LoadData(vDescriptors);
+        }
+
+     
 
 
     }

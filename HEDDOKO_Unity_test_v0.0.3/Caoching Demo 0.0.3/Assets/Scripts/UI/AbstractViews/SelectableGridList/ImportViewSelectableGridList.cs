@@ -8,8 +8,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic; 
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using UIWidgets;
 using UnityEngine;
@@ -48,6 +47,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         {
             mSortingComparisons.Add(SortingType.ByTitle, TitleComparison);
             mSortingComparisons.Add(SortingType.ByDate, DateTimeComparison);
+            mSortingComparisons.Add(SortingType.ByDuration, RecordingDurationComparison);
         }
 
         /// <summary>
@@ -84,6 +84,17 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         private int DateTimeComparison(ImportItemDescriptor vItemA, ImportItemDescriptor vItemY)
         {
             return vItemA.CreatedAtTime.CompareTo(vItemY.CreatedAtTime);
+        }
+
+        /// <summary>
+        /// comparison between recording duration
+        /// </summary>
+        /// <param name="vItemA"></param>
+        /// <param name="vItemY"></param>
+        /// <returns></returns>
+        private int RecordingDurationComparison(ImportItemDescriptor vItemA, ImportItemDescriptor vItemY)
+        {
+            return vItemA.RecordingDuration.CompareTo(vItemY.RecordingDuration);
         }
         /// <summary>
         /// Sets the component with spefied vItem
@@ -129,8 +140,9 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
                 int vTotalCount = SelectedItems.Count;
                 return vTotalCount;
             }
-
         }
+
+        
 
         /// <summary>
         /// toggle sort according to the sort
@@ -149,12 +161,21 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
             }
         }
 
+
         /// <summary>
         /// Sort the grid list by title
         /// </summary>
         public void SortByTitle()
         {
             ToggleSort(SortingType.ByTitle);
+        }
+
+        /// <summary>
+        /// Sort the grid by duration
+        /// </summary>
+        public void SortByDuration()
+        {
+            ToggleSort(SortingType.ByDuration);
         }
 
         /// <summary>
@@ -167,7 +188,8 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         public enum SortingType
         {
             ByTitle,
-            ByDate
+            ByDate,
+            ByDuration
         }
     }
 }

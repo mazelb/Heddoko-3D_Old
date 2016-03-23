@@ -32,20 +32,20 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
         /// Formats Milliseconds to a string in the following format HH:MM:SS
         /// </summary>
         /// <param name="vTotalTime"></param>
-        string FormatSecToStr(float vTotalTime)
+       public static string FormatSecondsToTimeString(int vTotalTime)
         {
             //seperate the total time passed in into three ints. 
             float vTempTime = vTotalTime;
             int vHour = (int)(vTempTime / 3600f);
-            vTempTime -= vHour * 3600000;
+            vTempTime -= vHour * 3600f;
             int vMin = (int)(vTempTime / 60);
-            vTempTime -= vMin * 60000;
+            vTempTime -= vMin * 60;
             int vSec = (int)vTempTime;
 
             //Format the time segements in case the values are less than 10
             string vToHour = vHour < 10 ? "0" + vHour + ":" : vHour + ":";
             string vToMin = vMin < 10 ? "0" + vMin + ":" : vMin + ":";
-            string vToSec = vSec < 10 ? "0" + vSec + ":" : vSec + ":";
+            string vToSec = vSec < 10 ? "0" + vSec   : vSec+""  ;
 
             return vToHour + vToMin + vToSec;
         }
@@ -63,7 +63,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
             float vCurrTimeStamp = ParentPanel.GetTimeStampFromFrameIdx(vIndex);
             float vStartTime = ParentPanel.GetTimeStampFromFrameIdx(0);
             float vCurrentTime = vCurrTimeStamp - vStartTime;
-            CurrentPlayTimeText.text = "/" + FormatSecToStr(vCurrentTime);
+            CurrentPlayTimeText.text = "/" + FormatSecondsToTimeString((int)vCurrentTime);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording
         public void UpdateMaxTimeAndMaxValue(int recordingCount, float totalRecordingTime)
         {
             PlaySlider.maxValue = recordingCount;
-            TotalRecordingTimeText.text = FormatSecToStr(totalRecordingTime);
+            TotalRecordingTimeText.text = FormatSecondsToTimeString((int)totalRecordingTime);
 
         }
     }
