@@ -22,6 +22,7 @@ namespace Assets.Demos
     /// </summary>
     public class DebugContextChecker : MonoBehaviour
     {
+        public bool DisableDebugging = false;
         public BrainpackComPortText BrainpackComPortText;
         private bool ResetTPosButtonEnabled;
         private int mHomeTPoseKeyCounter = 0;
@@ -41,30 +42,37 @@ namespace Assets.Demos
 
         void Awake()
         {
-            bool vIsDebug = false;
-#if UNITY_EDITOR 
-            vIsDebug = true;
+            if (!DisableDebugging)
+            {
+
+                bool vIsDebug = false;
+#if UNITY_EDITOR
+                vIsDebug = true;
 
 #endif
 #if DEVELOPMENT_BUILD
            vIsDebug = true;
 #endif
-            mDebuggingActive = vIsDebug;
-            mChildren.SetActive(mDebuggingActive);
-            mSegmentOptions.SetActive(mDebuggingActive);
-            foreach (var vDebuggingItems in mDebuggingItems)
-            {
-                vDebuggingItems.SetActive(mDebuggingActive);
+                mDebuggingActive = vIsDebug;
+                mChildren.SetActive(mDebuggingActive);
+                mSegmentOptions.SetActive(mDebuggingActive);
+                foreach (var vDebuggingItems in mDebuggingItems)
+                {
+                    vDebuggingItems.SetActive(mDebuggingActive);
+                }
             }
+
         }
         public void ToggleDebugContext()
         {
             //DebugTextAnimator.clip = Clip; 
            
             mDebuggingActive = !mDebuggingActive;
-            DebugToggleInfo.text = mDebuggingActive ? "DEBUG ENABLED" : "DEBUG DISABLED";
-          //  DebugTextAnimator.Play("Debug text animation");
-            DebugTextAnimator.Play("Debug text animation", -1, 0f);
+            if (DebugTextAnimator && DebugTextAnimator)
+            {
+                DebugToggleInfo.text = mDebuggingActive ? "DEBUG ENABLED" : "DEBUG DISABLED"; 
+                DebugTextAnimator.Play("Debug text animation", -1, 0f);
+            }
             mChildren.SetActive(mDebuggingActive);
             mSegmentOptions.SetActive(mDebuggingActive);
             DebugLogger.Settings.LogAll = mDebuggingActive;
@@ -77,38 +85,45 @@ namespace Assets.Demos
 
         void OnGUI()
         {
-            Event e = Event.current;
-            if (!ResetTPosButtonEnabled && Input.anyKeyDown && e.isKey)
+            if (!DisableDebugging)
             {
-                if (e.keyCode == KeyCode.Home)
+                Event e = Event.current;
+                if (!ResetTPosButtonEnabled && Input.anyKeyDown && e.isKey)
                 {
-                    mHomeTPoseKeyCounter++;
-                    if (mHomeTPoseKeyCounter == 5)
+                    if (e.keyCode == KeyCode.Home)
                     {
-                        InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+                        mHomeTPoseKeyCounter++;
+                        if (mHomeTPoseKeyCounter == 5)
+                        {
+                            InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+                            mHomeTPoseKeyCounter = 0;
+                        }
+                    }
+                    if (e.keyCode == KeyCode.F12)
+                    {
+                        mDebugContextEnablerCounter++;
+                        if (mDebugContextEnablerCounter == 5)
+                        {
+                            ToggleDebugContext();
+                            if (BrainpackComPortText)
+                            {
+                                BrainpackComPortText.EnableDisable();
+                            }
+                            mDebugContextEnablerCounter = 0;
+                        }
+                    }
+
+                    else if (e.keyCode != KeyCode.Home)
+                    {
                         mHomeTPoseKeyCounter = 0;
                     }
-                }
-                if (e.keyCode == KeyCode.F12)
-                {
-                    mDebugContextEnablerCounter++;
-                    if (mDebugContextEnablerCounter == 5)
+                    else if (e.keyCode == KeyCode.F12)
                     {
-                        ToggleDebugContext();
-                        BrainpackComPortText.EnableDisable();
                         mDebugContextEnablerCounter = 0;
                     }
                 }
-
-                else if (e.keyCode != KeyCode.Home)
-                {
-                    mHomeTPoseKeyCounter = 0;
-                }
-                else if (e.keyCode == KeyCode.F12)
-                {
-                    mDebugContextEnablerCounter = 0;
-                }
             }
+            
 
         }
     }

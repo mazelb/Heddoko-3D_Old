@@ -55,6 +55,12 @@ namespace HeddokoLib.utils
         public static string StopRecordingReq = "0x34";
         public static string StopRecordingResp = "0x35";
         public static string ClearBuffer = "0x36";
+        public static string DisableSleepTimerReq = "0x37";
+        public static string DisableSleepTimerResp = "0x38";
+        public static string EnableSleepTimerReq = "0x39";
+        public static string EnableSleepTimerResp = "0x39";
+
+
         public static string ClientError = "9x00";
      
 
