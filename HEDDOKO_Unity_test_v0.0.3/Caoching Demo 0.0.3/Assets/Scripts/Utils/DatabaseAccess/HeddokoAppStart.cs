@@ -35,12 +35,6 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private Database mDatabase;
         public GameObject[] GOtoReEnable;
         public ScrollablePanel ContentPanel;
-        public PlayerStreamManager PlayerStreamManager;
-        public DebugContextChecker DebugContextChecker;
-        private bool ResetTPosButtonEnabled;
-        private int mHomeTPoseKeyCounter = 0;
-        private int mDebugContextEnablerCounter = 0;
-        public BrainpackComPortText BrainpackComPortText;
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
@@ -172,41 +166,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
           mDatabase.Init();
             TaggingManager.Instance.SetDatabase(mDatabase);
         }
-        void OnGUI()
-        {
-            Event e = Event.current;
-            if (!ResetTPosButtonEnabled && Input.anyKeyDown && e.isKey)
-            {
-                if (e.keyCode == KeyCode.Home)
-                {
-                    mHomeTPoseKeyCounter++;
-                    if (mHomeTPoseKeyCounter == 5)
-                    {
-                        InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
-                        mHomeTPoseKeyCounter = 0;
-                    }
-                }
-                if (e.keyCode == KeyCode.F12)
-                {
-                    mDebugContextEnablerCounter++;
-                    if (mDebugContextEnablerCounter == 5)
-                    {
-                        DebugContextChecker.EnableDebugContext();
-                        BrainpackComPortText.EnableDisable();
-                    }
-                }
 
-                else if (e.keyCode != KeyCode.Home)
-                {
-                    mHomeTPoseKeyCounter = 0;
-                }
-                else if (e.keyCode == KeyCode.F12)
-                {
-                    mDebugContextEnablerCounter = 0;
-                }
-            }
-
-        }
 
     }
 }
