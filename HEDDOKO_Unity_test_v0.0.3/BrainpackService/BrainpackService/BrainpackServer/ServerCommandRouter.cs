@@ -74,7 +74,39 @@ namespace BrainpackService.BrainpackServer
             mHeddokoCommand.Register(HeddokoCommands.GetResponseMessageReq, RequestMessageResponse);
             mHeddokoCommand.Register(HeddokoCommands.StopRecordingReq, StopRecording);
             mHeddokoCommand.Register(HeddokoCommands.ClearBuffer, ClearBrainpackSerialConnectorBuffer);
+            mHeddokoCommand.Register(HeddokoCommands.EnableSleepTimerReq, EnableSleepTimer);
+            mHeddokoCommand.Register(HeddokoCommands.DisableSleepTimerReq, DisableBrainpackSleepTimer);
 
+        }
+
+        /// <summary>
+        /// Disables the brainpack sleep timer
+        /// </summary>
+        /// <param name="vsender"></param>
+        /// <param name="vargs"></param>
+        private void DisableBrainpackSleepTimer(object vSender, object vargs)
+        {
+            BrainpackSerialConnector.Instance.SendCommandToBrainpack("AutoOff0");
+            DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, "Request to disable the sleep timer");
+            string vResponses = "";
+            HeddokoPacket vResultPacket = new HeddokoPacket(HeddokoCommands.DisableSleepTimerResp, vResponses);
+            string vWrapped = HeddokoPacket.Wrap(vResultPacket);
+            AsynchronousSocketListener.Send((Socket)vSender, vWrapped);
+        }
+
+        /// <summary>
+        ///  enables the brainpack Sleep timer
+        /// </summary>
+        /// <param name="vSender"></param>
+        /// <param name="vargs"></param>
+        private void EnableSleepTimer(object vSender, object vargs)
+        {
+            BrainpackSerialConnector.Instance.SendCommandToBrainpack("AutoOff1");
+            DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, "Request to enable sleep timer");
+            string vResponses = "";
+            HeddokoPacket vResultPacket = new HeddokoPacket(HeddokoCommands.EnableSleepTimerResp, vResponses);
+            string vWrapped = HeddokoPacket.Wrap(vResultPacket);
+            AsynchronousSocketListener.Send((Socket)vSender, vWrapped);
         }
 
         /// <summary>

@@ -114,10 +114,22 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.GetBrainpackVersionReq, SendMediumPriorityMessage);
             mCommand.Register(HeddokoCommands.StartRecordingReq, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.ClearBuffer, SendMediumPriorityMessage);
+            mCommand.Register(HeddokoCommands.EnableSleepTimerReq, SendHighPriorityMessage);
+            mCommand.Register(HeddokoCommands.DisableSleepTimerReq, SendHighPriorityMessage);
+            mCommand.Register(HeddokoCommands.EnableSleepTimerResp, SleepTimerEnabled);
+            mCommand.Register(HeddokoCommands.DisableSleepTimerResp, SleepTimerDisabled);
+
         }
 
+        private void SleepTimerDisabled(object vsender, object vargs)
+        {
+        
+        }
 
-
+        private void SleepTimerEnabled(object vsender, object vargs)
+        {
+       
+        }
 
 
         /// <summary>

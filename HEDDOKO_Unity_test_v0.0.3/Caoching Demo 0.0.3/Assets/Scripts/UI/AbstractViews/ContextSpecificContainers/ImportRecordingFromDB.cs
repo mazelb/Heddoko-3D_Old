@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
     /// <summary>
     /// A container view for loading items from a database
     /// </summary>
-    public class ImportRecordingFromDB : AbstractView
+    public class ImportRecordingFromDB : AbstractView, IDatabaseConsumer
     {
         public ImportViewSelectableGridList GridList;
         public Button OpenFolderButton;
@@ -40,6 +41,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
             CreateDefaultLayout();
         }
 
+        public Database Database { get; set; }
      
 
         public override void CreateDefaultLayout()
@@ -76,8 +78,43 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
             GridList.LoadData(vDescriptors);
         }
 
-     
 
 
+    /*    void RecordingAddTest()
+        {
+            Debug.Log("scanning recordings from " + ApplicationSettings.PreferedRecordingsFolder);
+            int value = BodyRecordingsMgr.Instance.ScanRecordings(ApplicationSettings.PreferedRecordingsFolder);
+            Debug.Log("found " + value + " recordings");
+
+            bool[] vAddedRec = new bool[value];
+            for (int j = 0; j < vAddedRec.Length; j++)
+            {
+                vAddedRec[j] = false;
+
+            }
+            int i = 0;
+            int max = 15;
+            while (i < max)
+            {
+                int vRand = Random.Range(0, value);
+
+                if (!vAddedRec[vRand])
+                {
+                    CurrentRecordingPath = BodyRecordingsMgr.Instance.FilePaths[i];
+                    vAddedRec[vRand] = true;
+                    i++;
+                    BodyRecordingsMgr.Instance.ReadRecordingFile(CurrentRecordingPath, RecordingAddCallback);
+                }
+            }
+
+
+
+        }*/
+        void RecordingAddCallback(BodyFramesRecording vBfRec)
+        {
+            Debug.Log("found " + vBfRec.BodyRecordingGuid + "... now adding to DB");
+            Database.Connection.CreateRecording(vBfRec);
+
+        }
     }
 }

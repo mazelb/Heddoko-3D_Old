@@ -8,20 +8,19 @@
 
 using System;
 using System.Collections.Generic;
-using Assets.Demos;
+using System.Windows.Forms;
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.camera;
 using Assets.Scripts.UI.Loading;
-using Assets.Scripts.UI.MainMenu;
 using Assets.Scripts.UI.ModalWindow;
 using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.UI.Settings;
 using Assets.Scripts.UI.Tagging;
-using Assets.Scripts.Utils.DebugContext;
 using Assets.Scripts.Utils.DebugContext.logging;
 using UnityEngine;
+using Application = UnityEngine.Application;
 
 namespace Assets.Scripts.Utils.DatabaseAccess
 {
@@ -34,6 +33,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private LocalDBAccess mDbAccess;
         private Database mDatabase;
         public GameObject[] GOtoReEnable;
+        public GameObject[] DatabaseConsumers;
         public ScrollablePanel ContentPanel;
 
         // ReSharper disable once UnusedMember.Local
@@ -107,10 +107,10 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             DebugLogger.Instance.Start();
 
-            #if !DEBUG
+#if !DEBUG
             DebugLogger.Settings.AllFalse();
-            #endif
- 
+#endif
+
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         void OnApplicationQuit()
         {
-           // mDatabase.CleanUp();
+            // mDatabase.CleanUp();
             DebugLogger.Instance.Stop();
         }
 
@@ -163,8 +163,17 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         private void SetupDatabase()
         {
             mDatabase = new Database(DatabaseConnectionType.Local);
-          mDatabase.Init();
+            mDatabase.Init();
             TaggingManager.Instance.SetDatabase(mDatabase);
+            foreach (var vDbConsumer in DatabaseConsumers)
+            {
+                //attempt to grab the database consumer interface from the gameobject
+                IDatabaseConsumer vConsumer = vDbConsumer.GetComponent<IDatabaseConsumer>();
+                if (vConsumer != null)
+                {
+                    vConsumer.Database = mDatabase;
+                }
+            }
         }
 
 

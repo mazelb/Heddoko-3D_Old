@@ -8,6 +8,7 @@
 
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Assets.Scripts.Communication.View;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.UI.MainMenu;
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Communication.Controller
     /// </summary>
     public class BrainpackConnectionController : AbstractSuitConnection
     {
-       
+
         public OutterThreadToUnityTrigger BrainpackConnectedTrigger = new OutterThreadToUnityTrigger();
         public OutterThreadToUnityTrigger SocketClientErrorTrigger = new OutterThreadToUnityTrigger();
         public string Output = "";
@@ -122,7 +123,7 @@ namespace Assets.Scripts.Communication.Controller
 
         }
 
- 
+
         /// <summary>
         /// validate the comport input
         /// </summary>
@@ -164,8 +165,19 @@ namespace Assets.Scripts.Communication.Controller
         {
 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
-        
             ChangeCurrentState(BrainpackConnectionState.Disconnected);
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+        }
+
+        internal void EnableBrainpackSleepTimer()
+        {
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.EnableSleepTimerReq, "");
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+        }
+
+        internal void DisableBrainpackSleepTimer()
+        {
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisableSleepTimerReq, "");
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
         /// <summary>
@@ -248,7 +260,7 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 ConnectedStateEvent();
-                                StartHeartBeat(); 
+                                StartHeartBeat();
                             }
 
                         }
@@ -277,13 +289,13 @@ namespace Assets.Scripts.Communication.Controller
 
                         if (vNewState == BrainpackConnectionState.Disconnected)
                         {
-                            
+
                             if (DisconnectedStateEvent != null)
                             {
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
                             }
-                          
+
                             mCurrentConnectionState = vNewState;
                         }
                         break;
@@ -321,7 +333,7 @@ namespace Assets.Scripts.Communication.Controller
             {
                 ChangeCurrentState(BrainpackConnectionState.Disconnected);
             };
-            
+
         }
 
         void OnEnable()
@@ -340,13 +352,14 @@ namespace Assets.Scripts.Communication.Controller
         {
             StopAllCoroutines();
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
-            {
+            { 
+                //Enable sleep timer on the brainpack
+                EnableBrainpackSleepTimer();
+                //Wait 1 sec then disconnect brainpack
+                Thread.Sleep(1000);
                 DisconnectBrainpack();
-            }
+            } 
 
-            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
-            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
-            
         }
 
         /// <summary>
@@ -372,6 +385,8 @@ namespace Assets.Scripts.Communication.Controller
             {
                 BrainpackConnectionResult(BrainpackConnectedTrigger.InterestedVariable);
                 BrainpackConnectedTrigger.Reset();
+                //Disable sleep timer
+                DisableBrainpackSleepTimer();
             }
             if (SocketClientErrorTrigger.Triggered)
             {
@@ -397,7 +412,7 @@ namespace Assets.Scripts.Communication.Controller
 
         }
 
-        
+
         /// <summary>
         /// Sets the body as being ready to connect to the brainpack, once the brainpack is connected, the body will stream the brainpack
         /// </summary>
@@ -431,7 +446,7 @@ namespace Assets.Scripts.Communication.Controller
         /// Sends a command to the brainpack to shut down 
         /// </summary>
         public void PowerOffBrainpackCmd()
-        { 
+        {
             SendCommandToBrainpack(HeddokoCommands.ShutdownBrainpackReq);
             ChangeCurrentState(BrainpackConnectionState.Disconnected);
         }
@@ -485,7 +500,7 @@ namespace Assets.Scripts.Communication.Controller
                 HeddokoPacket vPacket = new HeddokoPacket(vCommand, "");
                 PacketCommandRouter.Instance.Process(this, vPacket);
             }
-           
+
         }
 
         /// <summary>
@@ -520,7 +535,7 @@ namespace Assets.Scripts.Communication.Controller
 
             if (Regex.IsMatch(vMsg, "Idle", RegexOptions.IgnoreCase))
             {
-                vReceivedState= SuitState.Idle;
+                vReceivedState = SuitState.Idle;
             }
             else if (Regex.IsMatch(vMsg, "Reset", RegexOptions.IgnoreCase))
             {
@@ -539,13 +554,13 @@ namespace Assets.Scripts.Communication.Controller
             {
                 OnSuitStateUpdate.Invoke(vReceivedState);
             }
-            
+
         }
 
-     
- 
 
- 
+
+
+
 
         /// <summary>
         /// Heartbeat coroutine
@@ -561,7 +576,7 @@ namespace Assets.Scripts.Communication.Controller
                 {
                     vMessageSent = true;
                     GetBrainpackStateCmd();
-                    CountdownSinceStateReqSent = vTimer; 
+                    CountdownSinceStateReqSent = vTimer;
                 }
                 else
                 {
@@ -569,10 +584,10 @@ namespace Assets.Scripts.Communication.Controller
                     vMessageSent = false;
                 }
                 yield return null;
-            }   
+            }
         }
     }
 
- 
+
 }
 
