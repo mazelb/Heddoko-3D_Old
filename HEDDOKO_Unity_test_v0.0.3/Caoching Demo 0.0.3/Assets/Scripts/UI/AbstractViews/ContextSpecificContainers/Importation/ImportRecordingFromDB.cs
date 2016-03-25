@@ -5,18 +5,18 @@
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
+
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
+using UIWidgets;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = System.Random;
+using UnityEngine.UI; 
 
 
-namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
+namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
 {
     /// <summary>
     /// A container view for loading items from a database
@@ -26,28 +26,23 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
         public ImportViewSelectableGridList GridList;
         public Button OpenFolderButton;
         private FolderScanner mFolderScanner = new FolderScanner();
+        public ImportItemsToDb ImportItem;
         //private ImportToDatabase6+++++++++++++++++++++++++
-        public int NumberOfItems = 200;
-
-        private Random gen = new Random();
-        DateTime RandomDay()
-        {
-            DateTime start = new DateTime(1995, 1, 1);
-            int range = (DateTime.Today - start).Days;
-            return start.AddDays(gen.Next(range));
-        }
+        public int NumberOfItems = 200; 
+      
         void Awake()
         {
             CreateDefaultLayout();
         }
 
         public Database Database { get; set; }
-     
+
 
         public override void CreateDefaultLayout()
         {
             GridList.Initialize();
             OpenFolderButton.onClick.AddListener(OpenSelectFolderDialog);
+          //  Notify.Template.
 
         }
 
@@ -68,7 +63,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
             UniFileBrowser.use.filterFileExtensions = new[] { "som3rAN66Ddhum3cks2Tension38F" };
             UniFileBrowser.use.filterFiles = true;
             UniFileBrowser.use.showVolumes = true;
-            UniFileBrowser.use.volumesAreSeparate = true;
+            UniFileBrowser.use.volumesAreSeparate = false;
             UniFileBrowser.use.OpenFolderWindow(true, mFolderScanner.ScanDirectory);
         }
 
@@ -78,43 +73,23 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
             GridList.LoadData(vDescriptors);
         }
 
-
-
-    /*    void RecordingAddTest()
+        public void ImportItems()
         {
-            Debug.Log("scanning recordings from " + ApplicationSettings.PreferedRecordingsFolder);
-            int value = BodyRecordingsMgr.Instance.ScanRecordings(ApplicationSettings.PreferedRecordingsFolder);
-            Debug.Log("found " + value + " recordings");
-
-            bool[] vAddedRec = new bool[value];
-            for (int j = 0; j < vAddedRec.Length; j++)
+             if (GridList.SelectedItems.Count > 0)
             {
-                vAddedRec[j] = false;
-
-            }
-            int i = 0;
-            int max = 15;
-            while (i < max)
-            {
-                int vRand = Random.Range(0, value);
-
-                if (!vAddedRec[vRand])
-                {
-                    CurrentRecordingPath = BodyRecordingsMgr.Instance.FilePaths[i];
-                    vAddedRec[vRand] = true;
-                    i++;
-                    BodyRecordingsMgr.Instance.ReadRecordingFile(CurrentRecordingPath, RecordingAddCallback);
-                }
+                GameObject vDialog = Dialog.Template(ImportItem.TemplateName).Show("Import File Progress");
+                
+                ImportItem = vDialog.GetComponent<ImportItemsToDb>();
+                ImportItem.Database = Database;
+                ImportItem.InitiateImport(GridList.SelectedItems);
+                ImportItem.GridList = GridList;
             }
 
 
-
-        }*/
-        void RecordingAddCallback(BodyFramesRecording vBfRec)
-        {
-            Debug.Log("found " + vBfRec.BodyRecordingGuid + "... now adding to DB");
-            Database.Connection.CreateRecording(vBfRec);
 
         }
+
+
+
     }
 }

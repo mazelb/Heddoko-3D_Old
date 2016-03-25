@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
+using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using JetBrains.Annotations;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
@@ -36,8 +37,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vCallback">(optional) action to invoke after disconnection</param>
 
         void Disconnect(Action vCallback = null);
-
-
+        /// <summary>
+        /// Allow a loop to break when set to false
+        /// </summary>
+        bool ContinueWorking { get; set; }
         /// <summary>
         /// Query the database
         /// </summary>
@@ -51,6 +54,16 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vRecording"></param>
         /// <returns></returns>
         bool CreateRecording(BodyFramesRecording vRecording);
+
+        /// <summary>
+        /// Creates a recording entry on the database from the given parameters. Invokes a callback with regards to progress
+        /// </summary>
+        /// <param name="vRecording">the recording to import</param>
+        /// <param name="vDescriptor">the recording's description</param>
+        /// <param name="vTotalImportProgress">callback to update progress</param>
+        /// <returns></returns>
+        bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor,
+            Action<int> vTotalImportProgress);
 
         /// <summary>
         /// get a recording based on the id passed in

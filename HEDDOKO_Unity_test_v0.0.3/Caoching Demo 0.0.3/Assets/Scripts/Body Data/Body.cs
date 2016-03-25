@@ -137,7 +137,7 @@ public class Body
         }
         else
         {
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => InitBody(vBodyUUID, BodyType));
+            OutterThreadToUnityThreadIntermediary.QueueActionInUnity(() => InitBody(vBodyUUID, BodyType));
         }
     }
 

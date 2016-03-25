@@ -82,7 +82,7 @@ namespace Assets.Scripts.Tests
 
                 if (!OutterThreadToUnityThreadIntermediary.InUnityThread())
                 {
-                    OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => mRecordingLoadedCallback.Invoke(vRecording));
+                    OutterThreadToUnityThreadIntermediary.QueueActionInUnity(() => mRecordingLoadedCallback.Invoke(vRecording));
                 }
                 else
                 {

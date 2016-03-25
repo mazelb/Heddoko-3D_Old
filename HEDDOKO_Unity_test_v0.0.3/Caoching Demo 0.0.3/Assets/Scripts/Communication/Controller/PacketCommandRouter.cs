@@ -151,7 +151,7 @@ namespace Assets.Scripts.Communication
                         BrainpackConnectionController.Instance.BrainpackStatusResponse.Invoke(vPayload);
                     }
                 };
-                OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
+                OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);
             }
         }
         /**
@@ -329,7 +329,7 @@ namespace Assets.Scripts.Communication
                     BrainpackConnectionController.Instance.BrainpackStatusResponse.Invoke(vPayload);
                 }
             };
-            OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);
+            OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);
             /*
                         Action vAction = () =>
                         {
@@ -338,7 +338,7 @@ namespace Assets.Scripts.Communication
                                 BrainpackConnectionController.BrainpackStatusResponse.Invoke(vPayload);
                             }
                         };
-                        OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+                        OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);*/
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace Assets.Scripts.Communication
                       BrainpackConnectionController.BrainpackTimeSetResp.Invoke();
                   }
               };
-              OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+              OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);*/
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Assets.Scripts.Communication
                       BrainpackConnectionController.ResetBrainpackResp.Invoke();
                   }
               };
-              OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+              OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);*/
         }
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace Assets.Scripts.Communication
              {
                  BrainpackConnectionController.BrainpackShutdown.Invoke();
              };
-             OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(vAction);*/
+             OutterThreadToUnityThreadIntermediary.QueueActionInUnity(vAction);*/
         }
 
 

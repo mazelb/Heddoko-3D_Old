@@ -169,7 +169,7 @@ namespace UIWidgets {
 		/// <param name="modalSprite">Modal sprite.</param>
 		/// <param name="modalColor">Modal color.</param>
 		/// <param name="canvas">Canvas.</param>
-		public virtual void Show(string title = null,
+		public virtual GameObject Show(string title = null,
 		                 string message = null,
 		                 DialogActions buttons = null,
 		                 string focusButton = null,
@@ -221,6 +221,7 @@ namespace UIWidgets {
 			gameObject.SetActive(true);
 
 			CreateButtons(buttons, focusButton);
+		    return gameObject;
 		}
 		
 		/// <summary>

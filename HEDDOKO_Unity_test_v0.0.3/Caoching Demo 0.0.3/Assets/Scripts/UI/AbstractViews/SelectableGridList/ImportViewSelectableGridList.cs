@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
                 DataSource.Add(vItemDescriptors[i]); 
             } 
             DataSource.EndUpdate(); 
+            
         }
         /// <summary>
         /// Compare titles
@@ -191,5 +192,6 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
             ByDate,
             ByDuration
         }
+
     }
 }

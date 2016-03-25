@@ -87,9 +87,7 @@ namespace Assets.Scripts.UI.Settings
             get
             {
                 string vLocalDbPath = Application.persistentDataPath + "/db/" + DBSettings.DbName;
-                #if UNITY_EDITOR
-                    vLocalDbPath = "Assets" + "/db/" + DBSettings.DbName;
-                #endif 
+          
                 return vLocalDbPath;
             }
         }

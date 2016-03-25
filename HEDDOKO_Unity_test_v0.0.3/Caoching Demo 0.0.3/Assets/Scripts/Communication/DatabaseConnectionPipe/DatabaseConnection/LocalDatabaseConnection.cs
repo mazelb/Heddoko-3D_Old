@@ -12,6 +12,7 @@ using System.IO;
 using System.Windows.Forms;
 using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
 using Assets.Scripts.UI;
+using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using Assets.Scripts.UI.Settings;
 using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.DatabaseAccess;
@@ -83,6 +84,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
         }
 
+        public bool ContinueWorking { get; set; }
+
         /// <summary>
         /// Query the database with a command
         /// </summary>
@@ -102,14 +105,26 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         }
 
         /// <summary>
-        /// Update the database with a passed in recording
+        /// 
         /// </summary>
         /// <param name="vRecording"></param>
         /// <returns></returns>
         public bool CreateRecording(BodyFramesRecording vRecording)
         {
-            bool vResult = false;
+            return CreateRecording(vRecording, null,null);
+        }
 
+        /// <summary>
+        /// Update the database with a passed in recording
+        /// </summary>
+        /// <param name="vRecording"></param>
+        /// <param name="vDescriptor"></param>
+        /// <param name="vTotalImportProgress"></param>
+        /// <returns></returns>
+        public bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor , Action<int> vTotalImportProgress)
+        {
+            bool vResult = false;
+            int vTotalFrames = vRecording.RecordingRawFrames.Count;
             using (var vCmd = mDbConnection.CreateCommand())
             {
                 using (var vTransaction = mDbConnection.BeginTransaction())
@@ -117,7 +132,14 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
                     string vDatePattern = @"M/d/yyyy hh:mm:ss tt";
                     string vTimeNowUsEn = DateTime.UtcNow.ToString(vDatePattern);
-
+                    string vTime = vTimeNowUsEn;
+                    string vTitle = vRecording.Title;
+                     
+                    if (vDescriptor != null)
+                    {
+                        vTitle = vDescriptor.MovementTitle;
+                        vTime = vDescriptor.CreatedAtTime.ToString(vDatePattern);
+                    }
                     try
                     {
                         vCmd.CommandText = "INSERT INTO movements (id, complex_equipment_id , profile_id, submitted_by , folder_id,title ,created_at ,updated_at) "
@@ -127,9 +149,9 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         vCmd.Parameters.Add(new SqliteParameter("@param3", vRecording.BodyGuid));
                         vCmd.Parameters.Add(new SqliteParameter("@param4", vRecording.BodyGuid));
                         vCmd.Parameters.Add(new SqliteParameter("@param5", "Default"));
-                        vCmd.Parameters.Add(new SqliteParameter("@param6", vRecording.Title));
+                        vCmd.Parameters.Add(new SqliteParameter("@param6",  vTitle));
                         vCmd.Parameters.Add(new SqliteParameter("@param7", vTimeNowUsEn));
-                        vCmd.Parameters.Add(new SqliteParameter("@param8", vTimeNowUsEn));
+                        vCmd.Parameters.Add(new SqliteParameter("@param8", vTime));
                         vCmd.ExecuteNonQuery();
 
                         vCmd.CommandText = "INSERT INTO movement_meta (id ,movement_id,start_frame,end_frame) "
@@ -145,12 +167,17 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         BodyRawFrame vRawFrame = null;
                         string vInstantDataJson = "";
                         string vJoinedRawFrameData = "";
-                        for (int i = 0; i < vRecording.RecordingRawFrames.Count; i++)
+                        for (int i = 0; i < vTotalFrames; i++)
                         {
+                            if(!ContinueWorking)
+                            {
+                                vTransaction.Rollback();
+                                break;
+                            }
                             try
                             {
                                 vRawFrame = vRecording.RecordingRawFrames[i];
-                                vConvertedFrame = RawFrameConverter.ConvertRawFrame(vRawFrame);
+                                vConvertedFrame = RawFrameConverter.ConvertEncondedRawFrame(vRawFrame);
                                 //+++++++++++++++++++++Frames table insertion +++++++++++++++++++++++++++++++++++++++++++++++
 
                                 vCmd.CommandText = "INSERT INTO frames (id,movement_id,format_revision,timestamp) "
@@ -182,6 +209,19 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                                 vCmd.Parameters.Add(new SqliteParameter("@param4", vRecording.BodyRecordingGuid));
 
                                 vCmd.ExecuteNonQuery();
+                                if (vTotalImportProgress != null)
+                                {
+                                    if (OutterThreadToUnityThreadIntermediary.InUnityThread())
+                                    {
+                                        vTotalImportProgress.Invoke(i);
+                                    }
+                                    else
+                                    {
+                                        int vTemp = i;
+                                        OutterThreadToUnityThreadIntermediary.EnqueueOverwrittableActionInUnity("vTotalImportProgress",() => vTotalImportProgress(vTemp));
+                                    }
+                                   
+                                }
                             }
                             catch (Exception e)
                             {
@@ -190,14 +230,21 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             }
 
                         }
-                        vResult = true;
+                        if (ContinueWorking)
+                        {
+                            vResult = true;
+                            vTransaction.Commit();
+                        }
+                      
                     }
+
                     catch (SqliteException vEx)
                     {
                         Debug.Log("SqliteException " + vEx);
+                        vTransaction.Rollback();
                     }
-
-                    vTransaction.Commit();
+                   
+                   
                 }
             }
 

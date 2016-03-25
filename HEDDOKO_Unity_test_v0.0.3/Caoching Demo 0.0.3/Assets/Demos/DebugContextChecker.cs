@@ -42,6 +42,7 @@ namespace Assets.Demos
 
         void Awake()
         {
+            DebugLogger.Settings.LogAll = true;
             if (!DisableDebugging)
             {
 
@@ -68,14 +69,18 @@ namespace Assets.Demos
             //DebugTextAnimator.clip = Clip; 
            
             mDebuggingActive = !mDebuggingActive;
-            if (DebugTextAnimator && DebugTextAnimator)
+            if (DebugTextAnimator && DebugToggleInfo)
             {
-                DebugToggleInfo.text = mDebuggingActive ? "DEBUG ENABLED" : "DEBUG DISABLED"; 
+                DebugToggleInfo.text = mDebuggingActive ? "DEBUG ENABLED" : "DEBUG DISABLED";
+                if (mDebuggingActive && !DebugTextAnimator.enabled)
+                {
+                    DebugTextAnimator.enabled = true;
+                }
                 DebugTextAnimator.Play("Debug text animation", -1, 0f);
             }
             mChildren.SetActive(mDebuggingActive);
             mSegmentOptions.SetActive(mDebuggingActive);
-            DebugLogger.Settings.LogAll = mDebuggingActive;
+     
             foreach (var vDebuggingItems in mDebuggingItems)
             {
                 vDebuggingItems.SetActive(mDebuggingActive);

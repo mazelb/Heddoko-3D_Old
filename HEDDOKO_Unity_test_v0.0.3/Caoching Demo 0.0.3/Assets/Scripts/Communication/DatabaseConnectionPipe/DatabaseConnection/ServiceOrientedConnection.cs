@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
+using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -39,12 +40,19 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             throw new NotImplementedException();
         }
 
+        public bool ContinueWorking { get; set; }
+
         public bool Query(string vQuery, Action vCallback = null)
         {
             throw new NotImplementedException();
         }
 
         public bool CreateRecording(BodyFramesRecording vRecording)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor, Action<int> vTotalImportProgress)
         {
             throw new NotImplementedException();
         }

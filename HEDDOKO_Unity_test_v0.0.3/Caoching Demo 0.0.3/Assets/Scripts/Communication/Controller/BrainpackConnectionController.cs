@@ -354,7 +354,7 @@ namespace Assets.Scripts.Communication.Controller
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             { 
                 //Enable sleep timer on the brainpack
-                EnableBrainpackSleepTimer();
+               // EnableBrainpackSleepTimer();
                 //Wait 1 sec then disconnect brainpack
                 Thread.Sleep(1000);
                 DisconnectBrainpack();
@@ -386,7 +386,7 @@ namespace Assets.Scripts.Communication.Controller
                 BrainpackConnectionResult(BrainpackConnectedTrigger.InterestedVariable);
                 BrainpackConnectedTrigger.Reset();
                 //Disable sleep timer
-                DisableBrainpackSleepTimer();
+               // DisableBrainpackSleepTimer();
             }
             if (SocketClientErrorTrigger.Triggered)
             {

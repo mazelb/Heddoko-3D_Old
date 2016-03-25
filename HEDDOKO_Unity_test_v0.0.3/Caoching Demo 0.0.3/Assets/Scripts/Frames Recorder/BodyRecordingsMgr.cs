@@ -249,7 +249,7 @@ public class BodyRecordingsMgr
         }
         if (vCallbackAction != null)
         {
-           OutterThreadToUnityThreadIntermediary.TriggerActionInUnity(() => vCallbackAction(vTempRecording));
+           OutterThreadToUnityThreadIntermediary.QueueActionInUnity(() => vCallbackAction(vTempRecording));
         }
    
     }

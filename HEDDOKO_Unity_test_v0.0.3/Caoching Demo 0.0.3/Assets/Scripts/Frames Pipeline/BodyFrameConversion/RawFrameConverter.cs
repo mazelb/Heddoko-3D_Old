@@ -53,7 +53,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameConversion
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        private static BodyFrame ConvertEncondedRawFrame(BodyRawFrame rawData)
+        public  static BodyFrame ConvertEncondedRawFrame(BodyRawFrame rawData)
         {
             float vTimeStamp = (float)(Convert.ToInt32(rawData[0]));
             vTimeStamp =  (vTimeStamp / 1000f) - sStartTime ;
