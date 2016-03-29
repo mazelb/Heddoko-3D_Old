@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList;
@@ -175,10 +176,19 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
         /// </summary>
         private void FinishedImporting()
         {
-
+            int vTotalImportCount = mTotalImportedItems.Count;
+            //remove items that were succesfully imported
+            for (int i = 0; i < vTotalImportCount; i ++)
+            {
+                GridList.DataSource.Remove(mTotalImportedItems[i].ItemDescriptor);
+            }
             CloseButton.gameObject.SetActive(true);
             CancelButton.gameObject.SetActive(false);
             mIsImporting = false;
+            //send notification that import has been completed
+    
+            var message = string.Format("{0} movements have been exported ", vTotalImportCount); 
+            Notify.Template("FadinFadoutNotifyTemplate").Show(message, 4.5f, hideAnimation :  Notify.FadeOutAnimation, showAnimation: Notify.FadeInAnimation, sequenceType: NotifySequence.First );
 
         }
 

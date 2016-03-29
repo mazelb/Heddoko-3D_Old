@@ -6,9 +6,11 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
- 
+
+using System;
 using System.Collections.Generic;
- 
+using System.Configuration;
+using System.IO;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI;
 using Assets.Scripts.UI.Settings;
@@ -22,19 +24,42 @@ namespace Assets.Scripts.Tests.database
     /// <summary>
     /// this class demonstrates how to use the database in a recordings context
     /// </summary>
-    public class RecordingDBCRUDTest : MonoBehaviour
+    public class RecordingDBCRUDTest : MonoBehaviour, ITaggingManagerConsumer, IDatabaseConsumer
     {
         public string CurrentRecordingPath;
         public string RecordingGuid;
-        public Database Database;
-
+        public Database Database { get; set; }
+        private List<Tag> mTags; 
 
         void Start()
+        { 
+            FindResultsByPartialTitle("Ab");
+            ExcludeTagList("ab");
+            //   Debug.Log("create connection to db");
+            //   Database = new Database(DatabaseConnectionType.Local);
+            //  Database.Init();
+            // CreateTagsForRecordings();
+        }
+
+        private void FindResultsByPartialTitle(string ab)
         {
-            Debug.Log("create connection to db");
-            Database = new Database(DatabaseConnectionType.Local);
-            Database.Init();
-            CreateTagsForRecordings();
+            mTags = TaggingManager.FindTagByPartialTitle("%ab");
+           Debug.Log(mTags.Count);
+        }
+
+        private void ExcludeTagList(string vPartial)
+        {
+            List<Tag> vExclusion = mTags.GetRange(0, mTags.Count/3);
+            List<Tag> vResults = TaggingManager.GetTagsByPartialTitleExcludingList(vPartial, vExclusion);
+           Debug.Log(vResults.Count);
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                FindResultsByPartialTitle("ab");
+            }
         }
 
         BodyFramesRecording RecordingGetTest()
@@ -86,27 +111,51 @@ namespace Assets.Scripts.Tests.database
 
         }
 
+        void CreateRandomTags()
+        {
+            string vTest = "Testag";
+            string vPath = "Assets/Resources/english-words.dict";
+            string vFileContent = "";
+            string[] vDictionaryContent;
+
+
+            using (StreamReader vStreamReader = new StreamReader(File.OpenRead(vPath)))
+            {
+                vFileContent = vStreamReader.ReadToEnd();
+                vDictionaryContent = vFileContent.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+                for (int i = 0; i < 200; i++)
+                {
+                   Tag vTag = new Tag();
+                    vTag.Title = vDictionaryContent[i];
+                    vTag.TagUid = Guid.NewGuid().ToString();
+                    TaggingManager.AddTag(vTag);
+                }
+
+            }
+            //      TaggingManager.AddTag(Tag vTag);
+        }
+
         void CreateTagsForRecordings()
         {
             string vTest = "Testag";
             string vPath = "Assets/Resources/english-words.dict";
-            string vFileContent = ""; 
+            string vFileContent = "";
             BodyFramesRecording vGet = RecordingGetTest();
-          /*  
-            using (StreamReader vStreamReader = new StreamReader(File.OpenRead(vPath)))
-            {
-                vFileContent = vStreamReader.ReadToEnd();
-                vDictionaryContent = vFileContent.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
-            }
-*/
+            /*  
+              using (StreamReader vStreamReader = new StreamReader(File.OpenRead(vPath)))
+              {
+                  vFileContent = vStreamReader.ReadToEnd();
+                  vDictionaryContent = vFileContent.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
+              }
+  */
             List<Tag> vTags = new List<Tag>();
-            vTags = TaggingManager.Instance.LoadAllTags();
+            //  vTags = TaggingManager.Instance.LoadAllTags();
             Debug.Log("<color=blue><b>Total loaded tags:</b></color> " + vTags.Count);
 
-            for (int i = Random.Range(0, vTags.Count/2); i < vTags.Count; i++)
-            {
-                TaggingManager.Instance.AttachTagToRecording(vGet, vTags[i]);
-            }
+            /*    for (int i = Random.Range(0, vTags.Count/2); i < vTags.Count; i++)
+                {
+                    TaggingManager.Instance.AttachTagToRecording(vGet, vTags[i]);
+                }*/
         }
 
         void OnApplicationQuit()
@@ -117,5 +166,7 @@ namespace Assets.Scripts.Tests.database
             }
 
         }
+
+        public TaggingManager TaggingManager { get; set; }
     }
 }

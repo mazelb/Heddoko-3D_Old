@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
+using Assets.Scripts.UI.Tagging;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -28,7 +29,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
  
 
-        public string DbConnectionUUID { get; private set; }
+        public string DbConnectionUuid { get; private set; }
 
         public bool Connect(Action vCallback = null)
         {
@@ -77,6 +78,21 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             throw new NotImplementedException();
         }
 
+        public List<Tag> GetTagsByPartialTitle(string vTitleKey, int vTotalResults = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Tag> GetTagsByPartialTitleExcludingList(string vTitleKey, List<Tag> vExcludingTags, int vTotalResults = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string SanitizeInput(string vInput)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddTagToRecording(BodyFramesRecording vRec, Tag vTag)
         {
             throw new NotImplementedException();
@@ -96,5 +112,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         {
             throw new NotImplementedException();
         }
+
+    
     }
 }

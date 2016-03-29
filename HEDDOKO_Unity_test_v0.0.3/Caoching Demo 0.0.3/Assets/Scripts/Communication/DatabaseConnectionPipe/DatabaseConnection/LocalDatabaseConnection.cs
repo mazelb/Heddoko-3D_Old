@@ -9,11 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
-using Assets.Scripts.UI;
+using System.Text.RegularExpressions; 
+using Assets.Scripts.Frames_Pipeline.BodyFrameConversion; 
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using Assets.Scripts.UI.Settings;
+using Assets.Scripts.UI.Tagging;
 using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.DatabaseAccess;
 using UnityEngine;
@@ -29,20 +29,20 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
     {
         private SqliteConnection mDbConnection;
 
-        public string DbConnectionUUID { get; private set; }
+        public string DbConnectionUuid { get; private set; }
         public LocalDatabaseConnection()
         {
-            DbConnectionUUID = Guid.NewGuid().ToString();
+            DbConnectionUuid = Guid.NewGuid().ToString();
         }
 
-        
+
         public bool Equals([NotNull] IDatabaseConnection other)
         {
             if (other == null)
             {
                 throw new ArgumentNullException("other");
             }
-            return other.DbConnectionUUID.CompareTo(DbConnectionUUID) == 0;
+            return other.DbConnectionUuid.CompareTo(DbConnectionUuid) == 0;
 
         }
         public bool Connect(Action vCallback = null)
@@ -111,7 +111,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <returns></returns>
         public bool CreateRecording(BodyFramesRecording vRecording)
         {
-            return CreateRecording(vRecording, null,null);
+            return CreateRecording(vRecording, null, null);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vDescriptor"></param>
         /// <param name="vTotalImportProgress"></param>
         /// <returns></returns>
-        public bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor , Action<int> vTotalImportProgress)
+        public bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor, Action<int> vTotalImportProgress)
         {
             bool vResult = false;
             int vTotalFrames = vRecording.RecordingRawFrames.Count;
@@ -134,7 +134,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                     string vTimeNowUsEn = DateTime.UtcNow.ToString(vDatePattern);
                     string vTime = vTimeNowUsEn;
                     string vTitle = vRecording.Title;
-                     
+
                     if (vDescriptor != null)
                     {
                         vTitle = vDescriptor.MovementTitle;
@@ -149,7 +149,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         vCmd.Parameters.Add(new SqliteParameter("@param3", vRecording.BodyGuid));
                         vCmd.Parameters.Add(new SqliteParameter("@param4", vRecording.BodyGuid));
                         vCmd.Parameters.Add(new SqliteParameter("@param5", "Default"));
-                        vCmd.Parameters.Add(new SqliteParameter("@param6",  vTitle));
+                        vCmd.Parameters.Add(new SqliteParameter("@param6", vTitle));
                         vCmd.Parameters.Add(new SqliteParameter("@param7", vTimeNowUsEn));
                         vCmd.Parameters.Add(new SqliteParameter("@param8", vTime));
                         vCmd.ExecuteNonQuery();
@@ -169,7 +169,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         string vJoinedRawFrameData = "";
                         for (int i = 0; i < vTotalFrames; i++)
                         {
-                            if(!ContinueWorking)
+                            if (!ContinueWorking)
                             {
                                 vTransaction.Rollback();
                                 break;
@@ -218,9 +218,9 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                                     else
                                     {
                                         int vTemp = i;
-                                        OutterThreadToUnityThreadIntermediary.EnqueueOverwrittableActionInUnity("vTotalImportProgress",() => vTotalImportProgress(vTemp));
+                                        OutterThreadToUnityThreadIntermediary.EnqueueOverwrittableActionInUnity("vTotalImportProgress", () => vTotalImportProgress(vTemp));
                                     }
-                                   
+
                                 }
                             }
                             catch (Exception e)
@@ -235,7 +235,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             vResult = true;
                             vTransaction.Commit();
                         }
-                      
+
                     }
 
                     catch (SqliteException vEx)
@@ -243,8 +243,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         Debug.Log("SqliteException " + vEx);
                         vTransaction.Rollback();
                     }
-                   
-                   
+
+
                 }
             }
 
@@ -254,7 +254,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <summary>
         /// get a recording based on the id passed in
         /// </summary>
-        /// <param name="vRecordingId">the recording id</param>
+        /// <param name="vRecordingId">the recording id</param> 
         /// <returns></returns>
         public BodyFramesRecording GetRawRecording(string vRecordingId)
         {
@@ -361,6 +361,10 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             return vOutput;
         }
 
+        /// <summary>
+        /// Adds a new tag to the database
+        /// </summary>
+        /// <param name="vTag"></param>
         public void AddNewTag(Tag vTag)
         {
             using (var vCmd = mDbConnection.CreateCommand())
@@ -421,6 +425,112 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             return vFoundTags;
         }
 
+        /// <summary>
+        /// Get a list of tags from partial results. 
+        /// Note, if passing in a value of zero, or opting out of using the optional paramater,
+        /// will return the full list of results
+        /// </summary>
+        /// <param name="vTitleKey"></param>
+        /// <param name="vTotalResults">optional parameter, returns a subset of the total results</param>
+        /// <returns></returns>
+        public List<Tag> GetTagsByPartialTitle(string vTitleKey, int vTotalResults = 0)
+        {
+            string vSanitized = SanitizeInput(vTitleKey);
+            List<Tag> vFoundTags = new List<Tag>();
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "SELECT * FROM tags WHERE" +
+                                           " tags.title LIKE @param1";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1", "%" + vSanitized + "%"));
+                        if (vTotalResults > 0)
+                        {
+                            vCmd.CommandText += " LIMIT " + vTotalResults;
+                        }
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vTitle = vReader["title"].ToString();
+                            string vGuid = vReader["id"].ToString();
+                            Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
+                            vFoundTags.Add(vTag);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+
+            }
+            return vFoundTags;
+        }
+
+        public string SanitizeInput(string vInput)
+        { 
+            string vSanitized = Regex.Replace(vInput, @"%", "");
+            return vSanitized;
+        }
+
+        /// <summary>
+        /// Get a list of tags from partial result but excluding the list of tags
+        /// Note, will return a full list of results if the optional parameter isn't used, or is passed in with 0
+        /// </summary>
+        /// <param name="vTitleKey">the </param>
+        /// <param name="vExcludingTags">the tags to exclude</param>
+        /// <param name="vTotalResult">(Optional) Limit number of results to pass back</param>
+        /// <returns></returns>
+        public List<Tag> GetTagsByPartialTitleExcludingList(string vTitleKey, List<Tag> vExcludingTags,int vTotalResult = 0)
+        {
+            List<Tag> vFoundTags = new List<Tag>();
+            string vSanitized = SanitizeInput(vTitleKey);
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        //sanity check
+                        vCmd.CommandText = "SELECT * FROM tags WHERE" +
+                                           " tags.title LIKE @param1";
+                        int vParamCount = 1;
+                        string vParam = "@param" + vParamCount++;
+                        vCmd.Parameters.Add(new SqliteParameter(vParam, "%" + vSanitized + "%"));
+                        for (int i = 0; i < vExcludingTags.Count; i++, vParamCount++)
+                        {
+                            vParam = "@param" + vParamCount;
+                            string vCommandAffix = " AND tags.title NOT LIKE " + vParam;
+                            vCmd.CommandText += vCommandAffix;
+                            vCmd.Parameters.Add(new SqliteParameter(vParam, "%" + vExcludingTags[i].Title + "%"));
+                        }
+                        if (vTotalResult > 0)
+                        {
+                            vCmd.CommandText += " LIMIT " + vTotalResult;
+                        }
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vGuid = vReader["id"].ToString();
+                            string vTitle = vReader["title"].ToString();
+                            Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
+                            vFoundTags.Add(vTag);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+
+            }
+            return vFoundTags;
+        }
+
 
         /// <summary>
         /// Attaches a tag to a recording
@@ -473,7 +583,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         {
                             string vGuid = vReader["id"].ToString();
                             string vTitle = vReader["title"].ToString();
-                            vFound.Add(new Tag() {TagUid = vGuid,Title = vTitle});
+                            vFound.Add(new Tag() { TagUid = vGuid, Title = vTitle });
                         }
                         vTransaction.Commit();
                     }
@@ -503,7 +613,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vGuid = vReader["id"].ToString(); 
+                            string vGuid = vReader["id"].ToString();
                             vFound.Add(vGuid);
                         }
                         vTransaction.Commit();

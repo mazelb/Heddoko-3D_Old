@@ -8,10 +8,9 @@
 */
 
 using System;
-using System.Collections.Generic;
-using Assets.Scripts.UI;
+using System.Collections.Generic; 
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
-using JetBrains.Annotations;
+using Assets.Scripts.UI.Tagging; 
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
@@ -23,7 +22,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
        /// <summary>
        /// Unique id
        /// </summary>
-        string DbConnectionUUID { get; }
+        string DbConnectionUuid { get; }
 
         /// <summary>
         /// Connect to the database
@@ -82,6 +81,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <returns></returns>
         List<Tag> GetTagsOfRecording(string vRecGuid);
 
+     
         /// <summary>
         /// Attaches a tag to a recording
         /// </summary>
@@ -109,5 +109,27 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vFolderUid"></param>
         /// <returns></returns>
         bool UpdateRecordingFolder(string vRecordingUid, string vFolderUid);
+
+        /// <summary>
+        /// Get a list of tags by partial title
+        /// </summary>
+        /// <param name="vTitleKey"></param>
+        /// <param name="vTotalResults">(Optional) Limit the number of results</param>
+        /// <returns></returns>
+        List<Tag> GetTagsByPartialTitle(string vTitleKey, int vTotalResults =0);
+
+        /// <summary>
+        /// Get a list of tags by partial title but excluding the tag list
+        /// </summary>
+        /// <param name="vTitleKey"></param>
+        /// <param name="vExcludingTags"></param>
+        /// <param name="vTotalResults">(Optional) Limit the number of results to pass back</param>
+        /// <returns></returns>
+        List<Tag> GetTagsByPartialTitleExcludingList(string vTitleKey, List<Tag> vExcludingTags, int vTotalResults = 0);
+        /// <summary>
+        /// Sanitize input string
+        /// </summary>
+        /// <param name="vInput">the input to sanitize</param>
+        string SanitizeInput(string vInput);
     }
 }

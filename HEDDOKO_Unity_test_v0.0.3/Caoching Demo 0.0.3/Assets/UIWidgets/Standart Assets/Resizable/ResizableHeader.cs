@@ -21,7 +21,7 @@ namespace UIWidgets
     /// <summary>
     /// ResizableHeader.
     /// </summary>
-    [RequireComponent(typeof(LayoutGroup))]
+ 
     public class ResizableHeader : MonoBehaviour, IDropSupport<ResizableHeaderDragCell>
     {
         /// <summary>
@@ -323,7 +323,7 @@ namespace UIWidgets
             point += new Vector2(r.width * RectTransform.pivot.x, 0);
 
             int i = 0;
-            foreach (var child in children)
+                foreach (var child in children)
             {
                 var is_first = i == 0;
                 if (!is_first)

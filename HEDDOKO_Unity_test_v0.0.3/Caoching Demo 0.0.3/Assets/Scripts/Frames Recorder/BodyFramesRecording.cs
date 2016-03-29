@@ -3,14 +3,11 @@
 * @brief Contains the BodyFramesRecording class
 * @author Mazen Elbawab (mazen@heddoko.com)
 * @date June 2015
-*/ 
-
-using System.Collections;
+*/  
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Frames_Pipeline; 
-using Assets.Scripts.Interfaces;
-using Assets.Scripts.UI;
+using Assets.Scripts.Frames_Pipeline;  
+using Assets.Scripts.UI.Tagging;
 
 /**
 * BodyFramesRecording class 

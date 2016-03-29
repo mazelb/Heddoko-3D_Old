@@ -37,6 +37,7 @@ namespace UIWidgets
 		[Obsolete("Use DataSource instead.")]
 		List<string> strings = new List<string>();
 
+	    private RectTransform mRectTransform;
 		//[SerializeField]
 		//[HideInInspector]
 		ObservableList<string> dataSource;
@@ -399,10 +400,23 @@ namespace UIWidgets
 			}
 		}
 
-		/// <summary>
-		/// LayoutBridge.
-		/// </summary>
-		protected ILayoutBridge LayoutBridge;
+        public RectTransform RectTransform
+        {
+            get
+            {
+                if (mRectTransform == null)
+                {
+                    mRectTransform = GetComponent<RectTransform>();
+                }
+                return mRectTransform;
+            }
+            set { mRectTransform = value; }
+        }
+
+        /// <summary>
+        /// LayoutBridge.
+        /// </summary>
+        protected ILayoutBridge LayoutBridge;
 
 		List<string> SelectedItemsCache;
 

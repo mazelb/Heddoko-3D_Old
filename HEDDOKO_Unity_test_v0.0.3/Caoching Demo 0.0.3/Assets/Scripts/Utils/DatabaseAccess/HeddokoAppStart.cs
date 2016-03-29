@@ -7,8 +7,7 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Collections.Generic; 
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
@@ -32,8 +31,10 @@ namespace Assets.Scripts.Utils.DatabaseAccess
     {
         private LocalDBAccess mDbAccess;
         private Database mDatabase;
+        private TaggingManager mTaggingManager;
         public GameObject[] GOtoReEnable;
         public GameObject[] DatabaseConsumers;
+        public GameObject[] TaggingManagerConsumers;
         public ScrollablePanel ContentPanel;
 
         // ReSharper disable once UnusedMember.Local
@@ -41,9 +42,13 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
-            SetupPools();
-            SetupDatabase();
-            SetupLoggers();
+            mTaggingManager =new TaggingManager();
+            InitiliazePools();
+            InitializeDatabase();
+            InjectDatabaseDependents();
+            InjectTaggingManagerDependents(); 
+            InitializeLoggers();
+
             bool vAppSafelyLaunched;
             EnableObjects(false);
             //Start loading animation
@@ -103,7 +108,35 @@ namespace Assets.Scripts.Utils.DatabaseAccess
 
         }
 
-        private void SetupLoggers()
+        /// <summary>
+        /// Injects the single database component into interested consumers
+        /// </summary>
+        private void InjectDatabaseDependents()
+        {
+            mTaggingManager.Database = mDatabase;
+            foreach (var vDbConsumer in DatabaseConsumers)
+            {
+                //attempt to grab the database consumer interface from the gameobject
+                IDatabaseConsumer vConsumer = vDbConsumer.GetComponent<IDatabaseConsumer>();
+                if (vConsumer != null)
+                {
+                    vConsumer.Database = mDatabase;
+                }
+            }
+        }
+        /// <summary>
+        ///Injects tagging manager dependents with a tagging manager object
+        /// </summary>
+        private void InjectTaggingManagerDependents()
+        {
+            foreach (var vDependent in TaggingManagerConsumers)
+            {
+                ITaggingManagerConsumer vConsumer = vDependent.GetComponent<ITaggingManagerConsumer>();
+                vConsumer.TaggingManager = mTaggingManager;
+            }
+        }
+
+        private void InitializeLoggers()
         {
             DebugLogger.Instance.Start();
 
@@ -116,7 +149,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         /// <summary>
         /// Sets up internal pools
         /// </summary>
-        private void SetupPools()
+        private void InitiliazePools()
         {
             GameObject vRenderedBodyGroup = GameObject.FindWithTag("RenderedBodyGroup");
             GameObject vPanelCameraGroup = GameObject.FindWithTag("PanelCameraGroup");
@@ -159,21 +192,14 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             DebugLogger.Instance.Stop();
         }
 
-
-        private void SetupDatabase()
+        /// <summary>
+        /// Initialize the database 
+        /// </summary>
+        private void InitializeDatabase()
         {
             mDatabase = new Database(DatabaseConnectionType.Local);
             mDatabase.Init();
-            TaggingManager.Instance.SetDatabase(mDatabase);
-            foreach (var vDbConsumer in DatabaseConsumers)
-            {
-                //attempt to grab the database consumer interface from the gameobject
-                IDatabaseConsumer vConsumer = vDbConsumer.GetComponent<IDatabaseConsumer>();
-                if (vConsumer != null)
-                {
-                    vConsumer.Database = mDatabase;
-                }
-            }
+           
         }
 
 

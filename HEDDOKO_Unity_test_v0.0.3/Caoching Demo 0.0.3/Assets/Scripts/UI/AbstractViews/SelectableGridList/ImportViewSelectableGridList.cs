@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic; 
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
+using Assets.Scripts.UI.Tagging;
 using UIWidgets;
 using UnityEngine;
 
@@ -18,12 +19,13 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
     /// <summary>
 
     /// </summary>
-    public class ImportViewSelectableGridList : ListViewCustom<ImportRecordingGridSelectionComponent, ImportItemDescriptor>
+    public class ImportViewSelectableGridList : ListViewCustom<ImportRecordingGridSelectionComponent, ImportItemDescriptor>,ITaggingManagerConsumer
     {
         private bool mInitialized = false;
         private Dictionary<SortingType, Comparison<ImportItemDescriptor>> mSortingComparisons = new Dictionary<SortingType, Comparison<ImportItemDescriptor>>();
         [SerializeField]
         private SortingType mCurrentSortingType = SortingType.ByTitle;
+        public TaggingManager TaggingManager { get; set; }
         protected override void Awake()
         {
              
@@ -105,6 +107,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         protected override void SetData(ImportRecordingGridSelectionComponent vComponenent, ImportItemDescriptor vItem)
         {
             vComponenent.SetData(vItem);
+            vComponenent.TaggingManager = TaggingManager;
         }
 
         protected override void HighlightColoring(ImportRecordingGridSelectionComponent vComponent)
@@ -193,5 +196,6 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
             ByDuration
         }
 
+      
     }
 }

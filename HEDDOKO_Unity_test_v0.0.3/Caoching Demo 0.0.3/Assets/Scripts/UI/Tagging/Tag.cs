@@ -9,7 +9,7 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.UI.Tagging
 {
     /// <summary>
     /// A tag  containing a tile and its unique identifier
