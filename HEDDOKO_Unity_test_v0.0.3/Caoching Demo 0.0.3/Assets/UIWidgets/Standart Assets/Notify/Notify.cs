@@ -629,13 +629,12 @@ namespace UIWidgets
         {
             Utilites.CreateWidgetFromAsset("NotifyTemplate");
         }
-
+#endif
         private struct StartingColors
         {
             public Color BackgroundColor;
             public Color TextColor;
             public Color HideButtonColor;
         }
-#endif
     }
 }

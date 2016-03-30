@@ -32,7 +32,7 @@ namespace Assets.Scripts.Communication.Controller
         public BpConnectionControllerRespDel BrainpackStatusResponse;
         public BpConnectionControllerDel BrainpackTimeSetResp;
         public SuitStateHandler OnSuitStateUpdate;
-        public float CountdownSinceStateReqSent;
+         
 
         internal const string  mSuitStatePattern = "(?i)Reset(?-i)|(?i)Idle(?-i)|(?i)Recording(?-i)|(?i)Error(?-i)";
         public abstract void ConnectToBrainpack();
@@ -47,6 +47,10 @@ namespace Assets.Scripts.Communication.Controller
         public abstract void InitateStopRecordingReq();
 
         public abstract void FlushBrainpack();
+
+        public abstract void Reset();
+
+        public abstract void TimeoutHandler();
     }
     public enum BrainpackConnectionState
     {

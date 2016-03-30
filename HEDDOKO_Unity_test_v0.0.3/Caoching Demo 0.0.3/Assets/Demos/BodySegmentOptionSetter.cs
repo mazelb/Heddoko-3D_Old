@@ -72,7 +72,7 @@ namespace Assets.Demos
                     InputHandler.RegisterActions(vKeyCode, vAction);
                     vButtonBSegment.AssociatedButton.onClick.AddListener(vAction);
                 }   
-                catch(KeyNotFoundException e)
+                catch(KeyNotFoundException)
                 {
                     Debug.Log("option "+  vKVPair.Key + " in BodySegment.cs not found in HeddokoDebugKeyMappings. Make sure that you have this  mapped in HeddokoDebugKeyMappings");
                 }
@@ -100,7 +100,7 @@ namespace Assets.Demos
                 {
                     vRenderedBody.AssociatedBodyView.AssociatedBody.ResetBodyMetrics();
                 }
-                catch (NullReferenceException vException)
+                catch (NullReferenceException  )
                 {
                    Debug.Log("Following Rendered body hasn't had a body/view assigned:  "+vRenderedBody.name);
                 }

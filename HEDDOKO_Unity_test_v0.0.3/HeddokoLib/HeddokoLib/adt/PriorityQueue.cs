@@ -155,6 +155,12 @@ namespace HeddokoLib.adt
             return mStoredValues[vChildCellIdx / 2].CompareTo(mStoredValues[vChildCellIdx]) > 0;
         }
 
+
+        public void Clear()
+        {
+            mStoredValues.Clear();
+            mStoredValues.Add(default(T));
+        }
         /// <summary>
         /// Returns whether the left child cell is smaller than the parent cell.
         /// Returns false if a left child does not exist.

@@ -117,6 +117,10 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return mID.GetHashCode();
+        }
         /// <summary>
         /// Inserts a child at the current index. 
         /// </summary>

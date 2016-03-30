@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using Assets.Scripts.Communication.Controller;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
  

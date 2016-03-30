@@ -28,6 +28,7 @@ namespace Assets.Scripts.UI.Tagging
         public TagAutocomplete AutoComplete;
         private ListView mFloatListView;
         private TaggingManager mTaggingManager;
+        public TagView TagViewPrefab;
 
         public ListView FloatListView
         {

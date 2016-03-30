@@ -7,8 +7,7 @@
 */
 
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Collections.Generic; 
 using Assets.Scripts.UI.AbstractViews.AbstractPanels;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls;
 

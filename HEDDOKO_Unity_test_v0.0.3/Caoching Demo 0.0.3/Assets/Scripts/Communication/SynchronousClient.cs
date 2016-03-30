@@ -6,11 +6,10 @@
 * @date December 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
-
-
-using System.Collections.Generic;
+ 
 using System.Diagnostics;
 using System.Linq;
+using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.adt;
 
@@ -135,8 +134,10 @@ namespace Assets.Scripts.Communication
                 {
                     vSender.Shutdown(SocketShutdown.Both);
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
-                    vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    vMsg = "Timeout exception:time taken from start" + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
+                  
+      
 
                     vSender.Close();
                 }
@@ -159,7 +160,9 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
                     vMsg = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
-
+                    mSemaphore.WaitOne();
+                    mPriorityMessages.Clear();
+                    mSemaphore.Release();
                 }
                 catch (Exception e)
                 {
@@ -237,8 +240,14 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
                     vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
+                    PacketCommandRouter.Instance.Process(this, vPacket);
+                    mSemaphore.WaitOne();
+                    mPriorityMessages.Clear();
+                    mSemaphore.Release();
 
                     vSender.Close();
+    
                 }
                 catch (ArgumentNullException vE)
                 {
@@ -259,6 +268,11 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
                     vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
+                    PacketCommandRouter.Instance.Process(this, vPacket);
+                    mSemaphore.WaitOne();
+                    mPriorityMessages.Clear();
+                    mSemaphore.Release();
 
                 }
                 catch (Exception e)

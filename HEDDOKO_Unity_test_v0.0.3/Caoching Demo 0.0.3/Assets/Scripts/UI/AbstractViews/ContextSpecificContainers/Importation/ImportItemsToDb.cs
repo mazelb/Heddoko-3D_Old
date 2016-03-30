@@ -7,9 +7,8 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Collections.Generic; 
+using System.IO; 
 using System.Threading;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList;
@@ -17,6 +16,7 @@ using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
 using UIWidgets;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
 {
@@ -140,7 +140,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
                 Database.Connection.ContinueWorking = true;
                 mMaxItems = TotalProgress.Max = mItemStack.Count;
                 TotalProgressText.text = "Number of movements imported: " + mTotalImportedItems.Count + "/" + vSelectedItems.Count;
-                Import();
+                Import(); 
             }
 
 

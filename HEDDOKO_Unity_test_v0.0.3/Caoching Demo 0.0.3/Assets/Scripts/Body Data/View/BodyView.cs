@@ -7,8 +7,10 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections.Generic; 
 using Assets.Scripts.Utils.DebugContext;
+using Assets.Scripts.Utils.DebugContext.logging;
+using LogType = Assets.Scripts.Utils.DebugContext.logging.LogType;
 
 namespace Assets.Scripts.Body_Data.view
 {
@@ -171,6 +173,17 @@ namespace Assets.Scripts.Body_Data.view
                     }
 
                     UpdateViewTracking(vBodyFrame);
+                }
+                else
+                {
+                    if (mBuffer != null)
+                    {
+                        DebugLogger.Instance.LogMessage(LogType.ApplicationFrame, "Buffer size: " + mBuffer.Count + " ");
+                    }
+                    else
+                    {
+                        DebugLogger.Instance.LogMessage(LogType.ApplicationFrame, "Buffer is null ");
+                    }
                 }
 
                 // InputHandler();

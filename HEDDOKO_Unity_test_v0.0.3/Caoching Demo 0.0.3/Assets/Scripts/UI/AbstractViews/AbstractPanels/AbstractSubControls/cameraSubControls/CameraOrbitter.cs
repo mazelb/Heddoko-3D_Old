@@ -18,7 +18,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
     public class CameraOrbitter : AbstractSubControl, IEquatable<CameraOrbitter>
     {
         public Camera Camera;
-        private Guid mId = new Guid();
+        private Guid mId = Guid.NewGuid();
         public Transform Target;
         public LayerMask TargetsLayer;
         [SerializeField]
@@ -195,6 +195,12 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
                 return vResult;
         }
 
+        public override int GetHashCode()
+        {
+            return mId.GetHashCode();
+        }
+
+    
 
         private enum OrbitterState
         {
@@ -202,8 +208,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
             MouseOverTarget,
             MouseClicked,
             MouseReleased
-        }
-
+        } 
         public bool Equals(CameraOrbitter vOther)
         {
             bool vResult = false;

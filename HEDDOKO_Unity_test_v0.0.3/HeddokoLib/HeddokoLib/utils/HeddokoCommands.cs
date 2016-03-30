@@ -9,6 +9,7 @@ namespace HeddokoLib.utils
     /// </summary>
     public static class HeddokoCommands
     {
+        public static string RequestServerConnection = "0x40";
         public static string RequestBrainpackList = "0x00";
         public static string SendBrainpackList = "0x01";
         public static string RequestToConnectToBP = "0x02"; 

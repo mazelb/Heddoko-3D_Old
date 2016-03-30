@@ -31,5 +31,10 @@ namespace Assets.Scripts.UI.Scene_3d.View
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

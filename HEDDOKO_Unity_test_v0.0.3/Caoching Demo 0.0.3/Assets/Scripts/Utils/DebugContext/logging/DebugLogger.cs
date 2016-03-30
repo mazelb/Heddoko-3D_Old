@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq; 
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -143,12 +143,18 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                 return Settings.SocketClientLogging;
             });
             sSettingsRegistry.Add(LogType.UnitTest, () => { return true; });
+            sSettingsRegistry.Add(LogType.InboundBpBufferException, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
         }
 
         private void RegisterPaths()
-        {
-            /*var vLocation = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath; 
-            string vDirPath = Path.GetDirectoryName(vLocation);*/
+        { 
             string vms = Instance.mLogDirPath = OutterThreadToUnityThreadIntermediary.Instance.ApplicationPath + "\\Application_logs";
             Debug.Log(vms);
 
@@ -164,9 +170,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             mLogTypeToLogpathType.Add(LogType.SocketClientSettings, OutputLogPath.SocketClientLog);
             mLogTypeToLogpathType.Add(LogType.SocketClientError, OutputLogPath.SocketClientLog);
             mLogTypeToLogpathType.Add(LogType.UnitTest, OutputLogPath.UnitTestPriorityQueue);
-
-
-
+            mLogTypeToLogpathType.Add(LogType.InboundBpBufferException, OutputLogPath.ApplicationLog);
         }
 
         public void Start()
@@ -257,7 +261,8 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         SocketClientError = 9,
         SocketClientSettings = 10,
         UnitTest = 11,
-        FileConversionException =12
+        FileConversionException = 12,
+        InboundBpBufferException = 13
     }
 
     public enum OutputLogPath

@@ -447,6 +447,7 @@ public partial class BodySegment
         Vector3 vULAxisUp, vULAxisRight, vULAxisForward;
         Vector3 vLLAxisUp, vLLAxisRight, vLLAxisForward;
         Vector3 vNewRight1 = Vector3.up;
+        // ReSharper disable once UnusedVariable
         Vector3 vNewRight2 = Vector3.up;
         Vector3 vULNewForward = Vector3.forward;
         Vector3 vLLNewForward = Vector3.forward;

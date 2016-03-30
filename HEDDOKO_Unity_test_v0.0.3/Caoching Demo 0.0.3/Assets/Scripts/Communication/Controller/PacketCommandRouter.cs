@@ -6,18 +6,17 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
+
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 
-
-namespace Assets.Scripts.Communication
+namespace Assets.Scripts.Communication.Controller
 {
     /**
     * Body class 
@@ -118,7 +117,26 @@ namespace Assets.Scripts.Communication
             mCommand.Register(HeddokoCommands.DisableSleepTimerReq, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.EnableSleepTimerResp, SleepTimerEnabled);
             mCommand.Register(HeddokoCommands.DisableSleepTimerResp, SleepTimerDisabled);
+            mCommand.Register("TimeoutException", TimeoutExcCallback);
 
+        }
+
+        /// <summary>
+        /// Callback on timeout exception, notifies the app of the state of the socket
+        /// </summary>
+        /// <param name="vsender"></param>
+        /// <param name="vargs"></param>
+        private void TimeoutExcCallback(object vsender, object vargs)
+        { 
+            //clear out the buffer
+            if (FrameThread != null && FrameThread.InboundSuitBuffer != null)
+            {
+                FrameThread.InboundSuitBuffer.Clear();
+            }
+            OutterThreadToUnityThreadIntermediary.EnqueueOverwrittableActionInUnity("TimoutException", () =>
+            {
+                BrainpackConnectionController.Instance.TimeoutHandler();
+            });
         }
 
         private void SleepTimerDisabled(object vsender, object vargs)
@@ -249,12 +267,13 @@ namespace Assets.Scripts.Communication
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
-            // mClientSocket.WriteToServer(vPayload);
-            BrainpackConnectionController.Instance.Output = vPayload;
+            // mClientSocket.WriteToServer(vPayload); 
+            
             if (FrameThread != null && FrameThread.InboundSuitBuffer != null)
             {
                 FrameThread.InboundSuitBuffer.Enqueue(vHeddokoPacket);
             }
+            DebugLogger.Instance.LogMessage(LogType.BrainpackFrame, "Brainpack frame rx:"+ vPayload);
             //todo send to buffer to be processed
         }
 

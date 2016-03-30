@@ -10,14 +10,14 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Assets.Scripts.Communication.View;
-using Assets.Scripts.Interfaces;
-using Assets.Scripts.UI.MainMenu;
+using Assets.Scripts.Interfaces; 
 using Assets.Scripts.UI.MainMenu.View;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 using UnityEngine;
 using Assets.Scripts.Utils.UnityUtilities;
 using Assets.Scripts.Utils.UnityUtilities.Repos;
+using UIWidgets;
 
 namespace Assets.Scripts.Communication.Controller
 {
@@ -39,6 +39,7 @@ namespace Assets.Scripts.Communication.Controller
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Disconnected;
         public string BrainpackComPort = "";
 
+
         [SerializeField]
         private int vTotalTries;
 
@@ -47,7 +48,7 @@ namespace Assets.Scripts.Communication.Controller
         // private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
         private IBrainpackConnectionView mView;
-
+        public float CountdownSinceStateReqSent { get; set; }
 
         /// <summary>
         /// returns the current state of the controller
@@ -254,6 +255,15 @@ namespace Assets.Scripts.Communication.Controller
 
                             break;
                         }
+                        if (vNewState == BrainpackConnectionState.Disconnected)
+                        {
+                            if (DisconnectedStateEvent != null)
+                            {
+                                mCurrentConnectionState = vNewState;
+                                DisconnectedStateEvent();
+                            }
+                            break;
+                        }
                         if (vNewState == BrainpackConnectionState.Connected)
                         {
                             if (ConnectedStateEvent != null)
@@ -261,6 +271,7 @@ namespace Assets.Scripts.Communication.Controller
                                 mCurrentConnectionState = vNewState;
                                 ConnectedStateEvent();
                                 StartHeartBeat();
+                                DisableBrainpackSleepTimer();
                             }
 
                         }
@@ -294,8 +305,9 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
-                            }
-
+                            } 
+                            //stop heart beat
+                            StopCoroutine(HeartBeatRoutine());
                             mCurrentConnectionState = vNewState;
                         }
                         break;
@@ -351,15 +363,23 @@ namespace Assets.Scripts.Communication.Controller
         void OnApplicationQuit()
         {
             StopAllCoroutines();
-            if (mCurrentConnectionState == BrainpackConnectionState.Connected)
-            { 
-                //Enable sleep timer on the brainpack
-               // EnableBrainpackSleepTimer();
-                //Wait 1 sec then disconnect brainpack
-                Thread.Sleep(1000);
-                DisconnectBrainpack();
-            } 
+            StopConnection();
 
+        }
+
+        void StopConnection()
+        {
+            if (mCurrentConnectionState == BrainpackConnectionState.Connected)
+            {
+               
+                //Enable sleep timer on the brainpack
+                EnableBrainpackSleepTimer();
+                DisconnectBrainpack(); 
+                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
+                PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+
+            }
+         
         }
 
         /// <summary>
@@ -384,9 +404,7 @@ namespace Assets.Scripts.Communication.Controller
             if (BrainpackConnectedTrigger.Triggered)
             {
                 BrainpackConnectionResult(BrainpackConnectedTrigger.InterestedVariable);
-                BrainpackConnectedTrigger.Reset();
-                //Disable sleep timer
-               // DisableBrainpackSleepTimer();
+                BrainpackConnectedTrigger.Reset(); 
             }
             if (SocketClientErrorTrigger.Triggered)
             {
@@ -405,8 +423,6 @@ namespace Assets.Scripts.Communication.Controller
                 HeddokoPacket vRequestBrainpackData = new HeddokoPacket(HeddokoCommands.RequestBPData, "Requesting data");
                 PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
                 CountdownSinceStateReqSent -= Time.deltaTime;
-
-
             }
 
 
@@ -516,6 +532,27 @@ namespace Assets.Scripts.Communication.Controller
         {
             SendCommandToBrainpack(HeddokoCommands.ClearBuffer);
         }
+
+        /// <summary>
+        /// Reset the state of the connection
+        /// </summary>
+        public override void Reset()
+        {
+            ResetTries();
+        }
+
+        /// <summary>
+        /// handle timeouts
+        /// </summary>
+        public override void TimeoutHandler()
+        {
+            var message =
+                "Connection to the brainpack service timedout.You can try to connect again or restart the brainpack service";
+            Notify.Template("FadingNotifyTemplate").Show(message, 4.5f, hideAnimation: Notify.FadeOutAnimation, showAnimation: Notify.FadeInAnimation, sequenceType: NotifySequence.First, clearSequence: true);
+            Reset();
+            ChangeCurrentState(BrainpackConnectionState.Disconnected);
+        }
+
         /// <summary>
         /// Starts the HeartBeat subroutine
         /// </summary>

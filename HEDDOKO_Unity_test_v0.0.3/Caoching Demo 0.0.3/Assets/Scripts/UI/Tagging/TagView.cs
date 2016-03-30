@@ -16,5 +16,6 @@ namespace Assets.Scripts.UI.Tagging
         public Button RemoveTagButton;
         public TaggingContainer TaggingContainer;
         public Tag Tag;
+        public Text TagText;
     }
 }
