@@ -268,7 +268,7 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
                     vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
-                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
+                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException",string.Empty);
                     PacketCommandRouter.Instance.Process(this, vPacket);
                     mSemaphore.WaitOne();
                     mPriorityMessages.Clear();

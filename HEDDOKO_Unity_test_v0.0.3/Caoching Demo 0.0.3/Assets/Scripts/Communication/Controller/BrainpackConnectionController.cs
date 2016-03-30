@@ -227,7 +227,7 @@ namespace Assets.Scripts.Communication.Controller
         /// Change the current state of the controller and send out appropriate events
         /// </summary>
         /// <param name="vNewState">The new state to change to</param>
-        private void ChangeCurrentState(BrainpackConnectionState vNewState)
+        internal void ChangeCurrentState(BrainpackConnectionState vNewState)
         {
             switch (mCurrentConnectionState)
             {
@@ -375,11 +375,12 @@ namespace Assets.Scripts.Communication.Controller
                 //Enable sleep timer on the brainpack
                 EnableBrainpackSleepTimer();
                 DisconnectBrainpack(); 
-                HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
-                PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
-
+          
             }
-         
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+
+
         }
 
         /// <summary>
