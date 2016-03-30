@@ -57,7 +57,7 @@ namespace Assets.Scripts.Utils
 
         void Awake()
         {
-
+            Init();
         }
 
         /// <summary>
