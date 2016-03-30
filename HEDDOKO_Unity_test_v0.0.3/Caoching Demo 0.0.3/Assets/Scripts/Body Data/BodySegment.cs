@@ -80,8 +80,7 @@ public partial class BodySegment
     /// </summary>
     /// <param name="vFrame"></param>
     public void UpdateSensorsData(BodyFrame vFrame)
-    {
-    Debug.Log("in segments non active");
+    { 
         //Update the delta time
         CurrentFrameTime = vFrame.Timestamp;
         DeltaTime = CurrentFrameTime - LastFrameTime;

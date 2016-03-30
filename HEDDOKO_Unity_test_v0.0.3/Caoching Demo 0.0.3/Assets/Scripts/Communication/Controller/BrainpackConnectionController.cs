@@ -69,7 +69,7 @@ namespace Assets.Scripts.Communication.Controller
 
                 if (mView == null)
                 {
-                    if (Application.loadedLevelName == "Coaching_utility_scene - split_screen")
+                    if (Application.loadedLevelName == "Coaching_utility_scene - split_screen" || Application.loadedLevelName == "Maz_SandBox")
                     {
                         GameObject vCanvas = GameObject.FindGameObjectWithTag("UiCanvas");
                         GameObject vInstantiated = Instantiate(PrefabRepo.BrainpackConnectionViewPrefab);
