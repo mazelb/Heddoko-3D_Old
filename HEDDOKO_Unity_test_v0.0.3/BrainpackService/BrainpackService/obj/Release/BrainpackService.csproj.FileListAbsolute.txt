@@ -19,3 +19,4 @@ E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\b
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Release\HeddokoLib.dll
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Release\InTheHand.Net.Personal.dll
 E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Release\HeddokoLib.pdb
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Release\BrainpackService.csprojResolveAssemblyReference.cache

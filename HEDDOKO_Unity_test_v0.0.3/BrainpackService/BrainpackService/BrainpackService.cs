@@ -6,6 +6,7 @@ using System.ServiceProcess;
 using System.Threading;
 using BrainpackService.brainpack_serial_connect;
 using BrainpackService.BrainpackServer;
+using BrainpackService.BrainpackServer.client;
 using BrainpackService.Tools_and_Utilities;
 using BrainpackService.Tools_and_Utilities.Debugging;
 
@@ -13,7 +14,9 @@ namespace BrainpackService
 {
     public partial class BrainpackService : ServiceBase
     {
-        private Thread mNetworkThread = new Thread(AsynchronousSocketListener.StartListening);
+        private IBrainpackServer mServer; 
+        private Thread mNetworkThread; 
+        private ServerCommandRouter mServerCommandRouter;
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr vHandle, ref ServiceStatus vServiceStatus);
 
@@ -41,7 +44,7 @@ namespace BrainpackService
 
             mEventLog.Source = vEventSourceName;
             mEventLog.Log = vLogName;
-           
+
         }
 
 
@@ -82,12 +85,24 @@ namespace BrainpackService
          * @brief Defines what happens when the service starts   
          */
         protected override void OnStart(string[] vArgs)
-        { 
-            //start a periodic polling
-            System.Timers.Timer vTimer = new System.Timers.Timer {Interval = 10000};
-            // 60 seconds
-            vTimer.Elapsed += OnTimer;
-            vTimer.Start();
+        {
+            DebugLogger.Instance.Start();
+            mServer = new AsynchronousSocketListener();//  new PersistentTCPConnection();
+            UdpSender vUdpSender = new UdpSender();
+            mServerCommandRouter = new ServerCommandRouter
+            {
+                BrainpackServer = mServer,
+                UdpSender = vUdpSender
+            };
+            mServerCommandRouter.BeginRegistration();
+            BrainpackSerialConnector.Instance.ServerCommandRouter = mServerCommandRouter;
+            mServer.ServerCommandRouter = mServerCommandRouter;
+            mNetworkThread = new Thread(() =>
+            {
+                mServer.Start();
+            });
+            
+        
 
             //change the service status
             ServiceStatus vServiceStatus = new ServiceStatus();
@@ -96,26 +111,18 @@ namespace BrainpackService
             SetServiceStatus(ServiceHandle, ref vServiceStatus);
             //update the service state to running
             vServiceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
-            SetServiceStatus(ServiceHandle, ref vServiceStatus);
+            SetServiceStatus(ServiceHandle, ref vServiceStatus); 
 
-            //Initialize the server
-            ServerCommandRouter.Instance.BeginRegistration();
             mNetworkThread.Start();
-            
-            DebugLogger.Instance.Start();
+     
         }
 
         private void WriteEventLogMessage(string vMsg)
         {
             mEventLog.WriteEntry(vMsg);
-
         }
 
  
-        protected void OnTimer(object vSender, System.Timers.ElapsedEventArgs vArgs)
-        { 
-
-        }
         /**
         * OnStop() 
         * @brief Defines what happens when the stops starts   
@@ -123,8 +130,8 @@ namespace BrainpackService
         protected override void OnStop()
         {
             //mBrainPackBtPoller.Stop(); // stop the connector
-            AsynchronousSocketListener.StopService();
-            BrainpackEventLogManager.DeRegisterEventLogMessage(WriteEventLogMessage); 
+            mServer.Stop();
+            BrainpackEventLogManager.DeRegisterEventLogMessage(WriteEventLogMessage);
             BrainpackSerialConnector.Instance.Stop();
             DebugLogger.Instance.Stop();
         }

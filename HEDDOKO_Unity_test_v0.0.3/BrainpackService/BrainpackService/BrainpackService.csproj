@@ -55,7 +55,7 @@
   <ItemGroup>
     <Reference Include="HeddokoLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\HeddokoLib\HeddokoLib\bin\Debug\HeddokoLib.dll</HintPath>
+      <HintPath>..\..\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\HeddokoLib\HeddokoLib\bin\Debug\HeddokoLib.dll</HintPath>
     </Reference>
     <Reference Include="InTheHand.Net.Personal">
       <HintPath>bin\Debug\InTheHand.Net.Personal.dll</HintPath>
@@ -75,11 +75,16 @@
     <Compile Include="bluetooth connector\BrainpackInterfaces\IBrainpackConnection.cs" />
     <Compile Include="bluetooth connector\BrainpackSearcher.cs" />
     <Compile Include="bluetooth connector\BrainpackBTConnection.cs" />
+    <Compile Include="bluetooth connector\BrainpackSerialConnection.cs" />
     <Compile Include="bluetooth connector\DebugContext\DebugBodyFrameLogger.cs" />
     <Compile Include="bluetooth connector\SingleBrainpackConnectionManager.cs" />
-    <Compile Include="BrainpackServer\AsynchronousSocketListener.cs" />
-    <Compile Include="BrainpackServer\BrainpackListener.cs" />
+    <Compile Include="BrainpackServer\client\UdpSender.cs" />
+    <Compile Include="BrainpackServer\listener\AsynchronousSocketListener.cs" />
+    <Compile Include="BrainpackServer\listener\BrainpackListener.cs" />
     <Compile Include="BrainpackServer\BrainpackServer.cs" />
+    <Compile Include="BrainpackServer\routing\BrainpackConnectionRouter.cs" />
+    <Compile Include="BrainpackServer\IBrainpackServer.cs" />
+    <Compile Include="BrainpackServer\PersistentTCPConnection.cs" />
     <Compile Include="BrainpackServer\ServerCommandRouter.cs" />
     <Compile Include="BrainpackService.cs">
       <SubType>Component</SubType>

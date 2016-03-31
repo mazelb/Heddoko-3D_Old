@@ -5,6 +5,7 @@ namespace BrainpackService.BrainpackServer
 {
     public interface IBrainpackServer
     {
+        ServerCommandRouter ServerCommandRouter { get; set; }
         bool Start();
         bool Send(object vHandler,string vData);
 

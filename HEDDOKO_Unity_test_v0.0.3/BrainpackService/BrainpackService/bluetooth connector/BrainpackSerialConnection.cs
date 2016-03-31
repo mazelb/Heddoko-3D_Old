@@ -1,48 +1,42 @@
 ﻿using System;
 using System.IO;
 using System.IO.Ports;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
 using BrainpackService.bluetooth_connector.BrainpackInterfaces;
-using BrainpackService.BrainpackServer;
+using BrainpackService.brainpack_serial_connect;
 using BrainpackService.Tools_and_Utilities.Debugging;
 using HeddokoLib.adt;
-using HeddokoLib.networking;
-using HeddokoLib.utils;
 
-
-namespace BrainpackService.brainpack_serial_connect
+namespace BrainpackService.bluetooth_connector
 {
-    public class BrainpackSerialConnector : IBrainpackConnection
+    /// <summary>
+    /// Brainpack serial connection
+    /// </summary>
+    public class BrainpackSerialConnection : IBrainpackConnection
     {
+        private Guid mGuid;
+
+        
         private Thread mWorkerThread;
         private bool IsWorking { get; set; }
         private string mPortName; 
         private object mLatestStateLock = new object();
         //in milliseconds
         private const int gSerialPortTimeout = 15000;
-        private static BrainpackSerialConnector sInstance; 
+        private static BrainpackSerialConnector sInstance;
         private bool mSerialIsBeingProbed = false;
         string mBpStateSearchPattern = "(?i)Reset(?-i)|(?i)Idle(?-i)|(?i)Recording(?-i)|(?i)Error(?-i)";
         private bool mIsRecording;
         private string mLatestState { get; set; }
         SerialPort Serialport { get; set; } = new SerialPort();
-       
+
         CircularQueue<string> OutboundBuffer { get; } = new CircularQueue<string>(10, true);
         CircularQueue<string> ResponseBuffer { get; } = new CircularQueue<string>(50, true);
         //private CircularQueue<string> mStateBuffer { get; } = new CircularQueue<string>(10, true);
-        public ServerCommandRouter ServerCommandRouter { get; set; }
-        public static BrainpackSerialConnector Instance
-        {
-            get
-            {
-                if (sInstance == null)
-                {
-                    sInstance = new BrainpackSerialConnector();
-                }
-                return sInstance;
-            }
-        }
+
+       
         /// <summary>
         /// Initialize the serialport with the given serialport name
         /// </summary>
@@ -59,45 +53,16 @@ namespace BrainpackService.brainpack_serial_connect
         {
             try
             {
-
-                if (vNewPort != mPortName)
-                {
-                    Stop();
-                    CloseSerialPort();
-                    Serialport = new SerialPort();
-                    Serialport.ReadTimeout = gSerialPortTimeout;
-                    Serialport.WriteTimeout = gSerialPortTimeout;
-                    mPortName = vNewPort;
-                    Serialport.PortName = mPortName;
-                    Serialport.NewLine = "\r\n";
-                    mWorkerThread = new Thread(ThreadedFunction);
-                    Serialport.BaudRate = 115200;
-                    Serialport.Open();
-                    Start();
-                }
-                if (vNewPort == mPortName && Serialport != null && !Serialport.IsOpen)
-                {
-
-
-                    CloseSerialPort();
-                    mWorkerThread = new Thread(ThreadedFunction);
-                    Serialport = new SerialPort();
-                    Serialport.ReadTimeout = gSerialPortTimeout;
-                    Serialport.WriteTimeout = gSerialPortTimeout;
-                    mPortName = vNewPort;
-                    Serialport.PortName = mPortName;
-                    Serialport.NewLine = "\r\n";
-                    mWorkerThread = new Thread(ThreadedFunction);
-                    Serialport.BaudRate = 115200;
-                    Serialport.Open();
-                    Start();
-                }
-
-                else
-                {
-                    OutboundBuffer.Clear();
-                    Start();
-                }
+                Serialport = new SerialPort();
+                Serialport.ReadTimeout = gSerialPortTimeout;
+                Serialport.WriteTimeout = gSerialPortTimeout;
+                mPortName = vNewPort;
+                Serialport.PortName = mPortName;
+                Serialport.NewLine = "\r\n";
+                mWorkerThread = new Thread(ThreadedFunction);
+                Serialport.BaudRate = 115200;
+                Serialport.Open();
+                Start();
 
             }
 
@@ -177,23 +142,21 @@ namespace BrainpackService.brainpack_serial_connect
                             if (vTemp.Length > 10 || vTemp.Contains("ack") || vTemp.Contains("Ack"))
                             {
                                 ResponseBuffer.Enqueue(vReadLine);
-                           //     HeddokoPacket vResponseData = new HeddokoPacket(HeddokoCommands.SendBPData, vReadLine);
-                                
+
                             }
                         }
                         else
-                        { 
-                             HeddokoPacket vPossibleBrainpackData = new HeddokoPacket(HeddokoCommands.SendBPData, vReadLine);
-                            ServerCommandRouter.Process(this, vPossibleBrainpackData);
+                        {
+                            OutboundBuffer.Enqueue(vReadLine);
+
+
                         }
 
                     }
                     catch (IOException vIoException)
                     {
                         DebugLogger.Instance.LogMessage(LogType.BrainpackSerialPortException,
-                            vIoException.StackTrace);
-
-                        //BrainpackEventLogManager.InvokeEventLogError(vIoException + "\r\n" + vIoException.StackTrace);
+                            vIoException.StackTrace); 
 
                     }
                     catch (NullReferenceException vNullReferenceException)

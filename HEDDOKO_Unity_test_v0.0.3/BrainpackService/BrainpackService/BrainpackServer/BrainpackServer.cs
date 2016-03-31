@@ -18,6 +18,7 @@ namespace BrainpackService.BrainpackServer
         private static List<Socket> mClientsToServe = new List<Socket>(5);
         private int mTotalConnectedSockets;
         private AsyncCallback mWorkerCallback;
+        public ServerCommandRouter ServerCommandRouter { get; set; }
         public void SetupServer()
         {
             IPHostEntry vIpHostEntry = Dns.GetHostEntry("localhost");
@@ -96,7 +97,7 @@ namespace BrainpackService.BrainpackServer
                     {
                         vSocketData.Command = HeddokoCommands.ExtractCommandFromBytes(0, 4, vSocketData.Payload); //extract the command out of the packet
                        
-                        ServerCommandRouter.Instance.Process(vSocketData.Socket, vSocketData);  
+                        ServerCommandRouter.Process(vSocketData.Socket, vSocketData);  
                     }
                     else
                     {
