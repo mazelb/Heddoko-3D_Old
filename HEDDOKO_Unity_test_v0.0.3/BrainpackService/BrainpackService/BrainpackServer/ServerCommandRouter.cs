@@ -85,11 +85,14 @@ namespace BrainpackService.BrainpackServer
         /// <param name="vargs"></param>
         private void DisableBrainpackSleepTimer(object vSender, object vargs)
         {
-            BrainpackSerialConnector.Instance.SendCommandToBrainpack("AutoOff0");
             DebugLogger.Instance.LogMessage(LogType.ApplicationCommand, "Request to disable the sleep timer");
+            BrainpackSerialConnector.Instance.SendCommandToBrainpack("AutoOff0");
+            
             string vResponses = "";
             HeddokoPacket vResultPacket = new HeddokoPacket(HeddokoCommands.DisableSleepTimerResp, vResponses);
             string vWrapped = HeddokoPacket.Wrap(vResultPacket);
+            DebugLogger.Instance.LogMessage(LogType.ApplicationResponse, "response to disable the sleep timer");
+
             BrainpackServer.Send((Socket)vSender, vWrapped);
         }
 
@@ -223,7 +226,7 @@ namespace BrainpackService.BrainpackServer
             {
                 vResponse = BrainpackSerialConnector.Instance.GetLatestState();
             }
-            DebugLogger.Instance.LogMessage(LogType.ApplicationResponse, vResponse);
+            DebugLogger.Instance.LogMessage(LogType.ApplicationResponse, "GetState response: "+vResponse);
 
             HeddokoPacket vResultPacket = new HeddokoPacket(HeddokoCommands.GetBrainpackStateResp, vResponse);
             string vWrapped = HeddokoPacket.Wrap(vResultPacket);

@@ -141,12 +141,9 @@ namespace BrainpackService.BrainpackServer
                 vContent = vState.mStringBuilder.ToString();
                 if (vContent.IndexOf(PacketSetting.EndOfPacketDelim) > -1)
                 {
-                    byte[] vData = vState.Buffer;
-                    //first 4 bytes are the command codes
+                    byte[] vData = vState.Buffer; 
                     HeddokoPacket vHPacket = new HeddokoPacket(vData, PacketSetting.PacketCommandSize);
-                    ServerCommandRouter.Process(vHander, vHPacket);
-                    //all data has been read from the client. redistribute it// place commands here
-                    //Send(vHander, vContent);
+                    ServerCommandRouter.Process(vHander, vHPacket); 
                 }
                 else
                 {
@@ -159,12 +156,13 @@ namespace BrainpackService.BrainpackServer
         public bool Send(object vObject, string vData)
         {
             Socket vHandler = (Socket)vObject;
-            DebugLogger.Instance.LogMessage(LogType.ApplicationResponse, "sending frame to app via socket: " + vData);
+            DebugLogger.Instance.LogMessage(LogType.ApplicationResponse, "Beginning send via socket: " + vData);
 
             //convert the string data to byte data using ASCII encoding
             byte[] vByteData = PacketSetting.Encoding.GetBytes(vData);
             //begin sending the data to the remote device
             vHandler.BeginSend(vByteData, 0, vByteData.Length, 0, new AsyncCallback(SendCallback), vHandler);
+ 
             return true;
         }
 

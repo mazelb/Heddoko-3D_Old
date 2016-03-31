@@ -141,7 +141,7 @@ namespace BrainpackService.BrainpackServer
         public static void Send(Socket vHandler, byte[] vByteData)
         {
             try
-            {
+            { 
                 vHandler.BeginSend(vByteData, 0, vByteData.Length, 0, new AsyncCallback(SendCallback), vHandler);
 
             }

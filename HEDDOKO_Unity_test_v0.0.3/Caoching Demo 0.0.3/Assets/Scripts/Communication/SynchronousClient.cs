@@ -33,7 +33,7 @@ namespace Assets.Scripts.Communication
     public class SynchronousClient
     {
         private Thread mWorkerThread;
-        private const int sTimeout = 10000;
+        private const int sTimeout = 30000;
         private Semaphore mSemaphore = new Semaphore(1, 1);
 
         public SynchronousClient()
@@ -238,9 +238,10 @@ namespace Assets.Scripts.Communication
                 catch (TimeoutException vE)
                 {
                     vSender.Shutdown(SocketShutdown.Both);
+                    vLogMessage = "Time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
-                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
-                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
+                    var vLogMsg = string.Format("Timedout on on sending {0} \n{1}", vMsg.MessagePayload, vLogMessage);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMsg);
                     HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
                     PacketCommandRouter.Instance.Process(this, vPacket);
                     mSemaphore.WaitOne();
@@ -261,20 +262,20 @@ namespace Assets.Scripts.Communication
                 }
                 catch (SocketException vE)
                 {
-
-                    vLogMessage = "SocketException  " + vE.ErrorCode + "\r\n" + vE;
-                    vLogMessage += vE.InnerException;
-                    vSender.Close();
-                    Debug.Log(vMsg);
-                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
-                    vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
-                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
-                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
-                    PacketCommandRouter.Instance.Process(this, vPacket);
                     mSemaphore.WaitOne();
                     mPriorityMessages.Clear();
                     mSemaphore.Release();
 
+                    vLogMessage = "Time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
+                    vLogMessage += "\r\nSocketException  " + vE.ErrorCode + "\r\n" + vE;
+                    vLogMessage += "\r\n" + vE.InnerException;
+                    var vLogMsg = string.Format("Socket exception on on sending {0} \n{1}", vMsg.MessagePayload, vLogMessage);
+                    DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMsg);
+                    Debug.Log(vLogMsg);
+                    vSender.Close();
+                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
+                    PacketCommandRouter.Instance.Process(this, vPacket);
+                   
                 }
                 catch (Exception e)
                 {
