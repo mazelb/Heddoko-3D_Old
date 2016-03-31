@@ -7,23 +7,20 @@
 * Copyright Heddoko(TM) 2015, all rights reserved
 */
 
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.adt;
-
-//using Assets.Scripts.Utils.Debugging;
-using HeddokoLib.networking;
+using HeddokoLib.networking; 
 using Debug = UnityEngine.Debug;
 
-namespace Assets.Scripts.Communication
+namespace Assets.Scripts.Communication.Communicators
 {
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Threading;
-
     // State object for receiving data from remote device.
 
     /// <summary>
@@ -34,7 +31,7 @@ namespace Assets.Scripts.Communication
     {
         private Thread mWorkerThread;
         private const int sTimeout = 10000;
-        private Semaphore mSemaphore = new Semaphore(1, 1);
+        private Semaphore mSemaphore = new Semaphore(1,1);
 
         public SynchronousClient()
         {
@@ -73,7 +70,7 @@ namespace Assets.Scripts.Communication
                     PriorityMessage vMsg = mPriorityMessages.RemoveFirstItem();
                     mSemaphore.Release();
                     StartClientAndSendData(vMsg);
-
+                   
 
                 }
 
@@ -136,8 +133,8 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vE.Message);
                     vMsg = "Timeout exception:time taken from start" + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vMsg);
-
-
+                  
+      
 
                     vSender.Close();
                 }
@@ -212,7 +209,6 @@ namespace Assets.Scripts.Communication
                 vSender.ReceiveTimeout = sTimeout;
                 vSender.SendTimeout = sTimeout;
 
-
                 try
                 {
                     vSender.Connect(vRemoteEndPoint);
@@ -248,7 +244,7 @@ namespace Assets.Scripts.Communication
                     mSemaphore.Release();
 
                     vSender.Close();
-
+    
                 }
                 catch (ArgumentNullException vE)
                 {
@@ -269,7 +265,7 @@ namespace Assets.Scripts.Communication
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
                     vLogMessage = "time taken from start until this exception " + vStopwatch.ElapsedMilliseconds + " ms";
                     DebugLogger.Instance.LogMessage(LogType.SocketClientError, vLogMessage);
-                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException", string.Empty);
+                    HeddokoPacket vPacket = new HeddokoPacket("TimeoutException",string.Empty);
                     PacketCommandRouter.Instance.Process(this, vPacket);
                     mSemaphore.WaitOne();
                     mPriorityMessages.Clear();
@@ -307,7 +303,6 @@ namespace Assets.Scripts.Communication
         private bool mIsworking;
         public void Stop()
         {
-            while (mPriorityMessages.Count != 0) ;
             mIsworking = false;
         }
 
@@ -349,7 +344,7 @@ namespace Assets.Scripts.Communication
         {
             string vReturn = "";
             vReturn += "Priority: " + EnumUtil.GetName(Priority) + " PriorityValue: " + (int)Priority + " HeapIndex: " +
-                       HeapIndex;
+                       HeapIndex ;
             return vReturn;
             ;
         }

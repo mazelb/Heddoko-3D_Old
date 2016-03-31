@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using Assets.Scripts.Communication.Communicators;
 using Assets.Scripts.Utils;
 using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.networking;
@@ -92,7 +93,8 @@ namespace Assets.Scripts.Communication.Controller
             mCommand.Register(HeddokoCommands.BPConnectionSucess, SuitConnectionSuccess);
             mCommand.Register(HeddokoCommands.RequestToConnectToBP, SendHighPriorityMessage);
             mCommand.Register(HeddokoCommands.SendBPData, ReRouteRawFrameData);
-            mCommand.Register(HeddokoCommands.RequestBPData, SendLowPriorityMessage);
+             mCommand.Register(HeddokoCommands.RegisterListener, SendHighPriorityMessage);
+            mCommand.Register(HeddokoCommands.RegisterListenerAck, RegisterAck);
             mCommand.Register(HeddokoCommands.ConnectionAck, ConnectionAcknowledged);
             mCommand.Register(HeddokoCommands.StopHeddokoUnityClient, Stop);
             mCommand.Register(HeddokoCommands.StopRecordingReq, SendHighPriorityMessage);
@@ -119,6 +121,16 @@ namespace Assets.Scripts.Communication.Controller
             mCommand.Register(HeddokoCommands.DisableSleepTimerResp, SleepTimerDisabled);
             mCommand.Register("TimeoutException", TimeoutExcCallback);
 
+        }
+
+        /// <summary>
+        /// Listener registration acknowledged
+        /// </summary>
+        /// <param name="vsender"></param>
+        /// <param name="vargs"></param>
+        private void RegisterAck(object vsender, object vargs)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -267,14 +279,12 @@ namespace Assets.Scripts.Communication.Controller
         {
             HeddokoPacket vHeddokoPacket = (HeddokoPacket)vArgs;
             string vPayload = HeddokoPacket.Unwrap(vHeddokoPacket.Payload);
-            // mClientSocket.WriteToServer(vPayload); 
-            
             if (FrameThread != null && FrameThread.InboundSuitBuffer != null)
             {
                 FrameThread.InboundSuitBuffer.Enqueue(vHeddokoPacket);
             }
             DebugLogger.Instance.LogMessage(LogType.BrainpackFrame, "Brainpack frame rx:"+ vPayload);
-            //todo send to buffer to be processed
+           
         }
 
 

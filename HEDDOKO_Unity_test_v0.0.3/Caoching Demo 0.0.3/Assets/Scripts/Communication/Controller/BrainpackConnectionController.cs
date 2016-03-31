@@ -8,7 +8,7 @@
 
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Threading;
+using Assets.Scripts.Communication.Communicators;
 using Assets.Scripts.Communication.View;
 using Assets.Scripts.Interfaces; 
 using Assets.Scripts.UI.MainMenu.View;
@@ -38,7 +38,7 @@ namespace Assets.Scripts.Communication.Controller
         [SerializeField]
         private BrainpackConnectionState mCurrentConnectionState = BrainpackConnectionState.Disconnected;
         public string BrainpackComPort = "";
-
+        private UdpListener mUdpListener = new UdpListener();
 
         [SerializeField]
         private int vTotalTries;
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Communication.Controller
         // private GameObject mLoadingScreen;
         private BodyFrameThread mBodyFrameThread;
         private IBrainpackConnectionView mView;
-        public float CountdownSinceStateReqSent { get; set; }
+        public float StateReqTimer { get; set; }
 
         /// <summary>
         /// returns the current state of the controller
@@ -164,10 +164,10 @@ namespace Assets.Scripts.Communication.Controller
 
         internal void DisconnectBrainpack()
         {
-
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.DisconnectBrainpack, "");
             ChangeCurrentState(BrainpackConnectionState.Disconnected);
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
+          
         }
 
         internal void EnableBrainpackSleepTimer()
@@ -262,6 +262,9 @@ namespace Assets.Scripts.Communication.Controller
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
                             }
+                            mUdpListener.Stop();
+                            //stop heart beat
+                            StopCoroutine(HeartBeatRoutine());
                             break;
                         }
                         if (vNewState == BrainpackConnectionState.Connected)
@@ -272,6 +275,8 @@ namespace Assets.Scripts.Communication.Controller
                                 ConnectedStateEvent();
                                 StartHeartBeat();
                                 DisableBrainpackSleepTimer();
+                                mUdpListener.Start();
+                                RegisterListener();
                             }
 
                         }
@@ -279,15 +284,7 @@ namespace Assets.Scripts.Communication.Controller
                     }
                 case BrainpackConnectionState.Connected:
                     {
-                        if (vNewState == BrainpackConnectionState.Disconnected)
-                        {
-                            if (DisconnectedStateEvent != null)
-                            {
-                                mCurrentConnectionState = vNewState;
-                                DisconnectedStateEvent();
-                            }
-                            break;
-                        }
+                        
                         if (vNewState == BrainpackConnectionState.Connecting)
                         {
                             if (ConnectingStateEvent != null)
@@ -305,10 +302,13 @@ namespace Assets.Scripts.Communication.Controller
                             {
                                 mCurrentConnectionState = vNewState;
                                 DisconnectedStateEvent();
-                            } 
+                               
+                            }
+                            mUdpListener.Stop();
                             //stop heart beat
                             StopCoroutine(HeartBeatRoutine());
                             mCurrentConnectionState = vNewState;
+
                         }
                         break;
                     }
@@ -325,6 +325,15 @@ namespace Assets.Scripts.Communication.Controller
                         break;
                     }
             }
+        }
+
+        /// <summary>
+        /// Send a request to the brainpack service to start sending data to the local listener
+        /// </summary>
+        private void RegisterListener()
+        {
+            HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.RegisterListener, "");
+            PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
         }
 
         /// <summary>
@@ -371,16 +380,15 @@ namespace Assets.Scripts.Communication.Controller
         {
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             {
-               
                 //Enable sleep timer on the brainpack
                 EnableBrainpackSleepTimer();
                 DisconnectBrainpack(); 
-          
             }
+            
+            mUdpListener.Stop();
+ 
             HeddokoPacket vHeddokoPacket = new HeddokoPacket(HeddokoCommands.StopHeddokoUnityClient, "");
             PacketCommandRouter.Instance.Process(this, vHeddokoPacket);
-
-
         }
 
         /// <summary>
@@ -421,9 +429,9 @@ namespace Assets.Scripts.Communication.Controller
             //start pulling data
             if (mCurrentConnectionState == BrainpackConnectionState.Connected)
             {
-                HeddokoPacket vRequestBrainpackData = new HeddokoPacket(HeddokoCommands.RequestBPData, "Requesting data");
-                PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
-                CountdownSinceStateReqSent -= Time.deltaTime;
+              //  HeddokoPacket vRequestBrainpackData = new HeddokoPacket(HeddokoCommands.RequestBPData, "Requesting data");
+               // PacketCommandRouter.Instance.Process(this, vRequestBrainpackData);
+                StateReqTimer -= Time.deltaTime;
             }
 
 
@@ -614,7 +622,7 @@ namespace Assets.Scripts.Communication.Controller
                 {
                     vMessageSent = true;
                     GetBrainpackStateCmd();
-                    CountdownSinceStateReqSent = vTimer;
+                    StateReqTimer = vTimer;
                 }
                 else
                 {

@@ -91,10 +91,7 @@ namespace Assets.Scripts.UI.ActivitiesContext.View
                 NonSquatMetrics.Show();
             }
 
-            PlayerStreamManager.ResetBody();
-          
-            Application.targetFrameRate = 45;
-             QualitySettings.vSyncCount = 0;
+            PlayerStreamManager.ResetBody(); 
         }
 
         /// <summary>

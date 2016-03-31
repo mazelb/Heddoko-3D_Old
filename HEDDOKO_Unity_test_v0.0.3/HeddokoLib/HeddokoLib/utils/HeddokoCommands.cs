@@ -59,9 +59,9 @@ namespace HeddokoLib.utils
         public static string DisableSleepTimerReq = "0x37";
         public static string DisableSleepTimerResp = "0x38";
         public static string EnableSleepTimerReq = "0x39";
-        public static string EnableSleepTimerResp = "0x39";
-
-
+        public static string EnableSleepTimerResp = "0x42";
+        public static string RegisterListener = "0x43";
+        public static string RegisterListenerAck = "0x44";
         public static string ClientError = "9x00";
      
 

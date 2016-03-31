@@ -52,7 +52,7 @@ namespace Assets.Scripts.UI.RecordingLoading.View
         public override void Show()
         {
             PlayerManager.ChangeState(PlayerStreamManager.BodyPlaybackState.Waiting);
-            Application.targetFrameRate = 60;
+           // Application.targetFrameRate = 60;
             gameObject.SetActive(true);
             RecordingPanelView.Show();
             ModelSwitcher.Show();

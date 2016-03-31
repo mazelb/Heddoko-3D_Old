@@ -5,8 +5,8 @@
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
 
-using System;
-using Assets.Scripts.Communication;
+using System; 
+using Assets.Scripts.Communication.Communicators;
 using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.adt;
 using UnityEngine;

@@ -20,7 +20,7 @@ namespace Assets
     {
         public Button RestartServiceButton;
         private ServiceController mServiceController;
-        
+
         public void Awake()
         {
             mServiceController = new ServiceController("BrainpackService");
@@ -30,7 +30,7 @@ namespace Assets
         {
             RestartServiceButton.interactable = false;
             BrainpackConnectionController.Instance.ChangeCurrentState(BrainpackConnectionState.Disconnected);
-            StartCoroutine(RestartBpService(2));
+            StartCoroutine(RestartBpService(1));
         }
 
         /// <summary>
@@ -39,12 +39,9 @@ namespace Assets
         /// <param name="vTimeout"></param>
         /// <returns></returns>
         private IEnumerator RestartBpService(float vTimeout)
-        {
-
-            float vRemainingTime = vTimeout;
-
+        { 
             bool mStopSuccess = false;
-            bool mServiceStartSuccess = false;
+            bool vStartSucess = false;
             try
             {
                 mServiceController.Stop();
@@ -53,53 +50,44 @@ namespace Assets
             catch (Exception vE)
             {
                 Debug.Log("Problem stopping" + vE);
-                mStopSuccess = false; 
+                mStopSuccess = false;
             }
 
             if (mStopSuccess)
             {
-                while (vRemainingTime >= 0)
+
+                yield return new WaitForSeconds(vTimeout);
+                //check status
+                if (mServiceController.Status == ServiceControllerStatus.Stopped)
                 {
-                    vRemainingTime -= Time.time;
-                    //check status
-                    if (mServiceController.Status == ServiceControllerStatus.Stopped)
-                    {
-                        Debug.Log("Service stopped.");
-                        mStopSuccess = true;
-                        yield break;
-                    }
-                    yield return null;
-                }
+                    Debug.Log("Service stopped.");
+                    mStopSuccess = true; 
+                } 
             }
             try
             {
                 if (mStopSuccess)
                 {
                     mServiceController.Start();
-                    mServiceStartSuccess = true;
-                    vRemainingTime = vTimeout;
+                    vStartSucess = true;
                 }
             }
-             
+
             catch (Exception vE)
             {
-                mServiceStartSuccess = false;
+                vStartSucess = false;
                 Debug.Log("Problem starting" + vE);
                 throw;
             }
-            if (mServiceStartSuccess && mStopSuccess)
+            if (vStartSucess && mStopSuccess)
             {
-                while (vRemainingTime >= 0)
+                yield return new WaitForSeconds(vTimeout);
+                //check status
+                if (mServiceController.Status == ServiceControllerStatus.Running)
                 {
-                    vRemainingTime -= Time.time;
-                    //check status
-                    if (mServiceController.Status == ServiceControllerStatus.Running)
-                    {
-                        Debug.Log("Service started again.");
-                        yield break;
-                    }
-                    yield return null;
+                    Debug.Log("Service started again."); 
                 }
+
             }
             if (!mStopSuccess)
             {
@@ -107,11 +95,17 @@ namespace Assets
                "there was a problem with stopping the brainpack service. Verify that you are running the application in an administrative capacity or try again";
                 Notify.Template("FadingNotifyTemplate").Show(message, 4.5f, hideAnimation: Notify.FadeOutAnimation, showAnimation: Notify.FadeInAnimation, sequenceType: NotifySequence.First, clearSequence: true);
             }
-            if (!mServiceStartSuccess)
+            if (!vStartSucess)
             {
                 var message =
                "there was a problem with starting the brainpack service. Verify that you are running the application in an administrative capacity or try again";
                 Notify.Template("FadingNotifyTemplate").Show(message, 4.5f, hideAnimation: Notify.FadeOutAnimation, showAnimation: Notify.FadeInAnimation, sequenceType: NotifySequence.First, clearSequence: true);
+            }
+            if (mStopSuccess && vStartSucess)
+            {
+                var message =
+               "Service restarted";
+                Notify.Template("FadingNotifyTemplate").Show(message, 2.5f, hideAnimation: Notify.FadeOutAnimation, showAnimation: Notify.FadeInAnimation, sequenceType: NotifySequence.First, clearSequence: true);
             }
             RestartServiceButton.interactable = true;
         }

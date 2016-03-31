@@ -100,7 +100,7 @@ namespace Assets.Scripts.Cameras
         }
         IEnumerator MoveNext()
         {
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
             float vStartTime = 0;
             float vCurrOrthoCam = Camera.orthographicSize;
             Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
@@ -156,7 +156,7 @@ namespace Assets.Scripts.Cameras
         {
             bool vPreFollowPos = CamLookAt.UsePosition;
             CamLookAt.UsePosition = false;
-            Application.targetFrameRate = 60;
+       //     Application.targetFrameRate = 60;
             float vStartTime = 0;
             float vCurrOrthoCam = Camera.orthographicSize;
             Vector3 vCurrentLookAtPos = CamLookAt.Target.position;
