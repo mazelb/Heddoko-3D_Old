@@ -37,7 +37,7 @@ namespace Assets.Scripts.Body_Data.CalibrationData
         /// <summary>
         /// Transition period between the number of calibrations
         /// </summary>
-        public static float TransitionPeriod
+        public static float TransitionTimer
         {
             get
             {
@@ -95,12 +95,11 @@ namespace Assets.Scripts.Body_Data.CalibrationData
             sCalibrationTypes = new List<CalibrationType>();
             //set calibration times according to their current order
             float vMultipler = 1;
-
             sCalibrationTimes.Add(CalibrationType.Tpose, CalibrationTimer * vMultipler++);
             sCalibrationTimes.Add(CalibrationType.ArmsForward, CalibrationTimer * vMultipler++);
             sCalibrationTimes.Add(CalibrationType.SoldierPose, CalibrationTimer * vMultipler++);
             sCalibrationTimes.Add(CalibrationType.TposeToZombieTransition, CalibrationTimer * vMultipler++);
-            sCalibrationTimes.Add(CalibrationType.ZombieToSoldierTransition, CalibrationTimer * vMultipler++);
+            sCalibrationTimes.Add(CalibrationType.ZombieToSoldierTransition, CalibrationTimer * vMultipler);
             FinalPose = CalibrationType.ZombieToSoldierTransition;
         }
     }

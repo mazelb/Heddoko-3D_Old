@@ -4,18 +4,23 @@
 * @author Mohammed Haider (mohammed@heddoko.com)
 * @date Macrch 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
-*/ 
+*/
 using Assets.Scripts.Communication.Controller;
-using Assets.Scripts.UI.AbstractViews.Enums; 
+using Assets.Scripts.UI.AbstractViews.Enums;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.AbstractSuitSubControls
 {
+    public delegate void StartRecordingDel();
+
+    public delegate void StopRecordingDel();
     /// <summary>
     /// contains a button control which allows the state change of the suit
     /// </summary>
     public class SuitStateChangerControl : AbstractSuitsSubControl
     {
+        public static event StartRecordingDel StartRecordingEvent;
+        public static event StopRecordingDel StopRecordingEvent;
         public Button SuitStateControl;
         public Text ControlText;
         private string mWaitingText = "Waiting for response";
@@ -24,6 +29,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
         private string mInErrorStateTxt = "Error: click to reset";
         private string mInResetStateTxt = "Reinitializing..";
         private string mInDisconnectStatetxt = "Disconnected state";
+
         public ColorBlock RecordingStateColorBlock;
         public ColorBlock IdleStateBlock;
         public ColorBlock InErrorStateBlock;
@@ -74,6 +80,10 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
                     SuitStateControl.interactable = true;
                     SuitStateControl.colors = IdleStateBlock;
                     ControlText.text = mInIdleStateTxt;
+                    if (StopRecordingEvent != null)
+                    {
+                        StopRecordingEvent.Invoke();
+                    }
                     break;
                 case SuitState.Reset:
                     SuitStateControl.interactable = false;
@@ -84,6 +94,10 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
                     SuitStateControl.interactable = true;
                     SuitStateControl.colors = RecordingStateColorBlock;
                     ControlText.text = mInRecordingStateTxt;
+                    if (StartRecordingEvent != null)
+                    {
+                        StartRecordingEvent.Invoke();
+                    }
                     break;
                 case SuitState.Undefined:
                     //todo
@@ -92,9 +106,9 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             }
             SuitState = vSuitState;
         }
-        
 
-        
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -103,7 +117,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             SuitStateControl.interactable = true;
             WaitForStatusResponse();
         }
- 
+
 
         private void EngageControl()
         {
@@ -148,12 +162,12 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
         public override void Disable()
         {
-           
+
         }
 
         public override void Enable()
         {
-            
+
         }
 
         private void OnDisable()
