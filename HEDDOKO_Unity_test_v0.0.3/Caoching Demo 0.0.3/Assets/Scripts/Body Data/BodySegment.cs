@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Body_Data.view; 
 using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.CalibrationData;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
@@ -28,7 +29,7 @@ public partial class BodySegment
 
     //Body SubSegments 
     public Dictionary<int, BodySubSegment> BodySubSegmentsDictionary = new Dictionary<int, BodySubSegment>();
-
+    private BodyCalibrationSetting mBodyCalibration;
     public Body ParentBody;
 
     //Is segment tracked (based on body type) 
@@ -117,7 +118,8 @@ public partial class BodySegment
     /// UpdateInitialSensorsData: The function will update the sensors data with the passed in BodyFrame. Iterates through the list of sensor tuples and updates the initial sensor's information.
     /// </summary>
     /// <param name="vFrame">the body frame whose subframes will updates to initial sensors.</param>
-    public void UpdateInitialSensorsData(BodyFrame vFrame)
+    /// <param name="vBodyCalibrationSetting">optional parameter to set the current calibration setting</param>
+    public void UpdateInitialSensorsData(BodyFrame vFrame, BodyCalibrationSetting vBodyCalibrationSetting = null)
     {
         IsReseting = true;
         List<BodyStructureMap.SensorPositions> vSensorPos = BodyStructureMap.Instance.SegmentToSensorPosMap[SegmentType];

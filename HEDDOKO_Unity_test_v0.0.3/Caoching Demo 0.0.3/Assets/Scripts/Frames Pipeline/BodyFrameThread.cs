@@ -10,10 +10,12 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Frames_Pipeline;
 using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
+using Assets.Scripts.Utils.DebugContext.logging;
 using HeddokoLib.adt;
 using HeddokoLib.networking;
 using HeddokoLib.utils;
 using UnityEngine;
+using LogType = Assets.Scripts.Utils.DebugContext.logging.LogType;
 
 /**
 * BodyFrameThread class 
@@ -29,12 +31,34 @@ public class BodyFrameThread : ThreadedJob
     private List<BodyRawFrame> mRawFrames;
     private RecordingPlaybackTask mPlaybackTask;
     private bool mContinueWorking;
-    private CircularQueue<HeddokoPacket> mInboundSuitBuffer = new CircularQueue<HeddokoPacket>(1024, true);
+    private const int MinSuitBufferSize = 10;
+    private static int mInboudSuitBufferCap = 1500;
+
+
+
+    private CircularQueue<HeddokoPacket> mInboundSuitBuffer;//= new CircularQueue<HeddokoPacket>(100, true);
     
     private object mWorkerThreadLockHandle = new object();
     private Vector3[] vPreviouslyValidValues = new Vector3[9];
 
     private bool mPausedWorker;
+
+    /// <summary>
+    /// Sets and gets the inbound suit buffer's capacity
+    /// Note: if the value falls below a minimally acceptable level, it will be forcefully set to an acceptable level
+    /// </summary>
+    public static int InboundSuitBufferCap
+    {
+        get { return mInboudSuitBufferCap; }
+        set
+        {
+            mInboudSuitBufferCap = value;
+            if (mInboudSuitBufferCap < MinSuitBufferSize)
+            {
+                mInboudSuitBufferCap = MinSuitBufferSize;
+            }
+         }
+    }
     /// <summary>
     /// Paused worker flag
     /// </summary>
@@ -144,6 +168,7 @@ public class BodyFrameThread : ThreadedJob
         }
 
         mDataSourceType = SourceDataType.BrainFrame;
+        mInboundSuitBuffer = new CircularQueue<HeddokoPacket>(InboundSuitBufferCap,true);
     }
 
     public override void Start()
@@ -292,13 +317,14 @@ public class BodyFrameThread : ThreadedJob
                 {
                     continue;
                 }
-
                 //the first value is a timestamp in int
                 int vTimeStamp = Convert.ToInt32(vExploded[0]);
                 if (++vCounter == 1)
                 {
                     vStartTime = vTimeStamp;
                 }
+                DebugLogger.Instance.LogMessage(LogType.BodyFrameThreadStart, "Starting frame conversion with timestamp "+ vStartTime);
+
                 //get the bitmask from index 1
                 Int16 vBitmask = Convert.ToInt16(vExploded[1], 16);
 
@@ -320,15 +346,14 @@ public class BodyFrameThread : ThreadedJob
                         float vRoll = ConversionTools.ConvertHexStringToFloat((v3data[0]));
                         float vPitch = ConversionTools.ConvertHexStringToFloat((v3data[1]));
                         float vYaw = ConversionTools.ConvertHexStringToFloat((v3data[2]));
-
                         vPreviouslyValidValues[vSetterIndex] = new Vector3(vPitch, vRoll, vYaw);
                     }
                 }
                 BodyFrame vBodyFrame = RawFrameConverter.CreateBodyFrame(vPreviouslyValidValues);
                 //Todo: convert the timestamp to a float
-                vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f;//vTimeStamp;
+                vBodyFrame.Timestamp = (float)(vTimeStamp - vStartTime) / 1000f; 
                 BodyFrameBuffer.Enqueue(vBodyFrame);
-
+                DebugLogger.Instance.LogMessage(LogType.BodyFrameThreadEnd, "Completed frame conversion with timestamp " + vStartTime);
             }
             catch (IndexOutOfRangeException)
             {

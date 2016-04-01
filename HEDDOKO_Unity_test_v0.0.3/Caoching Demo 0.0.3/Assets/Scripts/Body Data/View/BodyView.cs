@@ -7,7 +7,7 @@
 */
 
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Assets.Scripts.Utils.DebugContext;
 using Assets.Scripts.Utils.DebugContext.logging;
 using LogType = Assets.Scripts.Utils.DebugContext.logging.LogType;
@@ -22,7 +22,6 @@ namespace Assets.Scripts.Body_Data.view
 
         //private BodyFrameBuffer mBuffer;
         private BodyFrameBuffer mBuffer;
-        public int BufferCount;
         [SerializeField]
         private Body mAssociatedBody;
         private BodyFrame mCurreBodyFrame;
@@ -163,30 +162,17 @@ namespace Assets.Scripts.Body_Data.view
 
                 if (mBuffer != null && mBuffer.Count > 0)
                 {
-                    BufferCount = mBuffer.Count;
                     BodyFrame vBodyFrame = mBuffer.Dequeue();
-
+                    DebugLogger.Instance.LogMessage(LogType.FrameRenderingStart, "Start timestamp: " + vBodyFrame.Timestamp);
                     if (AssociatedBody.InitialBodyFrame == null)
                     {
-                        //AssociatedBody.SetInitialFrame(vBodyFrame);
                         ResetInitialFrame(vBodyFrame);
                     }
 
                     UpdateViewTracking(vBodyFrame);
-                }
-                else
-                {
-                    if (mBuffer != null)
-                    {
-                        DebugLogger.Instance.LogMessage(LogType.ApplicationFrame, "Buffer size: " + mBuffer.Count + " ");
-                    }
-                    else
-                    {
-                        DebugLogger.Instance.LogMessage(LogType.ApplicationFrame, "Buffer is null ");
-                    }
-                }
+                    DebugLogger.Instance.LogMessage(LogType.FrameRenderingFinish, "Finish timestamp: " + vBodyFrame.Timestamp);
 
-                // InputHandler();
+                }
             }
         }
 

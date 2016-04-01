@@ -103,7 +103,8 @@ namespace UIWidgets {
 		/// <returns>The item size.</returns>
 		public Vector2 GetItemSize()
 		{
-			return new Vector2(DefaultItem.rect.width, DefaultItem.rect.height);
+		    float y = DefaultItem.rect.height; 
+			return new Vector2(DefaultItem.rect.width, y);
 		}
 
 		/// <summary>

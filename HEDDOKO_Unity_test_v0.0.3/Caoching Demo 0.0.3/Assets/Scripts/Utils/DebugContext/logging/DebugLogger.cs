@@ -151,6 +151,55 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                 }
                 return false;
             });
+            sSettingsRegistry.Add(LogType.SegmentUpdateStart, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.SegmentUpdateFinish, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.FrameRenderingFinish, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.FrameRenderingStart, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.BodyFrameThreadStart, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+            sSettingsRegistry.Add(LogType.BodyFrameThreadEnd, () =>
+            {
+                if (Settings.LogAll)
+                {
+                    return true;
+                }
+                return false;
+            });
+
         }
 
         private void RegisterPaths()
@@ -171,6 +220,12 @@ namespace Assets.Scripts.Utils.DebugContext.logging
             mLogTypeToLogpathType.Add(LogType.SocketClientError, OutputLogPath.SocketClientLog);
             mLogTypeToLogpathType.Add(LogType.UnitTest, OutputLogPath.UnitTestPriorityQueue);
             mLogTypeToLogpathType.Add(LogType.InboundBpBufferException, OutputLogPath.ApplicationLog);
+            mLogTypeToLogpathType.Add(LogType.SegmentUpdateStart, OutputLogPath.MappingLog);
+            mLogTypeToLogpathType.Add(LogType.SegmentUpdateFinish, OutputLogPath.MappingLog);
+            mLogTypeToLogpathType.Add(LogType.FrameRenderingStart, OutputLogPath.MappingLog);
+            mLogTypeToLogpathType.Add(LogType.FrameRenderingFinish, OutputLogPath.MappingLog);
+            mLogTypeToLogpathType.Add(LogType.BodyFrameThreadStart, OutputLogPath.MappingLog);
+            mLogTypeToLogpathType.Add(LogType.BodyFrameThreadEnd, OutputLogPath.MappingLog);
         }
 
         public void Start()
@@ -262,7 +317,13 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         SocketClientSettings = 10,
         UnitTest = 11,
         FileConversionException = 12,
-        InboundBpBufferException = 13
+        InboundBpBufferException = 13,
+        FrameRenderingStart,
+        FrameRenderingFinish,
+        SegmentUpdateStart,
+        SegmentUpdateFinish,
+        BodyFrameThreadEnd,
+        BodyFrameThreadStart
     }
 
     public enum OutputLogPath
@@ -272,7 +333,8 @@ namespace Assets.Scripts.Utils.DebugContext.logging
         BrainpackFrames,
         ApplicationFrames,
         SocketClientLog,
-        UnitTestPriorityQueue
+        UnitTestPriorityQueue,
+        MappingLog
     }
 
     public struct Log

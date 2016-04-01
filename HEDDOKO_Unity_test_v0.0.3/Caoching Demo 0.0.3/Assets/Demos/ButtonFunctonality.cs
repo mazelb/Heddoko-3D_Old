@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using UnityEngine; 
 using Assets.Scripts.Body_Data.view;
 public class ButtonFunctonality : MonoBehaviour {
 

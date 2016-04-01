@@ -12,6 +12,7 @@ using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
 using System.Linq; 
 using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.CalibrationData;
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
@@ -19,6 +20,7 @@ using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Body_Pipeline.Analysis.Torso;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Frames_Pipeline.BodyFrameConversion;
+using Assets.Scripts.Utils.DebugContext.logging; 
 
 /**
 * Body class 
@@ -46,6 +48,7 @@ public class Body
     [SerializeField]
     public BodyFrame PreviousBodyFrame;
 
+    private BodyCalibrationSetting mBodyCalibrationSetting = new BodyCalibrationSetting();
 
 
     [SerializeField]
@@ -243,6 +246,7 @@ public class Body
     {
         PreviousBodyFrame = CurrentBodyFrame;
         CurrentBodyFrame = vFrame;
+        mBodyCalibrationSetting.UpdateTimeFromBodyFrame(CurrentBodyFrame);
         for (int i = 0; i < BodySegments.Count; i++)
         {
             BodySegments[i].UpdateSensorsData(vFrame);
@@ -257,6 +261,8 @@ public class Body
     public void SetInitialFrame(BodyFrame vInitialFrame)
     {
         InitialBodyFrame = vInitialFrame;
+        //set the body calibration setting with the new frame
+        mBodyCalibrationSetting.SetNewStartTimeFromBodyFrame(vInitialFrame);
         UpdateInitialFrameData();
     }
 
@@ -267,7 +273,7 @@ public class Body
     {
         for (int i = 0; i < BodySegments.Count; i++)
         {
-            BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame);
+            BodySegments[i].UpdateInitialSensorsData(InitialBodyFrame,mBodyCalibrationSetting);
         }
     }
 
@@ -289,6 +295,8 @@ public class Body
     */
     public void PlayRecording(string vRecUUID)
     {
+        
+
         //Stops the current thread from running.
         StopThread();
 
@@ -406,8 +414,11 @@ public class Body
                     vFilteredDictionary.Add(vSenPos, vTrackedMatrices);
                 }
             }
+            DebugLogger.Instance.LogMessage(Assets.Scripts.Utils.DebugContext.logging.LogType.SegmentUpdateStart, "Segment Update start: " + vBodySegment.SegmentType.ToString());
 
             vBodySegment.UpdateSegment(vFilteredDictionary);
+            DebugLogger.Instance.LogMessage(Assets.Scripts.Utils.DebugContext.logging.LogType.SegmentUpdateStart, "Segment Update finish  : " + vBodySegment.SegmentType.ToString());
+
         }
     }
 

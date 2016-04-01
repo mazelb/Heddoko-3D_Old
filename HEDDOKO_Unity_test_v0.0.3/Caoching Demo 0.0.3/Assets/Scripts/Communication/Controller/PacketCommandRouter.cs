@@ -62,7 +62,7 @@ namespace Assets.Scripts.Communication.Controller
         //On brainpack data retreival, send the data to the bodyframethread
         private BodyFrameThread mBodyFrameThread;
 
-        private BodyFrameThread FrameThread
+        internal BodyFrameThread FrameThread
         {
             get
             {
