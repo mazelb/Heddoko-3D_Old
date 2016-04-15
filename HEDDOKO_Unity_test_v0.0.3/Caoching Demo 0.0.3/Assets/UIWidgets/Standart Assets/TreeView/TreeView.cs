@@ -10,11 +10,11 @@ namespace UIWidgets {
 		/// <summary>
 		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="vComponenent">Component.</param>
+		/// <param name="vComponent">Component.</param>
 		/// <param name="vItem">Item.</param>
-		protected override void SetData(TreeViewComponent vComponenent, ListNode<TreeViewItem> vItem)
+		protected override void SetData(TreeViewComponent vComponent, ListNode<TreeViewItem> vItem)
 		{
-			vComponenent.SetData(vItem.Node, vItem.Depth);
+			vComponent.SetData(vItem.Node, vItem.Depth);
 		}
 		
 		/// <summary>

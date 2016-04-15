@@ -27,9 +27,9 @@ namespace UIWidgetsSamples {
 	}
 	
 	public class ListViewVariableHeight : ListViewCustomHeight<ListViewVariableHeightComponent,ListViewVariableHeightItemDescription> {
-		protected override void SetData(ListViewVariableHeightComponent vComponenent, ListViewVariableHeightItemDescription vItem)
+		protected override void SetData(ListViewVariableHeightComponent vComponent, ListViewVariableHeightItemDescription vItem)
 		{
-			vComponenent.SetData(vItem);
+			vComponent.SetData(vItem);
 		}
 		
 		protected override void HighlightColoring(ListViewVariableHeightComponent component)

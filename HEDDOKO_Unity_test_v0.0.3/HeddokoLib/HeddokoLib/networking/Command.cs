@@ -5,9 +5,7 @@
 * @date November 2015
 * Copyright Heddoko(TM) 2015, all rights reserved
  
-*/
-
-using System;
+*/ 
 using System.Collections.Generic;
 
 namespace HeddokoLib.networking

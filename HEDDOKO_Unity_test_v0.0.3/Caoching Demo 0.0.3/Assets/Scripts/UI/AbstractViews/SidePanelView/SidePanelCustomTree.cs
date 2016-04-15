@@ -6,9 +6,9 @@ namespace Assets.Scripts.UI.AbstractViews.SidePanelView
 {
     public class SidePanelCustomTree : TreeViewCustom<SideViewPanelComponent, ISideViewPanelItem>
     {
-        protected override void SetData(SideViewPanelComponent vComponenent, ListNode<ISideViewPanelItem> vItem)
+        protected override void SetData(SideViewPanelComponent vComponent, ListNode<ISideViewPanelItem> vItem)
         {
-            vComponenent.SetData(vItem.Node, vItem.Depth); 
+            vComponent.SetData(vItem.Node, vItem.Depth); 
         }
 
 

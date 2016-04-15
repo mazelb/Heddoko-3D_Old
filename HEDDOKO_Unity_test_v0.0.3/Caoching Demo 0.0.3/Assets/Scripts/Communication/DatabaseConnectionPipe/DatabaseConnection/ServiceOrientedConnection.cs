@@ -93,6 +93,11 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
             throw new NotImplementedException();
         }
 
+        public Tag GetTagByTitle(string vTitle)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddTagToRecording(BodyFramesRecording vRec, Tag vTag)
         {
             throw new NotImplementedException();

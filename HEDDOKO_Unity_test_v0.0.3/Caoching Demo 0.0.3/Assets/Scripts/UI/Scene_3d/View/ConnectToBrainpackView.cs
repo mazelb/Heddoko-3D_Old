@@ -34,7 +34,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         }
 
         /// <summary>
-        /// Hide the associated components from this view
+        /// Hide the associated Components from this view
         /// </summary>
         public void Hide()
         {
@@ -42,7 +42,7 @@ namespace Assets.Scripts.UI.Scene_3d.View
         } 
 
         /// <summary>
-        /// Shows the associated components from this view
+        /// Shows the associated Components from this view
         /// </summary>
         public void Show()
         {

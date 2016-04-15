@@ -1040,7 +1040,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// The components cache.
+		/// The Components cache.
 		/// </summary>
 		List<ListViewStringComponent> componentsCache = new List<ListViewStringComponent>();
 
@@ -1050,9 +1050,9 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Gets the new components according max count of visible items.
+		/// Gets the new Components according max count of visible items.
 		/// </summary>
-		/// <returns>The new components.</returns>
+		/// <returns>The new Components.</returns>
 		List<ListViewStringComponent> GetNewComponents()
 		{
 			componentsCache.RemoveAll(IsNullComponent);
@@ -1273,7 +1273,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Updates the colors of components.
+		/// Updates the colors of Components.
 		/// </summary>
 		void UpdateColors()
 		{

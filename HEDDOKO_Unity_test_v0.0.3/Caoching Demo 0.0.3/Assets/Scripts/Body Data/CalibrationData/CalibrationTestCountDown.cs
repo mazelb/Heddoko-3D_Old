@@ -6,12 +6,14 @@
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
- 
+
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.AbstractSuitSubControls;
 using Assets.Scripts.UI.AbstractViews.Enums;
+using Assets.Scripts.UI.Loading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,108 +24,159 @@ namespace Assets.Scripts.Body_Data.CalibrationData
     {
 
         private SubControlType mSubControl = SubControlType.AddCommentSubControl;
-        private SuitState mPreviousSuitState = SuitState.Undefined;
+        public CircularCountdownTimer LargeTimer;
+        public CircularCountdownTimer SmallTimer;
+        public Image SmallExpandingOutline;
+
         private Dictionary<CalibrationType, CalibrationTestDescriptor> mCalibrationImageMap = new Dictionary<CalibrationType, CalibrationTestDescriptor>(3);
         public Sprite TPoseSprite;
         public Sprite ArmsFrontSprite;
         public Sprite ArmsDownSprite;
         public Sprite TposToArmsFrontSprite;
         public Sprite ArmsFrontToDownSprite;
-        public Image CalibrationImage;
-        public Text Info;
-        public Text CountDowntext;
-        public Animator DebugTextAnimator;
+        public Sprite OnCompletionImage;
+        public Image CurrentCalibrationImage;
 
-        void EnableCountdownTextAnim(bool vFlag)
-        {
-            DebugTextAnimator.enabled = vFlag;
-            CountDowntext.gameObject.SetActive(vFlag);
-        }
+        public AudioSource AudioSource;
+        public AudioClip FinishSubCalibrationClip;
+        private CalibrationTestDescriptor mOnCompletionDescription;
+
+        public Text Info;
+        public Text HoldThisPoseText;
+
+
         private void Awake()
         {
-            EnableCountdownTextAnim(false);
-            EnableInfo(false);
-
+            SuitStateChangerControl.StopRecordingEvent += StopCountdownRoutine;
+            SuitStateChangerControl.StartRecordingEvent += StartCountDownRoutine;
             CalibrationTestDescriptor vTposeDescritor = new CalibrationTestDescriptor
             {
-                Info = "T-Pose",
-                Sprite = TPoseSprite
+                CurrentInfo = "T-Pose",
+                CurrentSprite = TPoseSprite,
+                NextInfo = "Arms Out Front",
+                NextSprite = ArmsFrontSprite,
+                CompletionTime = GlobalCalibrationSettings.CalibrationTimes[CalibrationType.TPoseToArmsForward]
             };
+
             CalibrationTestDescriptor vArmsFrontDescriptor = new CalibrationTestDescriptor
             {
-                Info = "Arms out front",
-                Sprite = ArmsFrontSprite
+                CurrentInfo = "Arms Out Front",
+                CurrentSprite = ArmsFrontSprite,
+                NextInfo = "Arms To The Side",
+                NextSprite = ArmsFrontToDownSprite,
+                CompletionTime = GlobalCalibrationSettings.CalibrationTimes[CalibrationType.ArmsForwardToArmsDown]
+
             };
             CalibrationTestDescriptor vArmsDownSprite = new CalibrationTestDescriptor
             {
-                Info = "Arms down",
-                Sprite = ArmsDownSprite
-            };
-            CalibrationTestDescriptor vTposeToArmFrontTestDescriptor = new CalibrationTestDescriptor()
-            {
-                Info = "Next calibration: Arms front",
-                Sprite = TposToArmsFrontSprite,
-                UsesAnimation = true
-            };
-            CalibrationTestDescriptor vArmsFrontToArmsDownDescriptor = new CalibrationTestDescriptor()
-            {
-                Info = "Next calibration: Arms down",
-                Sprite = ArmsFrontToDownSprite,
-                UsesAnimation = true
-            };
+                CurrentInfo = "Arms To The Side",
+                CurrentSprite = ArmsFrontToDownSprite,
+                NextInfo = "",
+                NextSprite = null,
+                CompletionTime = GlobalCalibrationSettings.CalibrationTimes[CalibrationType.ArmsDown]
 
+            };
+            mOnCompletionDescription = new CalibrationTestDescriptor()
+            {
+                CurrentInfo = "Calibration Complete",
+                CurrentSprite = OnCompletionImage
+            };
             mCalibrationImageMap.Add(CalibrationType.Tpose, vTposeDescritor);
-            mCalibrationImageMap.Add(CalibrationType.TposeToZombieTransition, vTposeToArmFrontTestDescriptor);
             mCalibrationImageMap.Add(CalibrationType.ArmsForward, vArmsFrontDescriptor);
-            mCalibrationImageMap.Add(CalibrationType.ZombieToSoldierTransition, vArmsFrontToArmsDownDescriptor);
-            mCalibrationImageMap.Add(CalibrationType.SoldierPose, vArmsDownSprite);
+            mCalibrationImageMap.Add(CalibrationType.ArmsDown, vArmsDownSprite);
+            float vTotalCountdown = mCalibrationImageMap.Count * GlobalCalibrationSettings.CalibrationTimer +
+                ((mCalibrationImageMap.Count) * GlobalCalibrationSettings.TransitionTimer);
+            float vHoldPoseCount = GlobalCalibrationSettings.CalibrationTimer +
+                                   GlobalCalibrationSettings.TransitionTimer;
+            LargeTimer.Init(vSeconds: vTotalCountdown);
+            SmallTimer.Init(vHoldPoseCount, vNearCompletion: ExpandSmallOutline);
+            EnableComponent(false);
+
         }
         /// <summary>
         /// Starts the countdown routine
         /// </summary>
         private void StartCountDownRoutine()
         {
-            EnableInfo(true);
-            StartCoroutine(CountdownRoutine());
+            EnableComponent(true);
+            LargeTimer.StartAnimation();
+            StartCoroutine(SmallFillRoutine());
         }
 
-        void EnableInfo(bool vFlag)
+        void EnableComponent(bool vFlag)
         {
-            CalibrationImage.gameObject.SetActive(vFlag);
-            Info.gameObject.SetActive(vFlag);
-
+            gameObject.SetActive(vFlag);
         }
 
-        IEnumerator CountdownRoutine()
+        private void SetInformation(CalibrationTestDescriptor vDescriptor)
         {
-            float vWaitTime = GlobalCalibrationSettings.CalibrationTimer;
-            foreach (KeyValuePair<CalibrationType, CalibrationTestDescriptor> vKvPair in mCalibrationImageMap)
+            Info.text = vDescriptor.CurrentInfo;
+            CurrentCalibrationImage.sprite = vDescriptor.CurrentSprite;
+        }
+        private IEnumerator SmallFillRoutine()
+        {
+            foreach (KeyValuePair<CalibrationType, CalibrationTestDescriptor> vKv in mCalibrationImageMap)
             {
-
-                CalibrationImage.sprite = vKvPair.Value.Sprite;
-                Info.text = vKvPair.Value.Info;
-                if (!vKvPair.Value.UsesAnimation)
-                {
-                    EnableCountdownTextAnim(false);
-                    yield return new WaitForSeconds(vWaitTime);
-                }
-                else
-                {
-                    EnableCountdownTextAnim(true);
-                    yield return StartCoroutine(CountDownNum((int)GlobalCalibrationSettings.TransitionTimer));
-                }
+                SetInformation(vKv.Value);
+                yield return StartCoroutine(SmallTimer.FillAnimation());
+                AudioSource.clip = FinishSubCalibrationClip;
+                AudioSource.Play();
             }
-            StopCountdownRoutine();
+            SetInformation(mOnCompletionDescription);
+            SmallTimer.InnerFill.fillAmount = 0;
+            HoldThisPoseText.text = "";
+            StartCoroutine(HideInSeconds(5f));
+        }
 
+        private IEnumerator HideInSeconds(float vSeconds)
+        {
+            yield return new WaitForSeconds(vSeconds);
+            StopCountdownRoutine();
         }
 
         private void StopCountdownRoutine()
         {
-            EnableCountdownTextAnim(false);
             StopAllCoroutines();
-            EnableInfo(false);
+            LargeTimer.StopAllCoroutines();
+            SmallTimer.StopAllCoroutines();
+            EnableComponent(false);
         }
 
+        /// <summary>
+        /// Expands a small out line in 3/4 the time of completion of the small count down timer
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ExpandSmallOutline()
+        {
+            float vTimeToFinish = 0.5f;
+            Vector2 vStartSizeDelta = SmallTimer.OutlineRectTransform.sizeDelta;
+            Vector2 vFinishSizeDelta = vStartSizeDelta + Vector2.one * 75f;
+            Color vColor = SmallTimer.Outline.color;
+            vColor.a = 0.75f;
+            SmallTimer.Outline.color = vColor;
+            float vStartAlpha = vColor.a;
+            float vStartTime = Time.time;
+            while (true)
+            {
+                float vPercentage = (Time.time - vStartTime) / vTimeToFinish;
+                //transform the percentage in a cos curve
+                vPercentage = 1f - Mathf.Cos(vPercentage * Mathf.PI * 0.5f);
+                float vNewAlpha = Mathf.Lerp(vStartAlpha, 0, vPercentage);
+                Vector2 vNewSizeDelta = Vector2.Lerp(vStartSizeDelta, vFinishSizeDelta, vPercentage);
+                if (vPercentage >= 1)
+                {
+                    vColor.a = 0;
+                    SmallTimer.Outline.color = vColor;
+                    break;
+                }
+                vColor.a = vNewAlpha;
+                SmallTimer.Outline.color = vColor;
+                SmallTimer.OutlineRectTransform.sizeDelta = vNewSizeDelta;
+                yield return null;
+            }
+            //reset the start size
+            SmallTimer.OutlineRectTransform.sizeDelta = Vector2.zero;
+        }
 
         public override SubControlType SubControlType
         {
@@ -136,13 +189,9 @@ namespace Assets.Scripts.Body_Data.CalibrationData
             gameObject.SetActive(false);
         }
 
-        void OnEnable()
-        {
-            SuitStateChangerControl.StopRecordingEvent += StopCountdownRoutine;
-            SuitStateChangerControl.StartRecordingEvent += StartCountDownRoutine;
-        }
+      
 
-        void OnDisable()
+        void OnApplicationQuit()
         {
             SuitStateChangerControl.StopRecordingEvent -= StopCountdownRoutine;
             SuitStateChangerControl.StartRecordingEvent -= StartCountDownRoutine;
@@ -163,32 +212,20 @@ namespace Assets.Scripts.Body_Data.CalibrationData
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                StartCountDownRoutine();
-            }
+            if(Input.GetKeyDown(KeyCode.S))
+            { StartCountDownRoutine();}
         }
-        private IEnumerator CountDownNum(int vCountDownFrom)
-        {
-            int vCountdown = vCountDownFrom;
-            while (vCountdown >= 0)
-            {
-                CountDowntext.text = "" + vCountdown;
-                DebugTextAnimator.Play("CountdownAnimator", -1, 0f);
-                yield return new WaitForSeconds(1);
-                vCountdown--;
-            }
 
-        }
 
     }
 
     public class CalibrationTestDescriptor
     {
-        public Sprite Sprite;
-        public string Info;
-        public bool UsesAnimation;
-
+        public Sprite CurrentSprite;
+        public Sprite NextSprite;
+        public string CurrentInfo;
+        public string NextInfo;
+        public float CompletionTime;
     }
 
 }

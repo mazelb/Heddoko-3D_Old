@@ -7,12 +7,11 @@
 */
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
 using Assets.Scripts.UI.AbstractViews.camera;
-using Assets.Scripts.UI.Loading;
 using Assets.Scripts.UI.ModalWindow;
 using Assets.Scripts.UI.Scene_3d.View;
 using Assets.Scripts.UI.Settings;
@@ -36,78 +35,89 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         public GameObject[] DatabaseConsumers;
         public GameObject[] TaggingManagerConsumers;
         public ScrollablePanel ContentPanel;
+        public bool IsDemo = false;
+        public TaggingManager TaggingManager { get { return mTaggingManager; } }
 
         // ReSharper disable once UnusedMember.Local
         void Awake()
         {
-            BodySegment.IsTrackingHeight = false;
             OutterThreadToUnityThreadIntermediary.Instance.Init();
-            mTaggingManager =new TaggingManager();
+            mTaggingManager = new TaggingManager();
             InitiliazePools();
             InitializeDatabase();
             InjectDatabaseDependents();
-            InjectTaggingManagerDependents(); 
+            InjectTaggingManagerDependents();
             InitializeLoggers();
 
             bool vAppSafelyLaunched;
             EnableObjects(false);
-            //Start loading animation
-            LoadingBoard.StartLoadingAnimation();
-
-            mDbAccess = new LocalDBAccess();
-
-            bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
-
-
-            if (vApplicationSettingsFound)
+            BodySegment.IsTrackingHeight = false;
+            if (!IsDemo)
             {
-                vAppSafelyLaunched = ApplicationSettings.AppLaunchedSafely;
-                if (vAppSafelyLaunched)
+
+                mDbAccess = new LocalDBAccess();
+
+                bool vApplicationSettingsFound = mDbAccess.SetApplicationSettings();
+
+
+                if (vApplicationSettingsFound)
                 {
-                    string vGet = ApplicationSettings.PreferedConnName;
-                    LauncherBrainpackSearchResults.MapResults();
-                    if (LauncherBrainpackSearchResults.BrainpackToComPortMappings.ContainsKey(vGet))
+                    vAppSafelyLaunched = ApplicationSettings.AppLaunchedSafely;
+                    if (vAppSafelyLaunched)
                     {
-                        vGet = LauncherBrainpackSearchResults.BrainpackToComPortMappings[vGet];
+                        string vGet = ApplicationSettings.PreferedConnName;
+                        LauncherBrainpackSearchResults.MapResults();
+                        if (LauncherBrainpackSearchResults.BrainpackToComPortMappings.ContainsKey(vGet))
+                        {
+                            vGet = LauncherBrainpackSearchResults.BrainpackToComPortMappings[vGet];
+                        }
+                        else
+                        {
+                            vGet = string.Empty;
+                        }
+
+                        BrainpackConnectionController.Instance.BrainpackComPort = vGet;
+
+                        List<ScrollableContent> vContentList = new List<ScrollableContent>();
+
+                        foreach (KeyValuePair<string, string> vKV in LauncherBrainpackSearchResults.BrainpackToComPortMappings)
+                        {
+
+                            ScrollableContent vContent = new ScrollableContent();
+                            vContent.ContentValue = vKV.Value;
+                            if (vContent.ContentValue.Contains("COM") || vContent.ContentValue.Contains("com"))
+                            {
+                                vContent.Key = vKV.Key;
+                                vContent.CallbackAction = new Action(() =>
+                                {
+                                    BrainpackConnectionController.Instance.BrainpackComPort = vContent.ContentValue;
+                                });
+                                vContentList.Add(vContent);
+                                ContentPanel.CurrentlySelectedContent = vContent;
+                            }
+
+                        }
+                        ContentPanel.Contents = vContentList;
+                        EnableObjects(true);
                     }
                     else
                     {
-                        vGet = string.Empty;
+                        AppNotLaunchedThroughLauncher();
                     }
-
-                    BrainpackConnectionController.Instance.BrainpackComPort = vGet;
-                    LoadingBoard.StopLoadingAnimation();
-                    List<ScrollableContent> vContentList = new List<ScrollableContent>();
-
-                    foreach (KeyValuePair<string, string> vKV in LauncherBrainpackSearchResults.BrainpackToComPortMappings)
-                    {
-
-                        ScrollableContent vContent = new ScrollableContent();
-                        vContent.ContentValue = vKV.Value;
-                        if (vContent.ContentValue.Contains("COM") || vContent.ContentValue.Contains("com"))
-                        {
-                            vContent.Key = vKV.Key;
-                            vContent.CallbackAction = new Action(() =>
-                            {
-                                BrainpackConnectionController.Instance.BrainpackComPort = vContent.ContentValue;
-                            });
-                            vContentList.Add(vContent);
-                            ContentPanel.CurrentlySelectedContent = vContent;
-                        }
-
-                    }
-                    ContentPanel.Contents = vContentList;
-                    EnableObjects(true);
                 }
-                else
-                {
-                    AppNotLaunchedThroughLauncher();
-                }
+       
             }
 
 
         }
 
+        void Start()
+        {
+            if (!IsDemo)
+            {
+                UniFileBrowser.use.SetPath(ApplicationSettings.PreferedRecordingsFolder);
+            }
+        }
         /// <summary>
         /// Injects the single database component into interested consumers
         /// </summary>
@@ -158,10 +168,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
             PanelCameraPool.CameraParent = vPanelCameraGroup.transform;
         }
 
-        void Start()
-        {
-            UniFileBrowser.use.SetPath(ApplicationSettings.PreferedRecordingsFolder);
-        }
+      
         /// <summary>
         /// Enables or disable the array of gameobjects 
         /// </summary>
@@ -182,7 +189,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         /// </summary>
         private void AppNotLaunchedThroughLauncher()
         {
-            LoadingBoard.StopLoadingAnimation();
+
             ModalPanel.SingleChoice("The application wasn't started with the Launcher. Press Ok to exit and try again. ", Application.Quit);
         }
 
@@ -199,7 +206,7 @@ namespace Assets.Scripts.Utils.DatabaseAccess
         {
             mDatabase = new Database(DatabaseConnectionType.Local);
             mDatabase.Init();
-           
+
         }
 
 

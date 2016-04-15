@@ -7,7 +7,9 @@
 */
 
 using System;
+using System.Collections.Generic;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.PlaybackAndRecording;
+using Assets.Scripts.UI.Tagging;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
@@ -18,16 +20,19 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
     [Serializable]
     public class ImportItemDescriptor
     {
+        public const int MaxNumberOfTags = 5;
         [SerializeField]
         public string MovementTitle;
         [SerializeField]
         public string CreatedAtDescription;
+
         [SerializeField]
-        public string Tag;
+        public HashSet<string> TagSet = new HashSet<string>();
         [SerializeField]
         private DateTime mCreatedAtTime;
 
-        [SerializeField] public int RecordingDuration;
+        [SerializeField]
+        public int RecordingDuration;
 
         public string RecordingDurationToString
         {
@@ -50,7 +55,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
                 mCreatedAtTime = value;
                 //check if the created time is today or yesterday
                 bool vIsYesterday = DateTime.Today - mCreatedAtTime.Date == TimeSpan.FromDays(1);
-                bool vIsToday= DateTime.Today - mCreatedAtTime.Date == TimeSpan.FromDays(0);
+                bool vIsToday = DateTime.Today - mCreatedAtTime.Date == TimeSpan.FromDays(0);
                 string vPrefix = mCreatedAtTime.ToLongDateString();
                 if (vIsToday)
                 {
@@ -67,5 +72,22 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
         }
 
         public string FilePath { get; set; }
+
+
+        /// <summary>
+        /// adds a tag to the set
+        /// </summary>
+        /// <param name="vText"></param>
+        public void AddTag(string vText)
+        {
+            //verify if capacity hasn't been reached... add it
+            if (TagSet.Count < MaxNumberOfTags)
+            {
+                if (!TagSet.Contains(vText))
+                {
+                    TagSet.Add(vText);
+                }
+            }
+        }
     }
 }

@@ -13,13 +13,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using UIWidgets;
+using UnityEngine.EventSystems;
+
 namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
 {
     /// <summary>
     /// resizable items specific to importing views
     /// </summary>
     [Serializable]
-    public class ImportRecordingGridSelectionComponent : ListViewItem, IResizableItem 
+    public class ImportRecordingGridSelectionComponent : ListViewItem, IResizableItem
     {
         public MarkedForDeletion MarkedForDeletionItem;
         public Text MovementTitle;
@@ -28,8 +30,8 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         private TaggingManager mTaggingManager;
         public TaggingContainer TagContainer;
         public ListView FloatingList;
-        
-  
+
+
         /// <summary>
         /// The gameobject that can be resized
         /// </summary>
@@ -50,8 +52,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
 
         /// <summary>
         /// Sets data from the given 
-        /// </summary>
-        /// <param name="vComponent"></param>
+        /// </summary> 
         /// <param name="vDescriptorItem"></param>
         public void SetData(ImportItemDescriptor vDescriptorItem)
         {
@@ -65,6 +66,32 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
             MarkedForDeletionItem.Item = vDescriptorItem;
             MarkedForDeletionItem.IsMarkedForDeletion = vDescriptorItem.IsMarkedForDeletion;
             TagContainer.FloatListView = FloatingList;
+            //update the tagset
+            if (vDescriptorItem.TagSet.Count > 0)
+            {
+                foreach (var vItem in vDescriptorItem.TagSet)
+                {
+                    TagContainer.AddTag(vItem);
+                }
+            }
+            else
+            {
+                TagContainer.RemoveAllTags();
+            }
+
+        }
+
+        /// <summary>
+        /// Onpointer click ignores right click events
+        /// </summary>
+        /// <param name="eventData"></param>
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                return;
+            }
+            base.OnPointerClick(eventData);
         }
 
         public void AddTag(string vTagText)

@@ -177,7 +177,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                             try
                             {
                                 vRawFrame = vRecording.RecordingRawFrames[i];
-                                vConvertedFrame = RawFrameConverter.ConvertEncondedRawFrame(vRawFrame);
+                                vConvertedFrame = RawFrameConverter.ConvertEncodedRawFrame(vRawFrame);
                                 //+++++++++++++++++++++Frames table insertion +++++++++++++++++++++++++++++++++++++++++++++++
 
                                 vCmd.CommandText = "INSERT INTO frames (id,movement_id,format_revision,timestamp) "
@@ -277,8 +277,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         vDataReader = vCmd.ExecuteReader();
                         while (vDataReader.Read())
                         {
-                            vSuitGuid = vDataReader["complex_equipment_id"].ToString();
-                            vBodyGuid = vDataReader["profile_id"].ToString();
+                            vSuitGuid = vDataReader.GetString(1);
+                            vBodyGuid = vDataReader.GetString(2);
                         }
                         vDataReader.Close();
                         //Get the format revision from the first frame hit.
@@ -288,7 +288,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         vDataReader = vCmd.ExecuteReader();
                         while (vDataReader.Read())
                         {
-                            vFormatVersion = vDataReader["format_revision"].ToString();
+                            vFormatVersion = vDataReader.GetString(2);
                         }
 
                         vDataReader.Close();
@@ -302,7 +302,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 
                         while (vDataReader.Read())
                         {
-                            vTemp = vDataReader["data"].ToString();
+                            vTemp = vDataReader.GetString(2);
                             BodyRawFrame vRawFrame = new BodyRawFrame();
                             vRawFrame.BodyRecordingGuid = vRecordingId;
                             vRawFrame.BodyGuid = vBodyGuid;
@@ -350,7 +350,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                     while (vReader.Read())
                     {
                         vOutput.TagUid = vUid;
-                        vOutput.Title = vReader["title"].ToString();
+                        vOutput.Title = vReader.GetString(1);
                     }
                 }
                 catch (Exception vExc)
@@ -409,8 +409,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vGuid = vReader["id"].ToString();
-                            string vTitle = vReader["title"].ToString();
+                            string vGuid = vReader.GetString(0);
+                            string vTitle = vReader.GetString(1);
                             Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
                             vFoundTags.Add(vTag);
                         }
@@ -453,8 +453,9 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vTitle = vReader["title"].ToString();
-                            string vGuid = vReader["id"].ToString();
+                            string vGuid = vReader.GetString(0);
+                            string vTitle = vReader.GetString(1);
+
                             Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
                             vFoundTags.Add(vTag);
                         }
@@ -474,6 +475,48 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         { 
             string vSanitized = Regex.Replace(vInput, @"%", "");
             return vSanitized;
+        }
+
+        /// <summary>
+        /// Returns a tag found by its title from the database. If none are found, then null is returned
+        /// </summary>
+        /// <param name="vTitle"></param>
+        /// <returns></returns>
+        public Tag GetTagByTitle(string vTitle)
+        {
+            Tag vTag = null;
+             
+            string vSanitized = SanitizeInput(vTitle);
+   
+            using (var vCmd = mDbConnection.CreateCommand())
+            {
+                using (var vTransaction = mDbConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        vCmd.CommandText = "SELECT * FROM tags WHERE" +
+                                           " tags.title LIKE @param1";
+                        vCmd.Parameters.Add(new SqliteParameter("@param1",   vSanitized  ));
+                        //only limit to one 
+                        vCmd.CommandText += " LIMIT 1" ;
+                         
+                        SqliteDataReader vReader = vCmd.ExecuteReader();
+                        while (vReader.Read())
+                        {
+                            string vTagTitle = vReader.GetString(1); ; 
+                            string vGuid = vReader.GetString(0); ;
+                            vTag = new Tag() { TagUid = vGuid, Title = vTagTitle }; 
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red><b>DB error:</b></color> " + e);
+                        vTransaction.Rollback();
+                    }
+                }
+
+            }
+            return vTag;
         }
 
         /// <summary>
@@ -514,8 +557,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vGuid = vReader["id"].ToString();
-                            string vTitle = vReader["title"].ToString();
+                            string vGuid = vReader.GetString(0);  
+                            string vTitle = vReader.GetString(1);  
                             Tag vTag = new Tag() { TagUid = vGuid, Title = vTitle };
                             vFoundTags.Add(vTag);
                         }
@@ -581,8 +624,8 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vGuid = vReader["id"].ToString();
-                            string vTitle = vReader["title"].ToString();
+                            string vGuid = vReader.GetString(0);
+                            string vTitle = vReader.GetString(1);
                             vFound.Add(new Tag() { TagUid = vGuid, Title = vTitle });
                         }
                         vTransaction.Commit();
@@ -613,7 +656,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
                         SqliteDataReader vReader = vCmd.ExecuteReader();
                         while (vReader.Read())
                         {
-                            string vGuid = vReader["id"].ToString();
+                            string vGuid = vReader.GetString(0);
                             vFound.Add(vGuid);
                         }
                         vTransaction.Commit();

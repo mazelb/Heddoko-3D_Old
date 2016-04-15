@@ -42,10 +42,10 @@ namespace Assets.Demos
 
         void Awake()
         {
-            DebugLogger.Settings.LogAll = true;
+            DebugLogger.Settings.LogAll = false ;
             if (!DisableDebugging)
             {
-
+                DebugLogger.Settings.LogAll = true;
                 bool vIsDebug = false;
 #if UNITY_EDITOR
                 vIsDebug = true;
@@ -61,6 +61,19 @@ namespace Assets.Demos
                 {
                     vDebuggingItems.SetActive(mDebuggingActive);
                 }
+            }
+            if (DisableDebugging)
+            {
+                DebugLogger.Settings.LogAll = false;
+                bool vIsDebug = false; 
+                mDebuggingActive = false;
+                mChildren.SetActive(false);
+                mSegmentOptions.SetActive(false);
+                foreach (var vDebuggingItems in mDebuggingItems)
+                {
+                    vDebuggingItems.SetActive(false);
+                }
+
             }
 
         }
@@ -100,7 +113,7 @@ namespace Assets.Demos
                         mHomeTPoseKeyCounter++;
                         if (mHomeTPoseKeyCounter == 5)
                         {
-                            InputHandler.RegisterActions(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
+                            InputHandler.RegisterKeyboardAction(HeddokoDebugKeyMappings.ResetFrame, PlayerStreamManager.ResetBody);
                             mHomeTPoseKeyCounter = 0;
                         }
                     }

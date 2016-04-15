@@ -82,12 +82,12 @@ namespace UIWidgets {
 		Transform listParent;
 
 		/// <summary>
-		/// The components list.
+		/// The Components list.
 		/// </summary>
 		protected List<TComponent> components = new List<TComponent>();
 
 		/// <summary>
-		/// The components cache list.
+		/// The Components cache list.
 		/// </summary>
 		protected List<TComponent> componentsCache = new List<TComponent>();
 
@@ -514,7 +514,7 @@ namespace UIWidgets {
 		}
 
 		/// <summary>
-		/// Updates the components count.
+		/// Updates the Components count.
 		/// </summary>
 		protected void UpdateComponentsCount()
 		{

@@ -1320,7 +1320,7 @@
         </member>
         <member name="T:EvLeftLegMultiplieritGames.Client.Photon.EventData">
             <summary>
-            Contains all components of a Photon Event.
+            Contains all Components of a Photon Event.
             Event Parameters, like OperationRequests and OperationResults, consist of a Dictionary with byte-typed keys per value.
             </summary>
             <remarks>

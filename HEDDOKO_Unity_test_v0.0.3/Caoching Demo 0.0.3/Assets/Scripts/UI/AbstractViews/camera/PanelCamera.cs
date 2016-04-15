@@ -8,6 +8,7 @@
 
 using System;
 using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cameraSubControls;
 using UnityEngine;
 

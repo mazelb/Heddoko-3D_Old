@@ -8,7 +8,7 @@
 
 using System;
 using Assets.Scripts.UI.AbstractViews.Enums;
-using UnityEngine; 
+using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cameraSubControls
 {
@@ -38,7 +38,9 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         private Ray mRay;
         private RaycastHit mRaycastHit;
         private static SubControlType sType = SubControlType.CameraOrbitSubControl;
-        public bool IsEnabled { get; set; }
+        [SerializeField]
+        private bool mIsEnabled;
+        public bool IsEnabled { get { return mIsEnabled; } set { mIsEnabled = value; } }
 
 
         void Awake()
@@ -49,7 +51,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
                 string vLayer = LayerMask.LayerToName(Target.gameObject.layer);
                 TargetsLayer = LayerMask.GetMask(vLayer);
             }
-          
+
             CameraOrbitterCentralObserver.Add(this);
 
         }
@@ -75,7 +77,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
                 CameraObitterFSM();
             }
         }
-         
+
         /// <summary>
         /// A finite state machine for the orbitter
         /// </summary>
@@ -83,21 +85,20 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         {
             mRay = Camera.ScreenPointToRay(Input.mousePosition);
             bool vMouseOver = Physics.Raycast(mRay, 11000, TargetsLayer); 
-
             switch (mCurrentState)
             {
 
-                case OrbitterState.Idle: 
+                case OrbitterState.Idle:
                     if (vMouseOver)
                     {
                         mCurrentState = OrbitterState.MouseOverTarget;
                     }
                     break;
                 case OrbitterState.MouseOverTarget:
-                    
+
                     if (!vMouseOver)
                     {
-                        mCurrentState = OrbitterState.Idle; 
+                        mCurrentState = OrbitterState.Idle;
                     }
                     else if (Input.GetMouseButtonDown(0))
                     {
@@ -186,13 +187,13 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         public override bool Equals(object vObj)
         {
             bool vResult = false;
-             
+
             if (vObj != null && vObj is CameraOrbitter)
             {
-                CameraOrbitter vOrbitter = (CameraOrbitter) vObj;
+                CameraOrbitter vOrbitter = (CameraOrbitter)vObj;
                 vResult = mId.Equals(vOrbitter.mId);
             }
-                return vResult;
+            return vResult;
         }
 
         public override int GetHashCode()
@@ -200,7 +201,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
             return mId.GetHashCode();
         }
 
-    
+
 
         private enum OrbitterState
         {
@@ -208,7 +209,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
             MouseOverTarget,
             MouseClicked,
             MouseReleased
-        } 
+        }
         public bool Equals(CameraOrbitter vOther)
         {
             bool vResult = false;
@@ -223,7 +224,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.cam
         {
             get { return sType; }
         }
-        
+
 
         public override void Disable()
         {

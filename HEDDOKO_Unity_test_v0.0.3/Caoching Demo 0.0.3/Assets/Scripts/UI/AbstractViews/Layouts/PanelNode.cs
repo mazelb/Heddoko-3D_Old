@@ -8,13 +8,15 @@
 using System;
 using System.Collections;
 using Assets.Scripts.UI.Layouts;
-using System.Collections.Generic;
-using Assets.Scripts.Body_Data;
+using System.Collections.Generic; 
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.UI.AbstractViews.camera;
+using Assets.Scripts.UI.AbstractViews.Layouts;
 using Assets.Scripts.UI.AbstractViews.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void PanelCamUpdateDelOnNode(PanelNode vNode);
 namespace Assets.Scripts.UI.AbstractViews.Layouts
 {
     /// <summary>
@@ -23,11 +25,12 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
     [Serializable]
     public class PanelNode : MonoBehaviour
     {
+
         private PanelID mID = new PanelID();
         private PanelNode mParent;
         private List<PanelNode> mChildren = new List<PanelNode>();
         private PanelSettings mPanelSettings;
-
+        public event PanelCamUpdateDelOnNode PanelCamUpdated;
 
 
         public List<PanelNode> Children
@@ -196,8 +199,9 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
                 throw new InvalidSplitRequested();
             }
             List<PanelNode> vPanelNodes = new List<PanelNode>();
-            PanelNode vSecondChild = PanelNode.CreatePanelNode(this, vSecondChildTemplate, PanelSettings.RectTransform);
             PanelNode vFirstChild = PanelNode.CreatePanelNode(this, vFirstChildTemplate, PanelSettings.RectTransform);
+            PanelNode vSecondChild = PanelNode.CreatePanelNode(this, vSecondChildTemplate, PanelSettings.RectTransform);
+   
             //change the current HorizontalOrverticallayout group according to the type
             PanelNodeTemplate.AttachHorizontalOrVerticalLayoutGroup(this, vType);
 
@@ -245,11 +249,15 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             {
                 RenderedBody vRenderedBody = vBody.RenderedBody;
                 PanelSettings.CameraToBodyPair.PanelCamera.UpdateLayerMask(vRenderedBody.CurrentLayerMask);
+                if (PanelCamUpdated != null)
+                {
+                    PanelCamUpdated(this);
+                }
             }
             else
             {
                 StartCoroutine(UpdateCameraAfterEndOfFrame(vBody));}
-        }
+            }
 
 
 
@@ -265,6 +273,10 @@ namespace Assets.Scripts.UI.AbstractViews.Layouts
             PanelCameraSettings vPanelCameraSettings = new PanelCameraSettings(vRenderedBody.CurrentLayerMask, PanelSettings);
             PanelSettings.CameraToBodyPair.PanelCamera = PanelCameraPool.GetPanelCamResource(vPanelCameraSettings);
             PanelSettings.CameraToBodyPair.PanelCamera.SetCameraTarget(vRenderedBody, 10);
+            if (PanelCamUpdated != null)
+            {
+                PanelCamUpdated(this);
+            }
         }
     }
     /// <summary>

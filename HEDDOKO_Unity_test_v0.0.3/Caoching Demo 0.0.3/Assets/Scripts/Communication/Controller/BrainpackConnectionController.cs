@@ -272,11 +272,7 @@ namespace Assets.Scripts.Communication.Controller
                             if (ConnectedStateEvent != null)
                             {
                                 mCurrentConnectionState = vNewState;
-                                ConnectedStateEvent();
-                                StartHeartBeat();
-                                DisableBrainpackSleepTimer();
-                                mUdpListener.Start();
-                                RegisterListener();
+                              OnConnect();
                             }
 
                         }
@@ -337,19 +333,26 @@ namespace Assets.Scripts.Communication.Controller
         }
 
         /// <summary>
-        /// Initialize the instance
+        /// On connection
         /// </summary>
-        private void Init()
+        private void OnConnect()
         {
-
+            if (ConnectedStateEvent != null)
+            {
+                ConnectedStateEvent();
+            }
+            StartHeartBeat();
+            DisableBrainpackSleepTimer();
+            SetBrainpackTimeCmd();
+            mUdpListener.Start();
+            RegisterListener();
         }
 
         /// <summary>
         /// on Awake: Initialize the instance 
         /// </summary>
         public void Awake()
-        {
-            Instance.Init();
+        { 
             BrainpackShutdown += () =>
             {
                 ChangeCurrentState(BrainpackConnectionState.Disconnected);

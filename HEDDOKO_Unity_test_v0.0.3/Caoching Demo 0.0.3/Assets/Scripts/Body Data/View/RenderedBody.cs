@@ -5,16 +5,18 @@
 * @date February 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Assets.Scripts.Body_Data.view;
+using Assets.Scripts.Body_Data.View.Anaylsis;
 using UnityEngine;
 
-namespace Assets.Scripts.Body_Data
+namespace Assets.Scripts.Body_Data.View
 {
     /// <summary>
-    /// The class that models the in-scene avatar, referencing it's visual and movement components. 
+    /// The class that models the in-scene avatar, referencing it's visual and movement Components. 
     /// </summary>
     public class RenderedBody : MonoBehaviour
     {
@@ -23,6 +25,7 @@ namespace Assets.Scripts.Body_Data
         public SkinnedMeshRenderer Joints;
         public SkinnedMeshRenderer Torso;
         public SkinnedMeshRenderer Limbs;
+        public AnaylsisFeedBackContainer AnaylsisFeedBackContainer;
 
         public Shader NormalShader;
         public Shader XRayShader;
@@ -36,6 +39,7 @@ namespace Assets.Scripts.Body_Data
         public Transform LowerRightLeg;
         public Transform Hips;
         public Transform UpperSpine;
+        public GameObject[] LayerCopyListeners;
 
 
 
@@ -48,17 +52,29 @@ namespace Assets.Scripts.Body_Data
         /// </summary>
         public LayerMask CurrentLayerMask
         {
-            get { return mCurrLayerMask; }
+            get
+            {
+                mCurrLayerMask = gameObject.layer;
+                return mCurrLayerMask;
+            }
             set
             {
                 mCurrLayerMask = value;
                 Joints.gameObject.layer = mCurrLayerMask;
                 Limbs.gameObject.layer = mCurrLayerMask;
                 Torso.gameObject.layer = mCurrLayerMask;
+                gameObject.layer = mCurrLayerMask;
                 foreach (var vKvPair in mTransformMapping)
                 {
                     vKvPair.Value.gameObject.layer = mCurrLayerMask;
                 }
+                if (LayerCopyListeners != null)
+                {
+                    for (int i = 0; i < LayerCopyListeners.Length; i ++)
+                    {
+                        LayerCopyListeners[i].layer = mCurrLayerMask;
+                    }
+                } 
             }
         }
 
@@ -102,6 +118,17 @@ namespace Assets.Scripts.Body_Data
         public void HideSegment(BodyStructureMap.SegmentTypes vSegment)
         {
 
+        }
+
+        /// <summary>
+        /// Request a RulaVisualAngleAnalysis for the current rendered body
+        /// </summary>
+        /// <param name="vPosturePosition">The posture position</param>
+        /// <param name="vShow">Show after initialization: default to false</param>
+        /// <returns></returns>
+        public RulaVisualAngleAnalysis GetRulaVisualAngleAnalysis( AnaylsisFeedBackContainer.PosturePosition vPosturePosition,bool vShow=false)
+        {
+             return AnaylsisFeedBackContainer.RequestRulaVisualAngleAnalysis(vPosturePosition,CurrentLayerMask,vShow);
         }
 
         /// <summary>

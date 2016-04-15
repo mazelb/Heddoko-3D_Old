@@ -26,7 +26,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
         private ControlPanelType mControlPanelType;
         private RectTransform mParent;
         private RectTransform mCurrentRectTransform;
-        public     PanelNode ParentNode { get; set; }
+        public PanelNode ParentNode { get; set; }
         public ControlPanelType PanelType
         {
             get { return mControlPanelType; }
@@ -42,7 +42,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
             this.ParentNode = vParentNode;
             mParent = vParent;
             mCurrentRectTransform = GetComponent<RectTransform>();
-            mCurrentRectTransform.transform.SetParent(mParent,false);
+            mCurrentRectTransform.transform.SetParent(mParent, false);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
         {
             List<AbstractSubControl> vABDifference = mSubControls.Except(vSubcontrols).ToList();
             List<AbstractSubControl> vBADifference = vSubcontrols.Except(mSubControls).ToList();
-            List < AbstractSubControl > vReturn = new List<AbstractSubControl>();
+            List<AbstractSubControl> vReturn = new List<AbstractSubControl>();
             //remove the difference between a and b
             foreach (var vAbsSubCtrl in vABDifference)
             {
@@ -97,7 +97,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels
         /// <param name="vBody"></param>
         public virtual void BodyUpdated(Body vBody)
         {
-          
+
         }
 
         /// <summary>

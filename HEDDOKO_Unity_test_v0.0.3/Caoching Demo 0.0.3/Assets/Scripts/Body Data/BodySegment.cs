@@ -13,6 +13,7 @@ using System.Linq;
 using Assets.Scripts.Body_Data.view; 
 using Assets.Scripts.Body_Data;
 using Assets.Scripts.Body_Data.CalibrationData;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Body_Pipeline.Analysis;
 using Assets.Scripts.Body_Pipeline.Analysis.Arms;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
@@ -586,6 +587,7 @@ public partial class BodySegment
     public void MapArmsOrientations(Vector3 vUAInitEuler, Vector3 vUACurEuler, Vector3 vLAInitEuler, Vector3 vLACurEuler, Vector3 vTorsoInitEuler, Vector3 vTorsoCurEuler,
                                     BodySubSegment vUASubsegment, BodySubSegment vLASubsegment, BodySubSegment vTorsoSubSegment, BodySubSegment vHipsSubsegment, bool vIsRight = true)
     {
+
         //Upper arm
         //Quaternion vUpArmInitQuatY = Quaternion.Euler(0, 0, 0);
         //Quaternion vUpArmQuatY = Quaternion.Euler(0, (vIsRight) ? 100 * Mathf.Sin(vCurrentAngle) : -100 * Mathf.Sin(vCurrentAngle), 0);

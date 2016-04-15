@@ -69,7 +69,7 @@ namespace Assets.Demos
                     KeyValuePair<string, FieldInfo> vNewKvPair = new KeyValuePair<string, FieldInfo>(vKVPair.Key, vKVPair.Value);
                     UnityAction vAction = () => SetValue(vNewKvPair, vButtonBSegment);
                     KeyCode vKeyCode = (KeyCode)(vMappedDictionary[vKVPair.Key].GetValue(null));
-                    InputHandler.RegisterActions(vKeyCode, vAction);
+                    InputHandler.RegisterKeyboardAction(vKeyCode, vAction);
                     vButtonBSegment.AssociatedButton.onClick.AddListener(vAction);
                 }   
                 catch(KeyNotFoundException)
@@ -80,7 +80,7 @@ namespace Assets.Demos
 
             ResetButton.onClick.AddListener(ResetBodiesMetrics);
 
-            InputHandler.RegisterActions(KeyCode.H,
+            InputHandler.RegisterKeyboardAction(KeyCode.H,
                 () =>
                 {
                     bool vIsActive = DebuggingPanel.gameObject.activeSelf;

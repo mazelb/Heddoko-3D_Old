@@ -7,11 +7,11 @@ namespace UIWidgetsSamples {
 		/// <summary>
 		/// Sets vComponenent data with specified vItem.
 		/// </summary>
-		/// <param name="vComponenent">Component.</param>
+		/// <param name="vComponent">Component.</param>
 		/// <param name="vItem">Item.</param>
-		protected override void SetData(TreeViewSampleComponent vComponenent, ListNode<ITreeViewSampleItem> vItem)
+		protected override void SetData(TreeViewSampleComponent vComponent, ListNode<ITreeViewSampleItem> vItem)
 		{
-			vComponenent.SetData(vItem.Node, vItem.Depth);
+			vComponent.SetData(vItem.Node, vItem.Depth);
 		}
 		
 		/// <summary>

@@ -18,21 +18,33 @@ namespace Assets.Scripts.UI.Tagging
     /// </summary>
     public class TaggingManager
     { 
-        private Dictionary<string, Tag> mTags = new Dictionary<string, Tag>();
+        /// <summary>
+        /// tag set, where the key is defined by the tag uuid
+        /// </summary>
+        private Dictionary<string, Tag> mTags   = new Dictionary<string, Tag>();
         public Database Database { get; set; }
          
         /// <summary>
-        /// creates a tag
+        /// returns a tag from a title
         /// </summary>
         /// <param name="vTitle"></param>
-        public Tag CreateTag(string vTitle)
+        public Tag GetTagByTitle(string vTitle)
         {
             Tag vTag = null;
             bool vFound = mTags.Values.Any(value => value.Title.Equals(vTitle));
             if (!vFound)
             {
-                  vTag = new Tag() { TagUid = Guid.NewGuid().ToString(), Title = vTitle };
-                mTags.Add(vTag.TagUid, vTag);
+                vTag = Database.Connection.GetTagByTitle(vTitle);
+                //try to find the tag from the database first
+                if (vTag == null)
+                {
+                    vTag = new Tag() { TagUid = Guid.NewGuid().ToString(), Title = vTitle };
+                }
+                if (!mTags.ContainsKey(vTag.TagUid))
+                {
+                    mTags.Add(vTag.TagUid, vTag);
+                }
+     
                 Database.Connection.AddNewTag(vTag);
             }
             else
@@ -55,6 +67,11 @@ namespace Assets.Scripts.UI.Tagging
         public void AttachTagToRecording(BodyFramesRecording vRec, Tag vTag)
         {
             Database.Connection.AddTagToRecording(vRec, vTag);
+            //try to add the tag to the current collection
+            if (!mTags.ContainsKey(vTag.TagUid))
+            {
+                mTags.Add(vTag.TagUid,vTag);
+            }
             vRec.AddTag(vTag);
         }
         public void SetDatabase(Database vDatabase)
@@ -150,8 +167,10 @@ namespace Assets.Scripts.UI.Tagging
             }
         }
 
+     
+
         /// <summary>
-        /// Get a list of tags excluding the exlusion list
+        /// Get a list of tags excluding the exclusion list
         /// </summary>
         /// <param name="vPartial"></param>
         /// <param name="vExclusion"></param>
@@ -162,6 +181,28 @@ namespace Assets.Scripts.UI.Tagging
             List<Tag> vFoundTags = Database.Connection.GetTagsByPartialTitleExcludingList(vPartial,vExclusion);
             //come back and add the tags
             return vFoundTags;
+        }
+
+        /// <summary>
+        /// add a tag set to a body frame recording
+        /// </summary>
+        /// <param name="vTagSet">the tag set to add</param>
+        /// <param name="vRecording">the recording to add the tag set to</param>
+        public void AttachTagSetToRecording(ICollection<string> vTagSet, BodyFramesRecording vRecording)
+        {
+            if (vTagSet.Count == 0)
+            {
+                return;
+            }
+            else
+            {
+                foreach (var vTagSetDescritor in  vTagSet)
+                {
+                    Tag vTag = GetTagByTitle(vTagSetDescritor);
+                    AttachTagToRecording(vRecording,vTag);
+                    Database.Connection.AddNewTag(vTag);
+                }
+            }
         }
     }
 }

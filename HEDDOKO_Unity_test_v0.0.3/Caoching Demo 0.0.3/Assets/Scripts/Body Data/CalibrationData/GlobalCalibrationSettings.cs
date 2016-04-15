@@ -95,12 +95,14 @@ namespace Assets.Scripts.Body_Data.CalibrationData
             sCalibrationTypes = new List<CalibrationType>();
             //set calibration times according to their current order
             float vMultipler = 1;
+            sCalibrationTimes.Add(CalibrationType.NullToTPose, CalibrationTimer * vMultipler++);
             sCalibrationTimes.Add(CalibrationType.Tpose, CalibrationTimer * vMultipler++);
+            sCalibrationTimes.Add(CalibrationType.TPoseToArmsForward, CalibrationTimer * vMultipler++);
             sCalibrationTimes.Add(CalibrationType.ArmsForward, CalibrationTimer * vMultipler++);
-            sCalibrationTimes.Add(CalibrationType.SoldierPose, CalibrationTimer * vMultipler++);
-            sCalibrationTimes.Add(CalibrationType.TposeToZombieTransition, CalibrationTimer * vMultipler++);
-            sCalibrationTimes.Add(CalibrationType.ZombieToSoldierTransition, CalibrationTimer * vMultipler);
-            FinalPose = CalibrationType.ZombieToSoldierTransition;
+            sCalibrationTimes.Add(CalibrationType.ArmsForwardToArmsDown, CalibrationTimer * vMultipler++);
+            sCalibrationTimes.Add(CalibrationType.ArmsDown, CalibrationTimer * vMultipler);
+       
+            FinalPose = CalibrationType.ArmsForwardToArmsDown;
         }
     }
 
@@ -111,11 +113,12 @@ namespace Assets.Scripts.Body_Data.CalibrationData
     /// </summary>
     public enum CalibrationType
     {
-        Tpose=0,
-        TposeToZombieTransition=1,
-        ArmsForward = 2,
-        ZombieToSoldierTransition=3,
-        SoldierPose=4,
-        Count=5
+        NullToTPose = 0,
+        Tpose=1,
+        TPoseToArmsForward=2,
+        ArmsForward = 3,
+        ArmsForwardToArmsDown=4,
+        ArmsDown=5,
+        Count=6
     }
 }

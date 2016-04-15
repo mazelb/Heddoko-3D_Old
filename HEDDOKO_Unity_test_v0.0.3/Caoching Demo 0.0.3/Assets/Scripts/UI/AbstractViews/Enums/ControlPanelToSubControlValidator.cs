@@ -34,6 +34,8 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
             List<SubControlType> vTagsSubControls = new List<SubControlType>();
             List<SubControlType> vCommentsSubControls = new List<SubControlType>();
             List<SubControlType> vCameraSubControls = new List<SubControlType>();
+            List<SubControlType> vDemoKitSubControls = new List<SubControlType>();
+            
 
             sValidControlToSubControls.Add(ControlPanelType.RecordingPlaybackControlPanel, vRecSubCtrls);
             sValidControlToSubControls.Add(ControlPanelType.RenderedBodyControlPanel, vAvatarSubCtrl);
@@ -42,12 +44,14 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
             sValidControlToSubControls.Add(ControlPanelType.TagControlPanel, vTagsSubControls);
             sValidControlToSubControls.Add(ControlPanelType.CommentControlPanel, vCommentsSubControls);
             sValidControlToSubControls.Add(ControlPanelType.CameraControlPanel, vCameraSubControls);
+            sValidControlToSubControls.Add(ControlPanelType.DemoKit,vDemoKitSubControls);
 
             //register recordings subcontrols
             vRecSubCtrls.Add(SubControlType.PlaybackSliderSubcontrol);
             vRecSubCtrls.Add(SubControlType.RecordingSpeedModifierSubcontrol);
             vRecSubCtrls.Add(SubControlType.RecordingSelectionSubControl);
             vRecSubCtrls.Add(SubControlType.RecordingLoadSingleSubControl);
+            
             //register avatar subcontrols
             vAvatarSubCtrl.Add(SubControlType.ResetAvatarSubControl);
 
@@ -70,6 +74,9 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
             vCommentsSubControls.Add(SubControlType.CommentWidgetSubControl);
             vCommentsSubControls.Add(SubControlType.AddCommentSubControl);
             vCommentsSubControls.Add(SubControlType.ModifyCommentSubControl);
+
+            //Demo kit subcontrols
+            vDemoKitSubControls.Add(SubControlType.PlayerLoopback);
         }
 
         /// <summary>
@@ -126,7 +133,9 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         MiscClientControlPanel,
         SettingControlPanel,
         DebugRecordingPanel,
-        LoadingPanel
+        LoadingPanel,
+        DemoKit
+   
     }
 
     public enum SubControlType
@@ -138,6 +147,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         RecordingProgressSubControl,
         RecordingPlaySpeedModSubControl,
         RecordingLoadSingleSubControl,
+        PlayerLoopback,
         TagWidgetSubControl,
         TagModificationSubControl,
         TagTextBoxSubControl,
@@ -159,6 +169,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         AddCommentSubControl,
         ModifyCommentSubControl,
         CameraOrbitSubControl,
-        RecordingPlaybackSpeedDisplay
+        RecordingPlaybackSpeedDisplay,
+        RightClickSubControl
     }
 }

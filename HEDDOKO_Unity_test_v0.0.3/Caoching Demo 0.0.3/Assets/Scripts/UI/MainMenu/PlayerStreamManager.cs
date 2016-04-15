@@ -9,6 +9,7 @@
  
 using System.Collections.Generic;
 using Assets.Scripts.Body_Data;
+using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Body_Pipeline.Analysis.Legs;
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.Loading;
@@ -69,7 +70,7 @@ namespace Assets.Scripts.UI.MainMenu
             StreamingFromBrainPack
         }
         /// <summary>
-        /// On the start of the scene, initialize all the components to be able to start playing
+        /// On the start of the scene, initialize all the Components to be able to start playing
         /// </summary>
         void Awake()
         {

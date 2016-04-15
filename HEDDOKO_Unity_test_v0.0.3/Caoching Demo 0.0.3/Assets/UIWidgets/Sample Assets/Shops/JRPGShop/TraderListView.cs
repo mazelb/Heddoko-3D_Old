@@ -4,9 +4,9 @@ using UIWidgets;
 
 namespace UIWidgetsSamples.Shops {
 	public class TraderListView : ListViewCustom<TraderListViewComponent,JRPGOrderLine> {
-		protected override void SetData(TraderListViewComponent vComponenent, JRPGOrderLine vItem)
+		protected override void SetData(TraderListViewComponent vComponent, JRPGOrderLine vItem)
 		{
-			vComponenent.SetData(vItem);
+			vComponent.SetData(vItem);
 		}
 		
 		protected override void HighlightColoring(TraderListViewComponent component)

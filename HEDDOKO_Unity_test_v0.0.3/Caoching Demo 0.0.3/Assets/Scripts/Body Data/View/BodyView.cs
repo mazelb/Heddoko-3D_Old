@@ -72,6 +72,11 @@ namespace Assets.Scripts.Body_Data.view
             }
         }
 
+        public BodyFrameBuffer Buffer
+        {
+            get { return mBuffer; }
+        }
+
 
         /// <summary>
         /// Initialize the view with the frame buffer

@@ -103,7 +103,37 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
         }
         private LayoutContainerStruct OneRightByTwoLeftCreation()
         {
-            throw new NotImplementedException();
+            LayoutContainerStruct vLayoutContainer = SingleLayoutCreatorHelper(mParentAbstractView, HorizontalOrVerticalLayoutGroupType.Horizontal);
+            PanelNode vRoot = vLayoutContainer.LayoutContainer.GetRoot();
+            float vRootWidth = vRoot.PanelSettings.RectTransform.rect.width;
+            float vLeftSplit = vRootWidth * 0.25f;
+            float vRightSplit = vRootWidth - vLeftSplit;
+            RectOffset vFivesOffset = new RectOffset(5, 5, 5, 5);
+            PanelNode[] vNodes = new PanelNode[5];
+         
+            PanelNodeTemplate vLeftSplitTemplate = new PanelNodeTemplate(vFivesOffset, vLeftSplit, 5, HorizontalOrVerticalLayoutGroupType.Null);
+            PanelNodeTemplate vRightSplitTemplate = new PanelNodeTemplate(vFivesOffset, vRightSplit, 5, HorizontalOrVerticalLayoutGroupType.Null);
+
+            PanelNode vLeftSpliteNode = vLayoutContainer.LayoutContainer.AddPanelNode(vRoot, vRoot.PanelSettings.RectTransform, vLeftSplitTemplate);
+            PanelNode vRightSplitNode = vLayoutContainer.LayoutContainer.AddPanelNode(vRoot, vRoot.PanelSettings.RectTransform, vRightSplitTemplate);
+            vRightSplitNode.Parent = vRoot;
+            vLeftSpliteNode.Parent = vRoot;
+
+            float vLeftSplitHalf = vLeftSpliteNode.PanelSettings.RectTransform.rect.height / 2f;
+            PanelNodeTemplate vLeftSplitTop = new PanelNodeTemplate(vFivesOffset, vLeftSplitHalf, 5, HorizontalOrVerticalLayoutGroupType.Null);
+            PanelNodeTemplate vLeftSplitBot = new PanelNodeTemplate(vFivesOffset, vLeftSplitHalf, 5, HorizontalOrVerticalLayoutGroupType.Null);
+
+            //create a set of rendering panel nodes for the layout container. Fill them with its children
+            vLayoutContainer.RenderingPanelNodes = vNodes;
+
+            List<PanelNode> vNewChildren = vLeftSpliteNode.SplitPanelInHalf(HorizontalOrVerticalLayoutGroupType.Vertical, vLeftSplitTop, vLeftSplitBot);
+            vNodes[0] = vRoot;
+            vNodes[1] = vLeftSpliteNode;
+            vNodes[2] = vRightSplitNode;
+            vNodes[3] = vNewChildren[0];
+            vNodes[4] = vNewChildren[1];
+            Cleanup();
+            return vLayoutContainer;
         }
 
         private LayoutContainerStruct OneLeftByTwoRightCreation()
@@ -195,12 +225,12 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
         public LayoutContainerStruct CreateLayoutContainer(AbstractView vParentView, LayoutType vLayoutType)
         {
             LayoutContainerStruct vNewContainer = null;
-            mParentAbstractView = vParentView; 
+            mParentAbstractView = vParentView;
             if (mLayoutToCreationMapping.ContainsKey(vLayoutType))
-            { 
+            {
                 vNewContainer = mLayoutToCreationMapping[vLayoutType].Invoke();
                 return vNewContainer;
-            } 
+            }
 
             return vNewContainer;
         }

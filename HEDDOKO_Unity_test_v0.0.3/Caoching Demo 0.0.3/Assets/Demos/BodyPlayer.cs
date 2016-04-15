@@ -46,7 +46,7 @@ namespace Assets.Demos
         }
         
         /// <summary>
-        /// On the start of the scene, initialize all the components to be able to start playing
+        /// On the start of the scene, initialize all the Components to be able to start playing
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         void Start()

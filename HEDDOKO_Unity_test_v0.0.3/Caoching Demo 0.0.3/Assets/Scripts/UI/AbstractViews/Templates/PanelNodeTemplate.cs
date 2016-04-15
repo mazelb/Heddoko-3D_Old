@@ -26,6 +26,13 @@ namespace Assets.Scripts.UI.AbstractViews.Templates
         public float Spacing;
         public HorizontalOrVerticalLayoutGroupType HorizontalOrVerticalLayoutType;
 
+        /// <summary>
+        /// Create a new Template for a panel node with well defined parameters
+        /// </summary>
+        /// <param name="vPadding">the amount of padding of the resulting template</param>
+        /// <param name="vPrefHeightOrWidthMod">the preffered height or width modifier </param>
+        /// <param name="vSpacing">spacing between inner objects(if applicable)</param>
+        /// <param name="vType"></param>
         public PanelNodeTemplate(RectOffset vPadding, float vPrefHeightOrWidthMod, float vSpacing,
             HorizontalOrVerticalLayoutGroupType vType)
         {

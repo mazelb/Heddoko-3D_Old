@@ -29,7 +29,7 @@ namespace Assets.Scripts.UI.Settings
         {
             SettingsView.SettingsButton.onClick.AddListener(SwitchEnableState);
             SettingsView.CloseButton.onClick.AddListener(SwitchEnableState);
-            InputHandler.RegisterActions(HeddokoDebugKeyMappings.SettingsButton, SwitchEnableState);
+            InputHandler.RegisterKeyboardAction(HeddokoDebugKeyMappings.SettingsButton, SwitchEnableState);
             BrainpackConnectionController.Instance.BrainpackStatusResponse += UpdateTextBox;
             BrainpackConnectionController.Instance.BrainpackTimeSetResp += GenericAckMsg;
             BrainpackConnectionController.Instance.ResetBrainpackResp += GenericAckMsg;

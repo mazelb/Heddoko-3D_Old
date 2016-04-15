@@ -23,6 +23,7 @@ namespace Assets.Scripts.UI.AbstractViews
         {
             sIsInitialized = true;
             sRegistry.Add(ControlPanelType.RecordingPlaybackControlPanel, "Prefabs/AbstractControlPanel/PlaybackControls");
+            sRegistry.Add(ControlPanelType.DemoKit, "Prefabs/AbstractControlPanel/DemoKitPlayPrefab");
         }
 
         /// <summary>

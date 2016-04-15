@@ -163,7 +163,7 @@ namespace Assets.Scripts.UI.Analysis
             int vCount = vDescriptions.Count;
             ValidateNewLayout(vCount);
 
-            //resize the sub view components and set the playback controls to one of the panels
+            //resize the sub view Components and set the playback controls to one of the panels
             for (int i = 0; i < mSubviewComponents.Count; i++)
             {
                 LayoutDescription vLayoutDesc = vDescriptions[i];

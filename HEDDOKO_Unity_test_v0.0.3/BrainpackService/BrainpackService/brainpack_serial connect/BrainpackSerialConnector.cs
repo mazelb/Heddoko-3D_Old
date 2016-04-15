@@ -144,7 +144,12 @@ namespace BrainpackService.brainpack_serial_connect
                         string vReadLine = Serialport.ReadLine();
 
                         DebugLogger.Instance.LogMessage(LogType.BrainpackFrame, vReadLine);
-                        if (vReadLine.Length != 176 && vReadLine.Length <= 25 && vReadLine.Length > 0)
+                        if (vReadLine.Length >= 176)
+                        {
+                            HeddokoPacket vPossibleBrainpackData = new HeddokoPacket(HeddokoCommands.SendBPData, vReadLine);
+                            ServerCommandRouter.Process(this, vPossibleBrainpackData);
+                        }
+                        else if ( vReadLine.Length <= 25 && vReadLine.Length > 0)
                         {
                             string vTemp = vReadLine;
 
@@ -181,11 +186,7 @@ namespace BrainpackService.brainpack_serial_connect
                                 
                             }
                         }
-                        else
-                        { 
-                             HeddokoPacket vPossibleBrainpackData = new HeddokoPacket(HeddokoCommands.SendBPData, vReadLine);
-                            ServerCommandRouter.Process(this, vPossibleBrainpackData);
-                        }
+                       
 
                     }
                     catch (IOException vIoException)

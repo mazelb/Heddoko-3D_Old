@@ -236,7 +236,7 @@ namespace UIWidgets
 		public override void Resize()
 		{
 			//defaultItemCopy.gameObject.SetActive(true);
-			//(defaultItemCopy.transform as RectTransform).sizeDelta = (DefaultItem.transform as RectTransform).sizeDelta;
+			//(defaultItemCopy.transform as RectTransform).sizeDelta = (DefaultItem.transform as ButtonContainerRectTransform).sizeDelta;
 
 			SetItemsHeight(DataSource, true);
 			//defaultItemCopy.gameObject.SetActive(false);

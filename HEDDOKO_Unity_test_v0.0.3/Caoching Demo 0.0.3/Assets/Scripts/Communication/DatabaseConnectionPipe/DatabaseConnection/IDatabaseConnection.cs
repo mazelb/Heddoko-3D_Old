@@ -131,5 +131,12 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// </summary>
         /// <param name="vInput">the input to sanitize</param>
         string SanitizeInput(string vInput);
+
+        /// <summary>
+        /// Get tag by title
+        /// </summary>
+        /// <param name="vTitle">the tag title</param>
+        /// <returns></returns>
+        Tag GetTagByTitle(string vTitle);
     }
 }

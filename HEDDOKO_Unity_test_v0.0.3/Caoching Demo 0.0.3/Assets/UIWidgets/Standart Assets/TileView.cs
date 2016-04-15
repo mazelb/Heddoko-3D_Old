@@ -157,10 +157,10 @@ namespace UIWidgets {
 			bottomHiddenItems = Mathf.Max(0, DataSource.Count - visibleItems - topHiddenItems);
 
 			var new_visible_range = Enumerable.Range(topHiddenItems, visibleItems).ToList();
-			var current_visible_range = components.Convert<TComponent,int>(GetComponentIndex);
+			var current_visible_range = Components.Convert<TComponent,int>(GetComponentIndex);
 
 			var new_indicies_to_change = new_visible_range.Except(current_visible_range).ToList();
-			var components_to_change = new Stack<TComponent>(components.Where(x => !new_visible_range.Contains(x.Index)));
+			var components_to_change = new Stack<TComponent>(Components.Where(x => !new_visible_range.Contains(x.Index)));
 
 			new_indicies_to_change.ForEach(index => {
 				var component = components_to_change.Pop();
@@ -170,8 +170,8 @@ namespace UIWidgets {
 				Coloring(component as ListViewItem);
 			});
 
-			components.Sort(ComponentsComparer);
-			components.ForEach(SetComponentAsLastSibling);
+			Components.Sort(ComponentsComparer);
+			Components.ForEach(SetComponentAsLastSibling);
 
 			AddCallbacks();
 

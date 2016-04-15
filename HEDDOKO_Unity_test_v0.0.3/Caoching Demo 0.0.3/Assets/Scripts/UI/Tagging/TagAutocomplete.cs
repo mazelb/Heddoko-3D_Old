@@ -16,13 +16,21 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.Tagging
 {
-    /// <summary>
+    public delegate void OnSubmitDel(string vSubmission);
+
+    public delegate void OnAutocompleteSelectDelegate(string vData);
+
+    public delegate void OnHideDelegate();
+     /// <summary>
     /// An input field that contains a listview, displaying results of inserted text in the
     /// input field
     /// </summary>
     [Serializable]
     public class TagAutocomplete : MonoBehaviour, IPointerClickHandler, IDeselectHandler
-    {
+     {
+        public event OnSubmitDel OnSubmission;
+         public event OnAutocompleteSelectDelegate OnAutoCompleteSelection;
+         public event OnHideDelegate OnHideEvent;
         private InputField mInsertTagInputField;
 
         public int MaxResults;
@@ -78,24 +86,62 @@ namespace Assets.Scripts.UI.Tagging
         {
             InsertTagInputField.onValueChange.AddListener(Search); 
         }
- 
 
+         public void RegisterOnHide(OnHideDelegate vOnHideDelegate)
+         {
+             OnHideEvent += vOnHideDelegate; 
+         }
+
+         public void RemoveOnHideDelegate(OnHideDelegate vOnHideDelegate)
+         {
+             OnHideEvent -= vOnHideDelegate;
+         }
         public void Show()
         {
+            //focus to this input field
+            InsertTagInputField.gameObject.SetActive(true);
+            InsertTagInputField.onEndEdit.AddListener(OnSubmit);
             FloatingListView.OnSelectString.AddListener(SelectItem);
             FloatingListView.OnDeselect.AddListener(DeselectedList);
+            InsertTagInputField.Select();
         }
 
-       
+         void OnSubmit(string vTagData)
+         {
+             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+             {
+                  //invoke callback
+                 if (OnSubmission != null)
+                 {
+                     OnSubmission(vTagData);
+                 }
+             }
+
+        }
+
+         public void RegisterOnSubmit(OnSubmitDel vSubmissionDel)
+         {
+             OnSubmission += vSubmissionDel;
+         }
+
+         public void RemoveOnSubmit(OnSubmitDel vSubmissionDel)
+         {
+            OnSubmission -= vSubmissionDel;
+        }
         /// <summary>
         /// Hides the input field from view
         /// </summary>
         public void Hide()
         {
+            InsertTagInputField.gameObject.SetActive(false);
             InsertTagInputField.text = string.Empty;
             FloatingListView.gameObject.SetActive(false);
             FloatingListView.OnSelectString.RemoveListener(SelectItem);
             FloatingListView.OnDeselect.RemoveListener(DeselectedList);
+            if (OnHideEvent != null)
+            {
+                OnHideEvent();
+            }
 
         }
 
@@ -173,14 +219,33 @@ namespace Assets.Scripts.UI.Tagging
 
         }
         /// <summary>
-        /// When an item has been selected
+        /// When an autocomplete item has been selected, invoke selection
         /// </summary>
         /// <param name="index"></param>
         /// <param name="text"></param>
         public void SelectItem(int index, string text)
         {
-            Debug.Log("Item selected " + text);
+            string vTitle = FloatingListView.DataSource[index];
+            if (OnAutoCompleteSelection != null)
+            {
+                OnAutoCompleteSelection(vTitle);
+            }
+
         }
+
+        /// <summary>
+        /// Register AutoComplete selection event 
+        /// </summary>
+        /// <param name="vOnAutocompleteSelectDelegate"></param>
+         public void RegisterAutoCompleteSelection(OnAutocompleteSelectDelegate vOnAutocompleteSelectDelegate)
+        {
+            OnAutoCompleteSelection += vOnAutocompleteSelectDelegate;
+        }
+
+         public void RemoveAutoCompleteSelection(OnAutocompleteSelectDelegate vOnAutocompleteSelectDelegate)
+         {
+             OnAutoCompleteSelection -= vOnAutocompleteSelectDelegate;
+         }
 
         /// <summary>
         /// List has been deselected

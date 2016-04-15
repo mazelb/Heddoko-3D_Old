@@ -18,8 +18,6 @@ namespace Assets.Scripts.Frames_Pipeline
     /// </summary>
     public class RecordingPlaybackTask
     {
-      
-
         public bool IsWorking;
         public bool IsPaused { get; set; }
         public bool LoopPlaybackEnabled =true;

@@ -9,25 +9,31 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq; 
 using System.Threading;
 using Assets.Scripts.Communication.DatabaseConnectionPipe;
-using Assets.Scripts.Utils; 
+using Assets.Scripts.Utils;
+
 
 /**
 * RecordingsManager class 
 * @brief manager class for recordings (interface later)
 */
 // ReSharper disable once CheckNamespace
-public class BodyRecordingsMgr
+public class BodyRecordingsMgr : IDatabaseConsumer
 {
+    /// <summary>
+    /// Delegate definition of a callback function
+    /// </summary>
+    /// <param name="vRecording"></param>
+    public delegate void BodyFramesRecordingFoundDel(BodyFramesRecording vRecording);
     #region Singleton definition
     // ReSharper disable once InconsistentNaming
     private static readonly BodyRecordingsMgr instance = new BodyRecordingsMgr();  
     public delegate void StopActionDelegate();
     public event StopActionDelegate StopActionEvent;
 
+    public Database Database { get; set; }
     // Explicit static constructor to tell C# compiler
     // not to mark type as beforefieldinit
     static BodyRecordingsMgr()
@@ -344,7 +350,7 @@ public class BodyRecordingsMgr
     * @return BodyFramesRecording: The recording
     * @brief looks for a recording by its UUID
     */
-    public BodyFramesRecording GetRecordingByUuid(string vRecUuid)
+    public BodyFramesRecording GetRecordingByUuid(string vRecUuid )
     {
         if (RecordingExist(vRecUuid))
         {
@@ -353,6 +359,28 @@ public class BodyRecordingsMgr
 
         return null;
     }
+
+    /// <summary>
+    /// Attempt to locate a recording by its UUID and pass it off to an interested delegate
+    /// </summary>
+    /// <param name="vRecUuid">the recording UUID</param>
+    /// <param name="vCallbackDel">the callback delegate that accepts a body frame recording</param>
+    public void TryGetRecordingByUuid(string vRecUuid, BodyFramesRecordingFoundDel vCallbackDel)
+    {
+        BodyFramesRecording vRecording = GetRecordingByUuid(vRecUuid);
+        if (vCallbackDel != null)
+        {
+            vCallbackDel(vRecording);
+        }
+
+    }
+
+    /// <summary>
+    /// returns a list of recordings by their
+    /// </summary>
+    /// <param name="vFilter"></param>
+    public void TryGetRecordingUuids(string vFilter)
+    { }
 
     /// <summary>
     /// Sends a stop signal to any registered listeners
@@ -378,4 +406,6 @@ public class BodyRecordingsMgr
             CallbackAction = vCallbackAction;
         }
     }
+
+  
 }

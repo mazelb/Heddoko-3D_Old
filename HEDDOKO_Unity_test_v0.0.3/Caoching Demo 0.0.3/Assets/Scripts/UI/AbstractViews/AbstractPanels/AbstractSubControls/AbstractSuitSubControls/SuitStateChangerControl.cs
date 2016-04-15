@@ -7,6 +7,8 @@
 */
 using Assets.Scripts.Communication.Controller;
 using Assets.Scripts.UI.AbstractViews.Enums;
+using Assets.Scripts.Utils.DebugContext;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.AbstractSuitSubControls
@@ -110,15 +112,18 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
 
         /// <summary>
-        /// 
+        /// when the app is connected to the brain pack, allow the controls to be interactable
         /// </summary>
         public override void OnConnection()
         {
             SuitStateControl.interactable = true;
+            
             WaitForStatusResponse();
         }
 
-
+        /// <summary>
+        /// Engages suit controls based on the current suit state
+        /// </summary>
         private void EngageControl()
         {
             switch (SuitState)
@@ -170,10 +175,24 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
         }
 
+        /// <summary>
+        /// On disable , remove key bindings
+        /// </summary>
         private void OnDisable()
         {
             SuitState = SuitState.Start;
+            InputHandler.RemoveKeybinding(KeyCode.KeypadEnter, EngageControl);
         }
+
+        /// <summary>
+        /// On enable hook keyboard input to control input button 
+        /// </summary>
+        void OnEnable()
+        {
+            InputHandler.RegisterKeyboardAction(KeyCode.KeypadEnter, EngageControl);
+        }
+
+        
     }
 
 

@@ -42,7 +42,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameConversion
             }
             else
             {
-                return ConvertEncondedRawFrame(rawData);
+                return ConvertEncodedRawFrame(rawData);
             }
 
         }
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameConversion
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public  static BodyFrame ConvertEncondedRawFrame(BodyRawFrame rawData)
+        public  static BodyFrame ConvertEncodedRawFrame(BodyRawFrame rawData)
         {
             float vTimeStamp = (float)(Convert.ToInt32(rawData[0]));
             vTimeStamp =  (vTimeStamp / 1000f) - sStartTime ;
@@ -146,8 +146,9 @@ namespace Assets.Scripts.Frames_Pipeline.BodyFrameConversion
                     for (int j = 0; j < 3; j++)
                     {
                         float.TryParse(v3data[j], out value[j]);
-                    }
-                    vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]);
+                    } 
+                   vBodyFrame.FrameData[vSensorPosAsKey] = new Vector3(value[0], value[1], value[2]); 
+                  
                 }
 
             }

@@ -4,7 +4,7 @@ using UIWidgets;
 
 namespace UIWidgetsSamples {
 	public class ListViewUnderlineSampleComponent : ListViewItem {
-		// specify components for displaying item data
+		// specify Components for displaying item data
 		[SerializeField]
 		public Image Icon;
 		

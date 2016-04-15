@@ -87,7 +87,7 @@ namespace BrainpackService
         protected override void OnStart(string[] vArgs)
         {
             DebugLogger.Instance.Start();
-            mServer = new AsynchronousSocketListener();//  new PersistentTCPConnection();
+            mServer = new AsynchronousSocketListener();//  new PersistenListener();
             UdpSender vUdpSender = new UdpSender();
             mServerCommandRouter = new ServerCommandRouter
             {

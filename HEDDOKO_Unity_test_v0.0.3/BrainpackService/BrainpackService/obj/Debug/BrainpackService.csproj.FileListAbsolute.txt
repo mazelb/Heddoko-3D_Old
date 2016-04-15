@@ -49,14 +49,6 @@ C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackSe
 C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\f.csprojResolveAssemblyReference.cache
 C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\HeddokoLib.1.0.0.0.Fakes.dll
 C:\Users\Mohammed\Qsync\1. Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\Fakes\hl\o\HeddokoLib.1.0.0.0.Fakes.pdb
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.pdb
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\HeddokoLib.dll
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe.config
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.ProjectInstaller.resources
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csproj.GenerateResource.Cache
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.exe
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.pdb
 E:\Code\Binaries\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe.config
 E:\Code\Binaries\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
 E:\Code\Binaries\BrainpackService\BrainpackService\bin\Debug\BrainpackService.pdb
@@ -68,8 +60,6 @@ E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.Pr
 E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csproj.GenerateResource.Cache
 E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.exe
 E:\Code\Binaries\BrainpackService\BrainpackService\obj\Debug\BrainpackService.pdb
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\HeddokoLib.pdb
-E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csprojResolveAssemblyReference.cache
 E:\Code\BrainpackService v0.2\BrainpackService\bin\Debug\BrainpackService.exe.config
 E:\Code\BrainpackService v0.2\BrainpackService\obj\Debug\BrainpackService.exe
 E:\Code\BrainpackService v0.2\BrainpackService\obj\Debug\BrainpackService.pdb
@@ -80,3 +70,12 @@ E:\Code\BrainpackService v0.2\BrainpackService\bin\Debug\HeddokoLib.pdb
 E:\Code\BrainpackService v0.2\BrainpackService\obj\Debug\BrainpackService.ProjectInstaller.resources
 E:\Code\BrainpackService v0.2\BrainpackService\obj\Debug\BrainpackService.csproj.GenerateResource.Cache
 E:\Code\BrainpackService v0.2\BrainpackService\obj\Debug\BrainpackService.csprojResolveAssemblyReference.cache
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe.config
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.exe
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\BrainpackService.pdb
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\HeddokoLib.dll
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\bin\Debug\HeddokoLib.pdb
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.ProjectInstaller.resources
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.csproj.GenerateResource.Cache
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.exe
+E:\Code\Heddoko-3D\HEDDOKO_Unity_test_v0.0.3\BrainpackService\BrainpackService\obj\Debug\BrainpackService.pdb

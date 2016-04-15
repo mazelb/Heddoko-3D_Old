@@ -29,7 +29,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -39,7 +39,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -83,7 +83,6 @@
     <Compile Include="BrainpackServer\BrainpackServer.cs" />
     <Compile Include="BrainpackServer\routing\BrainpackConnectionRouter.cs" />
     <Compile Include="BrainpackServer\IBrainpackServer.cs" />
-    <Compile Include="BrainpackServer\PersistentTCPConnection.cs" />
     <Compile Include="BrainpackServer\ServerCommandRouter.cs" />
     <Compile Include="BrainpackService.cs">
       <SubType>Component</SubType>

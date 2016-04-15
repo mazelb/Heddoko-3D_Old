@@ -169,7 +169,7 @@ public class Webcam : MonoBehaviour
 
     void OnEnable()
     {
-        InputHandler.RegisterActions(KeyCode.F1,
+        InputHandler.RegisterKeyboardAction(KeyCode.F1,
             () =>
             {
                 if (CameraTexture != null)
@@ -196,7 +196,7 @@ public class Webcam : MonoBehaviour
 
     void Start()
     {
-        InputHandler.RegisterActions(KeyCode.F2, () =>
+        InputHandler.RegisterKeyboardAction(KeyCode.F2, () =>
         {
             bool vIsActive = gameObject.activeInHierarchy; 
              gameObject.SetActive(!vIsActive);

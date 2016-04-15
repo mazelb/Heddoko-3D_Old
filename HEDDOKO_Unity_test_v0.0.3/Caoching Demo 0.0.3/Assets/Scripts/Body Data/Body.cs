@@ -10,8 +10,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Body_Data.view;
 using Assets.Scripts.Utils;
-using System.Linq; 
-using Assets.Scripts.Body_Data;
+using System.Linq;
 using Assets.Scripts.Body_Data.CalibrationData;
 using Assets.Scripts.Body_Data.View;
 using Assets.Scripts.Body_Pipeline.Analysis;
@@ -295,15 +294,22 @@ public class Body
     */
     public void PlayRecording(string vRecUUID)
     {
-        
-
         //Stops the current thread from running.
         StopThread();
 
         //get the raw frames from recording 
         //first try to get the recording from the recording manager. 
-        BodyFramesRecording vBodyFramesRec = BodyRecordingsMgr.Instance.GetRecordingByUuid(vRecUUID);
+      BodyRecordingsMgr.Instance.TryGetRecordingByUuid(vRecUUID, PlayRecordingCallback);
 
+        
+    }
+
+    /// <summary>
+    /// Callback action after a body frames recording has been retrieved
+    /// </summary>
+    /// <param name="vBodyFramesRec"></param>
+    private void PlayRecordingCallback(BodyFramesRecording vBodyFramesRec)
+    {
         if (vBodyFramesRec != null && vBodyFramesRec.RecordingRawFrames.Count > 0)
         {
             //Setting the first frame as the initial frame
@@ -312,12 +318,12 @@ public class Body
             SetInitialFrame(vBodyFrame);
             BodyFrameBuffer vBuffer1 = new BodyFrameBuffer();
 
-           // mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
-          mBodyFrameThread = new BodyFrameThread(vBodyFramesRec, vBuffer1);
+            // mBodyFrameThread = new BodyFrameThread(bodyFramesRec.RecordingRawFrames, vBuffer1);
+            mBodyFrameThread = new BodyFrameThread(vBodyFramesRec, vBuffer1);
             View.Init(this, vBuffer1);
             View.StartUpdating = true;
             mBodyFrameThread.Start();
-            
+
         }
     }
 
@@ -382,8 +388,16 @@ public class Body
 
     public void UnhookBrainpackListeners()
     {
-        BrainpackConnectionController.Instance.ConnectedStateEvent -= BrainPackStreamReadyListener;
-        BrainpackConnectionController.Instance.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
+        try
+        {
+            BrainpackConnectionController.Instance.ConnectedStateEvent -= BrainPackStreamReadyListener;
+            BrainpackConnectionController.Instance.DisconnectedStateEvent -= BrainPackStreamDisconnectedListener;
+        }
+        catch
+        {
+            
+        }
+       
     }
 
     /// <summary>
@@ -501,7 +515,7 @@ public class Body
     }
 
     /// <summary>
-    /// Sets the passed in RenderedBody component and updates components with the passed in parameter
+    /// Sets the passed in RenderedBody component and updates Components with the passed in parameter
     /// </summary>
     /// <param name="vRendered"></param>
     public void UpdateRenderedBody(RenderedBody vRendered)

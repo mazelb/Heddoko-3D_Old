@@ -39,7 +39,7 @@ public class BodyRecordingReader
     /// <summary>
     /// Was the recording taken from a dat file or csv file?
     /// </summary>
-    public bool IsFromDatFile { get; private set; }
+    public bool IsFromDatFile { get;   set; }
 
     internal CryptoManager CrytoManager
     {

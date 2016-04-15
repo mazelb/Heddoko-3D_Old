@@ -6,13 +6,11 @@
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
 */
-
-using System.Collections;
+ 
 using System.Collections.Generic;
 using Assets.Scripts.UI.AbstractViews;
 using Assets.Scripts.UI.AbstractViews.Enums;
-using Assets.Scripts.UI.AbstractViews.Layouts;
-using UnityEngine;
+using Assets.Scripts.UI.AbstractViews.Layouts; 
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Tests
@@ -28,8 +26,7 @@ namespace Assets.Scripts.Tests
         public List<List<ControlPanelType>> ControlPanelTypeList = new List<List<ControlPanelType>>(2);
         public Button BackButton;
         private Body mRootNode;
-        private Body mRightNodeBody;
-        void Awake()
+         void Awake()
         {
             List<ControlPanelType> vLeftSide = new List<ControlPanelType>();
             vLeftSide.Add(ControlPanelType.RecordingPlaybackControlPanel);

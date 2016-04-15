@@ -87,12 +87,12 @@ namespace UIWidgets
 		public TComponent DefaultItem;
 
 		/// <summary>
-		/// The components list.
+		/// The Components list.
 		/// </summary>
-		protected List<TComponent> components = new List<TComponent>();
+		internal List<TComponent> Components = new List<TComponent>();
 
 		/// <summary>
-		/// The components cache list.
+		/// The Components cache list.
 		/// </summary>
 		protected List<TComponent> componentsCache = new List<TComponent>();
 
@@ -552,8 +552,8 @@ namespace UIWidgets
 			CalculateMaxVisibleItems();
 			UpdateView();
 
-			components.Sort(ComponentsComparer);
-			components.ForEach(SetComponentAsLastSibling);
+			Components.Sort(ComponentsComparer);
+			Components.ForEach(SetComponentAsLastSibling);
 		}
 
 		/// <summary>
@@ -873,33 +873,33 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Updates the components count.
+		/// Updates the Components count.
 		/// </summary>
 		protected void UpdateComponentsCount()
 		{
-			components.RemoveAll(IsNullComponent);
+			Components.RemoveAll(IsNullComponent);
 
-			if (components.Count==visibleItems)
+			if (Components.Count==visibleItems)
 			{
 				return ;
 			}
 
-			if (components.Count < visibleItems)
+			if (Components.Count < visibleItems)
 			{
 				componentsCache.RemoveAll(IsNullComponent);
 
-				Enumerable.Range(0, visibleItems - components.Count).ForEach(AddComponent);
+				Enumerable.Range(0, visibleItems - Components.Count).ForEach(AddComponent);
 			}
 			else
 			{
-				var to_cache = components.GetRange(visibleItems, components.Count - visibleItems).OrderByDescending<TComponent,int>(GetComponentIndex);
+				var to_cache = Components.GetRange(visibleItems, Components.Count - visibleItems).OrderByDescending<TComponent,int>(GetComponentIndex);
 
 				to_cache.ForEach(DeactivateComponent);
 				componentsCache.AddRange(to_cache);
-				components.RemoveRange(visibleItems, components.Count - visibleItems);
+				Components.RemoveRange(visibleItems, Components.Count - visibleItems);
 			}
 
-			base.Items = components.Convert(x => x as ListViewItem);
+			base.Items = Components.Convert(x => x as ListViewItem);
 		}
 
 		bool IsNullComponent(TComponent component)
@@ -923,7 +923,7 @@ namespace UIWidgets
 			component.Index = -1;
 			component.transform.SetAsLastSibling();
 			component.gameObject.SetActive(true);
-			components.Add(component);
+			Components.Add(component);
 		}
 
 		void DeactivateComponent(TComponent component)
@@ -1008,9 +1008,9 @@ namespace UIWidgets
 			// optimization on +-1 vItem scroll
 			else if (oldTopHiddenItems==(topHiddenItems + 1))
 			{
-				var bottomComponent = components[components.Count - 1];
-				components.RemoveAt(components.Count - 1);
-				components.Insert(0, bottomComponent);
+				var bottomComponent = Components[Components.Count - 1];
+				Components.RemoveAt(Components.Count - 1);
+				Components.Insert(0, bottomComponent);
 				bottomComponent.transform.SetAsFirstSibling();
 				
 				bottomComponent.Index = topHiddenItems;
@@ -1019,9 +1019,9 @@ namespace UIWidgets
 			}
 			else if (oldTopHiddenItems==(topHiddenItems - 1))
 			{
-				var topComponent = components[0];
-				components.RemoveAt(0);
-				components.Add(topComponent);
+				var topComponent = Components[0];
+				Components.RemoveAt(0);
+				Components.Add(topComponent);
 				topComponent.transform.SetAsLastSibling();
 				
 				topComponent.Index = topHiddenItems + visibleItems - 1;
@@ -1031,11 +1031,11 @@ namespace UIWidgets
 			// all other cases
 			else
 			{
-				var current_visible_range = components.Convert<TComponent,int>(GetComponentIndex);
+				var current_visible_range = Components.Convert<TComponent,int>(GetComponentIndex);
 				var new_visible_range = Enumerable.Range(topHiddenItems, visibleItems).ToArray();
 
 				var new_indicies_to_change = new_visible_range.Except(current_visible_range).ToList();
-				var components_to_change = new Stack<TComponent>(components.Where(x => !new_visible_range.Contains(x.Index)));
+				var components_to_change = new Stack<TComponent>(Components.Where(x => !new_visible_range.Contains(x.Index)));
 
 				new_indicies_to_change.ForEach(index => {
 					var component = components_to_change.Pop();
@@ -1045,8 +1045,8 @@ namespace UIWidgets
 					Coloring(component as ListViewItem);
 				});
 
-				components.Sort(ComponentsComparer);
-				components.ForEach(SetComponentAsLastSibling);
+				Components.Sort(ComponentsComparer);
+				Components.ForEach(SetComponentAsLastSibling);
 			}
 			
 			if (LayoutBridge!=null)
@@ -1057,7 +1057,7 @@ namespace UIWidgets
 		}
 
 		/// <summary>
-		/// Compare components by vComponenent index.
+		/// Compare Components by vComponenent index.
 		/// </summary>
 		/// <returns>A signed integer that indicates the relative values of x and y.</returns>
 		/// <param name="x">The x coordinate.</param>
@@ -1115,7 +1115,7 @@ namespace UIWidgets
 			UpdateComponentsCount();
 
 			var indicies = Enumerable.Range(topHiddenItems, visibleItems).ToArray();
-			components.ForEach((x, i) => {
+			Components.ForEach((x, i) => {
 				x.Index = indicies[i];
 				SetData(x, DataSource[indicies[i]]);
 				Coloring(x as ListViewItem);
@@ -1317,7 +1317,7 @@ namespace UIWidgets
 		/// </summary>
 		void UpdateColors()
 		{
-			components.ForEach(x => Coloring(x as ListViewItem));
+			Components.ForEach(x => Coloring(x as ListViewItem));
 		}
 
 		/// <summary>
