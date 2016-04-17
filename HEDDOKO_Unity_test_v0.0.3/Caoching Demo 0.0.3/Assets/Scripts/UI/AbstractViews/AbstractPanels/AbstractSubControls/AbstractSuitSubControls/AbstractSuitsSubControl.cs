@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿ 
 using Assets.Scripts.Communication.Controller;
+using UnityEngine;
 
 namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.AbstractSuitSubControls
 {
@@ -12,16 +10,18 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
         internal SuitState SuitState;
         public AbstractSuitConnection SuitConnection;
         
-        void OnEnable()
+       public virtual void OnEnable()
         {
+            Debug.Log("the enabling");
             //Listen to the AbstractSuitConnect OnConnect, OnDisconnect and OnStatusUpdate events
             SuitConnection.OnSuitStateUpdate += OnStatusUpdate;
             SuitConnection.ConnectedStateEvent += OnConnection;
             SuitConnection.DisconnectedStateEvent += OnDisconnect;
         }
 
-        void OnDisable()
+        public virtual void OnDisable()
         {
+            Debug.Log("the disabling");
             // ReSharper disable once DelegateSubtraction
             SuitConnection.OnSuitStateUpdate -= OnStatusUpdate;
             // ReSharper disable once DelegateSubtraction

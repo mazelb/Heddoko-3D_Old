@@ -19,10 +19,10 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
     /// <summary>
 
     /// </summary>
-    public class ExportViewSelectableGridList : ListViewCustom<ImportRecordingGridSelectionComponent, ImportItemDescriptor>,ITaggingManagerConsumer
+    public class ExportViewSelectableGridList : ListViewCustom<ImportRecordingGridSelectionComponent, RecordingItemDescriptor>,ITaggingManagerConsumer
     {
         private bool mInitialized = false;
-        private Dictionary<SortingType, Comparison<ImportItemDescriptor>> mSortingComparisons = new Dictionary<SortingType, Comparison<ImportItemDescriptor>>();
+        private Dictionary<SortingType, Comparison<RecordingItemDescriptor>> mSortingComparisons = new Dictionary<SortingType, Comparison<RecordingItemDescriptor>>();
         [SerializeField]
         private SortingType mCurrentSortingType = SortingType.ByTitle;
         public TaggingManager TaggingManager { get; set; }
@@ -56,7 +56,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// Loads data for the current list
         /// </summary>
         /// <param name="vItemDescriptors"></param>
-        public void LoadData(List<ImportItemDescriptor> vItemDescriptors)
+        public void LoadData(List<RecordingItemDescriptor> vItemDescriptors)
         { 
             DataSource.BeginUpdate();
             DataSource.Clear(); 
@@ -73,7 +73,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// <param name="vItemA"></param>
         /// <param name="vItemY"></param>
         /// <returns></returns>
-        private int TitleComparison(ImportItemDescriptor vItemA, ImportItemDescriptor vItemY)
+        private int TitleComparison(RecordingItemDescriptor vItemA, RecordingItemDescriptor vItemY)
         {
             return vItemA.MovementTitle.CompareTo(vItemY.MovementTitle);
         }
@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// <param name="vItemA"></param>
         /// <param name="vItemY"></param>
         /// <returns></returns>
-        private int DateTimeComparison(ImportItemDescriptor vItemA, ImportItemDescriptor vItemY)
+        private int DateTimeComparison(RecordingItemDescriptor vItemA, RecordingItemDescriptor vItemY)
         {
             return vItemA.CreatedAtTime.CompareTo(vItemY.CreatedAtTime);
         }
@@ -95,7 +95,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// <param name="vItemA"></param>
         /// <param name="vItemY"></param>
         /// <returns></returns>
-        private int RecordingDurationComparison(ImportItemDescriptor vItemA, ImportItemDescriptor vItemY)
+        private int RecordingDurationComparison(RecordingItemDescriptor vItemA, RecordingItemDescriptor vItemY)
         {
             return vItemA.RecordingDuration.CompareTo(vItemY.RecordingDuration);
         }
@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// </summary>
         /// <param name="vComponenent"></param>
         /// <param name="vItem"></param>
-        protected override void SetData(ImportRecordingGridSelectionComponent vComponenent, ImportItemDescriptor vItem)
+        protected override void SetData(ImportRecordingGridSelectionComponent vComponenent, RecordingItemDescriptor vItem)
         {
             vComponenent.SetData(vItem);
             vComponenent.TaggingManager = TaggingManager;

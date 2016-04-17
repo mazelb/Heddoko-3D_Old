@@ -249,6 +249,7 @@ namespace Assets.Scripts.Utils.DebugContext.logging
                 {
                     Log vLog = mMessageQueue.Dequeue();
                     WriteFile(vLog);
+                    Thread.Sleep(1);
                 }
             }
         }

@@ -1,6 +1,6 @@
 ﻿/** 
-* @file ImportItemDescriptor.cs
-* @brief Contains the ImportItemDescriptor class  
+* @file RecordingItemDescriptor.cs
+* @brief Contains the RecordingItemDescriptor class  
 * @author  Mohammed Haider(mohammed@heddoko.com)
 * @date March 2016
 * Copyright Heddoko(TM) 2016, all rights reserved
@@ -18,9 +18,11 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors
     /// Describes an item that is held by the import view selectable grid list
     /// </summary>
     [Serializable]
-    public class ImportItemDescriptor
+    public class RecordingItemDescriptor
     {
         public const int MaxNumberOfTags = 5;
+        [System.NonSerialized] public string RecordingUuid;
+        
         [SerializeField]
         public string MovementTitle;
         [SerializeField]

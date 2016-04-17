@@ -19,7 +19,8 @@ namespace BrainpackService.Tools_and_Utilities.Debugging
     public class DebugSettingsFileMonitor
     {
         //the poll timer in ms
-        public int PollTimer { get; set; } = 10000;//10 seconds 
+        //30 seconds
+        public int PollTimer { get; set; } = 30000; 
         private FileStream mSettingLogFileStream;
         public const string SettingsFileName = "LogSettings.txt";
         public bool ContinueWorking { get; set; } = true;

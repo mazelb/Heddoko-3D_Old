@@ -380,7 +380,9 @@ public class BodyRecordingsMgr : IDatabaseConsumer
     /// </summary>
     /// <param name="vFilter"></param>
     public void TryGetRecordingUuids(string vFilter)
-    { }
+    {
+         
+    }
 
     /// <summary>
     /// Sends a stop signal to any registered listeners

@@ -41,6 +41,7 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
 
         void Awake()
         {
+            Debug.Log("est");
             SuitStateControl.onClick.AddListener(EngageControl);
             //check current state of the suit
             if (mIsConnectedToSuit)
@@ -62,6 +63,14 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
             SuitStateControl.colors = DisconnectedBlock;
             ControlText.text = mInDisconnectStatetxt;
             base.OnDisconnect();
+        }
+
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            SuitState = SuitState.Start;
+            InputHandler.RemoveKeybinding(KeyCode.KeypadEnter, EngageControl);
         }
 
         public override void OnStatusUpdate(SuitState vSuitState)
@@ -178,17 +187,14 @@ namespace Assets.Scripts.UI.AbstractViews.AbstractPanels.AbstractSubControls.Abs
         /// <summary>
         /// On disable , remove key bindings
         /// </summary>
-        private void OnDisable()
-        {
-            SuitState = SuitState.Start;
-            InputHandler.RemoveKeybinding(KeyCode.KeypadEnter, EngageControl);
-        }
+       
 
         /// <summary>
         /// On enable hook keyboard input to control input button 
         /// </summary>
-        void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             InputHandler.RegisterKeyboardAction(KeyCode.KeypadEnter, EngageControl);
         }
 

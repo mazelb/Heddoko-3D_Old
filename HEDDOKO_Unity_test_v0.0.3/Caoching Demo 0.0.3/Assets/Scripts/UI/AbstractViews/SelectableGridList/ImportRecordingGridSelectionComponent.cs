@@ -54,7 +54,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
         /// Sets data from the given 
         /// </summary> 
         /// <param name="vDescriptorItem"></param>
-        public void SetData(ImportItemDescriptor vDescriptorItem)
+        public void SetData(RecordingItemDescriptor vDescriptorItem)
         {
             MovementTitle.text = vDescriptorItem.MovementTitle;
             CreatedAtDescription.text = vDescriptorItem.CreatedAtDescription;

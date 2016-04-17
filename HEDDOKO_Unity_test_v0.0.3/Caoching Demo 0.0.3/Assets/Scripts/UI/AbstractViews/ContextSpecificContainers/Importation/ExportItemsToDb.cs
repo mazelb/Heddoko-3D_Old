@@ -34,7 +34,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
         public Text TotalProgressText;
         public Text CurrentFileProgressText;
         private List<ImportTaskStructure> mTotalExportedItems;
-        private Stack<ImportItemDescriptor> mItemStack;
+        private Stack<RecordingItemDescriptor> mItemStack;
         private bool mIsImporting = false;
         public Button CancelButton;
         public Button CloseButton;
@@ -126,7 +126,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
         }
 
       
-        public void InitiateImport(List<ImportItemDescriptor> vSelectedItems)
+        public void InitiateImport(List<RecordingItemDescriptor> vSelectedItems)
         {
             Initialize();
             if (mIsImporting)
@@ -148,7 +148,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
                 Show();
                 mIsImporting = true;
                 mTotalExportedItems = new List<ImportTaskStructure>(vSelectedItems.Count);
-                mItemStack = new Stack<ImportItemDescriptor>();
+                mItemStack = new Stack<RecordingItemDescriptor>();
                 for (int i = vSelectedItems.Count - 1; i >= 0; i--)
                 {
                     mItemStack.Push(vSelectedItems[i]);
@@ -182,7 +182,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
             CurrentFileProgress.Stop();
             CurrentFileProgress.Value = 0;
             //get first recording
-            ImportItemDescriptor vCurrItemDescriptor = mItemStack.Peek();
+            RecordingItemDescriptor vCurrItemDescriptor = mItemStack.Peek();
             string vPath = vCurrItemDescriptor.FilePath;
             BodyRecordingsMgr.Instance.ReadRecordingFile(vPath, RecordingAddCallback);
         }
@@ -216,7 +216,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
         private void RecordingAddCallback(BodyFramesRecording vRecording)
         {
             //remove the first item from the stack
-            ImportItemDescriptor vCurrItemDescriptor = mItemStack.Pop();
+            RecordingItemDescriptor vCurrItemDescriptor = mItemStack.Pop();
             CurrentImportTask = new ImportTaskStructure() { CurrentProgressIndex = 0, ItemDescriptor = vCurrItemDescriptor, Recording = vRecording };
             //check if item needs to be deleted
             if (CurrentImportTask.ItemDescriptor.IsMarkedForDeletion)
@@ -322,7 +322,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
         public struct ImportTaskStructure
         {
             public BodyFramesRecording Recording;
-            public ImportItemDescriptor ItemDescriptor;
+            public RecordingItemDescriptor ItemDescriptor;
             public int CurrentProgressIndex;
 
             public int MaxCount

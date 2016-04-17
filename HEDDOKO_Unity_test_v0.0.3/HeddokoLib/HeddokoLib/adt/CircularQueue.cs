@@ -6,8 +6,10 @@
 */
 
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace HeddokoLib.adt
 {
@@ -29,7 +31,8 @@ namespace HeddokoLib.adt
         private const int mDefaultCapacity = 64; //default size to use in the parameterles constructor 
         #region properties
         public bool AllowOverflow { get; set; }
-        private object mQueueLock = new object();
+        //private object mQueueLock = new object();
+        private ReaderWriterLock mLock = new ReaderWriterLock();
         public int Capacity
         {
             get
@@ -216,8 +219,10 @@ namespace HeddokoLib.adt
             {
                 throw new CircularQueueOverflowException();
             }
-            lock (mQueueLock)
+
+            try
             {
+                mLock.AcquireWriterLock(250);
                 mQueue[mTailIndex] = vItem;
                 if (++mTailIndex == mCapacity)
                 {
@@ -227,8 +232,23 @@ namespace HeddokoLib.adt
                 {
                     mCount++;
                 }
-                
             }
+
+
+            catch (Exception)
+            {
+
+
+            }
+            finally
+            {
+                mLock.ReleaseLock();
+            }
+            //  lock (mQueueLock)
+            //  {
+
+
+            // }
 
         }
         /**
@@ -279,8 +299,11 @@ namespace HeddokoLib.adt
         {
             int actualCount = Math.Min(length, mCount);
             int startIndex = offset;
-            lock (mQueueLock)
+            //   lock (mQueueLock)
+            //     {
+            try
             {
+                mLock.AcquireWriterLock(250);
                 for (int i = 0; i < actualCount; i++, mHeadIndex++, startIndex++)
                 {
                     if (mHeadIndex == mCapacity)
@@ -291,6 +314,16 @@ namespace HeddokoLib.adt
                 }
                 mCount -= actualCount;
             }
+            catch
+            {
+
+            }
+            finally
+            {
+                mLock.ReleaseLock();
+            }
+
+            //  }
 
             return actualCount;
         }
@@ -309,14 +342,27 @@ namespace HeddokoLib.adt
                 throw new EmptyCircularQueueException();
             }
             var item = mQueue[mHeadIndex];
-            lock (mQueueLock)
+            // lock (mQueueLock)
+            //   {
+            try
             {
+                mLock.AcquireWriterLock(250);
                 if (++mHeadIndex == mCapacity)
                 {
                     mHeadIndex = 0;
                 }
                 mCount--;
             }
+            catch
+            {
+
+            }
+            finally
+            {
+                mLock.ReleaseLock();
+            }
+
+            //  }
 
             return item;
         }
@@ -370,8 +416,11 @@ namespace HeddokoLib.adt
             }
 
             int queueindex = mHeadIndex;
-            lock (mQueueLock)
+            // lock (mQueueLock)
+            //    {
+            try
             {
+                mLock.AcquireWriterLock(250);
                 for (int i = 0; i < mCount; i++, queueindex++, vArrayIndex++)
                 {
                     if (queueindex == mCapacity)
@@ -381,6 +430,16 @@ namespace HeddokoLib.adt
                     vA[vArrayIndex] = mQueue[queueindex];
                 }
             }
+            catch
+            {
+
+            }
+            finally
+            {
+                mLock.ReleaseLock();
+            }
+
+            //   }
 
         }
 

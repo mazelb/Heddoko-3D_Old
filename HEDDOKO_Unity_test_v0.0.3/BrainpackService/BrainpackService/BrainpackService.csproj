@@ -53,7 +53,8 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="HeddokoLib">
+    <Reference Include="HeddokoLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\HeddokoLib\HeddokoLib\bin\Debug\HeddokoLib.dll</HintPath>
     </Reference>
     <Reference Include="InTheHand.Net.Personal">

@@ -170,6 +170,7 @@ namespace Assets.Scripts.UI.AbstractViews.Enums
         ModifyCommentSubControl,
         CameraOrbitSubControl,
         RecordingPlaybackSpeedDisplay,
-        RightClickSubControl
+        RightClickSubControl,
+        LoginControl
     }
 }

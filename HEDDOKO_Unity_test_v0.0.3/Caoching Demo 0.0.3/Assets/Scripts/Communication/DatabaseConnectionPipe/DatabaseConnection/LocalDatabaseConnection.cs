@@ -121,7 +121,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vDescriptor"></param>
         /// <param name="vTotalImportProgress"></param>
         /// <returns></returns>
-        public bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor, Action<int> vTotalImportProgress)
+        public bool CreateRecording(BodyFramesRecording vRecording, RecordingItemDescriptor vDescriptor, Action<int> vTotalImportProgress)
         {
             bool vResult = false;
             int vTotalFrames = vRecording.RecordingRawFrames.Count;
@@ -475,6 +475,11 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         { 
             string vSanitized = Regex.Replace(vInput, @"%", "");
             return vSanitized;
+        }
+
+        public List<RecordingItemDescriptor> GetRecordingDescriptions(string vBodyGuid, List<Tag> vTagFilter)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

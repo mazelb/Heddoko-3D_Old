@@ -53,7 +53,7 @@ namespace Assets.Scripts.UI.AbstractViews.SelectableGridList
             }
         }
  
-        public ImportItemDescriptor Item { get; set; }
+        public RecordingItemDescriptor Item { get; set; }
 
         void Awake()
         {

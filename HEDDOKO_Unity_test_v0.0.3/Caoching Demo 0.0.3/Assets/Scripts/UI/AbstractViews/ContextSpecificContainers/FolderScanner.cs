@@ -18,7 +18,7 @@ using LogType = Assets.Scripts.Utils.DebugContext.logging.LogType;
 
 namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
 {
-    public delegate void OnDirectoryScanCompletion(List<ImportItemDescriptor> vItems);
+    public delegate void OnDirectoryScanCompletion(List<RecordingItemDescriptor> vItems);
     /// <summary>
     /// A helper class that maintains a list of scanned directories 
     /// </summary>
@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
                 return;
             }
             mScannedDirectories.Add(vFolder);
-            List<ImportItemDescriptor> vItemDescriptors = new List<ImportItemDescriptor>();
+            List<RecordingItemDescriptor> vItemDescriptors = new List<RecordingItemDescriptor>();
             //add a check to prevent duplicates
             BodyRecordingsMgr.Instance.ScanRecordings(vFolder);
             string[] vPaths = BodyRecordingsMgr.Instance.FilePaths;
@@ -63,7 +63,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers
                     int vStartTime = 0;
                     int vEndTime = 0;
                     int vTotalTime = 0;
-                    ImportItemDescriptor vDescriptor = new ImportItemDescriptor();
+                    RecordingItemDescriptor vDescriptor = new RecordingItemDescriptor();
                     using (FileStream fs = new FileStream(vPath, FileMode.Open, FileAccess.Read))
                     {
                         fs.Read(vStartOfFileBuffer, 0, vStartOfFileBuffer.Length);

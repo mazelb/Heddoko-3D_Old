@@ -8,27 +8,27 @@
 */
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Assets.Scripts.UI.AbstractViews.SelectableGridList.Descriptors;
-using Assets.Scripts.UI.Tagging; 
+using Assets.Scripts.UI.Tagging;
 
 namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
 {
     /// <summary>
     /// Provides an interface for database connections 
     /// </summary>
-   public interface IDatabaseConnection : IEquatable<IDatabaseConnection>
+    public interface IDatabaseConnection : IEquatable<IDatabaseConnection>
     {
-       /// <summary>
-       /// Unique id
-       /// </summary>
+        /// <summary>
+        /// Unique id
+        /// </summary>
         string DbConnectionUuid { get; }
 
         /// <summary>
         /// Connect to the database
         /// </summary>
         /// <param name="vCallback">(optional)Action to invoke on result of the connection</param> 
-        bool Connect(Action  vCallback = null);
+        bool Connect(Action vCallback = null);
 
         /// <summary>
         /// Disconnect from the database
@@ -46,7 +46,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vQuery">Query to make to the database </param>
         /// <param name="vCallback">optional callback on results</param>
         /// <returns></returns>
-        bool Query(string  vQuery, Action vCallback = null);
+        bool Query(string vQuery, Action vCallback = null);
         /// <summary>
         /// Creates a recording entry on the database
         /// </summary>
@@ -61,7 +61,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vDescriptor">the recording's description</param>
         /// <param name="vTotalImportProgress">callback to update progress</param>
         /// <returns></returns>
-        bool CreateRecording(BodyFramesRecording vRecording, ImportItemDescriptor vDescriptor,
+        bool CreateRecording(BodyFramesRecording vRecording, RecordingItemDescriptor vDescriptor,
             Action<int> vTotalImportProgress);
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <returns></returns>
         List<Tag> GetTagsOfRecording(string vRecGuid);
 
-     
+
         /// <summary>
         /// Attaches a tag to a recording
         /// </summary>
@@ -116,7 +116,7 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// <param name="vTitleKey"></param>
         /// <param name="vTotalResults">(Optional) Limit the number of results</param>
         /// <returns></returns>
-        List<Tag> GetTagsByPartialTitle(string vTitleKey, int vTotalResults =0);
+        List<Tag> GetTagsByPartialTitle(string vTitleKey, int vTotalResults = 0);
 
         /// <summary>
         /// Get a list of tags by partial title but excluding the tag list
@@ -131,6 +131,9 @@ namespace Assets.Scripts.Communication.DatabaseConnectionPipe.DatabaseConnection
         /// </summary>
         /// <param name="vInput">the input to sanitize</param>
         string SanitizeInput(string vInput);
+
+        List<RecordingItemDescriptor> GetRecordingDescriptions(string vBodyGuid, List<Tag> vTagFilter);
+
 
         /// <summary>
         /// Get tag by title

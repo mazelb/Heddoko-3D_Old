@@ -68,7 +68,7 @@ namespace Assets.Scripts.UI.AbstractViews.ContextSpecificContainers.Importation
             UniFileBrowser.use.OpenFolderWindow(true, mFolderScanner.ScanDirectory);
         }
 
-        private void OnScanCompletion(List<ImportItemDescriptor> vDescriptors)
+        private void OnScanCompletion(List<RecordingItemDescriptor> vDescriptors)
         {
             mFolderScanner.DirectoryScanCompleted -= OnScanCompletion;
             GridList.LoadData(vDescriptors);

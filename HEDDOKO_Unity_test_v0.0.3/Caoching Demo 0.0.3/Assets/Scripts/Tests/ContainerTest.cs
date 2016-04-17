@@ -52,16 +52,7 @@ namespace Assets.Scripts.Tests
             mPanelNodes = CurrentLayout.ContainerStructure.RenderingPanelNodes;
             mPanelNodes[0].name = "Main";
             mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mRootNode);
-            //            BodiesManager.Instance.CreateNewBody("SingleRec_LeftPanelBody");
-            //            BodiesManager.Instance.CreateNewBody("SingleRec_RightPanelBody");
-            //            mRootNode= BodiesManager.Instance.GetBodyFromUUID("SingleRec_LeftPanelBody");
-            //            mRightNodeBody = BodiesManager.Instance.GetBodyFromUUID("SingleRec_RightPanelBody"); 
-            //             CurrentLayout = new Layout(LayoutType, this);
-            //           mPanelNodes = CurrentLayout.ContainerStructure.RenderingPanelNodes; 
-            //            mPanelNodes[0].name = "Left";
-            //            mPanelNodes[1].name = "Right";
-            //            mPanelNodes[0].PanelSettings.Init(ControlPanelTypeList[0], true, mRootNode);
-            //            mPanelNodes[1].PanelSettings.Init(ControlPanelTypeList[1], true, mRightNodeBody);
+ 
         }
 
   
